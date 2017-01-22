@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta content="always" name="referrer">
+    <meta charset="utf-8"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>视频直播间 - 金道贵金属打造在线贵金属实盘直播室，掘金之旅在此起航！</title>
+    <meta content="实盘直播,贵金属实盘直播室,金道贵金属实盘直播,金道贵金属" name="keywords">
+    <meta content="金道贵金属打造在线贵金属实盘直播室，金道研究院名家观点即时播报，让您的掘金之旅在此起航！携手金道，生金有道！" name="description">
+    <link href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <link href="/base/lib/jqueryUI/jquery-ui.min.css" type="text/css" rel="stylesheet"/>
+    <link href="/base/lib/lightbox/lightbox.css" type="text/css" rel="stylesheet"/>
+    <link href="/base/lib/swipe/swiper.min.css"  type="text/css" rel="stylesheet" />
+    <link href="/base/lib/face/face.css" type="text/css" rel="stylesheet" />
+    <link href="/pm/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
+    <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <link href="/pm/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
+    <![endif]-->
+    <script type="text/javascript" src="/base/lib/store.min.js"></script>
+    <!-- 自动登录 begin -->
+    <script type="text/javascript" src="/pm/theme1/js/lg.min.js"></script>
+    <script>
+        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+        LoginAuto.init();
+    </script>
+    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+</head>
+<body class="">
+<!-- header begin -->
+<div class="box-header">
+    <div class="box-header-in clearfix">
+        <h1 class="fl hide-t" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_logo', 'content_top', 1, true]);">视频直播间</h1>
+        <div class="header_redbag fl" id="redPacket_header">
+            <div class="redbag_pic"></div>
+            <div class="rb_text">
+                <div class="te1">
+                    第<b rp="timesLabel"></b>波微信红包
+                </div>
+                <div class="timecount">
+                    <b rp="minutesLabel"></b>
+                    <span>分</span>
+                    <b rp="secondsLabel"></b>
+                    <span>秒</span>
+                </div>
+            </div>
+        </div>
+        <!--<div class="header_ad fl">
+            <a href="javascript:void(0);" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
+        </div>-->
+        <!--div class="header-btn fl">
+            <a href="http://oa.24k.hk/zh/realaccount_open.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','open_real_account', 'content_top',1,true]);"><i class="real"></i><span>开立真实账户</span></a>
+            <a href="http://oa.24k.hk/zh/account_02.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','open_demo_account', 'content_top',1,true]);"><i class="mn"></i><span>开立模拟账户</span></a>
+        </div-->
+        <div class="header-right fr clearfix">
+            <div class="h_menu1">
+                <%if(userSession.isLogin){%>
+                <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道直播间</span>
+                <a href="javascript:void(0)" id="logout" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zhuxiao', 'content_top', 1, true]);">注销</a>
+                <%} else {%>
+                <span class="welcome">嗨！欢迎进入金道直播间</span>
+                <a href="javascript:void(0)" id="login_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_login', 'content_top', 1, true]);">登录</a>
+                <a href="javascript:void(0)" id="register_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_register', 'content_top', 1, true]);">免费注册</a>
+                <%}%>
+                <a href="https://ui.24k.hk/" target="_webui" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_webui', 'content_top', 1, true]);">在线交易</a>
+                <div class="topbtn skin">
+                    <span class="skin-ico"><i class="new"></i></span>
+                    <div class="skinbox">
+                        <div class="cont">
+                            <div class="arr"><i></i><i class="i2"></i></div>
+                            <div class="skinlist" id="panel_theme" ismin="<%-!isDevTest %>">
+                                <div class="sk_item" theme="pm_def">
+                                    <i class="sk1"></i>
+                                    <span>简约白</span>
+                                    <a href="javascript:void(0)" class="sebox"></a>
+                                </div>
+                                <div class="sk_item" theme="pm_darkblue">
+                                    <i class="sk2"></i>
+                                    <span>暗金蓝</span>
+                                    <a href="javascript:void(0)" class="sebox"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="h_menu2">
+                <a href="https://wj.qq.com/s/969053/e2de" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_wjqq', 'content_top', 1, true]);">问卷调查</a>
+                <span>|</span>
+                <a href="javascript:void(0)" id="personal_center" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_myAccount', 'content_top', 1, true]);">我的账户</a>
+                <span class="dn">|</span>
+                <a class="dn" href="javascript:void(0)" id="vipbenefit" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_vipBenefits', 'content_top', 1, true]);">会员权益</a>
+                <span>|</span>
+                <a href="javascript:void(0)" id="pointsRule" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_pointsRule', 'content_top', 1, true]);">积分规则</a>
+                <span>|</span>
+                <a href="javascript:void(0)" id="infodown" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_ppt', 'content_top', 1, true]);">资料下载</a>
+                <span>|</span>
+                <a href="javascript:void(0)" id="live_preview" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_course', 'content_top', 1, true]);">直播预告</a>
+                <span>|</span>
+                <a href="http://www.24k.hk/lp_v144_studio.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_studioLP', 'content_top', 1, true]);">关于直播</a>
+                <span>|</span>
+                <a href="javascript:void(0);" id="qqcs" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_QQcs', 'content_top', 1, true]);">QQ客服</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- header end -->
+
+<!-- wrapper begin -->
+<div class="wrapper clearfix">
+    <% include index_video.html %>
+    <% include index_chat.html %>
+</div>
+<!-- wrapper end -->
+
+<!-- 各种弹框 -->
+<% include index_box.html %>
+<%
+    var defSkin = '';
+    defTemplate = JSON.parse(userSession.defTemplate || defTemplate || null);
+    if(defTemplate){
+        defSkin = defTemplate.style || '';
+    }
+%>
+<script type="text/javascript">
+    function pageFunc() {
+        indexJS.fromPlatform='<%- fromPlatform%>';
+        indexJS.apiUrl='<%= apiUrl %>';
+        indexJS.userInfo=JSON.parse('<%- userInfo %>');
+        indexJS.serverTime=Number('<%= serverTime %>');
+        indexJS.socketUrl=JSON.parse('<%- socketUrl %>');
+        indexJS.filePath='<%= filePath %>';
+        indexJS.syllabusData=common.formatToJson('<%- syllabusData%>');
+        indexJS.currStudioAuth=('<%- currStudioAuth%>'=='true');
+        indexJS.visitorSpeak=('<%- visitorSpeak%>'=='true');
+        //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
+        indexJS.init();//初始化
+        indexTool.Theme.setTheme('<%-defSkin%>', false);//修改样式
+    }
+</script>
+<%if(isDevTest) {%>
+    <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="/base/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
+    <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.xdomainrequest.min.js"></script>
+    <script type="text/javascript" src="/base/lib/obsplayer/obsplayer.min.js"></script>
+    <script type="text/javascript" src="/base/lib/paste.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.superslide.2.1.1.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.face.js"></script>
+    <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
+    <script type="text/javascript" src="/base/lib/newquote.js"></script>
+    <script type="text/javascript" src="/base/util/common.js"></script>
+    <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_box.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_video.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_video_live.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_video_teach.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_video_subscribe.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_video_train.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_chat_pride.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_chat.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_chat_teacher.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_chat_showtrade.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_notice.js"></script>
+    <script type="text/javascript" src="/pm/theme1/js/index_tool.js"></script>
+
+    <script type="text/javascript">
+        pageFunc();
+    </script>
+<%} else{ %>
+<script type="text/javascript" src="/base/lib/basket.min.js"></script>
+<script type="text/javascript">
+    basket.version='<%=version%>';
+    basket.require({url:"/pm/theme1/js/lib.min.js"},{url:"/pm/theme1/js/index.min.js"},pageFunc).then(pageFunc);
+</script>
+<%}%>
+</body>
+</html>

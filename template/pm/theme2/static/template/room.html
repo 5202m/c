@@ -1,0 +1,215 @@
+<div class="head-top head-fixed mt40 al-c" id="room_header">
+	<a href="javascript:void(0);" class="btn-l" id="room_back"><i class="i-back"></i></a>
+	<b id="room_roomName"></b>
+	<a href="javascript:void(0);" class="menu-list btn-r" id="room_syllabus">节目列表</a>
+</div>
+<section class="video-con mt84 mb50">
+	<div id="chat_player">
+		<div class="video-play-box dn" id="roomVideo">
+		</div>
+		<div class="audio-play-box dn" id="roomAudio">
+			<div class="voicepart stopped" id="roomAudioCtrl">
+				<div class="voice_wave">
+					<div class="style1">
+						<div class=""><img id="roomAudioImg" src="/pm/theme2/img/wave0.jpg" class="audio-img"></div>
+					</div>
+					<a href="javascript:void(0)" class="voice_playbtn"><i></i></a>
+				</div>
+				<div class="voice_ctrl">
+					<a href="javascript:void(0)" class="playbtn" id="roomAudioPlay"><i></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="video-infos" id="room_classnote">
+		<div class="infos-block plrall clearfix">
+			<div class="avatar-info fl" id="room_teacher" style="display: none;">
+				<img src="" class="img-avatar" id="room_teacherAvatar"/>
+				<div class="a-top"><b id="room_teacherName"></b><i class="i-dot3"></i></div>
+			</div>
+			<div class="infos-opbar">
+				<ul class="clearfix">
+					<li>
+						<a href="javascript:void(0);" id="room_chat">
+							<span class="top-icons i-comments2"><i class="i-tips"></i></span>
+							<label>聊天室</label>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" id="room_playerCtrl" class="dn">
+							<span class="top-icons i-volume"></span>
+							<label id="room_playerCtrlTxt">转声音直播</label>
+						</a>
+					</li>
+					<li>
+						<a href="http://m.24k.hk/realaccount_open.html" target="_blank">
+							<span class="top-icons i-key2"></span>
+							<label>开户</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="classNote_panel">
+			<div class="txt-block block-blue" temp="classNote_strategy" dataid="{0}">
+				<div class="txt-tit"><span class="square-dot c-purple"><i class="dot"></i></span>当前交易策略</div>
+				<div class="txt-details">
+					{1}
+				</div>
+			</div>
+			<div class="call-infos block-yellow" temp="classNote_shoutTrade" dataid="{0}">
+				<div class="call-hd">
+					<span class="call-time">{1}</span><span>{2}</span><p>{3}{2}了，快来围观！</p>
+				</div>
+				{4}
+			</div>
+			<div class="call-infos" temp="classNote_article" dataid="{0}">
+				<div class="call-hd">
+					<span class="call-time">{1}</span>
+				</div>
+				<div class="call-desc-txt">{2}</div>
+			</div>
+			<div class="btn-group" temp="classNote_look" dataid="{0}">
+				<a href="javascript:void(0);" class="btn btn-data">查看数据</a>
+			</div>
+			<i temp="classNote_dim1" class="txt-mban"></i>
+			<i temp="classNote_dim2" class="txt-mban repeat3x"></i>
+			<div temp="classNote_txt">{0}</div>
+			<div class="details-item-list sildeup" temp="classNote_data">{0}</div>
+			<table class="tb-default" temp="classNote_data1">
+				<tr><th>品种</th><th>方向</th><th>入场点位</th><th>止盈</th><th>止损</th></tr>
+				<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>
+			</table>
+			<div class="instr-txt" temp="classNote_data2">
+				<label>说明</label><span>{0}</span>
+			</div>
+			<div class="blk7 blke3e3ea" temp="classNote_split"></div>
+		</div>
+	</div>
+	<div class="bottom-fixed content_w" id="room_foot">
+		<div class="bottom-con plrall">
+			<div class="bt-infos-l fl">
+				<p class="p1">白银<i class="arrow-d-red"></i>16.8060</p>
+				<p class="p2">SSL<span>0.086(0.36%)</span></p>
+			</div>
+			<div class="infos-opbar">
+				<ul class="clearfix">
+					<li>
+						<a href="javascript:void(0)" id="room_showTrade">
+							<span class="top-icons i-sdan"><i class="i-tips"></i></span>
+							<label>晒单墙</label>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:void(0)">
+							<span class="top-icons i-send2"></span>
+							<label>分享</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="fixed-con dn" id="room_talk">
+		<div class="chat-top-bar clearfix" id="chat_ctrl">
+			<span class="fl chat-s1">聊天室</span>
+			<div class="view_select fl">
+				<div class="se_cont">
+					<select class="selected" id="chat_filter">
+						<option>看所有人</option>
+					</select>
+				</div>
+				<i class="i-arrow-down2"></i>
+			</div>
+			<span class="chat-s2">
+				<label id="chat_fullscreen">全屏聊天</label>
+				<i class="i-close close-btn" id="chat_close"></i>
+			</span>
+		</div>
+		<div class="chat-tips-bar dn" id="chat_floatMsg">
+			<div class="iscroll" id="scroll-tips">
+				<div class="scroller">
+					<div class="chat-tips-con">
+						<p class="pr15"></p>
+					</div>
+					<a href="javascript:void(0);" class="tips-arrow-btn"><i class="i-arrow-r"></i></a>
+				</div>
+			</div>
+			<a href="javascript:void(0);" class="tips-close-btn">关闭</a>
+		</div>
+		<div class="chat-block clearfix" id="chat_msg">
+			<div class="dialog {0}" temp="chat_dialog" id="{1}">
+				<div class="headimg" uid="{2}">
+					<a href="javascript:void(0);"><img src="{3}"></a>
+				</div>
+				<div class="infobar">
+					{4}
+					<a href="javascript:void(0);" class="uname">{5}</a>
+					<span class="ctime">{6}</span>
+				</div>
+				{7}
+			</div>
+			<div class="dialog dialog-me" temp="chat_dialogMe" id="{0}">
+				<div class="infobar">
+					<span class="ctime">{1}</span>
+					<a href="javascript:void(0);" class="uname">{2}</a>
+				</div>
+				{3}
+			</div>
+			<span class="level" temp="chat_dialogLevel">{0}</span>
+			<a href="{0}" target="_blank" class="a-block" temp="chat_dialogUrl">{0}</a>
+			<div class="dcont" temp="chat_dialogTxt1" talk="q">
+				{0}
+			</div>
+			<div class="dcont" temp="chat_dialogTxt2">
+				<div class="question">
+					<span>{0}</span>提问：
+					<span class="q" talk="q">{1}</span>
+					<i class="dot-line"></i>
+				</div>
+				<div class="reply">
+					<span>回复：</span>
+					<span talk="a">{2}</span>
+				</div>
+			</div>
+			<a href="javascript:void(0)" temp="chat_dialogImg" onclick="Chat.showImgInWindow(this)" url="{0}">
+				<img src="{1}" alt="图片" />
+			</a>
+			<div temp="chat_dialogLoading">
+				<em class="img-loading"><i></i></em>
+				<span class="shadow-box"></span>
+				<s class="shadow-conut"></s>
+			</div>
+			<em class="ruleTipStyle" temp="chat_dialogTip">{0}</em>
+		</div>
+		<div class="chat-op" id="chat_editor">
+			<div class="content_w">
+				<div class="chat-op-default">
+					<div class="op-panel">
+						<i class="i-addbtn2" id="addbox-btn"></i>
+						<div class="text-area-box">
+							<div id="contentText" contenteditable="true" class="text-area-con"></div>
+							<span class="placeholder">我来说两句...</span>
+						</div>
+						<button class="i-sendbtn hide">发送</button>
+					</div>
+				</div>
+				<div class="chat-add-box">
+					<div class="add-box-hd">
+						<div class="at-friend al-c">
+							<span>@<label class="uname">小娜</label></span><span>@<label class="uname">方宥恺</label></span><span>@<label class="uname">陈丞</label></span>
+						</div>
+					</div>
+					<div class="add-box-bd">
+						<ul class="add-btns-list clearfix">
+							<li><a href="javascript:;"><i class="i-emp2"></i><label>表情</label></a></li>
+							<li><a href="javascript:;"><i class="i-pic"></i><label>图片</label></a></li>
+							<li><a href="javascript:;"><i class="i-dollar"></i><label>打赏</label></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
