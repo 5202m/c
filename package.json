@@ -1,9 +1,9 @@
 {
-  "name": "pm_mb_3f",
-  "version": "3.1.0",
+  "name": "chat-pm",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/pm_chat"
+    "start": "node ./bin/chat-pm"
   },
   "dependencies": {
     "async": "^0.9.0",
