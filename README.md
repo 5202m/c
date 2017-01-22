@@ -1,6 +1,10 @@
-# chat-client
+# chat-pm
 
-> Place the project description here.
+贵金属直播间项目。
+
+## Dependency
+nodejs >= 6.9.2
+pm2
 
 ## Build Setup
 
