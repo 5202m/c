@@ -224,9 +224,7 @@ Analyst.setEvent = function(){
     /**
      * 返回老师列表
      */
-    $('#back_subscribe').bind('click', function(){
-        Subscribe.load();
-    });
+    $('#back_subscribe').bind('click', Container.back);
     /**
      * 更多老师
      */

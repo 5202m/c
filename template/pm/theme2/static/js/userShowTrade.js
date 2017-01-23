@@ -119,9 +119,7 @@ UserShowTrade.setEvent = function(){
     /**
      * 返回晒单墙
      */
-    $('#myShowTrade_back').bind('click', function(){
-        ShowTrade.load();
-    });
+    $('#myShowTrade_back').bind('click', Container.back);
     /**
      * 进入我要晒单页面
      */

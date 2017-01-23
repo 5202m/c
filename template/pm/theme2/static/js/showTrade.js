@@ -90,9 +90,7 @@ ShowTrade.setEvent = function(){
     /**
      * 返回直播大厅
      */
-    $('#showTrade_back').bind('click', function(){
-        Room.load();
-    });
+    $('#showTrade_back').bind('click', Container.back);
     /**
      * 进入我的晒单
      */

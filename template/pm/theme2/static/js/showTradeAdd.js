@@ -121,15 +121,11 @@ ShowTradeAdd.setEvent = function(){
     /**
      * 后退回到我的晒单
      */
-    $('#back_userShowTrade').bind('click',function(){
-        UserShowTrade.load();
-    });
+    $('#back_userShowTrade').bind('click', Container.back);
     /**
      * 返回我的晒单
      */
-    $('#to_userShowTrade').bind('click', function(){
-        UserShowTrade.load();
-    });
+    $('#to_userShowTrade').bind('click', Container.back);
     /**
      * 输入框获得焦点后隐藏提示
      */

@@ -54,9 +54,7 @@ Subscribe.setAnalystList = function(){
 Subscribe.setEvent = function(){
     $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**返回节目列表*/
-    $("#back_syllabus").bind("click", function(){
-        Syllabus.load();
-    });
+    $("#back_syllabus").bind("click", Container.back);
     /**
      * 老师简介
      */

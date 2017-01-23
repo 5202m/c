@@ -43,9 +43,7 @@ Room.initPage = function(){
 Room.setEvent = function(){
     $('body').addClass('bgfff');
     /**返回房间列表*/
-    $("#room_back").bind("click", function(){
-        Rooms.load();
-    });
+    $("#room_back").bind("click", Container.back);
 
     /** 节目列表 */
     $("#room_syllabus").bind("click", function(){
