@@ -308,7 +308,7 @@ var Util ={
                 if(typeof (failCallBack) == "function"){
                     failCallBack(textStatus);
                 }else{
-                    if (Util.isValid(obj.responseText) && obj.statusText != "OK") {
+                    if (Util.isNotBlank(obj.responseText) && obj.statusText != "OK") {
                         console.error(obj.responseText);
                     }else{
                         console.error("请求超时,请重试:url[%s]",url);
