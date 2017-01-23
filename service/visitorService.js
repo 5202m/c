@@ -1,8 +1,9 @@
 "use Strict";
 const logger = require('../resources/logConf').getLogger("visitorService");
 const liveRoomAPIService = require('./liveRoomAPIService');
-const Deferred = require("../util/common").Deferred;
-const request = require('request');//引入request
+const common = require("../util/common");
+const Deferred = common.Deferred;
+const request = require('request');
 
 let visitorService = {
         saveVisitorRecord: (type, dasData) => {
@@ -78,13 +79,12 @@ let visitorService = {
                 && common.isValid(dasData.userId) 
                 && common.isValid(dasData.operationType) 
                 && (common.isValid(dasData.touristId) || common.isValid(dasData.userTel))){
-                //logger.info('dasData ' + type + ':' + JSON.stringify(dasData));
                 request.post({
                     url: config.dasUrl,
                     form: {data: JSON.stringify(dasData), 'callback': '?'}, 
                     headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
                 }, 
-                function (err, response, result) {
+                (err, response, result) => {
                     if (err) {
                         logger.error("DAS online post fail:" + err);
                     } else {
