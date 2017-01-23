@@ -220,7 +220,6 @@ Analyst.setVideoList = function(){
  * 设置事件
  */
 Analyst.setEvent = function(){
-    $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**
      * 返回老师列表
      */

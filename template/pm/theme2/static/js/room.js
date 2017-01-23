@@ -41,7 +41,6 @@ Room.initPage = function(){
  * 绑定页面事件
  */
 Room.setEvent = function(){
-    $('body').addClass('bgfff');
     /**返回房间列表*/
     $("#room_back").bind("click", Container.back);
 

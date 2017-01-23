@@ -7,6 +7,12 @@ var ShowTradeAdd = new Container({
     url : "/pm/theme2/template/showTradeAdd.html",
     onLoad : function(){
         ShowTradeAdd.setEvent();
+    },
+    onShow : function(){
+        $('body').attr('class', 'home bgf2f2f2');
+    },
+    onHide : function(){
+        $('body').attr('class', 'home bgfff');
     }
 });
 
@@ -110,7 +116,6 @@ ShowTradeAdd.saveShowTrade = function(){
  * 设置事件
  */
 ShowTradeAdd.setEvent = function(){
-    $('body').removeClass('bgfff').addClass('bgf2f2f2');
     /**
      * 设置晒单人
      */

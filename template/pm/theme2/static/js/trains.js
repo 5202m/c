@@ -106,7 +106,6 @@ Trains.trainRegis = function(obj){
  * 设置事件
  */
 Trains.setEvent = function(){
-    $('body').removeClass('bgfff').addClass('bgf2f2f2');
     /**
      * 返回首页
      */

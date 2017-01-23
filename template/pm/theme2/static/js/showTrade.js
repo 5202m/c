@@ -86,7 +86,6 @@ ShowTrade.setShowTradePraise = function(obj){
  * 设置事件
  */
 ShowTrade.setEvent = function(){
-    $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**
      * 返回直播大厅
      */
