@@ -18,6 +18,9 @@ var Container = function(options){
     /** 状态 0未加载 1加载中 2未显示 3显示 */
     this.status = 0;
 
+    /** 浏览历史标记 */
+    this.flagHistory = true;
+
     /** 容器 */
     this.panel = options.panel;
 
@@ -39,15 +42,51 @@ var Container = function(options){
 };
 
 /**
- * 设置或获取当前Container对象
- * @param container
- * @returns {null}
+ * 历史记录
+ * @type {{list: Array, index: number}}
  */
-Container.container = function(container){
-    if(container){
-        Data.container = container;
+Container.history = {
+    list : [],
+    index : -1,
+    last : null
+};
+
+/**
+ * 返回
+ */
+Container.back = function(){
+    Container.go(-1);
+};
+
+/**
+ * 跳转到指定页面
+ * @param [param] {Number | Container}
+ */
+Container.go = function(param){
+    param = param || 0;
+    var history = Container.history;
+    var result;
+    if(param instanceof Container){
+        history.index++;
+        if(history.list.length > history.index){
+            history.list = history.list.slice(0, history.index);
+        }
+        history.list[history.index] = param;
+        result = param;
+    }else{
+        history.index += param;
+        result = history.list[history.index];
+        if(param != 0){
+            if(!result){
+                history.list = [Rooms];
+                history.index = 0;
+                result = history.list[history.index];
+            }
+            result.flagHistory = false;
+            result.load(); //前进、后退
+        }
     }
-    return Data.container;
+    return result;
 };
 
 /**
@@ -64,12 +103,16 @@ Container.prototype.show = function(){
     if(this.isVisible()){
         return;
     }
-    var currContainer = Container.container();
+    var currContainer = Container.history.last;
     if(currContainer){
         currContainer.hide();
         currContainer.onHide();
     }
-    Container.container(this);
+    if(this.flagHistory){
+        Container.go(this);
+    }
+    Container.history.last = this;
+    this.flagHistory = true;
     this.status = 3;
     this.panel.show();
     this.onShow();

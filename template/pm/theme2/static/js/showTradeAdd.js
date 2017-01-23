@@ -7,6 +7,12 @@ var ShowTradeAdd = new Container({
     url : "/pm/theme2/template/showTradeAdd.html",
     onLoad : function(){
         ShowTradeAdd.setEvent();
+    },
+    onShow : function(){
+        $('body').attr('class', 'home bgf2f2f2');
+    },
+    onHide : function(){
+        $('body').attr('class', 'home bgfff');
     }
 });
 
@@ -110,26 +116,21 @@ ShowTradeAdd.saveShowTrade = function(){
  * 设置事件
  */
 ShowTradeAdd.setEvent = function(){
-    $('body').removeClass('bgfff').addClass('bgf2f2f2');
     /**
      * 设置晒单人
      */
-    if(Util.isBlank(Data.userInfo.isSetName) || Data.userInfo.isSetName) {
+    if(Data.userInfo.isLogin && (Util.isBlank(Data.userInfo.isSetName) || Data.userInfo.isSetName)) {
         $('#showTradeAddForm .userName').text(Data.userInfo.nickname).attr('contenteditable', 'false');
         $('#showTradeAddForm .userName').next('.placeholder').hide();
     }
     /**
      * 后退回到我的晒单
      */
-    $('#back_userShowTrade').bind('click',function(){
-        UserShowTrade.load();
-    });
+    $('#back_userShowTrade').bind('click', Container.back);
     /**
      * 返回我的晒单
      */
-    $('#to_userShowTrade').bind('click', function(){
-        UserShowTrade.load();
-    });
+    $('#to_userShowTrade').bind('click', Container.back);
     /**
      * 输入框获得焦点后隐藏提示
      */

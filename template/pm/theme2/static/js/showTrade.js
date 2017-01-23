@@ -86,13 +86,10 @@ ShowTrade.setShowTradePraise = function(obj){
  * 设置事件
  */
 ShowTrade.setEvent = function(){
-    $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**
      * 返回直播大厅
      */
-    $('#showTrade_back').bind('click', function(){
-        Room.load();
-    });
+    $('#showTrade_back').bind('click', Container.back);
     /**
      * 进入我的晒单
      */

@@ -1542,7 +1542,6 @@ a:hover {
 }
 .view_select .se_cont a,
 .view_select .selected {
-  line-height: 18px;
   padding-left: 10px;
   font-size: 10px;
 }
@@ -1914,13 +1913,42 @@ a:hover {
 .chat-block .dialog ~ .dialog {
   margin-top: 21px;
 }
+.chat-block .dialog .dcont {
+  text-align: left;
+  white-space: normal;
+  word-break: break-all;
+  display: block;
+  font-size: 15px;
+  color: #333;
+  line-height: 18px;
+  padding-bottom: 5px;
+}
+.chat-block .dialog .dcont .question {
+  font-size: 10px;
+  line-height: 16px;
+  position: relative;
+  color: #64646f;
+  padding-bottom: 3px;
+  margin-bottom: 2px;
+}
+.chat-block .dialog .dcont .question .dot-line {
+  width: 16px;
+  border-bottom: 1px dotted #bfbfc7;
+  display: block;
+  position: absolute;
+  bottom: 0;
+}
+.chat-block .dialog .dcont .d-img img {
+  max-width: 228px;
+  margin-top: 5px;
+}
 .chat-block .dialog.dialog-me {
-  padding: 0 12px;
+  padding: 0 41px 0 12px;
   float: right;
 }
 .chat-block .dialog.dialog-me .headimg {
   left: auto;
-  right: 0;
+  right: 2px;
 }
 .chat-block .dialog.dialog-analyst .dcont .question {
   color: #46a6a6;
@@ -1936,11 +1964,11 @@ a:hover {
   float: right;
   margin-top: 3px;
 }
-.chat-block .dialog.dialog-reply .dcont .question {
-  color: #64646f;
+.chat-block .dialog.dialog-admin .question {
+  color: #ed7600;
 }
-.chat-block .dialog.dialog-reply .dcont .question .dot-line {
-  border-color: #bfbfc7;
+.chat-block .dialog.dialog-admin .question .dot-line {
+  border-bottom-color: #ed7600;
 }
 .chat-block .dialog a.a-block {
   display: block;
@@ -2037,30 +2065,17 @@ a:hover {
   border: 10px solid transparent;
   border-top-color: #c1c1cd;
 }
-.chat-block .dialog .dcont {
-  text-align: left;
-  white-space: normal;
-  word-break: break-all;
-  display: block;
-  font-size: 15px;
-  color: #333;
-  line-height: 18px;
-  padding-bottom: 3px;
+.chat-block .d-btn-op .btn {
+  -webkit-border-radius: 1000px;
+  -moz-border-radius: 1000px;
+  border-radius: 1000px;
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  padding: 2px 10px;
 }
-.chat-block .dialog .dcont .question {
-  font-size: 10px;
-  line-height: 16px;
-  position: relative;
-  color: #ed7600;
-  padding-bottom: 3px;
-  margin-bottom: 2px;
-}
-.chat-block .dialog .dcont .question .dot-line {
-  width: 16px;
-  border-bottom: 1px dotted #ed7600;
-  display: block;
-  position: absolute;
-  bottom: 0;
+.chat-block .d-btn-op .btn.btn-red {
+  background: #ed4f4f;
 }
 .chat-block .dialogbtn {
   position: absolute;
@@ -3600,7 +3615,6 @@ a:hover {
   }
   .view_select .se_cont a,
   .view_select .selected {
-    line-height: 20px;
     padding-left: 10px;
     font-size: 12px;
   }

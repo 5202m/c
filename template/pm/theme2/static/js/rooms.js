@@ -10,6 +10,10 @@ var Rooms = new Container({
         this.setStudioRoomList();
     },
     onShow : function(){
+        $('body').attr('class', 'home');
+    },
+    onHide : function(){
+        $('body').attr('class', 'home bgfff');
     }
 });
 
@@ -118,7 +122,6 @@ Rooms.setRoomCourseList = function(){
  * 绑定页面各类事件
  */
 Rooms.setEvent = function(){
-    $('body').removeClass('bgfff');
     this.setEventRoom();
 };
 

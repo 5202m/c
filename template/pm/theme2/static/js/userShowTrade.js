@@ -115,13 +115,10 @@ UserShowTrade.setUserShowTradePraise = function(obj){
  * 设置事件
  */
 UserShowTrade.setEvent = function(){
-    $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**
      * 返回晒单墙
      */
-    $('#myShowTrade_back').bind('click', function(){
-        ShowTrade.load();
-    });
+    $('#myShowTrade_back').bind('click', Container.back);
     /**
      * 进入我要晒单页面
      */

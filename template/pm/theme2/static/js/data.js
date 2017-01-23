@@ -17,7 +17,6 @@ var Data = {
     syllabusMap : null,      //课程表
     onlineNumMap : null,     //在线人数
 
-    container : null,       //当前显示的页面DOM Container
     analysts : null,        //所有分析列表
 
     pointLevel: [{points:0, name:'L1'},

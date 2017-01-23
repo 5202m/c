@@ -110,11 +110,8 @@ Syllabus.setSyllabusList = function(day){
  * 设置事件
  */
 Syllabus.setEvent = function(){
-    $('body').addClass('bgfff').removeClass('bgf2f2f2');
     /**返回房间*/
-    $("#back_chat").bind("click", function(){
-        Room.load();
-    });
+    $("#back_chat").bind("click", Container.back);
     /**
      * 课程表切换
      */

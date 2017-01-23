@@ -106,13 +106,10 @@ Trains.trainRegis = function(obj){
  * 设置事件
  */
 Trains.setEvent = function(){
-    $('body').removeClass('bgfff').addClass('bgf2f2f2');
     /**
      * 返回首页
      */
-    $('#train_back').bind('click', function(){
-        Rooms.load();
-    });
+    $('#train_back').bind('click', Container.back);
     /**
      * 报名/进入按钮事件
      */
