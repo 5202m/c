@@ -114,7 +114,7 @@ ShowTradeAdd.setEvent = function(){
     /**
      * 设置晒单人
      */
-    if(Util.isBlank(Data.userInfo.isSetName) || Data.userInfo.isSetName) {
+    if(Data.userInfo.isLogin && (Util.isBlank(Data.userInfo.isSetName) || Data.userInfo.isSetName)) {
         $('#showTradeAddForm .userName').text(Data.userInfo.nickname).attr('contenteditable', 'false');
         $('#showTradeAddForm .userName').next('.placeholder').hide();
     }
