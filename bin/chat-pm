@@ -7,8 +7,10 @@
 const app = require('../app');
 const debug = require('debug')('chat-cf:server');
 const http = require('http');
-const logger = require('../resources/logConf').getLogger('applicationScript');
+const logConf = require('../resources/logConf');
+const logger = logConf.getLogger('applicationScript');
 
+logConf.use(app);
 /**
  * Get port from environment and store in Express.
  */
