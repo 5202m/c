@@ -187,7 +187,7 @@ var chat={
             sendObj.fromUser.pointsGlobal = parseInt($('.personal_center .levelbar .le_detail').attr('pg'));
             sendObj.fromUser.toUser = toUser;
            // chat.socket.emit('sendMsg', sendObj);//发送数据
-            common.getJson("/message/sendMsg",{data:sendObj},function(){
+            $.post(indexJS.apiUrl+"/message/sendMsg",{data:sendObj},function(){
                 console.log("ok");
             });
             chat.setContent(sendObj, true, false);//直接把数据填入内容栏
@@ -1054,7 +1054,7 @@ var chat={
             sendObj.fromUser.toUser.publishTime=diaDom.attr("id");
         }
 //        chat.socket.emit('sendMsg',sendObj);//发送数据
-        common.getJson("/message/sendMsg",{data:sendObj},function(){
+        $.post(indexJS.apiUrl+"/message/sendMsg",{data:sendObj},function(){
             console.log("ok");
         });
         chat.setWhContent(sendObj,true,false);//直接把数据填入内容栏
@@ -1184,8 +1184,20 @@ var chat={
                     });
                     //加载私聊信息
                     //chat.socket.emit("getWhMsg",{clientStoreId:indexJS.userInfo.clientStoreId,userType:indexJS.userInfo.userType,groupId:indexJS.userInfo.groupId,groupType:indexJS.userInfo.groupType,userId:indexJS.userInfo.userId,toUser:{userId:userId,userType:userType}});
-                    common.getJson("/message/getWhMsg",
-                        {data:{clientStoreId:indexJS.userInfo.clientStoreId,userType:indexJS.userInfo.userType,groupId:indexJS.userInfo.groupId,groupType:indexJS.userInfo.groupType,userId:indexJS.userInfo.userId,toUser:{userId:userId,userType:userType}}},
+                    $.post(indexJS.apiUrl+"/message/getWhMsg",
+                        {
+                            data: {
+                                clientStoreId: indexJS.userInfo.clientStoreId,
+                                userType: indexJS.userInfo.userType,
+                                groupId: indexJS.userInfo.groupId,
+                                groupType: indexJS.userInfo.groupType,
+                                userId: indexJS.userInfo.userId,
+                                toUser: {
+                                    userId: userId,
+                                    userType: userType
+                                }
+                            }
+                        },
                         function(){
                             console.log("ok");
                         });
@@ -1409,7 +1421,7 @@ var chat={
         	    allowWhisper: currTab.attr("aw")
         	};
             //chat.socket.emit('login',{userInfo:indexJS.userInfo,lastPublishTime:$("#dialog_list>div:last").attr("id"),fUserTypeStr:currTab.attr("awr"), allowWhisper : currTab.attr("aw")});
-            common.getJson("/message/join", postData, function(){
+            $.post(indexJS.apiUrl+"/message/join", postData, function(){
                 console.log("ok");
             });
             $(".img-loading[pf=chatMessage]").show();
