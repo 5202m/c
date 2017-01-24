@@ -150,6 +150,15 @@ a:hover {
   margin: 0 auto;
   max-width: 640px;
 }
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+article.content_w {
+  height: 100%;
+  overflow-y: auto;
+}
 /* img */
 .rightbar .qq i,
 .room-main .tit .st i,
@@ -1646,6 +1655,7 @@ a:hover {
 }
 .call-infos.block-yellow .tb-default {
   border: 1px solid #fad6b2;
+  background: #fad6b2;
 }
 .call-infos.block-yellow .tb-default th {
   background-color: #fff5eb;
@@ -3320,7 +3330,7 @@ a:hover {
   height: 30px;
   bottom: 0;
   left: 0;
-  z-index: 10;
+  z-index: 8;
 }
 .txt-block .txt-details {
   position: relative;

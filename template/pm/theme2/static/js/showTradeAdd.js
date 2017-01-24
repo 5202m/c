@@ -7,12 +7,6 @@ var ShowTradeAdd = new Container({
     url : "/pm/theme2/template/showTradeAdd.html",
     onLoad : function(){
         ShowTradeAdd.setEvent();
-    },
-    onShow : function(){
-        $('body').attr('class', 'home bgf2f2f2');
-    },
-    onHide : function(){
-        $('body').attr('class', 'home bgfff');
     }
 });
 

@@ -5,6 +5,7 @@
 var Chat = {
     socket:null,
     fullscreen : false,
+    chatMsgFilter : "all", //all-看所有人 analyst-看分析师 me-与我相关
 
     /**
      * 初始化
@@ -118,10 +119,45 @@ var Chat = {
          * 关闭聊天
          */
         $("#chat_close").bind("click", function(){
+            if(Chat.fullscreen){
+                $("#chat_fullscreen").trigger("click");
+            }
             $("#room_classnote").show();
             $("#room_foot").show();
             $("#room_talk").hide();
         });
+
+        /**
+         * 对话消息过滤
+         */
+        $("#chat_filter").bind("change", function(){
+            Chat.filterMsg($(this).val());
+        });
+    },
+
+    /**
+     * 过滤显示消息
+     * @param [type]
+     */
+    filterMsg : function (type) {
+        //显示类型不发生改变，或者 加载消息的时候，本身就是“显示所有”时不需要处理
+        if(Chat.chatMsgFilter == type || (!type && Chat.chatMsgFilter == "all")){
+            return;
+        }
+        Chat.chatMsgFilter = type || Chat.chatMsgFilter;
+        switch(Chat.chatMsgFilter){
+            case "all":
+                $("#chat_msg > .dialog").show();
+                break;
+
+            case "analyst":
+                $("#chat_msg > .dialog").hide().filter(".tag-analyst").show();
+                break;
+
+            case "me":
+                $("#chat_msg > .dialog").hide().filter(".tag-me").show();
+                break;
+        }
     },
 
     /**
@@ -272,6 +308,7 @@ var Chat = {
         }
         $("#chat_msg").append(html.join(""));
         Chat.setTalkScroll();
+        Chat.filterMsg();
     },
 
     /**
@@ -394,6 +431,7 @@ var Chat = {
             result = Room.formatHtml("chat_dialogTxt1", result);
         }
 
+        var userTag = Chat.getUserTag(fromUser);
         if(isMeSend || fromUser.userId == Data.userInfo.userId){
             result = Room.formatHtml("chat_dialogMe",
                 fromUser.userId,
@@ -402,14 +440,13 @@ var Chat = {
                 result
             );
         }else{
-            var userTag = Chat.getUserTag(fromUser);
             result = Room.formatHtml("chat_dialog",
                 userTag.cls,
                 fromUser.publishTime,
                 fromUser.userId,
                 userTag.avatar,
                 userTag.level,
-                fromUser.nickname,
+                userTag.appellation + fromUser.nickname,
                 Chat.formatPublishTime(fromUser.publishTime),
                 result
             );
@@ -420,29 +457,38 @@ var Chat = {
     /**
      * 获取用户标签
      * @param userInfo
-     * @returns {{cls: string, level: string}}
+     * @returns {{cls: String, level: String, avatar: String, appellation: String}}
      */
     getUserTag : function(userInfo){
         var result = {
             cls : "",
             level : "",
-            avatar : "/pm/theme2/img/user_c.png"
+            avatar : "/pm/theme2/img/user_c.png",
+            appellation : ""
         };
         if(userInfo){
-            //dialog样式、用户级别
+            //名称 dialog样式、用户级别
             switch(userInfo.userType){
                 case 2:
-                    result.cls = "dialog-analyst";
+                    result.cls = " dialog-analyst tag-analyst";
                     break;
 
                 case 1:
+                    result.cls = " dialog-admin";
+                    result.appellation = "管理员";
+                    break;
+
                 case 3:
-                    result.cls = "dialog-admin";
+                    result.cls = " dialog-admin";
+                    result.appellation = "客服";
                     break;
 
                 case 0:
                     result.level = Room.formatHtml("chat_dialogLevel", Data.getUserLevel(userInfo.pointsGlobal));
                     break;
+            }
+            if(userInfo.userId == Data.userInfo.userId || (userInfo.toUser && userInfo.toUser.userId == Data.userInfo.userId)){
+                result.cls += " tag-me";
             }
 
             //头像

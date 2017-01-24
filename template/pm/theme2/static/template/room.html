@@ -117,7 +117,9 @@
 			<div class="view_select fl">
 				<div class="se_cont">
 					<select class="selected" id="chat_filter">
-						<option>看所有人</option>
+						<option value="all">看所有人</option>
+						<option value="analyst">只看分析师</option>
+						<option value="me">与我相关</option>
 					</select>
 				</div>
 				<i class="i-arrow-down2"></i>
@@ -139,7 +141,7 @@
 			<a href="javascript:void(0);" class="tips-close-btn">关闭</a>
 		</div>
 		<div class="chat-block clearfix" id="chat_msg">
-			<div class="dialog {0}" temp="chat_dialog" id="{1}">
+			<div class="dialog{0}" temp="chat_dialog" id="{1}">
 				<div class="headimg" uid="{2}">
 					<a href="javascript:void(0);"><img src="{3}"></a>
 				</div>
@@ -150,12 +152,16 @@
 				</div>
 				{7}
 			</div>
-			<div class="dialog dialog-me" temp="chat_dialogMe" id="{0}">
-				<div class="infobar">
-					<span class="ctime">{1}</span>
-					<a href="javascript:void(0);" class="uname">{2}</a>
+			<div class="dialog dialog-me tag-me" temp="chat_dialogMe" id="{0}">
+				<div class="headimg">
+					<a href="javascript:void(0);"><img src="{1}"></a>
 				</div>
-				{3}
+				<div class="infobar">
+					{3}
+					<span class="ctime">{4}</span>
+					<a href="javascript:void(0);" class="uname">{5}</a>
+				</div>
+				{6}
 			</div>
 			<span class="level" temp="chat_dialogLevel">{0}</span>
 			<a href="{0}" target="_blank" class="a-block" temp="chat_dialogUrl">{0}</a>
@@ -189,23 +195,25 @@
 					<div class="op-panel">
 						<i class="i-addbtn2" id="addbox-btn"></i>
 						<div class="text-area-box">
-							<div id="contentText" contenteditable="true" class="text-area-con"></div>
-							<span class="placeholder">我来说两句...</span>
+							<div id="chat_cont" contenteditable="true" class="text-area-con"></div>
+							<span id="chat_contHolder" class="placeholder">我来说两句...</span>
 						</div>
-						<button class="i-sendbtn hide">发送</button>
+						<button id="chat_send" class="i-sendbtn hide">发送</button>
 					</div>
 				</div>
 				<div class="chat-add-box">
 					<div class="add-box-hd">
-						<div class="at-friend al-c">
-							<span>@<label class="uname">小娜</label></span><span>@<label class="uname">方宥恺</label></span><span>@<label class="uname">陈丞</label></span>
+						<div class="at-friend al-c" id="chat_analysts">
+							<span>@<label class="uname">小娜</label></span>
+							<span>@<label class="uname">方宥恺</label></span>
+							<span>@<label class="uname">陈丞</label></span>
 						</div>
 					</div>
 					<div class="add-box-bd">
 						<ul class="add-btns-list clearfix">
-							<li><a href="javascript:;"><i class="i-emp2"></i><label>表情</label></a></li>
-							<li><a href="javascript:;"><i class="i-pic"></i><label>图片</label></a></li>
-							<li><a href="javascript:;"><i class="i-dollar"></i><label>打赏</label></a></li>
+							<li><a href="javascript:void(0);" id="chat_face"><i class="i-emp2"></i><label>表情</label></a></li>
+							<li><a href="javascript:void(0);" id="chat_img"><i class="i-pic"></i><label>图片</label></a></li>
+							<li><a href="javascript:void(0);" id="chat_reward"><i class="i-dollar"></i><label>打赏</label></a></li>
 						</ul>
 					</div>
 				</div>
