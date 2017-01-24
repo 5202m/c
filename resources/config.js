@@ -8,9 +8,7 @@ var config = {
         webui:'webui', //直播间中studio.js中针对webui不跳转到mini版本
         web24k:'web24k', //api中课程表信息，web24k只取一条课程记录
         roomId:{
-            studio : 'studio_teach',
-            fxstudio : 'fxstudio_11',
-            hxstudio : 'hxstudio_26'
+            studio : 'studio_teach'
         }
     },
     defTemplate:{
@@ -20,17 +18,12 @@ var config = {
         smsUrl : "http://testweboa.gwfx.com:8070/das_web/smsTemplate/send", //http://dmp.gwghk.com/smsTemplate/send
         emailUrl : "http://testweboa.gwfx.com:8070/das_web/emailTemplate/send", //http://dmp.gwghk.com/emailTemplate/send
         cstGroupUrl : "http://testweboa.gwfx.com:8070/das_web/customerGroup/updateCustomer", //http://dmp.gwghk.com/customerGroup/updateCustomer
-        fxstudio : {
-            sid : "fa573c78eaa8402cb6c84dabfcce7158",
-            token : "8867af2616da47d7927ff0df7ea60668"
-        },
         studio : {
             sid : "fa573c78eaa8402cb6c84dabfcce7159",
             token : "8867af2616da47d7927ff0df7ea60669"
         }
     },//UTM系统信息
     isDevTest:true,//是否开发或测试环境
-    clusterWorkCount:2,//开启多线程个数，如果该参数大于系统内核个数，默认是开启(cpu核数-1)个线程
     sessionConfig:{key:'connect.sid',secret:'pm@chat'},//session 对应key,secret
     redisUrlObj:{ host: '192.168.35.236', port: 6379 },	//链接redis缓存客户端连接
     isAllowCopyHomeUrl:true,//是否允许copy链接（针对微信进入聊天室）
@@ -54,10 +47,7 @@ var config = {
     packetAcUrl:'http://testweb1.24k.hk/activity20160105/getActivityUrl',//红包活动连接
     mobile24kPath:'http://testweb1.24k.hk:8092',//24k信息地址 http://m.24k.hk
     dasUrl:'http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom',//das数据分析系统地址
-    //db
-    dbURL:'mongodb://192.168.35.236/pm_mis',
-    dbUserName:'pmmisuser',
-    dbUserPWD:'pmmispwd123'
+    
 };
 //导出配置类
 module.exports =config;
