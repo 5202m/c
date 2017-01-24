@@ -57,7 +57,7 @@ Rooms.setAdvertisement = function(){
  * 获取房间列表
  */
 Rooms.setStudioRoomList = function(){
-    var html = [];
+    var html = [], trainObj = null;
     Data.getRoomList(function(rooms){
         var cls = ['blue','red','green','brown'], trainNum = 0;
         $.each(rooms, function(i, row){
@@ -69,6 +69,7 @@ Rooms.setStudioRoomList = function(){
                     '精品培训班',
                     row.roomType
                 ));
+                trainObj = row;
                 trainNum++;
             } else {
                 var loc_index = Util.randomIndex(4);
@@ -82,6 +83,11 @@ Rooms.setStudioRoomList = function(){
             }
         });
         $('#roomList').empty().html(html.join(''));
+        if($('#roomList .block-item a[rt="train"]').size()>0 && trainObj) {
+            $('#roomList .block-item a[rt="train"] .item-hd .course-info .course-time').text(trainObj.openDate.beginDate + '~' + trainObj.openDate.endDate);
+            $('#roomList .block-item a[rt="train"] .item-hd .course-info .teacher').text(trainObj.name);
+            $('#roomList .block-item a[rt="train"] .item-hd .course-info .courseTitle').text(trainObj.remark);
+        }
         $('#roomList .block-item a[rt="train"] .item-hd .block-tit .listenership').hide();
         Rooms.setRoomCourseList();
         Rooms.setEvent();
