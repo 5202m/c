@@ -6,6 +6,7 @@ var Chat = {
     socket:null,
     fullscreen : false,
     chatMsgFilter : "all", //all-看所有人 analyst-看分析师 me-与我相关
+    chatToolView : "none", //none-不显示 analyst-仅显示@ btns-显示@且显示工具栏 face显示表情
 
     /**
      * 初始化
@@ -132,6 +133,83 @@ var Chat = {
          */
         $("#chat_filter").bind("change", function(){
             Chat.filterMsg($(this).val());
+        });
+
+        /**
+         * 聊天框相关事件
+         */
+        $("#chat_cont").bind("focus", function(){
+            $("#chat_contHolder").hide();
+            if(Chat.chatToolView == "none"){
+                Chat.showTool("analyst");
+            }
+        }).bind("blur", function(e){
+            var msg = $.trim($(this).html());
+            if(!msg){
+                $("#chat_contHolder").fadeIn();
+            }
+            //如果是点击小加号的话，不执行
+            window.setTimeout(function(){
+                if(Chat.chatToolView == "analyst" || Chat.chatToolView == "face"){
+                    Chat.showTool("none");
+                }
+            }, 100);
+        }).bind("keypress", function(e){
+            var msg = $(this).html();
+            if(e.keyCode==13){//回车键
+                if(msg){
+                    $(this).html(msg.replace(/<div>|<\/div>/g,""));
+                    $("#chat_send").click();
+                }
+                return false;
+            }
+        }).bind("keyup", function(e){
+
+        }).bind("input", function(){
+            var isOk = ($.trim($(this).text()) != $(this).find(".txt_dia").text() || $(this).find("img").size() > 0);
+            if(isOk){
+                $("#chat_send").fadeIn();
+            }else{
+                $("#chat_send").hide();
+            }
+        });
+
+        /**
+         * 聊天框“+”
+         */
+        $("#chat_contTool").bind("click", function(){
+            if(Chat.chatToolView == "btns"){
+                Chat.showTool("none");
+            }else{
+                Chat.showTool("btns");
+            }
+            return false;
+        });
+
+        /**
+         * 表情
+         */
+        $("#chat_face").bind("click", function(){
+            Chat.showTool("face");
+
+            if(!Chat.face.initFace){
+                // 初始化表情
+                Data.getRoom(function(room){
+                    //初始化标签
+                    Chat.face.init($("#chat_facePanel"),
+                        $("#chat_cont"),
+                        Data.filePath+'/face/',
+                        !room || (!room.allowVisitor && "visitor"==studioChatMb.userInfo.clientGroup));
+                    $("#chat_cont").focusEnd();
+                });
+            }else{
+                $("#chat_cont").focusEnd();
+            }
+        });
+
+        /** 发送 */
+        $("#chat_send").bind("click", function(){
+            //TODO 发送消息
         });
     },
 
@@ -954,6 +1032,122 @@ var Chat = {
                 studioChatMb.socket.emit('sendMsg', sendObj);//发送数据
             }
             chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, studioChatMb.courseTick.course));//统计发言次数
+        }
+    },
+
+    /**
+     * 显示工具栏
+     */
+    showTool : function(type){
+        if(type == Chat.chatToolView){
+            return;
+        }
+        // none-不显示 analyst-仅显示@ btns-显示@且显示工具栏 face显示表情
+        switch (Chat.chatToolView){
+            case "none":
+                $("#chat_tools").show();
+                break;
+
+            case "analyst":
+                if(type != "btns"){
+                    $("#chat_tool1").fadeOut(300);
+                }
+                break;
+
+            case "btns":
+                if(type != "analyst"){
+                    $("#chat_tool1").fadeOut(300);
+                }
+                $("#chat_tool2").slideUp(300);
+                break;
+
+            case "face":
+                $("#chat_tool3").slideUp(300);
+                break;
+        }
+        switch (type){
+            case "none":
+                $("#chat_tools").hide();
+                break;
+
+            case "analyst":
+                if(Chat.chatToolView != "btns"){
+                    $("#chat_tool1").fadeIn(300);
+                }
+                break;
+
+            case "btns":
+                if(Chat.chatToolView != "analyst"){
+                    $("#chat_tool1").fadeIn(300);
+                }
+                $("#chat_tool2").slideDown(300);
+                break;
+
+            case "face":
+                $("#chat_tool3").slideDown(300);
+                break;
+        }
+        Chat.chatToolView = type;
+    },
+
+    /**
+     * 表情控制
+     */
+    face:{
+        initFace : false,
+
+        /**
+         * 初始化
+         */
+        init : function($panel, $assign, path, disabled){
+            if(this.initFace){
+                return;
+            }
+            this.build($panel, path);
+
+            /**表情分页滑动*/
+            new Swiper($panel.parent(), {
+                pagination: '.swiper-pagination',
+                paginationClickable: true
+            });
+
+            /**
+             * 表情选择事件
+             */
+            $panel.find("img").bind("click", {
+                panel : $panel,
+                assign : $assign,
+                disabled : disabled
+            }, function(e){
+                if(!e.data.disabled){
+                    e.data.assign.append($(this).clone()).trigger("input").focusEnd();
+                }
+            });
+            this.initFace = true;
+        },
+        /**
+         * 构建表情
+         * @param $panel
+         * @param path
+         */
+        build : function($panel, path){
+            var loc_face = [];
+            var step = 7;
+            for(var i = 1; i <= 75; i+=21){
+                loc_face.push('<div class="swiper-slide"><table border="0" cellspacing="0" cellpadding="0">');
+                for(var j = i, lenJ = Math.min(i + 20, 75); j <= lenJ; j++){
+                    if(j % step == 1){
+                        loc_face.push('<tr>');
+                    }
+                    loc_face.push('<td><img src="' + path + j + '.gif"/></td>');
+                    if(j % step == 0 || j == lenJ){
+                        loc_face.push('</tr>');
+                    }
+                }
+                loc_face.push('</table></div>');
+            }
+            $panel.html(loc_face.join(""));
+            //$(window).trigger("resize");
         }
     },
 };

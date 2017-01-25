@@ -3,7 +3,6 @@
  * author Dick.guo
  *
  * OnlineCS : 在线客服
- * Container : 页面容器
  */
 var Tool = {
 
@@ -90,9 +89,30 @@ var Tool = {
             }
         }
     },
+};
 
-    /**页面容器*/
-    Container : {
 
+/**
+ * 可编辑div焦点定位通用方法
+ * @returns {$.fn}
+ */
+$.fn.focusEnd = function() {
+    $(this).focus();
+    var tmp = $('<span/>').appendTo($(this)),
+        node = tmp.get(0),
+        range = null,
+        sel = null;
+    if (document.selection) {
+        range = document.body.createTextRange();
+        range.moveToElementText(node);
+        range.select();
+    } else if (window.getSelection) {
+        range = document.createRange();
+        range.selectNode(node);
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
     }
+    tmp.remove();
+    return this;
 };
