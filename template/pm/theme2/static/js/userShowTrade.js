@@ -127,7 +127,7 @@ UserShowTrade.setEvent = function(){
         //if(Data.userInfo.isLogin) {
         ShowTradeAdd.load();
         //}else{
-
+        //TODO 跳转至登录页
         //}
     });
     /**

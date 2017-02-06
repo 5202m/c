@@ -97,7 +97,7 @@ ShowTrade.setEvent = function(){
         //if(Data.userInfo.isLogin) {
             UserShowTrade.load();
         //}else{
-
+            //TODO 跳转至登录页
         //}
     });
     /**
@@ -108,7 +108,7 @@ ShowTrade.setEvent = function(){
         //if(Data.userInfo.isLogin) {
         ShowTradeAdd.load();
         //}else{
-
+            //TODO 跳转至登录页
         //}
     });
     /**

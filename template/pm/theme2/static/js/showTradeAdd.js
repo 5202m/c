@@ -94,6 +94,7 @@ ShowTradeAdd.saveShowTrade = function(){
             if(data.isOK){
                 box.showMsg('您的晒单已成功提交，等待系统审核！');
                 if(!Data.userInfo.isSetName){
+                    //TODO 设置更新昵称
                     //$('#myNickName').val(userName);
                     //$('#setNkBtn').click();
                 }

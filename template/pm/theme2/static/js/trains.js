@@ -71,32 +71,41 @@ Trains.trainRegis = function(obj){
             var params = {groupId:$(obj).attr("rid"),userNo:userNo,clientGroup:group,nickname:nickname};
             Util.postJson('/studio/addClientTrain',{data:JSON.stringify(params)},function(data){
                 if(data.awInto){//进入培训班
+                    //TODO 进入培训班
                     //indexJS.toRefreshView();
                 }else if(data.errcode){
                     if(!$(".train_detail").is(":visible") && $(obj).attr('rml')=='true' && $.inArray(data.errcode,['3003','3009'])>-1){
+                        //TODO 显示详情页
                         //chatTeacher.trainDetailsLoad(userNo, $(obj).text());
                     } else {
+                        //TODO 显示错误提示
                         //box.showMsg(data.errmsg);
                     }
                 }else{
                     if(data.isOK){
                         if(updateTrain){
+                            //TODO 显示培训班详情
                             //chatTeacher.showTrani(data.chatGroup);
                         }else if(isDetail=='true'){
+                            //TODO 显示列表
                             //box.showMsg(data.msg);
                             //videosTrain.getTrainList();
                         }else{
+                            //TODO 显示消息
                             //box.showMsg(data.msg);
                         }
                     }else{
+                        //TODO 显示提示消息
                         //box.showMsg(data.msg||data.errmsg);
                     }
                 }
             });
         }else{
+            //TODO 切换房间消息
             //videosLive.changeRoomMsg({title:"", type:"onlyTrain"});
         }
     }else{
+        //TODO 跳转至登录页
         //$('#loginBox').css('z-index','102');
         //common.openPopup('.blackbg,.login');
     }
@@ -114,6 +123,6 @@ Trains.setEvent = function(){
      * 报名/进入按钮事件
      */
     $('#trainsList').on('click', '.u-ch-class .u-ch-con a.btn', function(){
-
+        //TODO 进入培训班
     });
 };

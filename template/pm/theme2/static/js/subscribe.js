@@ -99,4 +99,5 @@ Subscribe.setPraise = function(obj, lb){
  * 订阅
  */
 Subscribe.setSubscribe = function(){
+    //TODO 订阅
 };
