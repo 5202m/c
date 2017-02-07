@@ -1689,7 +1689,9 @@ router.post('/subscribe', function(req, res){
     if(params.noticeCycle=='week') {
         params.endDate = common.DateAdd('w', 1, new Date(params.startDate));//结束时间，1周
     }else if(params.noticeCycle=='month'){
-        params.endDate = common.DateAdd('M', 1, new Date(params.startDate));//极速时间，1月
+        params.endDate = common.DateAdd('M', 1, new Date(params.startDate));//结束时间，1月
+    }else if(params.noticeCycle=='year'){
+        params.endDate = common.DateAdd('y', 1, new Date(params.startDate));//结束时间，1年(暂时供手机版使用)
     }
     if(common.isBlank(params.groupType) || common.isBlank(params.userId) || common.isBlank(params.type) || !common.isNumber(params.point)){
         res.json({'isOK':false, 'msg':'参数错误'});

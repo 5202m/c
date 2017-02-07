@@ -745,7 +745,7 @@ var Chat = {
                 var row;
                 for (var i = 0, lenI = data.length; i < lenI; i++) {
                     row = data[i];
-                    studioChatMb.formatUserToContent(row, true, result.toUserId);
+                    Chat.formatUserToContent(row, true, result.toUserId);
                 }
             }
         },
