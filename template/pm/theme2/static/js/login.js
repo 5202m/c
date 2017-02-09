@@ -23,6 +23,10 @@ Login.setEvent = function(){
         intervalId : null,
         time : 120
     }};
+    /**
+     * 返回
+     */
+    $('#login_back').bind('click', Container.back);
     $('.login-con').on('input propertychange','.f-i-text',function(){
         $('.error-bar').addClass('dn');
         !this.value && $(this).parent().find('.i-input-op').hide();
