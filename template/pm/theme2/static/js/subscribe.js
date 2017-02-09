@@ -58,7 +58,7 @@ Subscribe.setSubscribeData = function(obj){
         if(data!=null){
             $.each(data,function(i, row){
                 var analystsArr = row.analyst.split(',');
-                $.each(analystsArr, function(k, v){console.log(v);
+                $.each(analystsArr, function(k, v){
                     if($(obj+' a[analystId="'+v+'"]').size()>0) {
                         $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
                     }

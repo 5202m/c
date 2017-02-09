@@ -40,7 +40,7 @@ Syllabus.setSyllabusList = function(day){
     $('#syllabusDayTitle li.active').removeClass('active');
     $('#syllabusDayTitle li[day='+day+']').addClass('active');
     var clsObj = {grey:'grey', red:'red', blue:'blue', orange:'orange', green:'green'}
-    var courseDataHtml = [] ,curDay=new Date(Data.serverTime).getDay(), curTime = Util.formatDate(new Date(Data.serverTime),'HH:mm');
+    var courseDataHtml = [] ,curDay=new Date(Data.serverTime).getDay(), curTime = Util.formatDate(new Date(Data.serverTime),'HH:mm'), hideBtn = '';
     Data.getSyllabus(Data.userInfo.groupId, function(result){
         var courseType = {'0':'文字直播','1':'视频直播','2':'oneTV直播'};
         var days=result.courses.days,tmk=result.courses.timeBuckets;
@@ -71,16 +71,19 @@ Syllabus.setSyllabusList = function(day){
                                 statusCls = clsObj.red;
                                 btn = '不可回看';
                                 btnCls = clsObj.grey;
+                                hideBtn = ' style="display:none;"';
                             }else if(curDay > day || tmk[k].startTime<=curTime && tmk[k].endTime<curTime){
                                 status = '已结束';
                                 statusCls = clsObj.grey;
                                 btn = '不可回看';
                                 btnCls = clsObj.grey;
+                                hideBtn = ' style="display:none;"';
                             }else{
                                 status = '即将开始';
                                 statusCls = clsObj.orange;
                                 btn = '订阅';
                                 btnCls = clsObj.blue;
+                                hideBtn = '';
                             }
                             courseDataHtml.push(Syllabus.formatHtml('syllabusData',
                                 courseObj.title,
@@ -94,7 +97,9 @@ Syllabus.setSyllabusList = function(day){
                                 statusCls,
                                 btn,
                                 btnCls,
-                                courseObj.lecturerId
+                                courseObj.lecturerId,
+                                hideBtn,
+                                (courseObj.context||'&nbsp')
                             ));
                             courseDataHtml.push('<div class="blk7 blke3e3ea"></div>');
                         });
