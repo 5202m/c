@@ -37,20 +37,13 @@ var Index = {
         if(Data.userInfo.isLogin){
             $('#header_ui').text(Data.userInfo.nickname);
         }
-
         //登录、显示用户信息
         $("#header_ui").bind("click", function(){
-            if(Rooms.userInfo && Rooms.userInfo.isLogin){
+            if(Data.userInfo && Data.userInfo.isLogin){
                 //已登录，显示用户信息
                 //studioMbPop.popBox("person");
             }else{
-                //未登录，弹出登录框
-                /*studioMbPop.popBox("login", {
-                 groupId : "",
-                 clientGroup : Rooms.userInfo.clientGroup,
-                 clientStoreId : Rooms.userInfo.clientStoreId,
-                 platform : Rooms.options.platform
-                 });*/
+                Login.load();
             }
         });
     }

@@ -44,30 +44,31 @@ Subscribe.setAnalystList = function(){
                 });
             });
             $('#subscribeAnalyst').empty().html(analystHtml.join(''));
-            Subscribe.setSubscribeData();
+            Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
         }
     });
 };
 
 /**
  * 获取订阅数据
+ * @param obj
  */
-Subscribe.setSubscribeData = function(){
+Subscribe.setSubscribeData = function(obj){
     Util.postJson('/studio/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
         if(data!=null){
             $.each(data,function(i, row){
                 var analystsArr = row.analyst.split(',');
-                $.each(analystsArr, function(k, v){
-                    if($('#subscribeAnalyst .item-con .item-main .social-op a[analystId="'+v+'"]').size()>0) {
-                        $('#subscribeAnalyst .item-con .item-main .social-op a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
+                $.each(analystsArr, function(k, v){console.log(v);
+                    if($(obj+' a[analystId="'+v+'"]').size()>0) {
+                        $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
                     }
                 });
                 if(row.type == 'live_reminder'){
-                    $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').attr('lrid', row._id);
+                    $(obj+' a.btnSubscribe').attr('lrid', row._id);
                 }else if(row.type == 'shout_single_strategy'){
-                    $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').attr('ssid', row._id);
+                    $(obj+' a.btnSubscribe').attr('ssid', row._id);
                 }else if(row.type == 'trading_strategy'){
-                    $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').attr('tsid', row._id);
+                    $(obj+' a.btnSubscribe').attr('tsid', row._id);
                 }
             });
         }
@@ -98,7 +99,6 @@ Subscribe.setEvent = function(){
     /**
      * 订阅
      */
-    $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').unbind('click');
     $('#subscribeAnalyst').on('click', '.item-con .item-main .social-op a.btnSubscribe', function(){
         var $this = $(this), id = '', types = $this.attr('type').split(',');
         $this.addClass('clicked');
@@ -152,29 +152,16 @@ Subscribe.setPraise = function(obj, lb){
  * @param obj
  * @param id
  * @param type
+ * @param analysts
  * @param isLast
  */
 Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
-    //TODO 订阅
     /*if(Util.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(','))>-1){
      Pop.msg('请先绑定邮箱！');
      $('#infotab a[t="accountInfo"]').click();
      }else{*/
     var remark = {'live_reminder':'订阅直播提醒','shout_single_strategy':'订阅喊单策略','trading_strategy':'订阅交易策略'};
     var params = {id:id, groupType:Data.userInfo.groupType, noticeType:'email', noticeCycle:'year', type:type, pointsRemark : remark[type], point:0};
-    /*var analystArr = [];
-    var currAnalyst = obj.attr('analystId');
-    $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').each(function(){
-        if($(this).attr('subscribed')=='true'){
-            analystArr.push($(this).attr('analystId'));
-        }
-    });
-    var idx =  $.inArray(currAnalyst, analystArr);console.log(idx);
-    if(obj.attr('subscribed')=='true' && idx>-1){
-        analystArr.splice(idx);//如果点击已订阅，则删除当前订阅的老师
-    }else{
-        analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-    }*/
     params.analyst = analysts.join(',');
     Util.postJson('/studio/subscribe', {params: JSON.stringify(params)}, function (data) {
         if (data.isOK) {
@@ -191,7 +178,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
         }
         obj.removeClass('clicked');
         if(isLast){
-            Subscribe.setSubscribeData();
+            Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
         }
     });
     /*}*/

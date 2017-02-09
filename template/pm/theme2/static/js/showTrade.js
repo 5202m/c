@@ -94,22 +94,22 @@ ShowTrade.setEvent = function(){
      * 进入我的晒单
      */
     $('#myShowTrade').bind('click', function(){
-        //if(Data.userInfo.isLogin) {
+        if(Data.userInfo.isLogin) {
             UserShowTrade.load();
-        //}else{
-            //TODO 跳转至登录页
-        //}
+        }else{
+            Login.load();
+        }
     });
     /**
      * 进入我要晒单页面
      */
     $('.addShowTrade').unbind('click');
     $('.addShowTrade').bind('click', function(){
-        //if(Data.userInfo.isLogin) {
-        ShowTradeAdd.load();
-        //}else{
-            //TODO 跳转至登录页
-        //}
+        if(Data.userInfo.isLogin) {
+            ShowTradeAdd.load();
+        }else{
+            Login.load();
+        }
     });
     /**
      * 点赞晒单

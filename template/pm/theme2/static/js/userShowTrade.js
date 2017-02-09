@@ -124,11 +124,11 @@ UserShowTrade.setEvent = function(){
      */
     $('.addShowTrade').unbind('click');
     $('.addShowTrade').bind('click', function(){
-        //if(Data.userInfo.isLogin) {
-        ShowTradeAdd.load();
-        //}else{
-        //TODO 跳转至登录页
-        //}
+        if(Data.userInfo.isLogin) {
+            ShowTradeAdd.load();
+        }else{
+            Login.load();
+        }
     });
     /**
      * 点赞晒单

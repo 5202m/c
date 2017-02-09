@@ -139,6 +139,55 @@ var pmApiService = {
                 }
             }
         }).form(emailData);
+    },
+    /**
+     * 根据交易账号密码登录
+     * @param params
+     * @param callback
+     */
+    checkAccountLogin:function(params, callback){
+        var submitInfo={
+            loginname:params.loginname,
+            password:params.password,
+            ip:params.ip
+        };
+        var keys = ["GW","MT4","MT5","ONESTOP"];
+        request.post({url:(config.goldApiUrl+'/account/login'), form: submitInfo}, function(error, response, data) {
+            //logger.info("tmpData:"+data);
+            var callData = null;
+            if(!error && common.isValid(data)) {
+                try{
+                    data = JSON.parse(data);
+                    if (data.code == 'SUCCESS' && data.result && data.result.code == 'OK' && data.result.returnObj && data.result.returnObj[0]) {
+                        for(var i = 0; i<keys.length;i++){
+                            var result = data.result.returnObj[0][keys[i]];
+                            //不存在对应系统 或者 对应系统的账号不是当前登录的账号 则不是此系统 跳出
+                            if(!result || result.accountNo != params.loginname){
+                                continue;
+                            }
+                            var phone = result.mobilePhone;
+                            logger.info("checkAccountLogin phone:"+phone);
+                            if(phone){
+                                var index = phone.search(/1[3-9]\d{9}/);
+                                if(index>=0){
+                                    //只获取手机号码
+                                    phone = phone.substr(index,11);
+                                    callData = {mobilePhone:phone, clientGroup:result.accountStatus};
+                                }
+                            }
+                            break;
+                        }
+                    } else {
+                        callData = null;
+                    }
+                }catch (e){
+                    logger.error("checkAccountLogin by goldoffice_api["+params.loginname+"]->error:"+e);
+                }
+            }else{
+                logger.error("checkAccountLogin by goldoffice_api["+params.loginname+"]->error:"+error);
+            }
+            callback(callData);
+        });
     }
 };
 

@@ -227,7 +227,7 @@ var Util ={
      * @returns {Boolean}
      */
     isBlank : function (str) {
-        return str === null || str === undefined || str.replace(/\s+/g, "") === "";
+        return str === null || str === undefined || (str + "").replace(/\s+/g, "") === "";
     },
 
     /**
@@ -464,6 +464,13 @@ var Util ={
      */
     isRightName:function(name){
         return !(/^([0-9]{2,10})$/g.test(name)) && /^([\w\u4e00-\u9fa5]{2,10})$/g.test(name);
+    },
+    /**
+     * 验证是否符合手机号码格式
+     * @param val
+     */
+    isMobilePhone:function(val){
+        return /(^[0-9]{11})$|(^86(-){0,3}[0-9]{11})$/.test(val);
     },
     /**
      * 调试方法

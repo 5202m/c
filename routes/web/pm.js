@@ -2,6 +2,10 @@ var Config = require("../../resources/config");
 var Logger=require('../../resources/logConf').getLogger('pm');//引入log4js
 var Request = require("request");
 var Common = require("../../util/common");
+var apiService = require('../../service/pmApiService');//引入ApiService
+var studioService = require('../../service/studioService');//引入studioService
+var errorMessage = require('../../util/errorMessage');
+var visitorService = require('../../service/visitorService');//引入visitorService
 
 /**
  * pm页面请求控制类
@@ -65,4 +69,112 @@ router.post('/rob', function(req, res) {
         }
     });
 });
+
+/**
+ * 直播间交易账号密码登录
+ */
+router.post('/pmLogin',function(req, res){
+    var verMalCode=req.body["verMalCode"],
+        accountNo=req.body["accountNo"],
+        pwd=req.body["pwd"],
+        clientStoreId=req.body["clientStoreId"],
+        cookieId=req.body['cookieId'],
+        visitorId=req.body['visitorId'],
+        roomId=req.body['roomId'],
+        roomName=req.body['roomName'],
+        courseId=req.body['courseId'],
+        courseName=req.body['courseName'],
+        teacherId=req.body['teacherId'],
+        teacherName=req.body['teacherName'];
+    var result={isOK:false,error:null};
+    var userSession=req.session.studioUserInfo;
+    if(!userSession || !userSession.groupType){
+        res.json(result);
+        return;
+    }
+    if(Common.isBlank(accountNo)||Common.isBlank(pwd)){
+        result.error=errorMessage.code_1013;
+    }else if(Common.isBlank(verMalCode)||(verMalCode.toLowerCase()!=userSession.verMalCode)){
+        result.error=errorMessage.code_1002;
+    }/*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
+     result.error=errorMessage.code_1014;
+     }*/
+    if(result.error){
+        res.json(result);
+    }else{
+        apiService.checkAccountLogin({loginname:accountNo,password:pwd,ip:Common.getClientIp(req)},function(checkAResult){
+            Logger.info("checkAccountLogin->flagResult:"+JSON.stringify(checkAResult));
+            if(checkAResult!=null){
+                var clientGroup = '';
+                if(checkAResult.clientGroup != 'A' && checkAResult.clientGroup != 'N'){
+                    result.error = errorMessage.code_1018;
+                    res.json(result);
+                }else {
+                    if(checkAResult.clientGroup == 'A'){
+                        clientGroup = 'active';
+                    }else if(checkAResult.clientGroup == 'N'){
+                        clientGroup = 'notActive';
+                    }
+                    saveLoginInfo(res, req, userSession, checkAResult.mobilePhone, accountNo, clientStoreId, clientGroup, function (saveResult) {
+                        saveResult.isOK = true;
+                        req.session.studioUserInfo.cookieId = cookieId;
+                        req.session.studioUserInfo.visitorId = visitorId;
+                        req.session.studioUserInfo.roomName = roomName;
+                        var snUser = req.session.studioUserInfo;
+                        var dasData = {mobile:snUser.mobilePhone,cookieId:cookieId,clientGroup:snUser.clientGroup,roomName:roomName,roomId:(snUser.groupId||roomId),platform:'',userAgent:req.headers['user-agent'],sessionId:req.sessionID,clientStoreId:snUser.clientStoreId,groupType:snUser.groupType,userName:(snUser.userName||''),email:(snUser.email||''),ip:common.getClientIp(req),visitorId:visitorId,nickName:(snUser.nickname||''),courseName:courseName,courseId:courseId,teacherId:teacherId,teacherName:teacherName,accountNo:accountNo};
+                        visitorService.saveVisitorRecord("login", dasData);
+                        res.json(saveResult);
+                    });
+                }
+            }else{
+                result.error = errorMessage.code_1015;
+                res.json(result);
+            }
+        });
+    }
+});
+
+/**
+ * 保存登录信息
+ * @param res
+ * @param req
+ * @param userSession
+ * @param mobilePhone
+ * @param accountNo
+ * @param thirdId
+ * @param clientStoreId
+ */
+function saveLoginInfo(res,req,userSession,mobilePhone,accountNo,clientStoreId,clientGroup,callback){
+    var userInfo = {
+        mobilePhone: mobilePhone,
+        ip: Common.getClientIp(req),
+        groupType: userSession.groupType,
+        accountNo: accountNo,
+        thirdId: null,
+        clientGroup:clientGroup
+    };
+    studioService.checkMemberAndSave(userInfo,function(result,isNew){
+        req.session.studioUserInfo = {
+            groupType: userSession.groupType,
+            clientStoreId: clientStoreId,
+            firstLogin: true,
+            isLogin: true,
+            mobilePhone: userInfo.mobilePhone,
+            userId: userInfo.userId,
+            defGroupId: userInfo.defGroupId,
+            clientGroup: userInfo.clientGroup,
+            nickname: userInfo.nickname,
+            avatar:userInfo.avatar,
+            defTemplate:userInfo.defTemplate
+        };
+        result.userInfo = {clientGroup: userInfo.clientGroup};
+        callback(result);
+        if(isNew){
+            //新注册
+            userInfo.item = "register_reg";
+            studioService.addRegisterPoint(userInfo,userInfo.clientGroup);
+        }
+    });
+}
+
 module.exports = router;

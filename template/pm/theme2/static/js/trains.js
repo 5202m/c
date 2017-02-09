@@ -105,7 +105,7 @@ Trains.trainRegis = function(obj){
             //videosLive.changeRoomMsg({title:"", type:"onlyTrain"});
         }
     }else{
-        //TODO 跳转至登录页
+        Login.load();
         //$('#loginBox').css('z-index','102');
         //common.openPopup('.blackbg,.login');
     }

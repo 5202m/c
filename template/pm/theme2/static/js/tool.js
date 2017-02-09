@@ -89,6 +89,48 @@ var Tool = {
             }
         }
     },
+    /**
+     * 课程表定时器
+     */
+    courseTick : {
+        //当前课程或下次课程
+        course : {courseId:'',courseType:0,courseTypeName:'',day:0,endTime:'',isNext:false,lecturer:'',lecturerId:'',startTime:'',status:0,studioLink:null,title:'',courseName:''},
+        //下次校验时间
+        nextTickTime : 0,
+        roomId : null,
+        //初始化或者重新校验
+        tick : function(){
+            if(Data.serverTime.time <= this.nextTickTime && this.roomId == Data.userInfo.groupId){
+                return;
+            }
+            Data.getSyllabus(function(syllabusData){
+                var currCourse = Util.getSyllabusPlan(syllabusData, Data.serverTime.time);
+                if(!currCourse){
+                    return;
+                }
+                var nextTime = 0;
+                var timezoneOffset = new Date().getTimezoneOffset() * 60000;
+                if(currCourse.isNext){ //下次课程开始作为下一次tick时间
+                    //"17:51" eval("17*60+51")*60*1000
+                    nextTime = eval(currCourse.startTime.replace(":", "*60+"))*60000 + Data.serverTime.time - Data.serverTime.time % 86400000 + timezoneOffset;
+                }else{//本次课程结束后作为下一次tick时间
+                    nextTime = eval(currCourse.endTime.replace(":", "*60+"))*60000 + Data.serverTime.time - Data.serverTime.time % 86400000 + timezoneOffset + 60000;
+                }
+                if(this.nextTickTime != nextTime) {
+                    var courseType = {'0': '文字直播', '1': '视频直播', '2': 'oneTV直播'};
+                    var courseId = Util.formatDate(Data.serverTime.time, 'yyyy-MM-dd') + '_' + currCourse.startTime + '_' + Data.userInfo.groupId;
+                    this.course = currCourse;
+                    this.course.courseId = courseId;
+                    if(Util.isNotBlank(currCourse.title) && Util.isNotBlank(currCourse.lecturer) && Util.isNotBlank(currCourse.courseType)) {
+                        this.course.courseTypeName = courseType[currCourse.courseType];
+                        this.course.courseName = currCourse.title + '_' + currCourse.lecturer + '_' + courseType[currCourse.courseType];
+                    }
+                    this.nextTickTime = nextTime;
+                    this.roomId = Data.userInfo.groupId;
+                }
+            });
+        }
+    }
 };
 
 

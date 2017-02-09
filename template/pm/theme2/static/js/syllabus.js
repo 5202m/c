@@ -93,7 +93,8 @@ Syllabus.setSyllabusList = function(day){
                                 courseObj.lecturer,
                                 statusCls,
                                 btn,
-                                btnCls
+                                btnCls,
+                                courseObj.lecturerId
                             ));
                             courseDataHtml.push('<div class="blk7 blke3e3ea"></div>');
                         });
@@ -103,6 +104,7 @@ Syllabus.setSyllabusList = function(day){
             return false;
         });
         $('#syllabusList').empty().html(courseDataHtml.join(''));
+        Subscribe.setSubscribeData('#syllabusList .item-cell .btn-op');
     });
 };
 
@@ -125,5 +127,47 @@ Syllabus.setEvent = function(){
      */
     $('#chat_subscribe').bind('click', function(){
         Subscribe.load();
+    });
+    /**
+     * 老师简介
+     */
+    $('#syllabusList').on('click', '.item-cell .item-bd .avatar-info', function(){
+        Analyst.userNo = $(this).attr('userNo');
+        Analyst.load();
+        return false;
+    });
+    /**
+     * 订阅
+     */
+    $('#syllabusList').on('click', '.item-cell .btn-op a.btnSubscribe', function(){
+        var $this = $(this), id = '', types = $this.attr('type').split(',');
+        if(!$this.hasClass('btn-grey')) {//已结束的则不能订阅，只能到老师列表中订阅
+            $this.addClass('clicked');
+            var typeLen = types.length;
+            var analystArr = [];
+            var currAnalyst = $this.attr('analystId');
+            $('#syllabusList .item-cell .btn-op a.btnSubscribe').each(function () {
+                if ($(this).attr('subscribed') == 'true') {
+                    analystArr.push($(this).attr('analystId'));
+                }
+            });
+            var idx = $.inArray(currAnalyst, analystArr);
+            if ($this.attr('subscribed') == 'true' && idx > -1) {
+                analystArr.splice(idx, 1);//如果点击已订阅，则删除当前订阅的老师
+            } else {
+                analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
+            }
+            $.each(types, function (k, v) {
+                if (v == 'live_reminder') {
+                    id = $this.attr('lrid');
+                } else if (v == 'shout_single_strategy') {
+                    id = $this.attr('ssid');
+                } else if (v == 'trading_strategy') {
+                    id = $this.attr('tsid');
+                }
+                Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
+            });
+        }
+        return false;
     });
 };
