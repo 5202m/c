@@ -7,6 +7,7 @@ var Login = new Container({
     defaultTime : 120,
     /**配置信息：{$btn : $obj, $input : $obj, intervalId : Id, time : 120}*/
     verifyCodeMap : {}, //{reg:{useType : "studio_login", $btn : $obj, $input : $obj, intervalId : Id, time : 120}}
+    groupId : null,
     onLoad : function(){
         this.setEvent();
     }
@@ -305,22 +306,91 @@ Login.doLogin = function(){
                 $('.error-bar').removeClass('dn').find('.tips-txt').text(result.error.errmsg);
                 return false;
             }else{
-                //TODO 登录成功后处理相应数据
-                /*studioMbLogin.clientGroup = result.userInfo.clientGroup;
-                if(studioMbLogin.groupId){
-                    studioMbPop.changeRoom({groupId:studioMbLogin.groupId});
+                $('#header_ui').text(result.userInfo.nickname);
+                Data.userInfo.clientGroup = result.userInfo.clientGroup;
+                Data.userInfo.clientStoreId = result.userInfo.clientStoreId;
+                Data.userInfo.cookieId = result.userInfo.cookieId;
+                Data.userInfo.email = result.userInfo.email;
+                Data.userInfo.firstLogin = result.userInfo.firstLogin;
+                Data.userInfo.groupType = result.userInfo.groupType;
+                Data.userInfo.isLogin = result.userInfo.isLogin;
+                Data.userInfo.mobilePhone = result.userInfo.mobilePhone;
+                Data.userInfo.nickname = result.userInfo.nickname;
+                Data.userInfo.password = result.userInfo.password;
+                Data.userInfo.roomName = result.userInfo.roomName;
+                Data.userInfo.userId = result.userInfo.userId;
+                Data.userInfo.userName = result.userInfo.userName;
+                Data.userInfo.visitorId = result.userInfo.visitorId;
+                Data.userInfo.userType = 0;
+                if(Login.groupId){
+                    Login.changeRoom({groupId:Login.groupId});
                 }else{
-                    studioMbPop.loadingBlock($("#loginPop"), true);
-                    LoginAuto.setAutoLogin($("#loginForm_al").prop("checked"));
-                    if(studioMbPop.onWelcome){
-                        studioMbPop.onWelcome(result.userInfo.clientGroup);
-                    }
-                    studioMbPop.reload();
-                }*/
+                    LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
+                    Container.back();
+                }
             }
         },true,function(){
-            //studioMbLogin.resetFormInput();
-            //studioMbPop.loadingBlock($("#loginPop"), true);
+            Login.resetFormInput();
         });
     });
+};
+/**
+ * 切换房间
+ * params :{{[groupId]:String, [roomType]:String}}
+ */
+Login.changeRoom = function(params){
+    Util.postJson("/studio/checkGroupAuth",params,function(result){
+        if(!result.isOK){
+            if(result.error && result.error.errcode === "1000"){
+                Login.changeRoomMsg({msg: "您长时间未操作，请刷新页面后重试，"});
+            }else{
+                Login.changeRoomMsg({roomType: result.roomType, clientGroups : result.clientGroups});
+            }
+        }else{
+            Container.back();
+        }
+    },true,function(err){
+        if("success"!=err) {
+            Login.changeRoomMsg({type: "error"});
+        }
+    });
+};
+/**
+ * 重置输入框
+ */
+Login.resetFormInput = function(){
+    $('#page_login input[type="text"],#page_login input[type="password"]').val(null);
+};
+/**
+ * 切换房间提示
+ * @param ops {{[roomType]:String, [status]:String, [clientGroups]:String, [type]:String, [msg]:String}}
+ * @param btnFn
+ */
+Login.changeRoomMsg = function(ops){
+    var msgMap = {
+        "onlyTrain" : "该房间仅对培训班学员开放，",
+        "onlyNew" : "该房间仅对新客户开放，",
+        "onlyActive" : "已有真实账户并激活的客户才可进入该房间，您还不满足条件，",
+        "onlyVip" : "该房间仅对VIP客户开放，",
+        "onlyMark" : "该房间仅对指定客户开放，",
+        "noAuth" : "您没有访问该房间的权限，",
+        "error" : "操作失败，"
+    };
+    ops = ops||{};
+    if(ops.type && msgMap.hasOwnProperty(ops.type)){
+        ops.msg = msgMap[ops.type];
+    }else if(ops.roomType == "train"){
+        ops.msg = msgMap.onlyTrain;
+    }else if(ops.status == "2"){
+        ops.msg = msgMap.onlyMark;
+    }else if(ops.clientGroups){
+        if(/^((,visitor)|(,register))+$/.test( "," + ops.clientGroups)){
+            ops.msg = msgMap["onlyNew"];
+        }else if(ops.clientGroups == "vip"){
+            ops.msg = msgMap["onlyVip"];
+        }else if(/^((,active)|(,vip))+$/.test( "," + ops.clientGroups)){
+            ops.msg = msgMap["onlyActive"];
+        }
+    }
+    Pop.msg((ops.msg || msgMap["noAuth"]) + "如有疑问请联系老师助理。");
 };

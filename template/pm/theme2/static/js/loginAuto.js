@@ -15,6 +15,21 @@ var LoginAuto = {
     },
 
     /**
+     * 设置自动登录状态
+     * @param isAutoLogin
+     * @returns {boolean}
+     */
+    setAutoLogin : function(isAutoLogin){
+        var storeObj = Store.store(LoginAuto.loginUserStoreKey);
+        if(storeObj){
+            storeObj.autoLogin = isAutoLogin;
+            Store.store(LoginAuto.loginUserStoreKey, storeObj);
+            return true;
+        }
+        return false;
+    },
+
+    /**
      * 自动登录
      * @returns {boolean}
      */
