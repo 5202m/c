@@ -466,11 +466,36 @@ var Util ={
         return !(/^([0-9]{2,10})$/g.test(name)) && /^([\w\u4e00-\u9fa5]{2,10})$/g.test(name);
     },
     /**
+     * 判断客户端是否手机
+     */
+    isMobile : function(userAgent){
+        return /(iphone|ipod|ipad|android|mobile|playbook|bb10|meego)/.test((userAgent || navigator.userAgent).toLowerCase());
+    },
+    /**
      * 验证是否符合手机号码格式
      * @param val
      */
     isMobilePhone:function(val){
         return /(^[0-9]{11})$|(^86(-){0,3}[0-9]{11})$/.test(val);
+    },
+    /**
+     * 获取url参数值
+     * @param name
+     * @returns {*}
+     */
+    getUrlParam: function(name, notEncode){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if(notEncode){
+            if (r != null) {
+                return r[2];
+            }
+        }else {
+            if (r != null) {
+                return unescape(r[2]);
+            }
+        }
+        return null; //返回参数值
     },
     /**
      * 调试方法

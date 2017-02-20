@@ -55,6 +55,7 @@ Room.setEvent = function(){
         $("#room_foot").hide();
         $("#room_talk").show();
         Chat.setHeight();
+        Chat.setTalkScroll(true);
     });
 
     /** 老师简介 */

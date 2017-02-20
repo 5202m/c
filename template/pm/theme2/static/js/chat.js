@@ -5,8 +5,12 @@
 var Chat = {
     socket:null,
     fullscreen : false,
+    scrolling : false,
     chatMsgFilter : "all", //all-看所有人 analyst-看分析师 me-与我相关
     chatToolView : "none", //none-不显示 analyst-仅显示@ btns-显示@且显示工具栏 face显示表情
+    userMap : {}, //在线用户Map 管理员+分析师+客服助理
+    cntAdmin : 0, //在线管理员数量
+    cntAnalyst : 0, //在线分析师数量
 
     /**
      * 初始化
@@ -40,13 +44,15 @@ var Chat = {
         });
         //信息传输
         this.socket.on('sendMsg',function(data){
-            Chat.receiveMsg(data);
+            Chat.receiveMsg(data, false, false);
         });
         //通知信息
         this.socket.on('notice',function(result){
             switch (result.type){
                 case 'onlineNum':
-                    Chat.setOnlineUser(result.data);
+                    if(result.data && result.data.onlineUserInfo){
+                        Chat.setOnlineUser(result.data.onlineUserInfo, result.data.online);
+                    }
                     break;
 
                 case 'removeMsg':
@@ -209,8 +215,107 @@ var Chat = {
 
         /** 发送 */
         $("#chat_send").bind("click", function(){
-            //TODO 发送消息
+            Chat.sendMsg();
         });
+    },
+
+    /**
+     * 发送消息
+     */
+    sendMsg : function(){
+        Chat.showTool("none");
+        Data.getRoom(function(room){
+            if(!room.allowVisitor && Data.userInfo.clientGroup == "visitor"){
+                // TODO 弹出登录框
+            }
+            if(Data.userInfo.isSetName === false){
+                // TODO 设置昵称
+                return;
+            }
+            var toUser = Chat.getToUser();
+            var msg = Chat.getSendMsg($("#chat_cont"));
+            if(msg === false){
+                return;
+            }
+
+            var sendObj={
+                uiId : Chat.getUiId(),
+                fromUser : Data.userInfo,
+                content : {msgType:Data.msgType.text, value:msg}
+            };
+            sendObj.fromUser.toUser = toUser;
+            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
+                console.log("send message ok!");
+            });
+            Chat.receiveMsg(sendObj, true, false);//直接把数据填入内容栏
+
+            //清空输入框
+            $("#chat_cont").html("").trigger("input");//清空内容
+            chatAnalyze.setUTM(false, $.extend({operationType:2}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+        });
+    },
+
+    /**
+     * 提取uiId,用于标记记录的id，信息发送成功后取发布日期代替
+     */
+    getUiId:function(){
+        return new Date().getTime()+"_ms";
+    },
+
+    /**
+     * 提取@对话html
+     */
+    getToUser:function(){
+        var curDom=$('#chat_cont .txt_dia');
+        if(curDom.length>0){
+            return {
+                userId : curDom.attr("uid"),
+                nickname : curDom.find("label").text(),
+                talkStyle : 0,
+                userType : curDom.attr("utype"),
+                avatar : curDom.attr("avatar")
+            };
+        }
+        return null;
+    },
+
+    /**
+     * 过滤发送消息：过滤一些特殊字符等。
+     * 如果返回值为false,则终止发送消息。
+     */
+    getSendMsg : function(dom){
+        //校验聊天内容长度
+        if(dom.text().length + dom.find("img").size() > 140){
+            Pop.msg("消息内容超过最大长度限制（140字以内）！");
+            return false;
+        }
+
+        var msg = dom.html();
+        msg = Chat.clearMsgHtml(msg);
+        if(Util.isBlank(msg)){
+            dom.html("");
+            return false;
+        }
+        if(dom.find(".txt_dia").length>0){
+            dom.find(".txt_dia").remove();
+            msg=dom.html();
+            msg=msg.replace(/^(&nbsp;){1,2}/, "");
+        }
+        return msg;
+    },
+
+    /**
+     * 清除html多余代码
+     *  排除表情,去除其他所有html标签
+     * @param msg
+     * @returns {XML|string|void}
+     */
+    clearMsgHtml:function(msg){
+        var msg=msg.replace(/((^((&nbsp;)+))|\n|\t|\r)/g,'').replace(/<\/?(?!(img|IMG)\s+src="[^>"]+\/face\/[^>"]+"\s*>)[^>]*>/g,'');
+        if(msg){
+            msg= $.trim(msg);
+        }
+        return msg;
     },
 
     /**
@@ -222,6 +327,7 @@ var Chat = {
         if(Chat.chatMsgFilter == type || (!type && Chat.chatMsgFilter == "all")){
             return;
         }
+        Chat.setTalkScroll();
         Chat.chatMsgFilter = type || Chat.chatMsgFilter;
         switch(Chat.chatMsgFilter){
             case "all":
@@ -252,7 +358,6 @@ var Chat = {
         }
         $("#chat_msg").height(height);
     },
-
     /**
      * 在线用户列表
      * @param users
@@ -260,34 +365,61 @@ var Chat = {
      */
     setOnlineUsers : function(users, length){
         for(var i in users){
-            if(Chat.WhTalk.enable && users[i].userType==3){
-                Chat.WhTalk.setCSOnline(users[i].userId, true);
-            }
-            //快捷@
-            if(users[i].userType==3 || users[i].userType==2){
-                studioChatMb.setFastContact(users[i], true);
-            }
+            Chat.setOnlineUser(users[i], true);
         }
         if(Chat.WhTalk.enable){
             Chat.WhTalk.getCSList(); //加载客服列表
         }
     },
-
     /**
-     * 在线用户列表
-     * @param data
+     * 在线用户
+     * @param user
+     * @param isOnline
      */
-    setOnlineUser : function(data){
-        var userInfoTmp=data.onlineUserInfo;
-        if(userInfoTmp.userType==3 && Chat.WhTalk.enable){
-            Chat.WhTalk.setCSOnline(userInfoTmp.userId, data.online);
+    setOnlineUser : function(user, isOnline){
+        if(Chat.WhTalk.enable && user.userType == 3){
+            Chat.WhTalk.setCSOnline(user.userId, isOnline);
         }
         //快捷@
-        if(userInfoTmp.userType==3 || userInfoTmp.userType==2){
-            Chat.setFastContact(userInfoTmp, data.online);
+        if(user.userType==1 || user.userType==2 || user.userType==3){
+            Chat.setUsersMap(user, isOnline);
         }
     },
+    /**
+     * 设置后台在线用户列表
+     */
+    setUsersMap : function(userInfo, isOnline){
+        if(!isOnline) {
+            delete Chat.userMap[userInfo.userId];
+        }else{
+            Chat.userMap[userInfo.userId] = userInfo;
+        }
+        var fastAt = $("#chat_gwUsers"), fastAtHtml;
+        switch (userInfo.userType){
+            case 1:
+                Chat.cntAdmin += (isOnline ? 1 : -1);
+                fastAtHtml = Room.formatHtml("chat_gwUser", userInfo.userId, userInfo.nickName);
+                if(isOnline){
+                    fastAt.prepend(fastAtHtml);
+                }else{
+                    fastAt.find("[uid=" + userInfo.userId + "]").remove();
+                }
+                break;
 
+            case 2:
+                Chat.cntAnalyst += (isOnline ? 1 : -1);
+                fastAtHtml = Room.formatHtml("chat_gwUser", userInfo.userId, userInfo.nickName);
+                if(isOnline){
+                    fastAt.append(fastAtHtml);
+                }else{
+                    fastAt.find("[uid=" + userInfo.userId + "]").remove();
+                }
+                break;
+
+            case 3:
+                break;
+        }
+    },
     /**
      * 连接socket
      */
@@ -369,23 +501,26 @@ var Chat = {
             }
         }
         msgArr.reverse();
-        Chat.receiveMsg(msgArr);
+        Chat.receiveMsg(msgArr, false, true);
     },
 
     /**
      * 接收消息
+     * @param data
+     * @param isMeSend
+     * @param isLoadData
      */
-    receiveMsg : function(data){
+    receiveMsg : function(data, isMeSend, isLoadData){
         var html = [];
         if(data instanceof Array){
             for(var i = 0, lenI = data ? data.length : 0; i < lenI; i++){
-                html.push(Chat.getMsgHtml(data[i], false, true, false));
+                html.push(Chat.getMsgHtml(data[i], isMeSend, isLoadData, false));
             }
         }else{
-            html.push(Chat.getMsgHtml(data, false, true, false));
+            html.push(Chat.getMsgHtml(data, isMeSend, isLoadData, false));
         }
-        $("#chat_msg").append(html.join(""));
         Chat.setTalkScroll();
+        $("#chat_msg").append(html.join(""));
         Chat.filterMsg();
     },
 
@@ -403,11 +538,19 @@ var Chat = {
 
     /**
      * 设置聊天列表滚动条
+     * @param [force] {boolean}
      */
-    setTalkScroll : function(){
-        var panel = $("#chat_msg");
-        if(panel.scrollTop() + panel.height() + 30 >= panel.get(0).scrollHeight){
-            panel.scrollTop(panel[0].scrollHeight);
+    setTalkScroll : function(force){
+        if(!Chat.scrolling){
+            var panel = $("#chat_msg");
+            if(force || panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
+                Chat.scrolling = true;
+                window.setTimeout(function(){
+                    $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight);
+                    Chat.scrolling = false;
+                }, 300);
+
+            }
         }
     },
 
@@ -435,7 +578,7 @@ var Chat = {
             Chat.WhTalk.receiveWhMsg(data, false, false);
             return "";
         }
-        if(!data.serverSuccess && Data.userInfo.userId == data.fromUser.userId && !data.rule){
+        if(!isMeSend && !data.serverSuccess && Data.userInfo.userId == data.fromUser.userId && !data.rule){
             return "";
         }
         var fromUser=data.fromUser;
@@ -464,7 +607,7 @@ var Chat = {
         if(!isMeSend && Data.userInfo.userId==fromUser.userId && data.serverSuccess){//发送成功，则去掉加载框，清除原始数据。
             $('#'+data.uiId+' .uname span').html(Chat.formatPublishTime(fromUser.publishTime));
             $('#'+data.uiId).attr("id",fromUser.publishTime);//发布成功id同步成服务器发布日期
-            if(data.content.msgType==studioChatMb.msgType.img){
+            if(data.content.msgType==Data.msgType.img){
                 Chat.removeLoadDom(fromUser.publishTime);//去掉加载框
                 var aObj = $('#'+fromUser.publishTime+' [talk="a"]>a');
                 var url=data.content.needMax?'/studio/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
@@ -512,7 +655,9 @@ var Chat = {
         var userTag = Chat.getUserTag(fromUser);
         if(isMeSend || fromUser.userId == Data.userInfo.userId){
             result = Room.formatHtml("chat_dialogMe",
-                fromUser.userId,
+                fromUser.publishTime,
+                userTag.avatar,
+                userTag.level,
                 Chat.formatPublishTime(fromUser.publishTime),
                 fromUser.nickname,
                 result
@@ -606,7 +751,7 @@ var Chat = {
                             idTmp = 100;
                         }
                         idTmp = (idTmp + 17) % 40;
-                        result.avatar = Chat.filePath + '/upload/pic/header/chat/visitor/' + idTmp + '.png">';
+                        result.avatar = Data.filePath + '/upload/pic/header/chat/visitor/' + idTmp + '.png">';
                 }
             }
         }
@@ -835,7 +980,7 @@ var Chat = {
                             csTmp.userNo = cs.userNo;
                             csTmp.userName = cs.userName;
                             csTmp.userType = 3;
-                            csTmp.avatar = common.isValid(cs.avatar)?cs.avatar:'/fx/theme2/img/cm.png';
+                            csTmp.avatar = Util.isValid(cs.avatar)?cs.avatar:'/fx/theme2/img/cm.png';
                             csTmp.load = false;
                         }
                     }
@@ -953,7 +1098,7 @@ var Chat = {
                 this.askMsgObj = null;
             }
             //私聊消息咨询内容
-            if(isLoadData && fromUser.toUser && common.isValid(fromUser.toUser.question)){
+            if(isLoadData && fromUser.toUser && Util.isValid(fromUser.toUser.question)){
                 var csTmp = this.setWhCS({userId : fromUser.toUser.userId});
                 this.receiveWhMsg({
                     content : {
