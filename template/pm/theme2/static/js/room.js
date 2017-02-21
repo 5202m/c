@@ -9,6 +9,7 @@ var Room = new Container({
         Player.init();
         Room.setEvent();
         ClassNote.setEvent();
+        Tool.getAllMarketPrice.init();
     },
     onShow : function(){
         Room.initPage();

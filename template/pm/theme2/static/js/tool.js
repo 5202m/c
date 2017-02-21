@@ -135,6 +135,26 @@ var Tool = {
      */
     getAllMarketPrice : {
         pkMarketSocket : null,//定义标价socket
+        init : function(){
+            var url = "wss://kdata.gwfx.com:7087/websocket.do",
+                data = "service=HqDataWebSocketService&method=pushMarketprice&symbol=XAGUSD|XAUUSD|USDX|CLWTI&dataType=simpleMarketPrice",
+                httpUrl = "https://kdata.gwfx.com:7099/gateway.do?service=HqDataService&method=getMarkrtPriceDataFromCache",
+                selfOptions = null;
+            Tool.getAllMarketPrice.getAllMarketpriceIndex(url, data, httpUrl, selfOptions);
+            //底部信息轮播
+            var curIndex = 0;
+            var timeInterval = 3000;
+            var _obj = $(".infos-play li");
+            setInterval(changeinfos,timeInterval);
+            function changeinfos() {
+                if (curIndex == _obj.length-1) {
+                    curIndex = 0;
+                } else {
+                    curIndex += 1;
+                }
+                _obj.eq(curIndex).fadeIn().siblings().fadeOut();
+            }
+        },
         /**
          * 获取行情报价入口
          * @param wsUrl
@@ -172,7 +192,7 @@ var Tool = {
                     }, 1000 * 2);
                 }
             } catch (e) {
-                console.log("get price has error!");
+                console.log("get price has error!",e);
             }
         },
         /**
@@ -216,24 +236,16 @@ var Tool = {
                 var priceDom = $("#price_" +symbol);
                 priceDom.html(parseFloat(price).toFixed(_index_price_type));
                 var percentDom=$("#deltaPercent_" +symbol);
-                percentDom.text((deltaPercent * 100).toFixed(2) + "%");
                 if(!selfOptions){
+                    var liDom = $("#li_" +symbol);
                     if (deltaPrice > 0) {
-                        $("#price_" +symbol).parent().addClass("up");
+                        liDom.addClass("up");
+                        liDom.find('.p1').children('i').removeClass('arrow-d-red').addClass('arrow-u-green');
                     } else {
-                        $("#price_" + symbol).parent().removeClass("up");
+                        liDom.removeClass("up");
+                        liDom.find('.p1').children('i').removeClass('arrow-u-green').addClass('arrow-d-red');
                     }
-                    $("#deltaPrice_" +symbol).html(parseFloat(deltaPrice).toFixed(_index_price_type));
-                }else if(selfOptions.from == 'studio'){//pm3.0版
-                    var priceFormat = parseFloat(price).toFixed(_index_price_type);
-                    priceFormat = priceFormat.toString().substring(0,priceFormat.indexOf('.'))+'<b>.'+priceFormat.toString().substring(priceFormat.indexOf('.')+1)+'</b>';
-                    priceDom.html(priceFormat);
-                    percentDom.html('<span>' + deltaPrice + "</span><span>" + (deltaPercent * 100).toFixed(2) + "%</span>");
-                    if (deltaPrice > 0) {
-                        percentDom.removeClass(selfOptions.fall);
-                    } else {
-                        percentDom.addClass(selfOptions.fall);
-                    }
+                    percentDom.html(parseFloat(deltaPrice).toFixed(_index_price_type)+'('+(deltaPercent * 100).toFixed(2) + "%)");
                 }else{
                     var priceFormat = parseFloat(price).toFixed(_index_price_type);
                     priceFormat = priceFormat.toString().substring(0,priceFormat.indexOf('.'))+'<span>.'+priceFormat.toString().substring(priceFormat.indexOf('.')+1)+'</span>';
@@ -258,11 +270,6 @@ var Tool = {
         }
     }
 };
-
-
-
-
-
 
 
 /**
