@@ -192,7 +192,7 @@ var Tool = {
                     }, 1000 * 2);
                 }
             } catch (e) {
-                console.log("get price has error!",e);
+                console.log("get price has error!");
             }
         },
         /**
