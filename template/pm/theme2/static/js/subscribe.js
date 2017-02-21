@@ -140,7 +140,7 @@ Subscribe.setPraise = function(obj, lb){
             //var lb= obj.next("label") || obj.find('label');
             lb.text(Util.isNotBlank(lb.text())?(parseInt(lb.text())+1):0);
         }else{
-            Pop.msg('亲，已点赞，当天只能点赞一次！');
+            alert('亲，已点赞，当天只能点赞一次！');//Pop.msg('亲，已点赞，当天只能点赞一次！');
         }
         obj.addClass('supported');
         obj.attr('title','已点赞');
@@ -166,15 +166,15 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
     Util.postJson('/studio/subscribe', {params: JSON.stringify(params)}, function (data) {
         if (data.isOK) {
             if(Util.isBlank(params.analyst) || Util.isBlank(params.noticeType)){
-                Pop.msg('取消订阅成功！');
+                alert('取消订阅成功！');//Pop.msg('取消订阅成功！');
             } else if(Util.isNotBlank(params.id)) {
-                Pop.msg('修改订阅成功！');
+                alert('修改订阅成功！');//Pop.msg('修改订阅成功！');
                 $('#subscribeAnalyst .item-con .item-main .social-op a[analystId="' + obj.attr('analystId') + '"]').html('订阅').addClass('btn-blue').removeClass('btn-green').attr('subscribed', false);
             }else{
-                Pop.msg('订阅成功！');
+                alert('订阅成功！');//Pop.msg('订阅成功！');
             }
         }else{
-            Pop.msg(data.msg);
+            alert(data.msg);//Pop.msg(data.msg);
         }
         obj.removeClass('clicked');
         if(isLast){

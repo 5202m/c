@@ -5,7 +5,6 @@
  * OnlineCS : 在线客服
  */
 var Tool = {
-
     /**
      * 在线客服
      */
@@ -130,8 +129,140 @@ var Tool = {
                 }
             });
         }
+    },
+    /**
+     * 获取行情报价
+     */
+    getAllMarketPrice : {
+        pkMarketSocket : null,//定义标价socket
+        /**
+         * 获取行情报价入口
+         * @param wsUrl
+         * @param wsData
+         * @param httpUrl
+         * @param selfOptions
+         */
+         getAllMarketpriceIndex : function(wsUrl, wsData, httpUrl, selfOptions){
+            try {
+                if (!window.WebSocket) {
+                    window.WebSocket = window.MozWebSocket;
+                }
+                if (window.WebSocket) {
+                    if (!Tool.getAllMarketPrice.pkMarketSocket) {
+                        Tool.getAllMarketPrice.pkMarketSocket = new ReconnectingWebSocket(wsUrl, null, {reconnectInterval: 3000});
+                        Tool.getAllMarketPrice.pkMarketSocket.onmessage = function (event) {
+                            var retData = JSON.parse(event.data);
+                            if ("OK" == retData.code) {
+                                Tool.getAllMarketPrice.parseMarketpriceIndex(retData, selfOptions);
+                            }
+                        };
+                        Tool.getAllMarketPrice.pkMarketSocket.onopen = function (event) {
+                            if (Tool.getAllMarketPrice.pkMarketSocket.readyState == WebSocket.OPEN) {
+                                Tool.getAllMarketPrice.pkMarketSocket.send(wsData);
+                            }
+                        };
+                    } else {
+                        if (Tool.getAllMarketPrice.pkMarketSocket.readyState == WebSocket.OPEN) {
+                            Tool.getAllMarketPrice.pkMarketSocket.send(wsData);
+                        }
+                    }
+                } else {
+                    setInterval(function () {
+                        Tool.getAllMarketPrice.getMarketpriceCrossDomainIndex(httpUrl, selfOptions)
+                    }, 1000 * 2);
+                }
+            } catch (e) {
+                console.log("get price has error!");
+            }
+        },
+        /**
+         * 获取行情报价请求
+         * @param url
+         * @param selfOptions
+         */
+        getMarketpriceCrossDomainIndex : function(url,selfOptions) {
+            $.ajax({
+                type : "GET",
+                url : url,
+                dataType : "jsonp",
+                success : function(data) {
+                    if ("OK" == data.code) {
+                        Tool.getAllMarketPrice.parseMarketpriceIndex(data,selfOptions);
+                    }
+                },
+                error : function() {
+                }
+            });
+        },
+        /**
+         * 返回行情报价页面数据
+         * @param data
+         * @param selfOptions
+         */
+        parseMarketpriceIndex : function(data,selfOptions) {
+            var _index_price_type = 2,symbol='',deltaPrice= 0,deltaPercent= 0,price=0;
+            for (var i = 0; i < data.listResult.length; i++) {
+                symbol=data.listResult[i].symbol;
+                deltaPrice=data.listResult[i].deltaPrice;
+                price=data.listResult[i].price;
+                deltaPercent=data.listResult[i].deltaPercent;
+                if (symbol == "XAGUSD"||symbol == "USDJPY") {
+                    _index_price_type = 3;
+                } else if(symbol == "EURUSD"){
+                    _index_price_type = 3;
+                } else{
+                    _index_price_type = 2;
+                }
+                var priceDom = $("#price_" +symbol);
+                priceDom.html(parseFloat(price).toFixed(_index_price_type));
+                var percentDom=$("#deltaPercent_" +symbol);
+                percentDom.text((deltaPercent * 100).toFixed(2) + "%");
+                if(!selfOptions){
+                    if (deltaPrice > 0) {
+                        $("#price_" +symbol).parent().addClass("up");
+                    } else {
+                        $("#price_" + symbol).parent().removeClass("up");
+                    }
+                    $("#deltaPrice_" +symbol).html(parseFloat(deltaPrice).toFixed(_index_price_type));
+                }else if(selfOptions.from == 'studio'){//pm3.0版
+                    var priceFormat = parseFloat(price).toFixed(_index_price_type);
+                    priceFormat = priceFormat.toString().substring(0,priceFormat.indexOf('.'))+'<b>.'+priceFormat.toString().substring(priceFormat.indexOf('.')+1)+'</b>';
+                    priceDom.html(priceFormat);
+                    percentDom.html('<span>' + deltaPrice + "</span><span>" + (deltaPercent * 100).toFixed(2) + "%</span>");
+                    if (deltaPrice > 0) {
+                        percentDom.removeClass(selfOptions.fall);
+                    } else {
+                        percentDom.addClass(selfOptions.fall);
+                    }
+                }else{
+                    var priceFormat = parseFloat(price).toFixed(_index_price_type);
+                    priceFormat = priceFormat.toString().substring(0,priceFormat.indexOf('.'))+'<span>.'+priceFormat.toString().substring(priceFormat.indexOf('.')+1)+'</span>';
+                    priceDom.html(priceFormat+'<i changeCss="true"></i>');
+                    var changeCssDom = $("#price_" +symbol+" i");
+                    percentDom.text(deltaPrice + "  " +(deltaPercent * 100).toFixed(2) + "%");
+                    if (deltaPrice > 0) {
+                        if(changeCssDom.attr("changeCss")=="true"){
+                            priceDom.removeClass(selfOptions.down);
+                            percentDom.removeClass(selfOptions.down);
+                            changeCssDom.removeClass(selfOptions.downCss).addClass(selfOptions.upCss);
+                        }
+                    } else {
+                        if(changeCssDom.attr("changeCss")=="true"){
+                            priceDom.addClass(selfOptions.down);
+                            percentDom.addClass(selfOptions.down);
+                            changeCssDom.removeClass(selfOptions.upCss).addClass(selfOptions.downCss);
+                        }
+                    }
+                }
+            }
+        }
     }
 };
+
+
+
+
+
 
 
 /**
