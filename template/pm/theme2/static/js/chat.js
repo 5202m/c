@@ -217,6 +217,57 @@ var Chat = {
         $("#chat_send").bind("click", function(){
             Chat.sendMsg();
         });
+        /**
+         * 发送图片--选择图片
+         */
+        $(".file-img").click(function () {
+            Data.getRoom(function(room) {
+                if (!FileReader) {
+                    alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
+                    return false;
+                }
+                if (!Chat.WhTalk.tabCheck && !room.allowVisitor && Data.userInfo.clientGroup == 'visitor') {
+                    Login.load();
+                    return false;
+                }
+                if (Data.userInfo.isSetName === false) {
+                    //TODO 弹出设置昵称//studioMbPop.popBox("set", {studioChatObj : studioChatMb});
+                    return false;
+                }
+            });
+        });
+        /**
+         * 发送图片
+         */
+        $(".file-img").bind("change", function () {
+            var _this = this;
+            var img = _this.files[0];
+            // 判断是否图片
+            if (!img) {
+                return false;
+            }
+            // 判断图片格式
+            if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
+                alert('目前暂支持jpg,gif,png格式的图片！');
+                return false;
+            }
+            var fileSize = img.size;
+            if (fileSize >= 1024 * 1024) {
+                alert('发送的图片大小不要超过1MB.');
+                return false;
+            }
+            //加载文件转成URL所需的文件流
+            var reader = new FileReader();
+            reader.readAsDataURL(img);
+
+            reader.onload = function (e) {
+                Chat.setUploadImg(e.target.result, Chat.getToUser());//处理并发送图片
+            };
+            reader.onprogress = function (e) {};
+            reader.onloadend = function (e) {};
+            //studioChatMb.view.boardCtrl(1);
+            $(this).val("");
+        });
     },
 
     /**
@@ -227,6 +278,8 @@ var Chat = {
         Data.getRoom(function(room){
             if(!room.allowVisitor && Data.userInfo.clientGroup == "visitor"){
                 // TODO 弹出登录框
+                Login.load();
+                return;
             }
             if(Data.userInfo.isSetName === false){
                 // TODO 设置昵称
@@ -1295,4 +1348,105 @@ var Chat = {
             //$(window).trigger("resize");
         }
     },
+
+    /**
+     * 设置并压缩图片
+     */
+    setUploadImg:function(base64Data, toUser){
+        var uiId = Chat.getUiId();
+
+        //先填充内容框
+        var formUser={};
+        Util.copyObject(formUser,Data.userInfo,true);
+        formUser.toUser=toUser;
+        var sendObj={uiId:uiId,fromUser:formUser,content:{msgType:Data.msgType.img,value:'',needMax:0,maxValue:''}};
+        if(Chat.WhTalk.tabCheck) {
+            Chat.WhTalk.sendWhMsg(sendObj);
+        }else{
+            this.receiveMsg(sendObj,true,false);
+        }
+        sendObj.content.value=base64Data;
+        this.zipImg(sendObj,100,60,function(result,value){//压缩缩略图
+            if(result.error){
+                alert(result.error);
+                $('#'+uiId).remove();
+                return false;
+            }
+            var aObj=$("#"+result.uiId+" span[contt='a'] a");//[contt='a']
+            aObj.attr("href", value)
+                .children("img").attr("src",value).attr("needMax",result.content.needMax);
+            Chat.dataUpload(result);
+        });
+    },
+
+    /**
+     * 图片压缩
+     * @param sendObj
+     * @param max
+     * @param quality 压缩量
+     * @param callback
+     */
+    zipImg:function(sendObj,max,quality,callback){
+        var image = new Image();
+        // 绑定 load 事件处理器，加载完成后执行
+        image.onload = function(){
+            var canvas = document.createElement('canvas');
+            if(!canvas){
+                callback({error:'发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！'});
+            }
+            var w = image.width;
+            var h = image.height;
+            if(h>=9*w){
+                callback({error:'该图片高度太高，暂不支持发送！'});
+                return false;
+            }
+            if(max>0) {
+                if ((h > max) || (w > max)) {     //计算比例
+                    sendObj.content.needMax=1;
+                    if(h>max && w<=max){
+                        w= (max/h)*w;
+                        h = max;
+                    }else{
+                        h = (max / w) * h;
+                        w = max;
+                    }
+                    image.height = h;
+                    image.width = w;
+                }
+            }
+            var ctx = canvas.getContext("2d");
+            canvas.width = w;
+            canvas.height = h;
+            // canvas清屏
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 将图像绘制到canvas上
+            ctx.drawImage(image, 0, 0, w, h);
+            callback(sendObj,canvas.toDataURL("image/jpeg",quality/100));
+        };
+        image.src = sendObj.content.value;
+    },
+    /**
+     * 数据上传
+     * @param data
+     */
+    dataUpload:function(data){
+        //上传图片到后端
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/studio/uploadData');
+        xhr.addEventListener("progress", function(e){
+            if (e.lengthComputable) {
+                var ra= ((e.loaded / e.total *100)|0)+"%";
+                $("#"+data.uiId+" .shadow-box").css({height:"'+ra+'"});
+                $("#"+data.uiId+" .shadow-conut").html(ra);
+            }
+        }, false);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("dataUpload success!");
+            }
+        };
+        data.fromUser.socketId=this.socket.id;
+        xhr.send(JSON.stringify(data)); //发送base64
+    }
 };

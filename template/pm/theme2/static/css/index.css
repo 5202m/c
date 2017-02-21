@@ -444,554 +444,416 @@ article.content_w {
 .i-back {
   width: 8px;
   height: 16px;
-  background-image: url(../img/slice/i-back.png);
+  background-position: 0 -671px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-down {
   width: 15px;
   height: 7px;
-  background-image: url(../img/slice/i-down.png);
+  background-position: 0 -43px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-list {
   width: 14px;
   height: 10px;
-  background-image: url(../img/slice/i-list.png);
+  background-position: 0 -177px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-fullscreen {
   width: 18px;
   height: 18px;
-  background-image: url(../img/slice/i-fullscreen.png);
+  background-position: 0 -993px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dzan {
   width: 24px;
   height: 21px;
-  background-image: url(../img/slice/i-dzan.png);
+  background-position: 0 -1242px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-comment {
   width: 22px;
   height: 20px;
-  background-image: url(../img/slice/i-comment.png);
+  background-position: 0 -1216px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-comments {
   width: 26px;
   height: 21px;
-  background-image: url(../img/slice/i-comments.png);
+  background-position: 0 -1296px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-send {
   width: 20px;
   height: 16px;
-  background-image: url(../img/slice/i-send.png);
+  background-position: 0 -715px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-icon1 {
   width: 15px;
   height: 13px;
-  background-image: url(../img/slice/i-icon1.png);
+  background-position: 0 -404px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-icon2 {
   width: 13px;
   height: 15px;
-  background-image: url(../img/slice/i-icon2.png);
+  background-position: 0 -543px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-icon3 {
   width: 12px;
   height: 17px;
-  background-image: url(../img/slice/i-icon3.png);
+  background-position: 0 -898px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-key {
   width: 15px;
   height: 14px;
-  background-image: url(../img/slice/i-key.png);
+  background-position: 0 -482px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-up {
   width: 20px;
   height: 11px;
-  background-image: url(../img/slice/i-arrow-up.png);
+  background-position: 0 -259px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-down {
   width: 20px;
   height: 11px;
-  background-image: url(../img/slice/i-arrow-down.png);
+  background-position: 0 -242px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .order-d {
-  width: 9px;
+  width: 10px;
   height: 12px;
-  background-image: url(../img/slice/order-d.png);
+  background-position: 0 -293px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .arrow-d-red {
   width: 9px;
   height: 9px;
-  background-image: url(../img/slice/arrow-d-red.png);
+  background-position: 0 -100px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .arrow-u-green {
   width: 9px;
   height: 9px;
-  background-image: url(../img/slice/arrow-u-green.png);
+  background-position: 0 -115px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-emp {
   width: 28px;
   height: 28px;
-  background-image: url(../img/slice/i-emp.png);
+  background-position: 0 -1499px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-addbtn {
   width: 28px;
   height: 28px;
-  background-image: url(../img/slice/i-addbtn.png);
+  background-position: 0 -1533px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-badge {
   width: 8px;
   height: 17px;
-  background-image: url(../img/slice/i-badge.png);
+  background-position: 0 -760px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dot3 {
-  width: 10px;
+  width: 12px;
   height: 2px;
-  background-image: url(../img/slice/i-dot3.png);
+  background-position: 0 0;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-tips {
   width: 6px;
   height: 6px;
-  background-image: url(../img/slice/i-tips.png);
+  background-position: 0 -19px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-comments2 {
   width: 21px;
   height: 22px;
-  background-image: url(../img/slice/i-comments2.png);
+  background-position: 0 -1141px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-list2 {
   width: 16px;
   height: 21px;
-  background-image: url(../img/slice/i-list2.png);
+  background-position: 0 -1091px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-list3 {
   width: 16px;
   height: 12px;
-  background-image: url(../img/slice/i-list3.png);
+  background-position: 0 -193px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-list4 {
   width: 13px;
   height: 14px;
-  background-image: url(../img/slice/i-list4.png);
+  background-position: 0 -385px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-key2 {
   width: 19px;
   height: 21px;
-  background-image: url(../img/slice/i-key2.png);
+  background-position: 0 -1066px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-sdan {
   width: 23px;
   height: 21px;
-  background-image: url(../img/slice/i-sdan.png);
+  background-position: 0 -627px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-volume {
   width: 23px;
   height: 22px;
-  background-image: url(../img/slice/i-volume.png);
+  background-position: 0 -1269px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-video {
   width: 26px;
   height: 21px;
-  background-image: url(../img/slice/i-video.png);
+  background-position: 0 -462px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-send2 {
   width: 20px;
   height: 21px;
-  background-image: url(../img/slice/i-send2.png);
+  background-position: 0 -693px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .arrow-back {
   width: 11px;
   height: 19px;
-  background-image: url(../img/slice/arrow-back.png);
+  background-position: 0 -1116px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-light {
   width: 21px;
   height: 22px;
-  background-image: url(../img/slice/i-light.png);
+  background-position: 0 -1350px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-close {
   width: 13px;
   height: 13px;
-  background-image: url(../img/slice/i-close.png);
+  background-position: 0 -347px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-down2 {
   width: 8px;
   height: 5px;
-  background-image: url(../img/slice/i-arrow-down2.png);
+  background-position: 0 -8px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-down4 {
   width: 16px;
   height: 9px;
-  background-image: url(../img/slice/i-arrow-down4.png);
+  background-position: 0 -85px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-up4 {
   width: 16px;
   height: 9px;
-  background-image: url(../img/slice/i-arrow-up4.png);
+  background-position: 0 -130px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-r {
   width: 7px;
   height: 12px;
-  background-image: url(../img/slice/i-arrow-r.png);
+  background-position: 0 -311px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-addbtn2 {
   width: 26px;
   height: 26px;
-  background-image: url(../img/slice/i-addbtn2.png);
+  background-position: 0 -1435px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-emp2 {
   width: 22px;
   height: 22px;
-  background-image: url(../img/slice/i-emp2.png);
+  background-position: 0 -1378px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-pic {
   width: 24px;
   height: 22px;
-  background-image: url(../img/slice/i-pic.png);
+  background-position: 0 -806px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dollar {
   width: 18px;
   height: 22px;
-  background-image: url(../img/slice/i-dollar.png);
+  background-position: 0 -1323px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-down3 {
   width: 10px;
   height: 6px;
-  background-image: url(../img/slice/i-arrow-down3.png);
+  background-position: 0 -31px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-addbtn3 {
   width: 17px;
   height: 17px;
-  background-image: url(../img/slice/i-addbtn3.png);
+  background-position: 0 -783px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dzan2 {
   width: 18px;
   height: 15px;
-  background-image: url(../img/slice/i-dzan2.png);
+  background-position: 0 -585px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-sdan2 {
   width: 12px;
   height: 14px;
-  background-image: url(../img/slice/i-sdan2.png);
+  background-position: 0 -502px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .pic-thumb {
   width: 40px;
   height: 29px;
-  background-image: url(../img/slice/pic-thumb.png);
+  background-position: 0 -1567px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .status-grey {
   width: 70px;
   height: 18px;
-  background-image: url(../img/slice/status-grey.png);
+  background-position: 0 -969px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .status-orange {
   width: 70px;
   height: 18px;
-  background-image: url(../img/slice/status-orange.png);
+  background-position: 0 -945px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .status-red {
   width: 70px;
   height: 18px;
-  background-image: url(../img/slice/status-red.png);
+  background-position: 0 -921px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-volume2 {
   width: 12px;
   height: 10px;
-  background-image: url(../img/slice/i-volume2.png);
+  background-position: 0 -161px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-selected {
   width: 14px;
   height: 14px;
-  background-image: url(../img/slice/i-selected.png);
+  background-position: 0 -442px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-r2 {
   width: 13px;
   height: 13px;
-  background-image: url(../img/slice/i-arrow-r2.png);
+  background-position: 0 -366px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-badge-arrowr {
   width: 5px;
   height: 15px;
-  background-image: url(../img/slice/i-badge-arrowr.png);
+  background-position: 0 -522px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dzan3 {
   width: 20px;
   height: 19px;
-  background-image: url(../img/slice/i-dzan3.png);
+  background-position: 0 -852px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-dollar3 {
   width: 16px;
   height: 19px;
-  background-image: url(../img/slice/i-dollar3.png);
+  background-position: 0 -1191px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-comments3 {
   width: 18px;
   height: 19px;
-  background-image: url(../img/slice/i-comments3.png);
+  background-position: 0 -829px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-chat-wx {
   width: 21px;
   height: 19px;
-  background-image: url(../img/slice/i-chat-wx.png);
+  background-position: 0 -1041px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-arrow-r3 {
   width: 6px;
   height: 9px;
-  background-image: url(../img/slice/i-arrow-r3.png);
+  background-position: 0 -145px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-video2 {
   width: 26px;
   height: 26px;
-  background-image: url(../img/slice/i-video2.png);
+  background-position: 0 -1467px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-close-pop {
   width: 11px;
   height: 11px;
-  background-image: url(../img/slice/i-close-pop.png);
+  background-position: 0 -225px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-close3 {
   width: 19px;
   height: 19px;
-  background-image: url(../img/slice/i-close3.png);
+  background-position: 0 -1166px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-close4 {
   width: 11px;
   height: 11px;
-  background-image: url(../img/slice/i-close4.png);
+  background-position: 0 -276px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-download {
   width: 38px;
   height: 32px;
-  background-image: url(../img/slice/i-download.png);
+  background-position: 0 -1602px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .del-btn {
   width: 16px;
   height: 16px;
-  background-image: url(../img/slice/del-btn.png);
+  background-position: 0 -649px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-psw-show {
   width: 19px;
   height: 16px;
-  background-image: url(../img/slice/i-psw-show.png);
+  background-position: 0 -209px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-psw-hide {
   width: 19px;
   height: 16px;
-  background-image: url(../img/slice/i-psw-hide.png);
+  background-position: 0 -56px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-warn {
   width: 18px;
   height: 18px;
-  background-image: url(../img/slice/i-warn.png);
+  background-position: 0 -1017px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .i-line {
   width: 3px;
-  height: auto;
-  background-image: url(../img/slice/i-line.png);
+  height: 375px;
+  background-position: 0 -1640px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .square-dot {
   border: 1px solid #ccc;
@@ -1296,9 +1158,6 @@ article.content_w {
   display: block;
   margin: 0 auto;
 }
-.infos-opbar .top-icons.i-light {
-  background-size: 21px auto;
-}
 .infos-opbar .top-icons .i-tips {
   position: absolute;
   right: -2px;
@@ -1324,6 +1183,7 @@ article.content_w {
 .infos-opbar.share-btns {
   width: 100%;
   margin: 0;
+  float: none;
   padding: 10px 0 8px 0;
 }
 .infos-opbar.share-btns li {
@@ -1336,10 +1196,8 @@ article.content_w {
   color: #7caf5d;
 }
 .infos-opbar .has-dzan .i-dzan3 {
-  background-image: url(../img/slice/i-dzan3h.png);
+  background-position: 0 -875px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .infos-opbar .has-dzan label {
   color: #7caf5d;
@@ -1427,15 +1285,15 @@ article.content_w {
   line-height: 17px;
   float: left;
   padding: 0 2px 0 5px;
-  background: url(../img/slice/i-badge-l.png) no-repeat left center;
-  background-size: auto 17px;
+  background: no-repeat left center;background-position: 0 -737px;
+  /*background-size: auto 17px;*/
 }
 .badge .i-badge {
   position: absolute;
   right: 0;
   display: block;
   top: 0;
-  background-size: auto 17px;
+  /*background-size: auto 17px;*/
 }
 .badge ~ .badge {
   margin-left: 5px;
@@ -1492,10 +1350,9 @@ article.content_w {
   margin-top: -1px;
 }
 .resource-op a.switch-video i[class*="i-"].i-icon3 {
-  background: url(../img/slice/i-icon4.png) no-repeat;
+  background: no-repeat;background-position: 0 -329px;
   width: 18px;
   height: 12px;
-  background-size: 100%;
   margin-top: 2px;
 }
 .infos-block {
@@ -1513,7 +1370,7 @@ article.content_w {
   color: #5fae4a;
 }
 .infos-block .has-subscribe .i-icon2 {
-  background-image: url(../img/slice/i-icon2h.png);
+  background-position: 0 -564px;
 }
 .infos-block .has-subscribe label {
   font-weight: 100;
@@ -1827,10 +1684,8 @@ article.content_w {
   position: absolute;
   right: 6px;
   top: 7px;
-  background-image: url(../img/slice/i-arrow-down2.png);
+  background-position: 0 -8px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .call-infos {
   padding: 18px 12px;
@@ -2174,7 +2029,7 @@ article.content_w {
   color: #74a258;
 }
 .bottom-fixed .infos-play {
-  height: 36px;
+  height: 32px;
   overflow: hidden;
 }
 .bottom-fixed .infos-opbar {
@@ -2186,7 +2041,7 @@ article.content_w {
   color: #595961;
 }
 .bottom-fixed .infos-opbar .lighted .i-light {
-  background-image: url(../img/slice/i-light2.png);
+  background-position: 0 -1406px;
 }
 .bottom-fixed .infos-opbar .lighted label {
   color: rgba(162, 126, 91, 0.5);
@@ -2263,6 +2118,9 @@ article.content_w {
 }
 .chat-block .dialog .dcont a {
   text-decoration: underline;
+}
+.chat-block .dialog .dcont a.btn {
+  text-decoration: none;
 }
 .chat-block .dialog.dialog-me {
   padding: 0 41px 0 12px;
@@ -2566,6 +2424,16 @@ article.content_w {
   line-height: 15px;
   display: block;
 }
+.chat-add-box .add-box-bd .add-btns-list li .upload-pic {
+  width: 24px;
+  height: 22px;
+  display: block;
+  margin: 0 auto;
+}
+.chat-add-box .add-box-bd .add-btns-list li .upload-pic .sfile-input {
+  width: 24px;
+  height: 22px;
+}
 .chat-add-box .face {
   margin-bottom: 15px;
 }
@@ -2616,9 +2484,6 @@ article.content_w {
   border-radius: 1000px;
   padding: 0 5px;
 }
-.chat-top-bar .chat-s2:active .close-btn {
-  background-image: url(../img/slice/i-close2.png);
-}
 .chat-top-bar .view_select {
   top: 3px;
 }
@@ -2626,25 +2491,27 @@ article.content_w {
   display: block;
   position: absolute;
   right: 0;
-  top: 0;
-  width: 44px;
-  height: 44px;
-  background-size: 13px 13px;
+  top: 15px;
+  padding: 0 15px;
+  background-position-x: -25%;
+  /*.size(44px,44px);background-size:13px 13px;*/
 }
 .chat-top-bar .close-btn:active {
-  background-image: url(../img/slice/i-close2.png);
+  background-position: 0 -423px;
+  background-position-x: -25%;
 }
 .chat-top-bar .i-arrow {
   display: block;
   position: absolute;
   right: 44px;
-  top: 0;
-  width: 44px;
-  height: 44px;
-  background-size: 16px 9px;
+  top: 17px;
+  padding: 0 14px;
+  background-position-x: -25%;
+  /*.size(44px,44px);background-size:16px 9px;*/
 }
-.chat-top-bar .i-arrow:active {
-  background-image: url(../img/slice/i-close2.png);
+.chat-top-bar .i-arrow.i-arrow-down4:active {
+  background-position: 0 -70px;
+  background-position-x: -25%;
 }
 .chat-top-bar.fixed-bar {
   position: fixed;
@@ -2800,10 +2667,8 @@ article.content_w {
   color: #7caf5d;
 }
 .social-op .has-dzan .i-dzan2 {
-  background-image: url(../img/slice/i-dzan2h.png);
+  background-position: 0 -606px;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto;
 }
 .sdan-me {
   padding: 20px;
@@ -2938,41 +2803,62 @@ article.content_w {
 .sub-form .form-main {
   margin-bottom: 12px;
 }
-.sub-form .form-main .text-area-box {
-  margin-left: 92px;
-}
 .sub-form .form-main .upload-pic {
-  position: relative;
   width: 80px;
   height: 80px;
   float: left;
+  background: #fff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .sub-form .form-main .upload-pic .pic-thumb {
-  display: block;
-  position: absolute;
-  left: 50%;
-  top: 50%;
   margin-left: -20px;
   margin-top: -15px;
 }
 .sub-form .form-main .upload-pic .sfile-input {
-  display: block;
   width: 80px;
   height: 80px;
   font-size: 5em;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
 }
 .sub-form .form-main .upload-pic .obj-upload {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 80px;
   height: 80px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+}
+.sub-form .form-main .text-area-box {
+  margin-left: 92px;
+}
+.upload-pic {
+  position: relative;
+}
+.upload-pic .pic-thumb {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.upload-pic .i-pic {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 1px;
+}
+.upload-pic .sfile-input {
+  display: block;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+}
+.upload-pic .obj-upload {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .login-fix {
   min-height: 380px;
@@ -3197,15 +3083,6 @@ article.content_w {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 8px;
-}
-.upload-pic {
-  background: #fff;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
 .stxt-textarea {
   -webkit-box-sizing: border-box;
@@ -3462,6 +3339,7 @@ article.content_w {
 }
 .program-con .program-list .item-con {
   position: relative;
+  overflow: hidden;
 }
 .program-con .program-list .item-con .img-pro {
   position: absolute;
@@ -3751,7 +3629,8 @@ article.content_w {
   height: 0;
   left: 50%;
   margin-left: -2px;
-  background-position: center bottom;
+  background-position-y: 100%;
+  /*background-position: center bottom;*/
 }
 .popup .close-pop {
   cursor: pointer;
@@ -4744,3 +4623,89 @@ article.content_w {
   -o-animation-name: bounceInDown;
   animation-name: bounceInDown;
 }
+
+
+/* ../img/index-v2.png */
+.i-back,
+.i-down,
+.i-list,
+.i-fullscreen,
+.i-dzan,
+.i-comment,
+.i-comments,
+.i-send,
+.i-icon1,
+.i-icon2,
+.i-icon3,
+.i-key,
+.i-arrow-up,
+.i-arrow-down,
+.order-d,
+.arrow-d-red,
+.arrow-u-green,
+.i-emp,
+.i-addbtn,
+.i-badge,
+.i-dot3,
+.i-tips,
+.i-comments2,
+.i-list2,
+.i-list3,
+.i-list4,
+.i-key2,
+.i-sdan,
+.i-volume,
+.i-video,
+.i-send2,
+.arrow-back,
+.i-light,
+.i-close,
+.i-arrow-down2,
+.i-arrow-down4,
+.i-arrow-up4,
+.i-arrow-r,
+.i-addbtn2,
+.i-emp2,
+.i-pic,
+.i-dollar,
+.i-arrow-down3,
+.i-addbtn3,
+.i-dzan2,
+.i-sdan2,
+.pic-thumb,
+.status-grey,
+.status-orange,
+.status-red,
+.i-volume2,
+.i-selected,
+.i-arrow-r2,
+.i-badge-arrowr,
+.i-dzan3,
+.i-dollar3,
+.i-comments3,
+.i-chat-wx,
+.i-arrow-r3,
+.i-video2,
+.i-close-pop,
+.i-close3,
+.i-close4,
+.i-download,
+.del-btn,
+.i-psw-show,
+.i-psw-hide,
+.i-warn,
+.i-line,
+.infos-opbar .has-dzan .i-dzan3,
+.badge span,
+.resource-op a.switch-video i[class*="i-"].i-icon3,
+.infos-block .has-subscribe .i-icon2,
+.view_select i[class*="i-arrow"],
+.bottom-fixed .infos-opbar .lighted .i-light,
+.chat-top-bar .close-btn:active,
+.chat-top-bar .i-arrow.i-arrow-down4:active,
+.social-op .has-dzan .i-dzan2{
+  background-image: url(../img/index-v2.png);
+  background-image: -webkit-image-set(url(../img/index-v2.png) 1x, url(../img/index-v2@2x.png) 2x); background-image: -moz-image-set(url(../img/index-v2.png) 1x, url(../img/index-v2@2x.png) 2x); background-image: -ms-image-set(url(../img/index-v2.png) 1x, url(../img/index-v2@2x.png) 2x); background-image: image-set(url(../img/index-v2.png) 1x, url(../img/index-v2@2x.png) 2x);
+}
+
+.css_stamp{ content:"";}

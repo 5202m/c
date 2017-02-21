@@ -355,7 +355,7 @@ var Util ={
             return null;
         }
         //提取课程
-        var getCourses=function(tmBkTmp, i, day, studioLink, isNext){
+        var getCourses=function(tmBkTmp, i, day, studioLink, isNext, date){
             var course=null,courseTmp=tmBkTmp.course;
             if(courseTmp && courseTmp.length>i){
                 course=courseTmp[i];
@@ -367,6 +367,7 @@ var Util ={
                 course.day=day;
                 course.studioLink=studioLink;
                 course.isNext=isNext;
+                course.date = date;
                 return course;
             }else{
                 return null;
@@ -380,6 +381,8 @@ var Util ={
         }
         var days=coursesObj.days,timeBuckets=coursesObj.timeBuckets;
         var currDay = (new Date(serverTime).getDay() + 6) % 7, tmpDay;
+        var today = new Date(serverTime);
+        today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
         var currTime = Util.formatDate(serverTime, "HH:mm");
         var tmBk=null,courseObj=null;
         for(var i=0;i<days.length;i++){
@@ -390,7 +393,7 @@ var Util ={
             if(tmpDay>currDay){
                 for(var k in timeBuckets){
                     tmBk=timeBuckets[k];
-                    courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, true);
+                    courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, true, today + (tmpDay-currDay) * 86400000);
                     if(courseObj){
                         return courseObj;
                     }
@@ -399,9 +402,9 @@ var Util ={
                 for(var k in timeBuckets){
                     tmBk=timeBuckets[k];
                     if(tmBk.startTime<=currTime && tmBk.endTime>=currTime){
-                        courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, false);
+                        courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, false, today);
                     }else if(tmBk.startTime>currTime){
-                        courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, true);
+                        courseObj=getCourses(tmBk, i, days[i].day, data.studioLink, true, today);
                     }
                     if(courseObj){
                         return courseObj;
@@ -422,7 +425,7 @@ var Util ={
                 continue;
             }
             for(var k=0;k<timeBuckets.length;k++) {
-                courseObj=getCourses(timeBuckets[k], i, days[i].day, data.studioLink, true);
+                courseObj=getCourses(timeBuckets[k], i, days[i].day, data.studioLink, true, today + (tmpDay + 7 - currDay) * 86400000);
                 if(courseObj){
                     return courseObj;
                 }

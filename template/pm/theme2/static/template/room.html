@@ -60,13 +60,12 @@
 		</div>
 		<div class="program-con">
 			<div class="program-list">
-				<div class="badge-group">
-					<label class="u-badge">趋势专家<i class="i-badge-arrowr"></i></label>
-					<label class="u-badge">技术派<i class="i-badge-arrowr"></i></label>
+				<div id="roomAnalystTag" class="badge-group">
+					<label class="u-badge" temp="analyst_tags">{0}<i class="i-badge-arrowr"></i></label>
 				</div>
 			</div>
-			<div class="program-resource">
-				<span class="s1">文字交流</span><span class="s2">2017.01.19 17:30~19:00</span>
+			<div class="program-resource" id="roomCourse">
+				<span class="s1"><!--课程标题--></span><span class="s2"><!--2017.01.19 17:30~19:00--></span>
 			</div>
 		</div>
 		<div id="classNote_panel">
@@ -251,7 +250,13 @@
 					<div class="add-box-bd" id="chat_tool2">
 						<ul class="add-btns-list clearfix">
 							<li><a href="javascript:void(0);" id="chat_face"><i class="i-emp2"></i><label>表情</label></a></li>
-							<li><a href="javascript:void(0);" id="chat_img"><i class="i-pic"></i><label>图片</label></a></li>
+							<li>
+								<span class="upload-pic">
+									<input type="file" class="sfile-input file-img"/>
+									<i class="i-pic"></i>
+								</span>
+								<label>图片</label>
+							</li>
 							<li><a href="javascript:void(0);" id="chat_reward"><i class="i-dollar"></i><label>打赏</label></a></li>
 						</ul>
 					</div>

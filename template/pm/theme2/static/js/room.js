@@ -34,6 +34,7 @@ Room.initPage = function(){
             Player.startPlay();
             ClassNote.init();
             Chat.init();
+            Room.showCourse();
         }
     });
 };
@@ -90,11 +91,29 @@ Room.showLecturer = function(lecturerId){
     }
     Data.getAnalyst(lecturerId, function(lecturer){
         if(lecturer){
+            var tagHtml = [];
             $("#room_teacher").attr("userno", lecturer.userNo).show();
             $("#room_teacherAvatar").attr("src", lecturer.avatar || "");
             $("#room_teacherName").text(lecturer.userName || "");
+            var tags = lecturer.tag.replace(/\s*，\s*/g, ',').split(',');
+            $.each(tags, function(i, v){
+                tagHtml.push(Room.formatHtml('analyst_tags', v));
+            });
+            $('#roomAnalystTag').empty().html(tagHtml.join(''));
         }else{
             $("#room_teacher").hide();
+        }
+    });
+};
+
+/**
+ * 显示当前课程及时间
+ */
+Room.showCourse = function(){
+    Data.getSyllabusPlan(function(course){
+        if(course){
+            $('#roomCourse .s1').text(course.title);
+            $('#roomCourse .s2').text(Util.formatDate(course.date, 'yyyy.MM.dd')+' '+course.startTime+'~'+course.endTime);
         }
     });
 };
