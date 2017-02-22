@@ -93,30 +93,27 @@ var Chat = {
          * 全屏聊天
          */
         $("#chat_fullscreen").bind("click", function(){
-            var $this = $(this);
             Chat.fullscreen = !Chat.fullscreen;
             if(Chat.fullscreen){
-                $this.text("边看边聊");
                 if(Player.type != "text"){
                     $("#chat_player").slideUp(300);
                     setTimeout(function(){
-                        $("#chat_ctrl").addClass('fixed-bar');
+                        $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-down4');
                         Chat.setHeight();
                     }, 300);
                 }else{
-                    $("#chat_ctrl").addClass('fixed-bar');
+                    $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-down4');
                     Chat.setHeight();
                 }
             }else{
-                $this.text("全屏聊天");
                 if(Player.type != "text"){
                     $("#chat_player").slideDown(300);
                     setTimeout(function(){
-                        $("#chat_ctrl").removeClass('fixed-bar');
+                        $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-up4');
                         Chat.setHeight();
                     }, 300);
                 }else{
-                    $("#chat_ctrl").removeClass('fixed-bar');
+                    $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-up4');
                     Chat.setHeight();
                 }
             }
@@ -139,6 +136,13 @@ var Chat = {
          */
         $("#chat_filter").bind("change", function(){
             Chat.filterMsg($(this).val());
+        });
+
+        /**
+         * 打开私聊对话页面
+         */
+        $("#chat_whisper").bind("click", function(){
+            //TODO 打开私聊对话页面
         });
 
         /**
@@ -1269,13 +1273,13 @@ var Chat = {
                 break;
 
             case "analyst":
-                if(Chat.chatToolView != "btns"){
+                if(Chat.chatToolView != "btns" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                     $("#chat_tool1").fadeIn(300);
                 }
                 break;
 
             case "btns":
-                if(Chat.chatToolView != "analyst"){
+                if(Chat.chatToolView != "analyst" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                     $("#chat_tool1").fadeIn(300);
                 }
                 $("#chat_tool2").slideDown(300);
