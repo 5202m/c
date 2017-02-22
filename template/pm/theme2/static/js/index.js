@@ -15,6 +15,7 @@ var Index = {
         }else{
             Rooms.load();
         }
+        Pop.signIn.init();
     },
 
     /**

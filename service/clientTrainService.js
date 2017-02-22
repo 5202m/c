@@ -177,28 +177,33 @@ let clientTrainService = {
     },
 
     /**
-     * 查询签到
-     * 
+     * 查询当天签到
+     *
      * @param params
      */
-    getSignin: function (userInfo, callback) {
+    checkTodaySignin: function (userInfo, clientip, callback) {
         let deferred = new Deferred();
-        let path = "/clientTrain/getSignin";
-        path += "?mobilePhone=" + userInfo.mobilePhone;
-        path += "&groupType=" + userInfo.groupType;
-        liveRoomAPIService.get(path).then((result) => {
+        let path = "/clientTrain/checkTodaySignin";
+        let params = {
+            mobilePhone: userInfo.mobilePhone,
+            groupType: userInfo.groupType,
+            clientip: clientip
+        };
+        liveRoomAPIService.post(path, params).then((result) => {
             if (callback) {
                 callback(result);
             }
             deferred.resolve(result);
         }).catch ((e) => {
-            logger.error("getSignin! >>getSignin:", e);
+            logger.error("checkTodaySignin! >>checkTodaySignin:", e);
             if (callback) {
                 callback(null);
             }
             deferred.reject(e);
         });
+        return deferred.promise;
     }
+
 };
 // 导出服务类
 module.exports = clientTrainService;

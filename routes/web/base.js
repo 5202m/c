@@ -2202,4 +2202,16 @@ router.get('/getAuthUsersByGroupId', function(req, res){
     }
 });
 
+
+/**
+ * 查询当天是否签到
+ */
+router.post('/checkTodaySignin', function(req, res){
+    var userInfo=req.session.studioUserInfo;
+    var clientip = common.getClientIp(req);
+    clientTrainService.checkTodaySignin(userInfo, clientip, function(result){
+        res.json(result);
+    });
+});
+
 module.exports = router;

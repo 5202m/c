@@ -39,5 +39,69 @@ var Pop = {
             ops.onOK();
             $("#pop_msg").hide();
         });
+    },
+    signIn : {
+        /**
+         * 初始化
+         */
+        init : function(){
+            Pop.signIn.setEvent();
+            setTimeout("Pop.signIn.showSignIn()", 30000);
+        },
+        /**
+         * 设置事件
+         */
+        setEvent : function(){
+            /**
+             * 关闭签到
+             */
+            $('.sign-pop .animatebox .popcon .close-pop').bind('click', function(){
+                $('.sign-pop').hide();
+            });
+            /**
+             * 签到
+             */
+            $('.sign-pop .sign-btn').bind('click', function(){
+                Pop.signIn.addSignIn();
+            });
+        },
+        /**
+         * 显示签到
+         */
+        showSignIn : function(){
+            if (Data.userInfo.isLogin) {
+                Util.postJson('/studio/checkTodaySignin', null, function (data) {
+                    if (null != data) {
+                        if(data.isOK == false){
+                            var _obj = $('.sign-pop');
+                            var _signc = _obj.find('.popcon .sign-main').eq(0);
+                            var _signh = _signc.css('height', 'auto').height() > 307 ? _signc.css('height', 'auto').height() : 307;
+                            var _signl = _obj.find('.i-line');
+                            var _difh = parseInt(($(window).height() - _signh) / 2) + 9;
+                            _signl.height(_difh);
+                            _obj.show();
+                            _obj.find('.animatebox').addClass('amin');
+                        }
+                    } else {
+                        console.log("fail");
+                    }
+                });
+            }
+        },
+        /**
+         * 签到
+         */
+        addSignIn : function(){
+            if (Data.userInfo.isLogin) {
+                Util.postJson('/studio/addSignin', null, function (data) {
+                    if (data.isOK) {
+                        alert("签到成功!");//box.showMsg("签到成功!");
+                        $('.sign-pop .animatebox .popcon .close-pop').trigger('click');
+                    } else {
+                        alert(data.msg);//box.showMsg(data.msg);
+                    }
+                });
+            }
+        }
     }
 };
