@@ -95,7 +95,7 @@ Room.showLecturer = function(lecturerId){
             $("#room_teacher").attr("userno", lecturer.userNo).show();
             $("#room_teacherAvatar").attr("src", lecturer.avatar || "");
             $("#room_teacherName").text(lecturer.userName || "");
-            var tags = lecturer.tag.replace(/\s*，\s*/g, ',').split(',');
+            var tags = Util.isNotBlank(lecturer.tag)?lecturer.tag.replace(/\s*，\s*/g, ',').split(','):[];
             $.each(tags, function(i, v){
                 tagHtml.push(Room.formatHtml('analyst_tags', v));
             });

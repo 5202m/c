@@ -1101,17 +1101,17 @@ var Chat = {
                 return;
             }
             if(!isMeSend && Data.userInfo.userId==fromUser.userId && data.serverSuccess){//发送成功，则去掉加载框，清除原始数据。
-                $('#'+data.uiId+' .uname span').html(studioChatMb.formatPublishTime(fromUser.publishTime));
+                $('#'+data.uiId+' .uname span').html(Chat.formatPublishTime(fromUser.publishTime));
                 $('#'+data.uiId).attr("id",fromUser.publishTime);//发布成功id同步成服务器发布日期
-                if(data.content.msgType==studioChatMb.msgType.img){
-                    studioChatMb.removeLoadDom(fromUser.publishTime);//去掉加载框
+                if(data.content.msgType==Data.msgType.img){
+                    Chat.removeLoadDom(fromUser.publishTime);//去掉加载框
                     var aObj=$('#'+fromUser.publishTime+' span[contt="a"] a');
-                    var url=data.content.needMax?'/fxstudio/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
+                    var url=data.content.needMax?'/studio/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
                     aObj.attr("href",url);
                 }
                 return;
             }
-            var dialog=studioChatMb.formatContentHtml(data,isMeSend,isLoadData, true);
+            var dialog=Chat.formatContentHtml(data,isMeSend,isLoadData, true);
             var talkPanel = $("#WhTalkPanel");
             //如果本身就在最底端显示，则自动滚动，否则不滚动
             var isScroll = talkPanel.scrollTop() + talkPanel.height() + 30 >= talkPanel.get(0).scrollHeight;
@@ -1123,7 +1123,7 @@ var Chat = {
             if(isScroll && this.tabCheck){
                 Chat.WhTalk.setWHTalkListScroll();
             }
-            studioChatMb.formatMsgToLink(fromUser.publishTime);//格式链接
+            Chat.formatMsgToLink(fromUser.publishTime);//格式链接
             //昵称点击
             if(Data.userInfo.userId!=fromUser.userId){
                 $('#'+fromUser.publishTime+' .uname,#'+fromUser.publishTime+' .headimg').click(function(){
@@ -1372,7 +1372,7 @@ var Chat = {
                 $('#'+uiId).remove();
                 return false;
             }
-            var aObj=$("#"+result.uiId+" span[contt='a'] a");//[contt='a']
+            var aObj=$("#"+result.uiId+" .dcont a");//[contt='a']
             aObj.attr("href", value)
                 .children("img").attr("src",value).attr("needMax",result.content.needMax);
             Chat.dataUpload(result);
