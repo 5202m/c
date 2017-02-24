@@ -148,9 +148,9 @@ ShowTrade.pushShowTradeInfo = function(data) {
         }
         var time = Util.formatDate(Data.serverTime, 'HH:mm');
         txt = row.boUser.userName + '在晒单墙晒了一单，' + (Util.isBlank(row.title)?'...':row.title);
-        $('#chat_msg').append(Room.formatHtml('chat_sys_msg', time, txt));
+        $('#chat_msg').append(Room.formatHtml('chat_sys_msg', time, txt, 'showTrade', row._id));
         $('#scroll-tips .scroller .chat-tips-con .pr15').text(txt).show();
-        chat.showSystemTopInfo("showTrade", row.id, txt);
+        //chat.showSystemTopInfo("showTrade", row.id, txt);
     }
     var timeOutId = setTimeOut(function(){
         $('#scroll-tips').hide();
@@ -158,14 +158,7 @@ ShowTrade.pushShowTradeInfo = function(data) {
     },10000);
     $('#showTradeList').prepend(tradeHtml.join(''));
     ShowTrade.showShowTradeNumTip(false);
-    /*$('#chatMsgContentDiv .dialoglist .pushclose').unbind('click');
-    $('#chatMsgContentDiv .dialoglist .pushclose').click(function(){
-        $(this).parent().hide();
-    });
-    $('#chatMsgContentDiv .dialoglist .showtrade').unbind('click');
-    $('#chatMsgContentDiv .dialoglist .showtrade').click(function(){
-        chatShowTrade.gotoLook($(this).attr('_id'));
-    });*/
+    Tool.gotoLook();
 };
 
 /**

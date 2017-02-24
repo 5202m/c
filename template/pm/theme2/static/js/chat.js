@@ -85,22 +85,16 @@ var Chat = {
                     var articleInfo = result.data;
                     if (articleInfo) {
                         switch (articleInfo.categoryId){
-                            case "trade_strategy_article":
-                                var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
-                                var authorId = articleDetail && articleDetail.authorInfo && articleDetail.authorInfo.userId;
-                                if (articleDetail && $("#lvInfoId .te_detail").attr("uid") == authorId) {
-                                    $("#lvInfoId .info2 p").text(articleDetail.content);
-                                }
-                                break;
                             case "class_note"://直播精华
                                 if(articleInfo.platform && articleInfo.platform.indexOf(indexJS.userInfo.groupId) != -1){
                                     var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
-                                    if(Util.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
+                                    ClassNote.appendClassNote(articleInfo, true);
+                                    /*if(Util.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
                                         chatPride.appendTradeStrategyNote(articleInfo, true, true, true);
                                     }else{
                                         chatPride.appendClassNoteInfo(articleInfo, true, true, true);
-                                    }
-                                    chatPride.pushShoutSingleInfo(articleInfo);
+                                    }*/
+                                    ClassNote.pushShoutSingleInfo(articleInfo);
                                 }
                                 break;
                         }
@@ -314,7 +308,6 @@ var Chat = {
         Chat.showTool("none");
         Data.getRoom(function(room){
             if(!room.allowVisitor && Data.userInfo.clientGroup == "visitor"){
-                // TODO 弹出登录框
                 Login.load();
                 return;
             }
@@ -982,7 +975,7 @@ var Chat = {
             var csTmp = this.CSMap[csId];
             csTmp.load = true;
             //加载私聊信息
-            studioChatMb.socket.emit("getWhMsg",{
+            Chat.socket.emit("getWhMsg",{
                 clientStoreId:Data.userInfo.clientStoreId,
                 userType:Data.userInfo.userType,
                 groupId:Data.userInfo.groupId,
@@ -1268,7 +1261,7 @@ var Chat = {
                 this.setWhCS();
             }
             if(!this.currCS){
-                studioMbPop.showMessage("老师助理不在线，暂不可私聊！");
+                alert("老师助理不在线，暂不可私聊！");//Pop.msg("老师助理不在线，暂不可私聊！");
                 return ;
             }
             sendObj.fromUser.toUser = {

@@ -179,5 +179,23 @@ var ClassNote = {
             return $.inArray(id, storeClassNote) == -1;
         }
         return false;
+    },
+    /**
+     * 老师喊单后推送消息提醒
+     */
+    pushShoutSingleInfo:function(articleInfo){
+        var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+        var aid = articleInfo._id || articleInfo.id;
+        var txt = null;
+        if (Util.isNotBlank(articleDetail.tag) && Util.isNotBlank(articleDetail.remark) && (articleDetail.tag == 'shout_single' || articleDetail.tag == 'resting_order')) {
+            var label = "老师喊单啦";
+            if(articleDetail.tag == 'resting_order'){
+                label = "老师挂单啦";
+            }
+            txt = (Util.isBlank(articleDetail.content) ? (articleDetail.authorInfo.userName||'')+label : articleDetail.content.replace('<p>','').replace('</p>',''));
+            var time = Util.formatDate(Data.serverTime, 'HH:mm');
+            $('#chat_msg').append(Room.formatHtml('chat_sys_msg', time, txt, 'classNote', aid));
+            Tool.gotoLook();
+        }
     }
 };

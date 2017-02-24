@@ -5,6 +5,7 @@
  * OnlineCS : 在线客服
  */
 var Tool = {
+    htmlBody : $('html, body'),
     /**
      * 在线客服
      */
@@ -268,6 +269,26 @@ var Tool = {
                 }
             }
         }
+    },
+    /**
+     * 去看看-策略、喊单、挂单、晒单
+     */
+    gotoLook : function(){
+        $('a[to="look"]').unbind('click');
+        $('a[to="look"]').bind('click', function(){
+            var t = $(this).attr('t'), _id = $(this).attr('_id');
+            $('#chat_close').trigger('click');
+            if(t=='classNote'){
+                Tool.htmlBody.animate({
+                    scrollTop: $('div[dataid="'+_id+'"]').offset().top
+                }, 500);
+            }else if(t=='showTrade'){
+                ShowTrade.load();
+                Tool.htmlBody.animate({
+                    scrollTop: $('div[sid="'+_id+'"]').offset().top
+                }, 500);
+            }
+        });
     }
 };
 
