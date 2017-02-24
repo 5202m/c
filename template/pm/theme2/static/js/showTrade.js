@@ -76,7 +76,7 @@ ShowTrade.setShowTradePraise = function(obj){
             var lb= obj.children("span").children('label');
             lb.text(Util.isNotBlank(lb.text())?(parseInt(lb.text())+1):0);
         }else{
-            alert('亲，已点赞，当天只能点赞一次！');//Pop.msg('亲，已点赞，当天只能点赞一次！');
+            Pop.msg('亲，已点赞，当天只能点赞一次！');
         }
         obj.addClass('supported');
         obj.attr('title','已点赞');

@@ -16,7 +16,7 @@ var Pop = {
             ops = {msg : ops};
         }
         $.extend(ops, {
-            msg : "",
+            //msg : "",
             closeable : true,
             autoClose : -1,
             onOK : $.noop
@@ -35,7 +35,7 @@ var Pop = {
             $("#pop_msgBtn").show();
             $("#pop_msg").fadeIn();
         }
-        $("#pop_msgBtn").one(function(){
+        $("#pop_msgBtn").one('click', function(){
             ops.onOK();
             $("#pop_msg").hide();
         });
@@ -98,10 +98,10 @@ var Pop = {
             if (Data.userInfo.isLogin) {
                 Util.postJson('/studio/addSignin', null, function (data) {
                     if (data.isOK) {
-                        alert("签到成功!");//box.showMsg("签到成功!");
+                        Pop.msg("签到成功!");
                         $('.sign-pop .animatebox .popcon .close-pop').trigger('click');
                     } else {
-                        alert(data.msg);//box.showMsg(data.msg);
+                        Pop.msg(data.msg);
                     }
                 });
             }

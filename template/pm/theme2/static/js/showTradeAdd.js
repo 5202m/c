@@ -24,12 +24,12 @@ ShowTradeAdd.uploadShowTradeImg = function(fileObj){
     }
     // 判断图片格式
     if(!(img.type.indexOf('image')==0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase())) ){
-        alert('目前暂支持jpg,gif,png格式的图片！');;//Pop.msg('目前暂支持jpg,gif,png格式的图片！');
+        Pop.msg('目前暂支持jpg,gif,png格式的图片！');
         return false;
     }
     var fileSize=img.size;
     if(fileSize>=1024*512){
-        alert('上传的图片大小不要超过512KB.');//Pop.msg('上传的图片大小不要超过512KB.');
+        Pop.msg('上传的图片大小不要超过512KB.');
         return false ;
     }
     try{
@@ -51,7 +51,7 @@ ShowTradeAdd.uploadShowTradeImg = function(fileObj){
                         $(_this).val('');
                     }
                 }else{
-                    alert("上传图片失败，请联系在线客服！");//Pop.msg("上传图片失败，请联系在线客服！");
+                    Pop.msg("上传图片失败，请联系在线客服！");
                 }
             },
             error: function (result) {
@@ -72,13 +72,13 @@ ShowTradeAdd.saveShowTrade = function(){
     var tradeImg = $('#tradeImg').val();
     var remark = $('#showTradeAddForm .remark').text();
     if(Util.isBlank(title)){
-        alert('请输入标题');//Pop.msg('请输入标题');
+        Pop.msg('请输入标题');
     }else if(Util.isBlank(userName)){
-        alert('请输入晒单人');//Pop.msg('请输入晒单人');
+        Pop.msg('请输入晒单人');
     }else if(!Util.isRightName(userName)){
-        alert('晒单人为2至10位字符(数字/英文/中文/下划线)，不能全数字!');//Pop.msg('晒单人为2至10位字符(数字/英文/中文/下划线)，不能全数字!');
+        Pop.msg('晒单人为2至10位字符(数字/英文/中文/下划线)，不能全数字!');
     }else if(Util.isBlank(tradeImg)){
-        alert('请上传晒单图片');//Pop.msg('请上传晒单图片');
+        Pop.msg('请上传晒单图片');
     }else{
         var params = {groupType:Data.userInfo.groupType,
             groupId:Data.userInfo.groupId,
@@ -92,7 +92,7 @@ ShowTradeAdd.saveShowTrade = function(){
         };
         Util.postJson('/studio/addShowTrade',{data:JSON.stringify(params)},function(data){
             if(data.isOK){
-                alert('您的晒单已成功提交，等待系统审核！');//Pop.msg('您的晒单已成功提交，等待系统审核！');
+                Pop.msg('您的晒单已成功提交，等待系统审核！');
                 if(!Data.userInfo.isSetName){
                     //TODO 设置更新昵称
                     //$('#myNickName').val(userName);
@@ -101,7 +101,7 @@ ShowTradeAdd.saveShowTrade = function(){
                 //$('.pop_addsd').hide();
                 $('#showTradeAddForm .contentText,#tradeImg').empty();
             }else{
-                alert(data.msg);//Pop.msg(data.msg);
+                Pop.msg(data.msg);
             }
         });
     }

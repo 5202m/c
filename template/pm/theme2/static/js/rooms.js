@@ -159,7 +159,7 @@ Rooms.entryRoom = function(roomId){
     Data.getRoom(roomId, function(room){
         if(room){
             if(!room.allowVisitor && Data.userInfo.clientGroup == "visitor"){
-                //TODO 弹出登录框
+                Login.load();
                 return;
             }
             if(room.roomType == "train"){

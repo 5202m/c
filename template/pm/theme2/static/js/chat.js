@@ -1261,7 +1261,7 @@ var Chat = {
                 this.setWhCS();
             }
             if(!this.currCS){
-                alert("老师助理不在线，暂不可私聊！");//Pop.msg("老师助理不在线，暂不可私聊！");
+                Pop.msg("老师助理不在线，暂不可私聊！");
                 return ;
             }
             sendObj.fromUser.toUser = {
