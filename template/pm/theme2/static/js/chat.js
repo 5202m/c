@@ -11,13 +11,14 @@ var Chat = {
     userMap : {}, //在线用户Map 管理员+分析师+客服助理
     cntAdmin : 0, //在线管理员数量
     cntAnalyst : 0, //在线分析师数量
+    cntOnline : 0,  //在线用户
 
     /**
      * 初始化
      */
     init : function(){
         this.setSocket();
-        this.setEvent();
+        this.setOnlineNum(true);
     },
 
     /**
@@ -52,6 +53,7 @@ var Chat = {
                 case 'onlineNum':
                     if(result.data && result.data.onlineUserInfo){
                         Chat.setOnlineUser(result.data.onlineUserInfo, result.data.online);
+                        Chat.setOnlineNum();
                     }
                     break;
 
@@ -70,8 +72,39 @@ var Chat = {
                     Chat.pushMsg(result.data);
                     break;
 
+                case 'showTrade'://晒单信息
+                    var showTradeInfo = result.data;
+                    ShowTrade.pushShowTradeInfo(showTradeInfo);
+                    break;
+
                 case 'serverTime':
                     Data.serverTime = result.data;
+                    break;
+
+                case 'articleInfo'://交易策略
+                    var articleInfo = result.data;
+                    if (articleInfo) {
+                        switch (articleInfo.categoryId){
+                            case "trade_strategy_article":
+                                var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+                                var authorId = articleDetail && articleDetail.authorInfo && articleDetail.authorInfo.userId;
+                                if (articleDetail && $("#lvInfoId .te_detail").attr("uid") == authorId) {
+                                    $("#lvInfoId .info2 p").text(articleDetail.content);
+                                }
+                                break;
+                            case "class_note"://直播精华
+                                if(articleInfo.platform && articleInfo.platform.indexOf(indexJS.userInfo.groupId) != -1){
+                                    var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+                                    if(Util.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
+                                        chatPride.appendTradeStrategyNote(articleInfo, true, true, true);
+                                    }else{
+                                        chatPride.appendClassNoteInfo(articleInfo, true, true, true);
+                                    }
+                                    chatPride.pushShoutSingleInfo(articleInfo);
+                                }
+                                break;
+                        }
+                    }
                     break;
             }
         });
@@ -209,7 +242,7 @@ var Chat = {
                     Chat.face.init($("#chat_facePanel"),
                         $("#chat_cont"),
                         Data.filePath+'/face/',
-                        !room || (!room.allowVisitor && "visitor"==studioChatMb.userInfo.clientGroup));
+                        !room || (!room.allowVisitor && "visitor"==Data.userInfo.clientGroup));
                     $("#chat_cont").focusEnd();
                 });
             }else{
@@ -427,6 +460,7 @@ var Chat = {
         if(Chat.WhTalk.enable){
             Chat.WhTalk.getCSList(); //加载客服列表
         }
+        Chat.setOnlineNum();
     },
     /**
      * 在线用户
@@ -441,6 +475,22 @@ var Chat = {
         if(user.userType==1 || user.userType==2 || user.userType==3){
             Chat.setUsersMap(user, isOnline);
         }
+        if(isOnline){
+            Chat.cntOnline ++;
+        }else{
+            Chat.cntOnline --;
+        }
+        Chat.cntOnline = Math.abs(Chat.cntOnline); //避免出现负数
+    },
+    /**
+     * 设置在线人数
+     */
+    setOnlineNum:function(isInit){
+        if(isInit){
+            Chat.cntOnline = 0;
+            return;
+        }
+        $("#chatOnlineNum").text(Chat.cntOnline);
     },
     /**
      * 设置后台在线用户列表
@@ -579,6 +629,9 @@ var Chat = {
         Chat.setTalkScroll();
         $("#chat_msg").append(html.join(""));
         Chat.filterMsg();
+        if(!isLoadData){
+            Chat.showChatMsgNumTip(false);
+        }
     },
 
     /**
@@ -1230,10 +1283,10 @@ var Chat = {
                 sendObj.fromUser.toUser.publishTime=this.askMsgObj.publishTime;
             }
             Chat.WhTalk.receiveWhMsg(sendObj,true,false);//直接把数据填入内容栏
-            if(sendObj.content.msgType != studioChatMb.msgType.img) {
-                studioChatMb.socket.emit('sendMsg', sendObj);//发送数据
+            if(sendObj.content.msgType != Data.msgType.img) {
+                Chat.socket.emit('sendMsg', sendObj);//发送数据
             }
-            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, studioChatMb.courseTick.course));//统计发言次数
+            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, Tool.courseTick.course));//统计发言次数
         }
     },
 
@@ -1452,5 +1505,19 @@ var Chat = {
         };
         data.fromUser.socketId=this.socket.id;
         xhr.send(JSON.stringify(data)); //发送base64
+    },
+    /**
+     * 显示新消息数量角标
+     */
+    showChatMsgNumTip : function(isClear){
+        var $tip = $("#chatMsgCount");
+        if(isClear){
+            $tip.data("cnt", 0).html("").hide();
+        }else{
+            if($('#room_talk').is(':hidden')){
+                var cnt = ($tip.data("cnt") || 0) + 1;
+                $tip.data("cnt", cnt).html(cnt).css("display", "inline-block");
+            }
+        }
     }
 };

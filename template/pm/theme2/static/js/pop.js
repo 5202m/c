@@ -46,7 +46,10 @@ var Pop = {
          */
         init : function(){
             Pop.signIn.setEvent();
-            setTimeout("Pop.signIn.showSignIn()", 30000);
+            var timeOutId = setTimeout(function(){
+                Pop.signIn.showSignIn();
+                clearTimeout(timeOutId);
+            }, 30000);
         },
         /**
          * 设置事件

@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="video-infos" id="room_classnote">
-		<div class="infos-block plrall clearfix">
+		<div class="infos-block plrall clearfix" id="roomLiveAnalyst">
 			<div class="avatar-info fl" id="room_teacher" style="display: none;">
 				<img src="" class="img-avatar" id="room_teacherAvatar"/>
 				<div class="a-top"><b id="room_teacherName"></b><i class="i-dot3"></i></div>
@@ -30,16 +30,16 @@
 			<div class="infos-opbar">
 				<ul class="clearfix">
 					<li>
-						<a href="javascript:void(0);">
+						<a href="javascript:void(0);" id="room_pride">
 							<span class="top-icons i-light"></span>
 							<label>直播精华</label>
 						</a>
 					</li>
 					<li>
 						<a href="javascript:void(0);" id="room_chat">
-							<span class="top-icons i-comments2"><i class="i-tips-txt dn">0</i></span>
+							<span class="top-icons i-comments2"><i class="i-tips-txt dn" id="chatMsgCount">0</i></span>
 							<label>聊天室
-								<small>(2211)</small>
+								<small>(<span id="chatOnlineNum">0</span>)</small>
 							</label>
 						</a>
 					</li>
@@ -58,7 +58,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="program-con">
+		<div class="program-con" id="roomAnalystTagCourse">
 			<div class="program-list">
 				<div id="roomAnalystTag" class="badge-group">
 					<label class="u-badge" temp="analyst_tags">{0}<i class="i-badge-arrowr"></i></label>
@@ -68,11 +68,35 @@
 				<span class="s1"><!--课程标题--></span><span class="s2"><!--2017.01.19 17:30~19:00--></span>
 			</div>
 		</div>
+		<div class="head-top head-fixed mt40 al-c dn" id="prideTopTitle">
+			<span class="btn-l"><b class="head-tit">直播精华</b></span>
+			<a href="javascript:void(0);" class="txt-btn btn-r" id="prideTopClose"><i class="i-close close-btn"></i></a>
+		</div>
+		<div class="infos-block plrall clearfix live-essence dn" id="prideShowAnalyst">
+			<div class="avatar-info fl" id="pride_teacher" style="display: none;">
+				<img src="" class="img-avatar" id="pride_teacherAvatar">
+				<div class="a-top"><b id="pride_teacherName"></b><i class="i-dot3"></i></div>
+			</div>
+			<div class="program-con infos-program fl">
+				<div class="program-list">
+					<div class="badge-group" id="prideAnalystTags">
+
+					</div>
+				</div>
+				<div class="program-resource al-r" id="prideCourse">
+					<div class="s1">即市行情</div>
+					<div class="s2">2017.01.19 17:30~19:00</div>
+				</div>
+			</div>
+		</div>
 		<div id="classNote_panel">
 			<div class="txt-block block-blue" temp="classNote_strategy" dataid="{0}">
 				<div class="txt-tit"><span class="square-dot c-purple"><i class="dot"></i></span>当前交易策略</div>
 				<div class="txt-details">
 					{1}
+				</div>
+				<div class="toggle-op-btn">
+					<i class="i-arrow-down"></i>
 				</div>
 			</div>
 			<div class="call-infos block-yellow" temp="classNote_shoutTrade" dataid="{0}">
@@ -130,7 +154,7 @@
 				<ul class="clearfix">
 					<li>
 						<a href="javascript:void(0)" id="room_showTrade">
-							<span class="top-icons i-sdan"><i class="i-tips-txt dn">0</i></span>
+							<span class="top-icons i-sdan"><i class="i-tips-txt dn" id="showTradeNum">0</i></span>
 							<label>晒单墙</label>
 						</a>
 					</li>
@@ -233,6 +257,18 @@
 				<s class="shadow-conut"></s>
 			</div>
 			<em class="ruleTipStyle" temp="chat_dialogTip">{0}</em>
+			<div class="dialog" temp="chat_sys_msg">
+				<div class="headimg">
+					<a href="javascript:void(0);"><img src="/pm/theme2/img/avatar-sys.png"></a>
+				</div>
+				<div class="infobar">
+					<a href="javascript:void(0);" class="uname">系统消息</a><span class="ctime">{0}</span>
+				</div>
+				<div class="dcont">
+					<span>{1}</span>
+					<div class="d-btn-op al-r"><a href="javascript:void(0);" class="btn btn-red">去看看</a></div>
+				</div>
+			</div>
 		</div>
 		<div class="chat-op" id="chat_editor">
 			<div class="content_w">

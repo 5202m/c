@@ -124,3 +124,59 @@ ShowTrade.setEvent = function(){
         ShowTrade.setShowTradeList();
     });
 };
+
+/**
+ * 聊天室 推送用户晒单提示消息
+ * @param data
+ */
+ShowTrade.pushShowTradeInfo = function(data) {
+    var tradeHtml=[], row = null,txt=null;
+    for(var i = 0, length=data.length; i < length; i++){
+        row = data[i];
+        if($('#showTradeList .item-cell[sid="'+row.id+'"]').length==0){
+            var showTradeDate = Util.formatDate(row.showDate,'MM-dd HH:mm');
+            tradeHtml.push(ShowTrade.formatHtml('showTrade',
+                row.user.avatar,
+                row.user.userName,
+                showTradeDate,
+                row.title,
+                row.tradeImg,
+                row.remark,
+                row.praise||0,
+                row._id
+            ));
+        }
+        var time = Util.formatDate(Data.serverTime, 'HH:mm');
+        txt = row.boUser.userName + '在晒单墙晒了一单，' + (Util.isBlank(row.title)?'...':row.title);
+        $('#chat_msg').append(Room.formatHtml('chat_sys_msg', time, txt));
+        $('#scroll-tips .scroller .chat-tips-con .pr15').text(txt).show();
+        chat.showSystemTopInfo("showTrade", row.id, txt);
+    }
+    var timeOutId = setTimeOut(function(){
+        $('#scroll-tips').hide();
+        clearTimeout(timeOutId);
+    },10000);
+    $('#showTradeList').prepend(tradeHtml.join(''));
+    ShowTrade.showShowTradeNumTip(false);
+    /*$('#chatMsgContentDiv .dialoglist .pushclose').unbind('click');
+    $('#chatMsgContentDiv .dialoglist .pushclose').click(function(){
+        $(this).parent().hide();
+    });
+    $('#chatMsgContentDiv .dialoglist .showtrade').unbind('click');
+    $('#chatMsgContentDiv .dialoglist .showtrade').click(function(){
+        chatShowTrade.gotoLook($(this).attr('_id'));
+    });*/
+};
+
+/**
+ * 显示新消息数量角标
+ */
+ShowTrade.showShowTradeNumTip = function(isClear){
+    var $tip = $("#showTradeNum");
+    if(isClear){
+        $tip.data("cnt", 0).html("").hide();
+    }else{
+        var cnt = ($tip.data("cnt") || 0) + 1;
+        $tip.data("cnt", cnt).html(cnt).css("display", "inline-block");
+    }
+}
