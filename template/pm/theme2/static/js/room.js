@@ -45,7 +45,16 @@ Room.initPage = function(){
  */
 Room.setEvent = function(){
     /**返回房间列表*/
-    $("#room_back").bind("click", Container.back);
+    $("#room_back").bind("click", function(){
+        Container.back();
+        if(Chat.socket){
+            Chat.socket.disconnect();
+            Chat.socket = null;
+            Player.player.clear($("#roomVideo"));
+            Room.currGroupId = null;
+            $('#chat_msg,#classNote_panel').empty();
+        }
+    });
 
     /** 节目列表 */
     $("#room_syllabus").bind("click", function(){
