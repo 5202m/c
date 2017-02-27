@@ -18,7 +18,7 @@ var Chat = {
      */
     init : function(){
         this.setSocket();
-        this.setOnlineNum(true);
+        this.setOnlineNum(0, false, true);
     },
 
     /**
@@ -52,8 +52,7 @@ var Chat = {
             switch (result.type){
                 case 'onlineNum':
                     if(result.data && result.data.onlineUserInfo){
-                        Chat.setOnlineUser(result.data.onlineUserInfo, result.data.online);
-                        Chat.setOnlineNum();
+                        Chat.setOnlineUser(result.data.onlineUserInfo, result.data.online, true);
                     }
                     break;
 
@@ -448,19 +447,20 @@ var Chat = {
      */
     setOnlineUsers : function(users, length){
         for(var i in users){
-            Chat.setOnlineUser(users[i], true);
+            Chat.setOnlineUser(users[i], true, false);
         }
         if(Chat.WhTalk.enable){
             Chat.WhTalk.getCSList(); //加载客服列表
         }
-        Chat.setOnlineNum();
+        Chat.setOnlineNum(length, true, false);
     },
     /**
      * 在线用户
      * @param user
      * @param isOnline
+     * @param setOnlineNum
      */
-    setOnlineUser : function(user, isOnline){
+    setOnlineUser : function(user, isOnline, setOnlineNum){
         if(Chat.WhTalk.enable && user.userType == 3){
             Chat.WhTalk.setCSOnline(user.userId, isOnline);
         }
@@ -468,21 +468,27 @@ var Chat = {
         if(user.userType==1 || user.userType==2 || user.userType==3){
             Chat.setUsersMap(user, isOnline);
         }
-        if(isOnline){
-            Chat.cntOnline ++;
-        }else{
-            Chat.cntOnline --;
+        if(setOnlineNum){
+            Chat.setOnlineNum(isOnline ? 1 : -1, false, false);
         }
-        Chat.cntOnline = Math.abs(Chat.cntOnline); //避免出现负数
     },
     /**
      * 设置在线人数
      */
-    setOnlineNum:function(isInit){
-        if(isInit){
+    setOnlineNum:function(num, isAddVirtual, isReset){
+        //初始化
+        if(isReset){
             Chat.cntOnline = 0;
             return;
         }
+        Chat.cntOnline += (num || 1);
+        if(isAddVirtual){
+            if(Chat.cntOnline <= 200){
+                Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
+                Chat.cntOnline = Math.round(Chat.cntOnline);
+            }
+        }
+        Chat.cntOnline = Math.abs(Chat.cntOnline); //避免出现负数
         $("#chatOnlineNum").text(Chat.cntOnline);
     },
     /**
