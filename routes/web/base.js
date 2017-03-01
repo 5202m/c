@@ -71,6 +71,7 @@ router.get('/', function(req, res) {
     var chatUser=req.session.studioUserInfo,clientGroup=constant.clientGroup.visitor;
     var targetGType=getGroupType(req);
     var openId = req.query["userId"];
+    let appToken = req.query['token'];
     if(openId) {
         studioService.login({thirdId:openId,groupType:getGroupType(req)}, 3, function(loginRes){
             if(loginRes.isOK){
@@ -87,6 +88,56 @@ router.get('/', function(req, res) {
                 };
             }
             res.redirect(getGroupType(req,true)+getRredirctUrl(req));
+        });
+        return;
+    }else if(appToken && options.platform && options.platform == 'app'){
+        targetGType=getGroupType(req, false);
+        let params = {clientId:config.appAutoLogin.clientId, token:appToken, remoteIp:common.getClientIp(req), timestamp:common.formatDate(new Date(), 'yyyyMMddHHmmssSSS')}
+        params.sign = common.getMD5('clientId='+params.clientId+'&token='+appToken+'&remoteIp='+params.remoteIp+'&timestamp='+params.timestamp+'&key='+config.appAutoLogin.rgsKey);
+        request.post({url:config.appAutoLogin.rgsUrl, form: params}, function(error, response, tmpData){
+            if(error){
+                logger.error("rgs validate->error" + error);
+                res.redirect(getGroupType(req,true)+getRredirctUrl(req));
+            }
+            tmpData = typeof tmpData == 'string' ? JSON.parse(tmpData) : tmpData;
+            if(tmpData && tmpData.code == 'success') {
+                try {
+                    let account = tmpData.result;
+                    studioService.checkClientGroup(null, account, common.getTempPlatformKey(targetGType), function (clientGroup, accountNo) {
+                        var userInfo = {
+                            mobilePhone: accountNo,
+                            ip: params.remoteIp,
+                            groupType: 'studio',
+                            accountNo: account,
+                            clientGroup: clientGroup
+                        };
+                        studioService.checkMemberAndSave(userInfo, function (result) {
+                            studioService.login({userId:result.userId,groupType:targetGType}, 2, function(loginRes){
+                                if(loginRes.isOK){
+                                    loginRes.userInfo.isLogin=true;
+                                    req.session.studioUserInfo=loginRes.userInfo;
+                                    req.session.studioUserInfo.clientGroup = clientGroup;
+                                    req.session.studioUserInfo.firstLogin=true;
+                                }else{
+                                    req.session.studioUserInfo = {
+                                        isLogin : false,
+                                        clientGroup : constant.clientGroup.visitor,
+                                        userType : constant.roleUserType.visitor,
+                                        mobilePhone : null,
+                                        userId : result.userId
+                                    };
+                                }
+                                res.redirect(getGroupType(req,true)+getRredirctUrl(req));
+                            });
+                        });
+                    });
+                } catch (e) {
+                    logger.error("rgs validate->error" + e);
+                    res.redirect(getGroupType(req,true)+getRredirctUrl(req));
+                }
+            }else{
+                res.redirect(getGroupType(req,true)+getRredirctUrl(req));
+            }
         });
         return;
     }else if(chatUser && chatUser.isLogin){
@@ -161,11 +212,11 @@ router.get('/', function(req, res) {
 function toStudioView(chatUser, options, groupId,clientGroup,isMobile,req,res){
     studioService.getIndexLoadData(chatUser,groupId, true,(!isMobile||(isMobile && common.isValid(groupId))), chatUser.isLogin, function(data){
         if(chatUser.isLogin){
-            //每次刷新，从后台数据库重新获取最新客户信息后更新session，应用于升级和修改昵称等
-            for(var key in data.memberInfo){
-        	req.session.studioUserInfo[key] = data.memberInfo[key];
-                chatUser[key] = data.memberInfo[key];
-            }
+        //每次刷新，从后台数据库重新获取最新客户信息后更新session，应用于升级和修改昵称等
+        for(var key in data.memberInfo){
+            req.session.studioUserInfo[key] = data.memberInfo[key];
+            chatUser[key] = data.memberInfo[key];
+        }
         }
         var ip = common.getClientIp(req);
         var newStudioList=[],rowTmp=null;

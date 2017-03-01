@@ -47,7 +47,11 @@ var config = {
     packetAcUrl:'http://testweb1.24k.hk/activity20160105/getActivityUrl',//红包活动连接
     mobile24kPath:'http://testweb1.24k.hk:8092',//24k信息地址 http://m.24k.hk
     dasUrl:'http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom',//das数据分析系统地址
-    
+    appAutoLogin:{
+        rgsUrl : 'http://ot1.24k.hk:8080/rgs/validate',
+        clientId : 'pmlivebroadcast',
+        rgsKey : '4f924b48xa012x49eax95bbx7a74a3bc0035'
+    }//app端自动登录直播间
 };
 //导出配置类
 module.exports =config;
