@@ -48,6 +48,7 @@ var videosSubscribe = {
                         weekParentDiv.children('div.item').hide();
                         weekParentDiv.children('div.mydytime').html(common.formatterDate(row.startDate,'/')+' <b>至</b> '+common.formatterDate(row.endDate,'/')).removeClass('dn');
                     }
+                    $('.dytable .'+row.type+' b').text(row.point+'分');
                     $('.dytable .'+row.type+' a[t="'+row.type+'"]').attr({'id':row._id,'orip':row.point});
                 });
             }
@@ -150,15 +151,21 @@ var videosSubscribe = {
             params.pointsRemark = '订阅'+$this.attr('tn');
             params.id = common.isBlank($this.attr('id'))?'':$this.attr('id');
             params.orip = common.isBlank($this.attr('orip'))?0:$this.attr('orip');
-            if(common.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(','))>-1){
+            if(common.isBlank($('#myEmail').val())){
                 box.showMsg('请先绑定邮箱！');
                 $('#infotab a[t="accountInfo"]').click();
             }else if(common.isBlank(params.id) && common.isBlank(params.analyst)){
+                $this.removeClass('clicked');
                 box.showMsg('请选择订阅老师！');
             }else if(common.isBlank(params.id) && common.isBlank(params.noticeType)){
+                $this.removeClass('clicked');
                 box.showMsg('请选择订阅方式！');
             }else if(common.isBlank(params.id) && common.isBlank(params.noticeCycle)){
+                $this.removeClass('clicked');
                 box.showMsg('请选择订阅周期！');
+            }else if(common.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(','))>-1){
+                box.showMsg('请先绑定邮箱！');
+                $('#infotab a[t="accountInfo"]').click();
             }else{
                 if(common.isBlank(params.analyst) || common.isBlank(params.noticeType)){
                     params.point = 0;
