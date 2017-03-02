@@ -99,7 +99,9 @@ var videosSubscribe = {
                             noticeCycleHtml.push(noticeCycle.formatStr(row1.cycle, row1.name, row1.point, row.code));
                         });
                     }
-                    subscribeTypeHtml.push(subscribeType.formatStr(row.name,analystsHtml.join(''), noticeTypesHtml.join(''), noticeCycleHtml.join(''),subscribeBtnHtml.join(''), cls1, cls2, row.code));
+                    if(row.code != 'shout_single_strategy'){
+                        subscribeTypeHtml.push(subscribeType.formatStr(row.name,analystsHtml.join(''), noticeTypesHtml.join(''), noticeCycleHtml.join(''),subscribeBtnHtml.join(''), cls1, cls2, row.code));
+                    }
                 });
                 $('.dytable .tody tbody').html(subscribeTypeHtml.join(''));
                 indexJS.setListScroll($("#dy-scbox"));//我的订阅
