@@ -53,14 +53,22 @@ var pmApiService = {
                         var allData = JSON.parse(tmpData);
                         var result = allData.result;
                         if (allData.code == 'SUCCESS'&& result!=null) {
-                            if (result.mobilePhone.indexOf(params.mobilePhone)==-1) {
+                            if (common.isValid(params.mobilePhone)&&result.mobilePhone.indexOf(params.mobilePhone)==-1) {
                                 flagResult.flag = 0;//没有对应记录
                             }  else if (result.accountStatus != 'A') {
                                 flagResult.flag = 2;//未入金激活
+                            } else if (result.accountStatus == 'A') {
+                                flagResult.flag = 3;//入金激活
                             } else if (result.isBindWeichat!=1) {
                                 flagResult.flag = 1;//未绑定微信
                             }else {
                                 flagResult.flag = 3;//绑定微信并且已经入金激活
+                            }
+                            let index = result.mobilePhone.search(/1[3-9]\d{9}/);
+                            if(index>=0) {
+                                flagResult.accountNo = result.mobilePhone.substr(index,11);
+                            }else{
+                                flagResult.accountNo = result.mobilePhone;
                             }
                         } else {
                             flagResult.flag = 0;//没有对应记录

@@ -331,7 +331,7 @@ var studioService = {
             mobilePhone: mobilePhone,
             accountNo: accountNo,
             ip: '',
-            isCheckByMobile: true
+            isCheckByMobile: mobilePhone?true:false
         }, function (result) {
             logger.info("checkAClient->flagResult:" + JSON.stringify(result));
             if (result.flag == 2) {
@@ -341,13 +341,17 @@ var studioService = {
                 clientGroup = constant.clientGroup.active;
                 callback(clientGroup, result.accountNo);
             } else {
-                // 检查用户是否模拟用户
-                apiService.checkSmClient(mobilePhone, function (hasRow) {
-                    if (hasRow) {
-                        clientGroup = constant.clientGroup.simulate;
-                    }
-                    callback(clientGroup);
-                });
+                if(common.isValid(mobilePhone)) {
+                    // 检查用户是否模拟用户
+                    apiService.checkSmClient(mobilePhone, function (hasRow) {
+                        if (hasRow) {
+                            clientGroup = constant.clientGroup.simulate;
+                        }
+                        callback(clientGroup);
+                    });
+                }else{
+                    callback(clientGroup, result.accountNo);
+                }
             }
         });
     },
