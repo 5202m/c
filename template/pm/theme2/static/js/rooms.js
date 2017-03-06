@@ -144,7 +144,7 @@ Rooms.setEventRoom = function(){
             Trains.load();
         }else if($(this).attr("rt")=='simple'){
             //新手学堂
-
+            Teach.load();
         }else {
             Rooms.entryRoom($(this).attr("gi"));
         }
@@ -210,6 +210,7 @@ Rooms.entryTrain = function(room){
         }
     }
 };
+
 
 /**
  * 检查进入房间权限
