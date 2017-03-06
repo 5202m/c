@@ -2,36 +2,37 @@
  * 直播间前台客户端入口
  * author Alan.wu
  */
-var indexJS ={
-    fromPlatform:null,//来源平台
-    isNeverLogin:false,//是否首次访问
-    serverTime:0,//服务器时间
-    towMinTime:0,//2分钟间隔时间
-    socketUrl:'',//socket路径
-    userInfo:null,
-    filePath:'',//文件路径
-    apiUrl:'',//api路径
-    currStudioAuth:false,//当前房间是否授权
-    visitorSpeak:false,//游客是否允许发言
-    syllabusData:null,//课程数据
-    infoNewCount:0,//快讯新条数
-    onlineCsStatus:0,//在线客服链接状态：0-未连接 1-正在连接 2-已连接
-    pointLevel: [{points:0, name:'L1'},
-        {points:10000, name:'L2'},
-        {points:30000, name:'L3'},
-        {points:50000, name:'L4'},
-        {points:100000, name:'L5'},
-        {points:300000, name:'L6'},
-        {points:500000, name:'L7'},
-        {points:1000000,name:'L8'},
-        {points:2000000,name:'L9'},
-        {points:400000000000,name:'L10'}],
-    init:function(){
+var indexJS = {
+    fromPlatform: null, //来源平台
+    isNeverLogin: false, //是否首次访问
+    serverTime: 0, //服务器时间
+    towMinTime: 0, //2分钟间隔时间
+    socketUrl: '', //socket路径
+    userInfo: null,
+    filePath: '', //文件路径
+    apiUrl: '', //api路径
+    currStudioAuth: false, //当前房间是否授权
+    visitorSpeak: false, //游客是否允许发言
+    syllabusData: null, //课程数据
+    infoNewCount: 0, //快讯新条数
+    onlineCsStatus: 0, //在线客服链接状态：0-未连接 1-正在连接 2-已连接
+    pointLevel: [{ points: 0, name: 'L1' },
+        { points: 10000, name: 'L2' },
+        { points: 30000, name: 'L3' },
+        { points: 50000, name: 'L4' },
+        { points: 100000, name: 'L5' },
+        { points: 300000, name: 'L6' },
+        { points: 500000, name: 'L7' },
+        { points: 1000000, name: 'L8' },
+        { points: 2000000, name: 'L9' },
+        { points: 400000000000, name: 'L10' }
+    ],
+    init: function() {
         this.widthCheck();
         this.heightCalcu();
         this.serverTimeUp();
-        this.setVisitStore();//设置访客存储
-        this.setEvent();//设置各种事件
+        this.setVisitStore(); //设置访客存储
+        this.setEvent(); //设置各种事件
         //this.setTradeStrategyNote(null, true);
         box.init();
         videosTeach.init();
@@ -50,83 +51,83 @@ var indexJS ={
     /**
      * 事件控制
      */
-    setEvent:function(){
-        $(window).resize(function (e) {
+    setEvent: function() {
+        $(window).resize(function(e) {
             indexJS.widthCheck();
             indexJS.heightCalcu();
         });
         lightbox.option({
             'resizeDuration': 200,
             'wrapAround': true,
-            'disableScrolling':true,
-            'positionFromTop':50,
-            'albumLabel':"%1 of %2"
+            'disableScrolling': true,
+            'positionFromTop': 50,
+            'albumLabel': "%1 of %2"
         });
-        $('#register_a').click(function(){
+        $('#register_a').click(function() {
             common.openPopup('.blackbg,.register');
         });
         /**
          * 换肤
          */
-        $("#panel_theme .sk_item").bind("click", function(){
+        $("#panel_theme .sk_item").bind("click", function() {
             indexTool.Theme.setTheme($(this).attr("theme"), true);
         });
         /**
          * 我的帐户按钮事件
          */
-        $('#personal_center').click(function(){
-            if(indexJS.userInfo.isLogin) {
+        $('#personal_center').click(function() {
+            if (indexJS.userInfo.isLogin) {
                 chatShowTrade.getPointsInfo();
                 common.openPopup('.blackbg,.personal_center');
                 $('#infotab a[t="accountInfo"]').click();
-            }else{
+            } else {
                 common.openPopup('.blackbg,.login');
             }
         });
         /**
          * 会员权益按钮事件
          */
-        $('#vipbenefit').click(function(){
+        $('#vipbenefit').click(function() {
             $('.vipbenefit .main_tabnav a:first').click();
             common.openPopup('.blackbg,.vipbenefit');
         });
         /**
          * 积分规则按钮事件
          */
-        $('#pointsRule').click(function(){
+        $('#pointsRule').click(function() {
             $('.pointrule .main_tabnav a:first').click();
             common.openPopup('.blackbg,.pointrule');
         });
-        indexJS.setListScroll($(".pointrule .tabcont .scrollbox"));//设置积分规则滚动条
+        indexJS.setListScroll($(".pointrule .tabcont .scrollbox")); //设置积分规则滚动条
         /**
          * 资料下载按钮事件
          */
-        $('#infodown').click(function(){
-            if(indexJS.userInfo.isLogin) {
+        $('#infodown').click(function() {
+            if (indexJS.userInfo.isLogin) {
                 box.setDownloadPPT(1, box.getDownloadSort());
                 common.openPopup('.blackbg,.infodown');
-            }else{
+            } else {
                 common.openPopup('.blackbg,.login');
             }
         });
         /**
          * 直播预告按钮事件
          */
-        $('#live_preview').click(function(){
+        $('#live_preview').click(function() {
             common.openPopup('.blackbg,.live_preview');
         });
         /*QQ客服按钮事件*/
-        $('#qqcs').click(function(){
-            openQQChatByCommonv3('','800018282');
+        $('#qqcs').click(function() {
+            openQQChatByCommonv3('', '800018282');
         });
         /*聊天及我的账户弹框tab切换*/
-        $('.main_tabnav a').click(function () {
+        $('.main_tabnav a').click(function() {
             var t = $(this).attr('t');
             $(this).parent().find('a').removeClass('on');
             $(this).parent().parent().find('.tabcont .main_tab').removeClass('on');
             $(this).addClass('on');
-            $('div[t='+ t +']').addClass('on');
-            switch(t){
+            $('div[t=' + t + ']').addClass('on');
+            switch (t) {
                 case 'livepride':
                     $("#livePrideCount").data("cnt", 0).html("").hide();
                     chatPride.setTradeStrategyNote(null, false);
@@ -136,7 +137,7 @@ var indexJS ={
                     chatTeacher.getShowTeacher(null);
                     break;
                 case 'showtrade':
-                    chatShowTrade.initShowTrade();/*晒单墙*/
+                    chatShowTrade.initShowTrade(); /*晒单墙*/
                     break;
                 case 'mySubscribe':
                     chatShowTrade.getPointsInfo();
@@ -146,30 +147,30 @@ var indexJS ={
                     chatShowTrade.getPointsInfo();
                     break;
             }
-            if($(this).parent().hasClass('vipbene') && !$(this).hasClass('loaded')){
+            if ($(this).parent().hasClass('vipbene') && !$(this).hasClass('loaded')) {
                 $(this).addClass('loaded');
                 box.setVipBeneFit(t);
             }
             indexJS.heightCalcu();
-            if(t == 'chat'){
+            if (t == 'chat') {
                 chat.showChatMsgNumTip(true);
                 chat.setTalkListScroll(true);
             }
         });
         /*视频框下tab切换*/
-        $('.tabnav a.tablink').bind("click", function (e, onlyChangeStyle) {
-            if($(this).hasClass('on')){
+        $('.tabnav a.tablink').bind("click", function(e, onlyChangeStyle) {
+            if ($(this).hasClass('on')) {
                 return;
             }
             $(this).parent().find('.tablink').removeClass('on');
             $(this).parent().parent().find('.tabcont .main_tab').removeClass('on');
             $(this).addClass('on');
             $($(this).parent().parent().find('.tabcont .main_tab')[$(this).index()]).addClass('on');
-            if(!onlyChangeStyle){
-                if($(this).hasClass('live')){
+            if (!onlyChangeStyle) {
+                if ($(this).hasClass('live')) {
                     $(this).addClass('initEasyPieChart');
                     videos.playAuto(true);
-                }else if($(this).hasClass('teach')){
+                } else if ($(this).hasClass('teach')) {
                     //当切换tab并有教学视频情况就随机播放视频
                     videosTeach.playRandomTeach(true);
                 }
@@ -177,21 +178,21 @@ var indexJS ={
         });
         /*滚动条*/
         if ($(window).width() > 768) {
-            indexJS.setListScroll($(".tabcont .main_tab .teacherlist .scrollbox"));//直播老师
-            indexJS.setListScroll($(".pop_train .cont .scrollbox"));//培训班
-            indexJS.setListScroll($(".train_detail .cont .scrollbox"));//培训班详情
-            indexJS.setListScroll('#teachVideoPanel .scrollbox');//教学列表
+            indexJS.setListScroll($(".tabcont .main_tab .teacherlist .scrollbox")); //直播老师
+            indexJS.setListScroll($(".pop_train .cont .scrollbox")); //培训班
+            indexJS.setListScroll($(".train_detail .cont .scrollbox")); //培训班详情
+            indexJS.setListScroll('#teachVideoPanel .scrollbox'); //教学列表
         }
         /**
          * 联系助理按钮事件
          */
-        $('.mod_infotab .tabnav .myaid').click(function(){
+        $('.mod_infotab .tabnav .myaid').click(function() {
             var roomType = $('#roomInfoId').attr('rt');
-            if(roomType=='vip' || roomType == "train"){
+            if (roomType == 'vip' || roomType == "train") {
                 indexJS.connectOnlineCs();
-            }else {
+            } else {
                 if ($(".pletter_win .mult_dialog a[utype=3]").length == 0) {
-                    chat.getCSList();//设置所有客服
+                    chat.getCSList(); //设置所有客服
                 }
                 if ($(this).hasClass('nocs')) {
                     box.showTipBox('助理失联中');
@@ -201,26 +202,26 @@ var indexJS ={
             }
         });
         /*兼容提示*/
-        $('.ietip .iewhybtn').click(function(){
+        $('.ietip .iewhybtn').click(function() {
             $('.ietip').hide();
             $('.iestory').show();
         });
-        $('.iestory .closebtn').click(function(){
+        $('.iestory .closebtn').click(function() {
             $('.iestory').hide();
             $('.ietip').show();
         });
-        common.placeholderSupport(".formcont .in_line input[placeholder]");//ie下输入框显示文字提示
+        common.placeholderSupport(".formcont .in_line input[placeholder]"); //ie下输入框显示文字提示
     },
     /**
      * 显示欢迎语
      */
-    showWelcomeMsg:function(){
+    showWelcomeMsg: function() {
         //创建专场房间快速入口
         var vipRoom = $(".mod_infotab .sub-tabnav a:contains('专场')");
-        if(vipRoom.size() == 1){
+        if (vipRoom.size() == 1) {
             var cgs = vipRoom.siblings(".enterbtn").attr("cgs");
             var roomName = vipRoom.text();
-            if(common.containSplitStr(cgs,indexJS.userInfo.clientGroup)){
+            if (common.containSplitStr(cgs, indexJS.userInfo.clientGroup)) {
                 alert("您已具备进入“" + roomName + "”的条件，请关注" + roomName + "的课程安排。");
             }
         }
@@ -228,60 +229,65 @@ var indexJS ={
     /**
      * 填充课程，直播预告
      */
-    fillCourse:function(){
-        var courses=indexJS.syllabusData && indexJS.syllabusData.courses;
-        if(courses){
-            var courseType = {'0':'文字直播','1':'视频直播','2':'oneTV直播'};
-            var days=courses.days,tmk=courses.timeBuckets;
-            var nva=$(".live_preview .main_tabnav").html("");
-            var als='',ons='',curDay=new Date(indexJS.serverTime).getDay();
-            var startDateTime = indexJS.serverTime - 86400000 * ((curDay + 6) % 7),dateStr;
+    fillCourse: function() {
+        var courses = indexJS.syllabusData && indexJS.syllabusData.courses;
+        if (courses) {
+            var courseType = { '0': '文字直播', '1': '视频直播', '2': 'oneTV直播' };
+            var days = courses.days,
+                tmk = courses.timeBuckets;
+            var nva = $(".live_preview .main_tabnav").html("");
+            var als = '',
+                ons = '',
+                curDay = new Date(indexJS.serverTime).getDay();
+            var startDateTime = indexJS.serverTime - 86400000 * ((curDay + 6) % 7),
+                dateStr;
             var awidth = 100 / days.length; //默认宽度20%
-            for(var i= 0,len=days.length;i<len;i++){
-                if(i==0){
-                    als='fir';
-                }else if(i==len-1){
-                    als='last';
-                }else{
-                    als='nct';
+            for (var i = 0, len = days.length; i < len; i++) {
+                if (i == 0) {
+                    als = 'fir';
+                } else if (i == len - 1) {
+                    als = 'last';
+                } else {
+                    als = 'nct';
                 }
-                if(days[i].day==curDay){
-                    ons=' on';
-                }else{
-                    ons='';
+                if (days[i].day == curDay) {
+                    ons = ' on';
+                } else {
+                    ons = '';
                 }
                 dateStr = common.formatterDate(new Date(startDateTime + ((days[i].day + 6) % 7) * 86400000)).substring(5);
-                nva.append('<a href="javascript:" class="'+ons+'" t="'+i+'" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'header_yg_' + i + '\', \'content_top\', 1, true]);"><span>'+common.daysCN[days[i].day+""]+'<b>' + dateStr + '</b></span><i></i></a>');
-                $(".live_preview .tabcont").append('<div class="main_tab'+ons+'" t="'+i+'" d="'+days[i].day+'"><ul class="live_prevlist"></ul></div>');
-                als='';
-                var lsTab=$(".live_preview .tabcont .main_tab:last ul"),courseObj=null;
-                if(days[i].status != 1){
+                nva.append('<a href="javascript:" class="' + ons + '" t="' + i + '" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'header_yg_' + i + '\', \'content_top\', 1, true]);"><span>' + common.daysCN[days[i].day + ""] + '<b>' + dateStr + '</b></span><i></i></a>');
+                $(".live_preview .tabcont").append('<div class="main_tab' + ons + '" t="' + i + '" d="' + days[i].day + '"><ul class="live_prevlist"></ul></div>');
+                als = '';
+                var lsTab = $(".live_preview .tabcont .main_tab:last ul"),
+                    courseObj = null;
+                if (days[i].status != 1) {
                     lsTab.append('<li><a href="javascript:"><span><lable>休市</lable></span></a></li>');
-                }else{
+                } else {
                     als = 'on';
-                    for(var k= 0,tklen=tmk.length;k<tklen;k++){
-                        courseObj=tmk[k].course[i];
-                        if(courseObj.status != 0 && courseObj.lecturer){
-                            lsTab.append('<li class="'+als+'" tuid="'+courseObj.lecturerId+'"><a href="javascript:" st="'+tmk[k].startTime+'" et="'+tmk[k].endTime+'" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'header_yg_course\', \'' + courseObj.title + '\', 1, true]);"><i></i><div class="c_name">'+courseObj.title+'<span>'+courseObj.lecturer+'</span><span class="time">'+tmk[k].startTime+'- '+tmk[k].endTime+'　</span><span>'+courseType[courseObj.courseType]+'　</span></div></a></li>');
+                    for (var k = 0, tklen = tmk.length; k < tklen; k++) {
+                        courseObj = tmk[k].course[i];
+                        if (courseObj.status != 0 && courseObj.lecturer) {
+                            lsTab.append('<li class="' + als + '" tuid="' + courseObj.lecturerId + '"><a href="javascript:" st="' + tmk[k].startTime + '" et="' + tmk[k].endTime + '" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'header_yg_course\', \'' + courseObj.title + '\', 1, true]);"><i></i><div class="c_name">' + courseObj.title + '<span>' + courseObj.lecturer + '</span><span class="time">' + tmk[k].startTime + '- ' + tmk[k].endTime + '　</span><span>' + courseType[courseObj.courseType] + '　</span></div></a></li>');
                             als = '';
                         }
                     }
                 }
             }
-            $(".live_preview .main_tabnav a").click(function(){
+            $(".live_preview .main_tabnav a").click(function() {
                 $(".live_preview .main_tabnav a").removeClass("on");
                 $('.live_preview .tabcont .main_tab').removeClass("on");
                 $(this).addClass("on");
-                $('.live_preview .tabcont .main_tab[t='+$(this).attr("t")+']').addClass("on");
+                $('.live_preview .tabcont .main_tab[t=' + $(this).attr("t") + ']').addClass("on");
             });
-            $('.live_preview .tabcont').css('height','200px');
+            $('.live_preview .tabcont').css('height', '200px');
             indexJS.setListScroll('.live_preview .tabcont');
         }
     },
     /**
      * 通过默认房间刷新对应页面
      */
-    toRefreshView:function(){
+    toRefreshView: function() {
         window.location.reload();
     },
     /**
@@ -291,10 +297,10 @@ var indexJS ={
      *  vip-vip || active
      *  new-非vip && 非active
      */
-    checkClientGroup : function(type){
+    checkClientGroup: function(type) {
         var currClientGroup = this.userInfo.clientGroup;
         var chkResult = false;
-        switch(type){
+        switch (type) {
             case "visitor":
                 chkResult = (currClientGroup == "visitor");
                 break;
@@ -310,29 +316,29 @@ var indexJS ={
     /**
      * 服务器时间更新
      */
-    serverTimeUp:function(){
-        indexJS.fillCourse();//填充课程
+    serverTimeUp: function() {
+        indexJS.fillCourse(); //填充课程
         indexJS.courseTick.tick();
-        this.towMinTime=this.serverTime;
-        setInterval(function(){
-            indexJS.serverTime+=1000;
-            if(indexJS.serverTime-indexJS.towMinTime>=2*60*1000){
-                indexJS.towMinTime=indexJS.serverTime;
+        this.towMinTime = this.serverTime;
+        setInterval(function() {
+            indexJS.serverTime += 1000;
+            if (indexJS.serverTime - indexJS.towMinTime >= 2 * 60 * 1000) {
+                indexJS.towMinTime = indexJS.serverTime;
                 videosLive.setInformation();
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
             indexTool.RedPacket.tick();
-        },1000);//每秒一次
+        }, 1000); //每秒一次
     },
     /**
      * 刷新昵称
      * @param isSetName
      * @param nickname
      */
-    refreshNickname : function(isSetName, nickname){
-        this.userInfo.isSetName=isSetName;
-        this.userInfo.nickname=nickname;
+    refreshNickname: function(isSetName, nickname) {
+        this.userInfo.isSetName = isSetName;
+        this.userInfo.nickname = nickname;
         //头部
         $(".personal_info .username,.header-right .welcome span").text(nickname);
     },
@@ -340,66 +346,67 @@ var indexJS ={
      * 设置访客存储信息
      * @param userInfo
      */
-    setVisitStore:function(){
-        if (!store.enabled){
+    setVisitStore: function() {
+        if (!store.enabled) {
             console.log('Local storage is not supported by your browser.');
             return;
         }
-        var key='storeInfos_'+this.userInfo.groupType,keyVal=store.get(key);
-        var obj={};
-        if(common.isBlank(keyVal)){
-            var randId=common.randomNumber(8);
-            obj.clientStoreId=new Date().getTime()+"_"+randId;
-            obj.userId="visitor_"+randId;
-            obj.nickname='游客_'+randId;
-            obj.userType=-1;
-            store.set(key,obj);
-        }else{
-            obj=keyVal;
+        var key = 'storeInfos_' + this.userInfo.groupType,
+            keyVal = store.get(key);
+        var obj = {};
+        if (common.isBlank(keyVal)) {
+            var randId = common.randomNumber(8);
+            obj.clientStoreId = new Date().getTime() + "_" + randId;
+            obj.userId = "visitor_" + randId;
+            obj.nickname = '游客_' + randId;
+            obj.userType = -1;
+            store.set(key, obj);
+        } else {
+            obj = keyVal;
         }
-        this.userInfo.clientStoreId= obj.clientStoreId;
-        this.userInfo.visitorId=obj.userId;
-        this.userInfo.loginId=obj.loginId;
-        if(this.userInfo.clientGroup && this.userInfo.clientGroup=='visitor'){
-            this.userInfo.nickname=obj.nickname;
-            this.userInfo.userId=obj.userId;
-            if(!this.visitorSpeak){
-                $("#contentText").attr("contenteditable",false).append('<div class="lgtip">亲，<a href="javascript:box.openLgBox();">登录</a> 后可以发言哦~</div>');//设置登录后发言
+        this.userInfo.clientStoreId = obj.clientStoreId;
+        this.userInfo.visitorId = obj.userId;
+        this.userInfo.loginId = obj.loginId;
+        if (this.userInfo.clientGroup && this.userInfo.clientGroup == 'visitor') {
+            this.userInfo.nickname = obj.nickname;
+            this.userInfo.userId = obj.userId;
+            if (!this.visitorSpeak) {
+                $("#contentText").attr("contenteditable", false).append('<div class="lgtip">亲，<a href="javascript:box.openLgBox();">登录</a> 后可以发言哦~</div>'); //设置登录后发言
             }
-        }else{
-            obj.loginId=this.userInfo.userId;
-            store.set(key,obj);
+        } else {
+            obj.loginId = this.userInfo.userId;
+            store.set(key, obj);
         }
-        this.isNeverLogin=!common.isValid(obj.loginId);
+        this.isNeverLogin = !common.isValid(obj.loginId);
         //如果非游客没有昵称，自动设置一个昵称
-        if(common.isBlank(this.userInfo.nickname) && this.userInfo.clientGroup!='visitor'){
-            this.refreshNickname(false, "匿名_" + this.userInfo.userId.substring(8,12));
+        if (common.isBlank(this.userInfo.nickname) && this.userInfo.clientGroup != 'visitor') {
+            this.refreshNickname(false, "匿名_" + this.userInfo.userId.substring(8, 12));
         }
     },
     /**
      * 设置滚动条样式
      * @param dom
      */
-    setScrollStyle:function(dom){
-        dom.find(".mCSB_dragger_bar").css({background: "url(/pm/theme1/img/scroll.png) -10px 50% repeat-y",width: "6px","-webkit-border-radius": "3px", "-moz-border-radius": "3px", "border-radius": "3px"});
+    setScrollStyle: function(dom) {
+        dom.find(".mCSB_dragger_bar").css({ background: "url(/pm/theme1/img/scroll.png) -10px 50% repeat-y", width: "6px", "-webkit-border-radius": "3px", "-moz-border-radius": "3px", "border-radius": "3px" });
     },
     /**
      * 设置列表滚动条
      * @param domClass
      * @param options
      */
-    setListScroll:function(domClass, scrollTo, options){
+    setListScroll: function(domClass, scrollTo, options) {
         //滚动条
-        var dom=(typeof domClass=='object')?domClass:$(domClass);
-        if(dom.hasClass("mCustomScrollbar")){
+        var dom = (typeof domClass == 'object') ? domClass : $(domClass);
+        if (dom.hasClass("mCustomScrollbar")) {
             dom.mCustomScrollbar("update");
-            if(common.isValid(scrollTo)){
+            if (common.isValid(scrollTo)) {
                 dom.mCustomScrollbar("scrollTo", scrollTo);
             }
-        }else {
-            options = $.extend({scrollButtons: {enable: true},theme: "light-thick",scrollbarPosition: "outside",scrollButtons: false}, options);
+        } else {
+            options = $.extend({ scrollButtons: { enable: true }, theme: "light-thick", scrollbarPosition: "outside", scrollButtons: false }, options);
             dom.mCustomScrollbar(options);
-            if(options.isCustom){
+            if (options.isCustom) {
                 this.setScrollStyle(dom);
             }
         }
@@ -415,29 +422,29 @@ var indexJS ={
      * @param params {{authorId, pageKey, pageLess, isAll}}
      * @param callback
      */
-    getArticleList:function(code,platform,hasContent,curPageNo,pageSize,orderByStr,params,callback){
+    getArticleList: function(code, platform, hasContent, curPageNo, pageSize, orderByStr, params, callback) {
         params = params || {};
-        try{
-            $.getJSON('/studio/getArticleList',{
-                authorId:common.trim(params.authorId),
-                code:code,
-                platform:platform,
-                hasContent:hasContent,
-                pageNo:curPageNo,
-                pageKey:common.trim(params.pageKey),
-                pageLess:common.trim(params.pageLess),
-                isAll:common.trim(params.isAll),
-                pageSize:pageSize,
-                orderByStr:orderByStr,
-                ids:common.isBlank(params.ids)?'':params.ids,
+        try {
+            $.getJSON('/studio/getArticleList', {
+                authorId: common.trim(params.authorId),
+                code: code,
+                platform: platform,
+                hasContent: hasContent,
+                pageNo: curPageNo,
+                pageKey: common.trim(params.pageKey),
+                pageLess: common.trim(params.pageLess),
+                isAll: common.trim(params.isAll),
+                pageSize: pageSize,
+                orderByStr: orderByStr,
+                ids: common.isBlank(params.ids) ? '' : params.ids,
                 callTradeIsNotAuth: params.callTradeIsNotAuth,
                 strategyIsNotAuth: params.strategyIsNotAuth
-            },function(data){
+            }, function(data) {
                 //console.log("getArticleList->data:"+JSON.stringify(data));
                 callback(data);
             });
-        }catch (e){
-            console.error("getArticleList->"+e);
+        } catch (e) {
+            console.error("getArticleList->" + e);
             callback(null);
         }
     },
@@ -446,35 +453,36 @@ var indexJS ={
      * @param id
      * @param callback
      */
-    getArticleInfo:function(id,callback){
-        try{
-            $.getJSON('/studio/getArticleInfo',{id:id},function(data){
+    getArticleInfo: function(id, callback) {
+        try {
+            $.getJSON('/studio/getArticleInfo', { id: id }, function(data) {
                 //console.log("getArticleList->data:"+JSON.stringify(data));
                 callback(data);
             });
-        }catch (e){
-            console.error("getArticleInfo->"+e);
+        } catch (e) {
+            console.error("getArticleInfo->" + e);
             callback(null);
         }
     },
     /**
      * 加载实盘策略
      */
-    setTradeStrategy: function(scrollDom){
-        this.getArticleList("trade_strategy_article",indexJS.userInfo.groupId,1,1,100,'{"sequence":"asc","createDate":"desc"}',null,function(dataList){
-            if(dataList && dataList.result==0){
-                var data=dataList.data,row=null;
+    setTradeStrategy: function(scrollDom) {
+        this.getArticleList("trade_strategy_article", indexJS.userInfo.groupId, 1, 1, 100, '{"sequence":"asc","createDate":"desc"}', null, function(dataList) {
+            if (dataList && dataList.result == 0) {
+                var data = dataList.data,
+                    row = null;
                 var tradeStrategyHtml = '';
                 var tradeStrategyFormat = indexJS.formatHtml('tradestrategy');
-                for(var i in data){
-                    row=data[i].detailList[0];
-                    var author = '',avatar = '';
-                    if(!common.isBlank(row.author)){
+                for (var i in data) {
+                    row = data[i].detailList[0];
+                    var author = '',
+                        avatar = '';
+                    if (!common.isBlank(row.author)) {
                         var authors = row.author.split(';');
                         author = authors[0];
                         avatar = authors[1];
-                    }
-                    else {
+                    } else {
                         author = row.authorInfo.name;
                         avatar = row.authorInfo.avatar
                     }
@@ -488,24 +496,22 @@ var indexJS ={
                     );
                 }
                 $('#guidelist ul').html(tradeStrategyHtml);
-            }
-            else{
+            } else {
                 $('#guidelist ul').html('');
             }
-            indexJS.setListScroll(scrollDom);//设置滚动
+            indexJS.setListScroll(scrollDom); //设置滚动
         });
     },
     /**
      * 链接客服系统
      * */
-    connectOnlineCs : function(){
-        switch (indexJS.onlineCsStatus){
+    connectOnlineCs: function() {
+        switch (indexJS.onlineCsStatus) {
             case 0:
                 indexJS.onlineCsStatus = 1;
-                var csScriptUrl = 'http://jms.phgsa.cn/chat.php?pid=PM01&tln=' + indexJS.userInfo.userId + '&tnn=' + indexJS.userInfo.nickname + '&tul=' + indexJS.userInfo.clientGroup + '&tp=' + $("#myMobilePhone").attr('t')+ '&ta=' + $("#myMobilePhone").attr("ta");
-                LazyLoad.js(csScriptUrl, function(){
+                var csScriptUrl = 'http://jms.phgsa.cn/chat.php?pid=PM01&tln=' + indexJS.userInfo.userId + '&tnn=' + indexJS.userInfo.nickname + '&tul=' + indexJS.userInfo.clientGroup + '&tp=' + $("#myMobilePhone").attr('t') + '&ta=' + $("#myMobilePhone").attr("ta");
+                LazyLoad.js(csScriptUrl, function() {
                     indexJS.onlineCsStatus = 2;
-                    $("#welive_info").trigger("click");
                 });
                 break;
 
@@ -513,7 +519,7 @@ var indexJS ={
                 $("#welive_info").trigger("click");
                 break;
             case 1:
-            default :
+            default:
                 break;
         }
     },
@@ -522,9 +528,9 @@ var indexJS ={
      * @param region 内容域模块名
      * @returns {string}
      */
-    formatHtml:function(region){
+    formatHtml: function(region) {
         var formatHtmlArr = [];
-        switch(region) {
+        switch (region) {
             case 'tradestrategy':
                 formatHtmlArr.push('<li class="guideli">');
                 formatHtmlArr.push('    <div class="line1 clearfix">');
@@ -547,42 +553,42 @@ var indexJS ={
     /**
      * 课程表定时器
      */
-    courseTick : {
+    courseTick: {
         //当前课程或下次课程
-        course : {courseId:'',courseType:0,courseTypeName:'',day:0,endTime:'',isNext:false,lecturer:'',lecturerId:'',startTime:'',status:0,studioLink:null,title:'',courseName:''},
+        course: { courseId: '', courseType: 0, courseTypeName: '', day: 0, endTime: '', isNext: false, lecturer: '', lecturerId: '', startTime: '', status: 0, studioLink: null, title: '', courseName: '' },
         //下次校验时间
-        nextTickTime : 0,
+        nextTickTime: 0,
         //初始化或者重新校验
-        tick : function(){
-            if(indexJS.serverTime <= this.nextTickTime){
+        tick: function() {
+            if (indexJS.serverTime <= this.nextTickTime) {
                 return;
             }
-            var currCourse = common.getSyllabusPlan(indexJS.syllabusData,indexJS.serverTime);
-            if(!currCourse){
+            var currCourse = common.getSyllabusPlan(indexJS.syllabusData, indexJS.serverTime);
+            if (!currCourse) {
                 return;
             }
             var nextTime = 0;
             var todayTime0 = new Date(indexJS.serverTime);
             todayTime0 = new Date(todayTime0.getFullYear(), todayTime0.getMonth(), todayTime0.getDate()).getTime();
-            if(currCourse.isNext){ //下次课程开始作为下一次tick时间
-                if(currCourse.day != new Date(indexJS.serverTime).getDay()){
+            if (currCourse.isNext) { //下次课程开始作为下一次tick时间
+                if (currCourse.day != new Date(indexJS.serverTime).getDay()) {
                     nextTime = todayTime0 + 86400000 + 60000;
-                }else{
+                } else {
                     //"17:51" eval("17*60+51")*60*1000
-                    nextTime = eval(currCourse.startTime.replace(":", "*60+"))*60000 + todayTime0;
+                    nextTime = eval(currCourse.startTime.replace(":", "*60+")) * 60000 + todayTime0;
                 }
-            }else{//本次课程结束后作为下一次tick时间
-                nextTime = eval(currCourse.endTime.replace(":", "*60+"))*60000 + todayTime0 + 60000;
-                if(currCourse.endTime < currCourse.startTime){
+            } else { //本次课程结束后作为下一次tick时间
+                nextTime = eval(currCourse.endTime.replace(":", "*60+")) * 60000 + todayTime0 + 60000;
+                if (currCourse.endTime < currCourse.startTime) {
                     nextTime += 86400000;
                 }
             }
-            if(this.nextTickTime != nextTime){
-                var courseType = {'0':'文字直播','1':'视频直播','2':'oneTV直播'};
-                var courseId = common.formatterDate(indexJS.serverTime,'-')+'_'+currCourse.startTime+'_'+indexJS.userInfo.groupId;
+            if (this.nextTickTime != nextTime) {
+                var courseType = { '0': '文字直播', '1': '视频直播', '2': 'oneTV直播' };
+                var courseId = common.formatterDate(indexJS.serverTime, '-') + '_' + currCourse.startTime + '_' + indexJS.userInfo.groupId;
                 this.course = currCourse;
                 this.course.courseId = courseId;
-                if(common.isValid(currCourse.title) && common.isValid(currCourse.lecturer) && common.isValid(currCourse.courseType)) {
+                if (common.isValid(currCourse.title) && common.isValid(currCourse.lecturer) && common.isValid(currCourse.courseType)) {
                     this.course.courseTypeName = courseType[currCourse.courseType];
                     this.course.courseName = currCourse.title + '_' + currCourse.lecturer + '_' + courseType[currCourse.courseType];
                 }
@@ -618,7 +624,7 @@ var indexJS ={
     /**
      * 自动计算高度
      */
-     heightCalcu: function() {
+    heightCalcu: function() {
         var hh = $(window).height();
         var hh_header = $('.box-header').height();
         $('.mod_video').height(hh - $('.mod_infotab').height() - hh_header - 5);
