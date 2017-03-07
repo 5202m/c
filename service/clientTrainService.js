@@ -1,4 +1,5 @@
 const logger = require('../resources/logConf').getLogger('clientTrainService'); // 引入log4js
+const common = require('../util/common'); // 引入common类
 const liveRoomAPIService = require('./liveRoomAPIService');
 const Deferred = require("../util/common").Deferred;
 /**
@@ -48,7 +49,8 @@ let clientTrainService = {
             groupId: params.groupId,
             nickname: params.nickname,
             userId: userInfo.userId,
-            clientGroup: userInfo.clientGroup
+            clientGroup: userInfo.clientGroup,
+            noApprove: params.noApprove
         };
         liveRoomAPIService.post(path, postData).then((result) => {
             if (callback) {
@@ -98,14 +100,14 @@ let clientTrainService = {
      * @param isAll
      * @param callback
      */
-    getTrainList: function (groupType, teachId, isAll, callback) {
+    getTrainList: function (groupType, teachId, isAll, userId, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/getTrainList";
         path += "?groupType=" + groupType;
         if (teachId) {
             path += "&teachId=" + teachId;
         }
-        path += "&isAll=" + isAll;
+        path += "&isAll=" + isAll + "&userId=" + userId;
         liveRoomAPIService.get(path).then((result) => {
             if (callback) {
                 callback(result);

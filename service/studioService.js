@@ -3,7 +3,10 @@
  */
 const constant = require('../constant/constant'); // 引入constant
 const common = require('../util/common'); // 引入common类
+var errorMessage = require('../util/errorMessage');//引入errorMessage类
 const userService = require('../service/userService'); // 引入userService
+const clientTrainService = require('./clientTrainService');// 引入clientTrainService
+const chatService = require('./chatService');// 引入chatService
 const logger = require('../resources/logConf').getLogger('studioService'); // 引入log4js
 const liveRoomAPIService = require('./liveRoomAPIService');
 const querystring = require("querystring");

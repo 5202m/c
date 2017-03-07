@@ -57,23 +57,26 @@ Rooms.setAdvertisement = function(){
  * 获取房间列表
  */
 Rooms.setStudioRoomList = function(){
-    var html = [], trainObj = null;
+    var html = [], trainObj = null, currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
     Data.getRoomList(function(rooms){
         var cls = ['blue','red','green','brown'], trainNum = 0;
         $.each(rooms, function(i, row){
-            if(row.roomType == 'train' && trainNum == 0){
-                html.push(Rooms.formatHtml("roomInfo",
-                    '',
-                    4,
-                    'brown',
-                    '精品培训班',
-                    row.roomType
-                ));
-                trainObj = row;
-                trainNum++;
+            if(row.roomType == 'train'){
+                if(trainNum == 0) {
+                    html.push(Rooms.formatHtml("roomInfo",
+                        '',
+                        4,
+                        'brown',
+                        '精品培训班',
+                        row.roomType
+                    ));
+                    trainNum++;
+                }
+                if(row.openDate.beginDate <= currDate && row.openDate.endDate >= currDate){
+                    trainObj = row;
+                }
             } else {
                 var loc_index = Util.randomIndex(4);
-                Rooms.templates["roomInfo"]
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
                     (loc_index == 0 ? loc_index + 1 : loc_index),
@@ -160,57 +163,8 @@ Rooms.entryRoom = function(roomId){
         Room.load();
         return;
     }
-    Data.getRoom(roomId, function(room){
-        if(room){
-            if(!room.allowVisitor && Data.userInfo.clientGroup == "visitor"){
-                Login.load();
-                return;
-            }
-            if(room.roomType == "train"){
-                Rooms.entryTrain(room);
-                return;
-            }
-            var checkRes = Rooms.checkRoomAuth(room);
-            if(checkRes.isOK){
-                Util.postJson("/studio/checkGroupAuth",{groupId:room.id},function(result){
-                    if(!result.isOK){
-                        Rooms.showChangeRoomMsg("您没有访问该房间的权限");
-                    }else{
-                        Data.userInfo.groupId = result.groupId;
-                        Room.load();
-                    }
-                },true,function(err){
-                    if("success"!=err) {
-                        Rooms.showChangeRoomMsg("操作失败");
-                    }
-                });
-            }else{
-                Rooms.showChangeRoomMsg(checkRes.msg);
-            }
-        }
-    });
+    Trains.changeRoom(roomId);
 };
-
-/**
- * 进入培训班
- * @param room
- */
-Rooms.entryTrain = function(room){
-    //TODO 进入培训班
-    if(room && room.roomType == "train"){
-        var msg = null;
-        if(room.trainAuth == -1){//未报名
-            msg = "您还未报名该培训班";
-        }else if(room.trainAuth == 0){//报名审核中
-            if(room.isOpen){
-                msg = "您的报名正在审批中";
-            }else{
-                msg = "";
-            }
-        }
-    }
-};
-
 
 /**
  * 检查进入房间权限
