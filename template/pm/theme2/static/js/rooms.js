@@ -140,7 +140,11 @@ Rooms.setEventRoom = function(){
      */
     $('#roomList .block-item a').bind('click', function(){
         if($(this).attr("rt")=='train'){
+            //培训班
             Trains.load();
+        }else if($(this).attr("rt")=='simple'){
+            //新手学堂
+            Teach.load();
         }else {
             Rooms.entryRoom($(this).attr("gi"));
         }
@@ -206,6 +210,7 @@ Rooms.entryTrain = function(room){
         }
     }
 };
+
 
 /**
  * 检查进入房间权限
