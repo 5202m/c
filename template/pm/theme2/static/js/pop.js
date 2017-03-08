@@ -26,7 +26,7 @@ var Pop = {
         }else{
             $("#pop_msgClose").show();
         }
-        $("#pop_msgTxt").text(ops.msg);
+        $("#pop_msgTxt").html(ops.msg);
         if(ops.autoClose > 0){
             $("#pop_msgBtn").hide();
             $("#pop_msg").fadeIn().delay(ops.autoClose).fadeOut();

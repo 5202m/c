@@ -167,3 +167,12 @@ Room.showCourse = function(){
         }
     });
 };
+
+/**
+ * 切换页面
+ * @param groupId
+ */
+Room.toRefreshView = function(groupId){
+    Data.userInfo.groupId = groupId;
+    Room.load();
+};

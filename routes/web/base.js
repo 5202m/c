@@ -761,22 +761,22 @@ router.get('/getSyllabusHis', function(req, res) {
 router.post('/checkGroupAuth',function(req, res){
     var groupId=req.body["groupId"],
         roomType=req.body["roomType"],
-        result={isOK:false,error:null},
+        result=null,
         chatUser=req.session.studioUserInfo;
-    if(common.isBlank(groupId) || !chatUser){
+    /*if(common.isBlank(groupId) || !chatUser){
         result.error=errorMessage.code_1000;
     }
-    if(!result.error){
-        studioService.checkGroupAuth(roomType, groupId, chatUser.clientGroup, chatUser.userId, function(groupInfo){
-            if(groupInfo){
+    if(!result.error){*/
+    if ((common.isBlank(groupId) && common.isBlank(roomType)) || !chatUser) {
+        result = errorMessage.code_1000;
+    }
+    if (!result) {
+        studioService.checkGroupAuth(roomType, groupId, chatUser.clientGroup, chatUser.userId, function(err, groupInfo){
+            if (!err && groupInfo) {
                 req.session.studioUserInfo.toGroup=groupInfo._id;
-                result.groupId=groupInfo._id;
-                result.clientGroups=groupInfo.clientGroup;
-                result.roomType=groupInfo.roomType;
-                result.isOK=true;
-            }else{
-                result.isOK=false;
             }
+            result = err || {};
+            result.data = groupInfo;
             res.json(result);
         });
     }else{
@@ -1841,7 +1841,7 @@ router.get('/getTrainRoomList', function(req, res){
     if(!userInfo){
         res.json(null);
     }else{
-        clientTrainService.getTrainList(userInfo.groupType,null,true,function(result){
+        clientTrainService.getTrainList(userInfo.groupType, null, true, userInfo.userId, function(result){
             res.json(result);
         });
     }
@@ -1866,26 +1866,19 @@ router.get('/getTrainRoomNum', function(req, res){
  * 添加报名培训
  */
 router.post('/addClientTrain', function(req, res){
-    var params = req.body['data'];
-    var userInfo=req.session.studioUserInfo;
-    if(!userInfo){
-        res.json(null);
-        return;
+    var params = {
+        groupId: req.body['groupId'],
+        noApprove: req.body['noApprove'] == 1
+    };
+    var userInfo = req.session.studioUserInfo;
+    if (!userInfo || !params.groupId) {
+        res.json(errorMessage.code_1000);
+    } else {
+        params.nickname = userInfo.nickname;
+        clientTrainService.addClientTrain(params, userInfo, function (result) {
+            res.json(result);
+        });
     }
-    if(typeof params == 'string') {
-        try {
-            params = JSON.parse(params);
-        } catch (e) {
-            res.json(null);
-            return;
-        }
-    }
-    clientTrainService.addClientTrain(params,userInfo, function(result){
-        if(result.awInto){
-            req.session.studioUserInfo.toGroup=params.groupId;
-        }
-        res.json(result);
-    });
 });
 
 /**
