@@ -56,7 +56,7 @@ Trains.setTrainList = function(){
 Trains.changeRoomOrSignup = function(groupId){
     Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result1){
         if(!result1 || !result1.errcode){
-            Trains.toRefreshView(groupId);
+            Room.toRefreshView(groupId);
         }else{
             var msg = result1.errmsg + "已为你自动跳转到默认房间。";
             var trainCfg = Trains.getTrainConfig(result1.data && result1.data.trainConfig);
@@ -68,20 +68,20 @@ Trains.changeRoomOrSignup = function(groupId){
                     if(!result2 || result2.errcode == "4016"){
                         Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result3){
                             if(!result3 || !result3.errcode){
-                                Trains.toRefreshView(groupId);
+                                Room.toRefreshView(groupId);
                             }else{
                                 alert(msg);
-                                Trains.toRefreshView(groupId);
+                                Room.toRefreshView(groupId);
                             }
                         });
                     }else{
                         alert(result2.errmsg + "已为你自动跳转到默认房间。");
-                        Trains.toRefreshView(groupId);
+                        Room.toRefreshView(groupId);
                     }
                 });
             }else{
                 alert(msg);
-                Trains.toRefreshView(groupId);
+                Room.toRefreshView(groupId);
             }
         }
     });
@@ -95,7 +95,7 @@ Trains.changeRoomOrSignup = function(groupId){
 Trains.changeRoom = function(groupId){
     Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result){
         if(!result || !result.errcode){
-            Trains.toRefreshView(groupId);
+            Room.toRefreshView(groupId);
             return;
         }else if(result.data && result.data.roomType == "train"){
             var roomInfo = result.data;
@@ -246,7 +246,7 @@ Trains.trainEntryByPoints = function(roomInfo){
                         }else{
                             Util.postJson('/studio/updateSession',{params:JSON.stringify(params)}, function(result) {
                                 if(result.isOK){
-                                    Trains.toRefreshView(roomInfo._id);
+                                    Room.toRefreshView(roomInfo._id);
                                 }
                             });
                         }
@@ -254,7 +254,7 @@ Trains.trainEntryByPoints = function(roomInfo){
                 }else{
                     Util.postJson('/studio/updateSession',{params:JSON.stringify(params)}, function(result) {
                         if(result.isOK){
-                            Trains.toRefreshView(roomInfo._id);
+                            Room.toRefreshView(roomInfo._id);
                         }
                     });
                 }
@@ -273,15 +273,6 @@ Trains.getTrainConfig = function(cfgKey){
         return Trains.trainConfig[cfgKey];
     }
     return null;
-};
-
-/**
- * 切换页面
- * @param groupId
- */
-Trains.toRefreshView = function(groupId){
-    Data.userInfo.groupId = groupId;
-    Room.load();
 };
 
 /**
