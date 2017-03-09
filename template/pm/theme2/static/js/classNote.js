@@ -25,9 +25,10 @@ var ClassNote = {
      */
     setEvent : function(){
         $("#classNote_panel").on("click", ".btn-group", function(){
-            //TODO 查看数据
+            //查看数据(判断用户是否登录)
             if(Data.userInfo.isLogin) {
                 console.log("查看数据", $(this).attr("dataid"));
+                ClassNote.viewData($(this));
             }else{
                 Login.load();
             }
@@ -209,26 +210,35 @@ var ClassNote = {
      */
     viewData:function(dom){
         var storeData = ClassNote.getStoreViewData()||[];
-        var params = {groupType: Data.userInfo.groupType,item: dom.attr('item'),tag: 'viewdata_' + dom.attr('_id')};
+        var params = {groupType: Data.userInfo.groupType,item: dom.attr('item'),tag: 'viewdata_' + dom.attr('dataid')};
         Util.postJson('/studio/addPointsInfo', {params: JSON.stringify(params)}, function (result) {
             if (result.isOK) {
-                Index.getArticleInfo(dom.attr('_id'), function (data) {
+                Index.getArticleInfo(dom.attr('dataid'), function (data) {
                     if (data) {
                         if(Util.isNotBlank(result.msg) && typeof result.msg.change == 'number') {
                             Pop.msg('消费' + Math.abs(result.msg.change) + '积分');
                         }
                         ClassNote.setViewDataHtml(dom, data);
-                        if($.inArray(dom.attr('_id'), storeData)<0) {
-                            storeData.push(dom.attr('_id'));
+                        if($.inArray(dom.attr('dataid'), storeData)<0) {
+                            storeData.push(dom.attr('dataid'));
                         }
-                        store.set('point_'+indexJS.userInfo.userId, storeData);
+                        store.set('point_'+Data.userInfo.userId, storeData);
                     }
                 });
             }else{
-                Pop.msg(result.msg);
+                Pop.msg("不好意思，你的积分余额不足！");
             }
         });
+    },
+
+    getStoreViewData:function(){
+        if (!store.enabled){
+            console.log('Local storage is not supported by your browser.');
+            return;
+        }
+        return store.get('point_'+Data.userInfo.userId);
     }
+
 };
 
 /**
