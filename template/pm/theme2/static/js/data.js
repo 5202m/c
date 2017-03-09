@@ -47,7 +47,7 @@ var Data = {
         this.options = this.options || {};
         this.options.timezoneLs = this.options.timezoneLs || 0;
         this.windowHeight = $(window).height();
-
+        Store.init();
         this.initUserInfo();
     },
 

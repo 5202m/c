@@ -27,12 +27,16 @@ var ClassNote = {
         $("#classNote_panel").on("click", ".btn-group", function(){
             //查看数据(判断用户是否登录)
             if(Data.userInfo.isLogin) {
-                console.log("查看数据", $(this).attr("dataid"));
                 ClassNote.viewData($(this));
             }else{
                 Login.load();
             }
         });
+
+        $("#room_classnote").on("scroll","#classNote_panel",function() {//定义滚动条位置改变时触发的事件。
+            alert(1);
+        });
+
     },
 
     /**
@@ -218,11 +222,11 @@ var ClassNote = {
                         if(Util.isNotBlank(result.msg) && typeof result.msg.change == 'number') {
                             Pop.msg('消费' + Math.abs(result.msg.change) + '积分');
                         }
-                        ClassNote.setViewDataHtml(dom, data);
+                        ClassNote.setViewDataHtml(dom, data.data);
                         if($.inArray(dom.attr('dataid'), storeData)<0) {
                             storeData.push(dom.attr('dataid'));
                         }
-                        store.set('point_'+Data.userInfo.userId, storeData);
+                        Store.set('point_'+Data.userInfo.userId, storeData);
                     }
                 });
             }else{
@@ -236,7 +240,7 @@ var ClassNote = {
             console.log('Local storage is not supported by your browser.');
             return;
         }
-        return store.get('point_'+Data.userInfo.userId);
+        return Store.get('point_'+Data.userInfo.userId);
     }
 
 };
@@ -249,24 +253,25 @@ var ClassNote = {
 ClassNote.setViewDataHtml = function(dom, data){
     var upOrDown = {'up':'看涨', 'down':'看跌'};
     var articleInfo = data.detailList && data.detailList[0];
-    var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = chatPride.formatHtml('tradeStrategyHdDetail');
+    var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = ClassNote.formatHtml('tradeStrategyHdDetail');
     if(articleInfo.tag == 'shout_single' || articleInfo.tag == 'resting_order'){
         $.each(remarkArr, function (i, row) {
             var hideDesc = '';
-            if(common.isBlank(row.description)){
+            if(Util.isBlank(row.description)){
                 hideDesc = ' style="display:none;"';
             }
             tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
         });
-        dom.parent().children('table').remove()
-        dom.after(tradeStrategyHdDetailHtml.join(''));
+        dom.parent().children().children('table').remove();
+        dom.parent().children('div.details-item-list.sildeup').after(tradeStrategyHdDetailHtml.join(''));
+        dom.parent().children('div.details-item-list.sildeup')[0].remove();
         dom.hide();
     }else if(articleInfo.tag == 'trading_strategy'){
         var tradeStrategySupport = chatPride.formatHtml('tradeStrategySupport'); //交易支撑位信息
         var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv');//交易支撑位支撑值
         $.each(remarkArr, function (i, row) {
             var hideDesc = '';
-            if(common.isBlank(row.description)){
+            if(Util.isBlank(row.description)){
                 hideDesc = ' style="display:none;"';
             }
             tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
@@ -276,3 +281,182 @@ ClassNote.setViewDataHtml = function(dom, data){
         hdBoxDom.html(tradeStrategySupportHtml.join(''));
     }
 };
+
+/**
+ * 根据内容域模块名返回内容模板
+ * @param region 内容域模块名
+ * @returns {string}
+ */
+ClassNote.formatHtml = function(region){
+    var formatHtmlArr = [];
+    switch(region) {
+        case 'tradeStrategyLiveBrief'://课程信息，直播老师
+            formatHtmlArr.push('<div class="livebrief" pt="{6}" _aid="{9}">');
+            formatHtmlArr.push('    <div class="te_info" tid="{10}">');
+            formatHtmlArr.push('        <div class="himg"><img src="{0}" alt="" width="120" height="120"></div>');
+            formatHtmlArr.push('        <div class="teinfo1">');
+            formatHtmlArr.push('            <span class="te_name">{1}</span>');
+            formatHtmlArr.push('            <span class="livetime">{2}</span>');
+            formatHtmlArr.push('        </div>');
+            formatHtmlArr.push('        <span class="brieftit">{3}</span>');
+            formatHtmlArr.push('        <div class="taglist">');
+            formatHtmlArr.push('            {8}');
+            formatHtmlArr.push('        </div>');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('    <div class="hdbox">');
+            formatHtmlArr.push('        <div class="showpart cut">');
+            formatHtmlArr.push('            <div class="skill">');
+            formatHtmlArr.push('                <span><i class="dot"></i>当前交易策略：</span>');
+            formatHtmlArr.push('                <p>{4}</p>');
+            formatHtmlArr.push('            </div>');
+            /*formatHtmlArr.push('            <div class="hdbox2 clearfix">');
+             formatHtmlArr.push('                <table width="100%" border="0" cellspacing="0" cellpadding="0">');
+             formatHtmlArr.push('                    <tr>');
+             formatHtmlArr.push('                        <th>品种</th>');
+             formatHtmlArr.push('                        <th width="21%">方向</th>');
+             formatHtmlArr.push('                        <th width="21%">进场点位</th>');
+             formatHtmlArr.push('                        <th width="21%">止盈</th>');
+             formatHtmlArr.push('                        <th width="21%">止损</th>');
+             formatHtmlArr.push('                    </tr>');*/
+            formatHtmlArr.push('                    {5}');
+            /*formatHtmlArr.push('                </table>');
+             formatHtmlArr.push('            </div>');*/
+            formatHtmlArr.push('            <div class="scbox-shadow"></div>');
+            formatHtmlArr.push('        </div>');
+            formatHtmlArr.push('        <a href="javascript:void(0);" class="show-ctrl"{11}>点击展开</a>');
+            formatHtmlArr.push('        <a href="javascript:void(0);" class="viewdata"{7} _id="{9}" item="prerogative_strategy" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_cl_ChaKanShuJu\', \'content_right\', 1, true]);">查看数据</a>');
+            formatHtmlArr.push('        <i class="hdbox-i"></i>');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('    <div class="live_banner">');
+            formatHtmlArr.push('        <ul class="ban_ul"></ul>');
+            formatHtmlArr.push('        <div class="num">');
+            formatHtmlArr.push('            <ul></ul>');
+            formatHtmlArr.push('        </div>');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('    <div class="brieflist">');
+            formatHtmlArr.push('        <ul></ul>');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('</div>');
+            break;
+        case 'tradeStrategySupport':
+            formatHtmlArr.push('<div class="hdbox2 clearfix">');
+            formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
+            formatHtmlArr.push('        <tr>');
+            formatHtmlArr.push('            <th>品种</th>');
+            formatHtmlArr.push('            <th width="21%">方向</th>');
+            formatHtmlArr.push('            <th width="21%">进场点位</th>');
+            formatHtmlArr.push('            <th width="21%">止盈</th>');
+            formatHtmlArr.push('            <th width="21%">止损</th>');
+            formatHtmlArr.push('        </tr>');
+            formatHtmlArr.push('        <tr>');
+            formatHtmlArr.push('            <td>{0}</td>');//品种
+            formatHtmlArr.push('            <td>{1}</td>');//涨跌
+            formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
+            formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
+            formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+            formatHtmlArr.push('        </tr>');
+            formatHtmlArr.push('        <tr{7}>');
+            formatHtmlArr.push('            <td colspan="5" class="explain">说明：<span class="{6}">{5}</span></td>');
+            formatHtmlArr.push('        </tr>');
+            formatHtmlArr.push('    </table>');
+            formatHtmlArr.push('</div>');
+            /*formatHtmlArr.push('<div class="skilldata clearfix">');
+             formatHtmlArr.push('   {2}');
+             formatHtmlArr.push('    <div class="data_cont">');
+             formatHtmlArr.push('        <div class="pdname"><span>{0}</span><i></i></div>');
+             formatHtmlArr.push('        <b class="br-ctrl"></b>');
+             formatHtmlArr.push('        {1}');
+             formatHtmlArr.push('    </div>');
+             formatHtmlArr.push('</div>');*/
+            break;
+        case 'tradeStrategySupportDiv':
+            //formatHtmlArr.push('<div class="support"><i class="dot"></i><b>第{0}支撑位/阻力位：</b><span class="{3}">{1}/{2}</span></div>');
+            break;
+        case 'tradeStrategyNote':
+            formatHtmlArr.push('<li aid="{2}">');
+            formatHtmlArr.push('    <i class="dot"></i>');
+            formatHtmlArr.push('    <span class="ltime">{0}</span>');
+            formatHtmlArr.push('    <div class="textcont">');
+            formatHtmlArr.push('    {1}');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('</li>');
+            break;
+        case 'tradeStrategyHd':
+            formatHtmlArr.push('{0}');
+            formatHtmlArr.push('<div class="hdbox2 clearfix">');
+            formatHtmlArr.push('    <span class="hdtit">【{5}】{4}老师{5}了，快来围观！</span>');
+            formatHtmlArr.push('    <a href="javascript:void(0);" class="viewdata2"{2} _id="{3}" item="{6}" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_hd_ChaKanShuJu\', \'content_right\', 1, true]);">查看数据</a>');
+            /*formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
+             formatHtmlArr.push('        <thead>');
+             formatHtmlArr.push('            <tr>');
+             formatHtmlArr.push('                <th>品种</th>');
+             formatHtmlArr.push('                <th width="21%">方向</th>');
+             formatHtmlArr.push('                <th width="21%">进场点位</th>');
+             formatHtmlArr.push('                <th width="21%">止盈</th>');
+             formatHtmlArr.push('                <th width="21%">止损</th>');
+             formatHtmlArr.push('            </tr>');
+             formatHtmlArr.push('        </thead>');
+             formatHtmlArr.push('        <tbody>');*/
+            formatHtmlArr.push('            {1}');
+            /*formatHtmlArr.push('        </tbody>');
+             formatHtmlArr.push('    </table>');*/
+            formatHtmlArr.push('</div>');
+            break;
+        case 'tradeStrategyHdDetail':
+            formatHtmlArr.push('<table class="tb-default">');
+            formatHtmlArr.push('    <tbody>');
+            formatHtmlArr.push('        <tr>');
+            formatHtmlArr.push('            <th>品种</th>');
+            formatHtmlArr.push('            <th width="21%">方向</th>');
+            formatHtmlArr.push('            <th width="21%">进场点位</th>');
+            formatHtmlArr.push('            <th width="21%">止盈</th>');
+            formatHtmlArr.push('            <th width="21%">止损</th>');
+            formatHtmlArr.push('        </tr>');
+            formatHtmlArr.push('        <tr>');
+            formatHtmlArr.push('            <td>{0}</td>');
+            formatHtmlArr.push('            <td>{1}</td>');
+            formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
+            formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
+            formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+            formatHtmlArr.push('        </tr>');
+            formatHtmlArr.push('    </tbody>');
+            formatHtmlArr.push('</table>');
+            formatHtmlArr.push('<div class="details-item-list sildeup">');
+            formatHtmlArr.push('<div class="instr-txt">');
+            formatHtmlArr.push('<label>说明</label>');
+            formatHtmlArr.push('<span class="{6}">{5}</span>');
+            formatHtmlArr.push('</div>');
+            formatHtmlArr.push('</div>');
+            break;
+        case 'tradeStrategyNoteDetail':
+            formatHtmlArr.push('<div class="textcont">{0}</div>');
+            break;
+        case 'tradeStrategyNoteImg':
+            formatHtmlArr.push('<div class="picpart">');
+            formatHtmlArr.push('    <div class="imgbox" url="{0}">');
+            formatHtmlArr.push('        <a href="{0}" data-lightbox="liveinfo-img" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_ChaKanTu\', \'content_right\', 1, true]);"><i></i><img alt="" /></a>');
+            formatHtmlArr.push('    </div>');
+            formatHtmlArr.push('</div>');
+            break;
+        case 'tag':
+            formatHtmlArr.push('<a href="javascript:void(0);" class="tag"><span>{0}</span><i></i></a>');
+            break;
+        case 'pushShortSingle':
+            formatHtmlArr.push('<div class="info_push">');
+            formatHtmlArr.push('    <div class="pushcont">系统：{0}</div>');
+            formatHtmlArr.push('    <a href="javascript:void(0);" class="detailbtn shoutsingle" _id="{1}" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_lts_QuKankan\', \'content_right\', 1, true]);">去看看</a>');
+            formatHtmlArr.push('    <a href="javascript:void(0);" class="pushclose"><i></i></a>');
+            formatHtmlArr.push('</div>');
+            break;
+    }
+    return formatHtmlArr.join("");
+}
+
+/*替换字符串中占位符 扩展方法 begin*/
+String.prototype.formatStr=function() {
+    if(arguments.length==0) return this;
+    for(var s=this, i=0; i<arguments.length; i++)
+        s=s.replace(new RegExp("\\{"+i+"\\}","g"), (arguments[i] == null || arguments[i] == undefined) ? "" : arguments[i]);
+    return s;
+};
+/*替换字符串中占位符 扩展方法 end*/

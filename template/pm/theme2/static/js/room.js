@@ -34,7 +34,6 @@ Room.initPage = function(){
             Room.currGroupId = room.id;
             $("#room_roomName").html(room.name);
             Player.startPlay();
-            ClassNote.init();
             Chat.init();
             Room.showCourse();
         }
