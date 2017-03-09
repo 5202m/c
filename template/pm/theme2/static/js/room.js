@@ -14,6 +14,7 @@ var Room = new Container({
     },
     onShow : function(){
         Room.initPage();
+        ClassNote.init();
     },
     onHide : function(){
         Player.player.clear($("#roomVideo"));
@@ -106,7 +107,9 @@ Room.setEvent = function(){
      */
     $('#classNote_panel').on('click', '.txt-block .toggle-op-btn', function(){
         $(this).find('i').toggleClass('i-arrow-up i-arrow-down');
-        $(this).closest('.txt-block').find('.txt-details').toggleClass('sildeup');
+        $(this).closest('.txt-block').children('.txt-details').toggleClass('sildeup');
+        $(this).closest('.txt-block').children('.txt-details').children('.details-item-list').toggleClass('sildeup');
+        $(this).closest('.txt-block').children('.txt-details').children('.call-infos').toggleClass('dn');
     });
     /**
      * 点击直播精华

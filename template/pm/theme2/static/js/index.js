@@ -95,3 +95,21 @@ Index.getArticleList = function(params,callback){
         callback(null);
     }
 };
+
+
+/**
+ * 文档信息
+ * @param id
+ * @param callback
+ */
+Index.getArticleInfo = function(id,callback){
+    try{
+        $.getJSON('/studio/getArticleInfo',{id:id},function(data){
+            //console.log("getArticleList->data:"+JSON.stringify(data));
+            callback(data);
+        });
+    }catch (e){
+        console.error("getArticleInfo->"+e);
+        callback(null);
+    }
+};

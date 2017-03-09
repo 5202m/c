@@ -26,7 +26,11 @@ var ClassNote = {
     setEvent : function(){
         $("#classNote_panel").on("click", ".btn-group", function(){
             //TODO 查看数据
-            console.log("查看数据", $(this).attr("dataid"));
+            if(Data.userInfo.isLogin) {
+                console.log("查看数据", $(this).attr("dataid"));
+            }else{
+                Login.load();
+            }
         });
     },
 
@@ -127,7 +131,8 @@ var ClassNote = {
             var dimHtml = isHideData ? Room.formatHtml("classNote_dim1") : "";
             var dataHtml = [];
             var txtHtml = dataDetail.content && Room.formatHtml("classNote_txt", dataDetail.content) || "";
-            var lookHtml = isHideData ? Room.formatHtml("classNote_look", data._id) : "";
+            var item = dataDetail.tag == 'resting_order'? 'prerogative_callTrade' : 'prerogative_callTrade';
+            var lookHtml = isHideData ? (dataDetail.tag == "trading_strategy" ? Room.formatHtml("classNote_trading_strategy_look", data._id) : Room.formatHtml("classNote_look", data._id, item)) : "";
             var dataDataArr = Util.parseJSON(dataDetail.remark || ""), dataDataTemp;
             for(var i = 0,lenI = dataDataArr ? dataDataArr.length : 0; i < lenI; i++){
                 dataDataTemp = dataDataArr[i];
@@ -197,5 +202,67 @@ var ClassNote = {
             $('#chat_msg').append(Room.formatHtml('chat_sys_msg', time, txt, 'classNote', aid));
             Tool.gotoLook();
         }
+    },
+    /**
+     * 扣积分查看数据
+     * @param dom
+     */
+    viewData:function(dom){
+        var storeData = ClassNote.getStoreViewData()||[];
+        var params = {groupType: Data.userInfo.groupType,item: dom.attr('item'),tag: 'viewdata_' + dom.attr('_id')};
+        Util.postJson('/studio/addPointsInfo', {params: JSON.stringify(params)}, function (result) {
+            if (result.isOK) {
+                Index.getArticleInfo(dom.attr('_id'), function (data) {
+                    if (data) {
+                        if(Util.isNotBlank(result.msg) && typeof result.msg.change == 'number') {
+                            Pop.msg('消费' + Math.abs(result.msg.change) + '积分');
+                        }
+                        ClassNote.setViewDataHtml(dom, data);
+                        if($.inArray(dom.attr('_id'), storeData)<0) {
+                            storeData.push(dom.attr('_id'));
+                        }
+                        store.set('point_'+indexJS.userInfo.userId, storeData);
+                    }
+                });
+            }else{
+                Pop.msg(result.msg);
+            }
+        });
+    }
+};
+
+/**
+ * 设置查看数据的html
+ * @param dom
+ * @param data
+ */
+ClassNote.setViewDataHtml = function(dom, data){
+    var upOrDown = {'up':'看涨', 'down':'看跌'};
+    var articleInfo = data.detailList && data.detailList[0];
+    var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = chatPride.formatHtml('tradeStrategyHdDetail');
+    if(articleInfo.tag == 'shout_single' || articleInfo.tag == 'resting_order'){
+        $.each(remarkArr, function (i, row) {
+            var hideDesc = '';
+            if(common.isBlank(row.description)){
+                hideDesc = ' style="display:none;"';
+            }
+            tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+        });
+        dom.parent().children('table').remove()
+        dom.after(tradeStrategyHdDetailHtml.join(''));
+        dom.hide();
+    }else if(articleInfo.tag == 'trading_strategy'){
+        var tradeStrategySupport = chatPride.formatHtml('tradeStrategySupport'); //交易支撑位信息
+        var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv');//交易支撑位支撑值
+        $.each(remarkArr, function (i, row) {
+            var hideDesc = '';
+            if(common.isBlank(row.description)){
+                hideDesc = ' style="display:none;"';
+            }
+            tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+        });
+        var hdBoxDom = dom.parent('div.hdbox').children('div.showpart').children('div.hdbox2');
+        hdBoxDom.children('table').remove();
+        hdBoxDom.html(tradeStrategySupportHtml.join(''));
     }
 };
