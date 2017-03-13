@@ -62,7 +62,8 @@ TeachList.appendArticles = function(dataArr){
         html.push(TeachList.formatHtml('teachList_article',
             row.mediaImgUrl,
             row.detailList[0].title,
-            row.detailList[0].remark
+            row.detailList[0].remark,
+            row._id
         ));
 
     });
@@ -96,6 +97,18 @@ TeachList.setTitle = function () {
  */
 TeachList.bindNoviceGuideEnvent = function () {
     $("#teachList_articles li").bind("click",function(){
+        /**
+         * 用于测试
+         */
+        if($(this).attr('_id')=='10000569') {
+            NoviceGuide.url = '/pm/theme2/template/noviceGuide/novice-guide1-1.html';
+            NoviceGuide.paginationObj = '#paginationNoviceGuide1';
+            NoviceGuide.temp = 'noviceGuide1';
+        }else{
+            NoviceGuide.url = '/pm/theme2/template/noviceGuide/novice-guide2-2.html';
+            NoviceGuide.paginationObj = '#paginationNoviceGuide2';
+            NoviceGuide.temp = 'noviceGuide2';
+        }
         NoviceGuide.load();
     })
 }
