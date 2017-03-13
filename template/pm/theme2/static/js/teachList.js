@@ -25,6 +25,8 @@ TeachList.setEvent = function(){
     $('#teachList_back').bind('click', Container.back);
 };
 
+
+
 /**
  * 加载数据
  * @param isMore
@@ -32,7 +34,7 @@ TeachList.setEvent = function(){
 TeachList.loadData = function(isMore){
     Index.getArticleList({
         code : TeachList.currentCode,
-        platform : Data.userInfo.groupId,
+        platform : Data.userInfo.groupId || "studio_teach",
         hasContent : 1,
         pageSize : 25,
         pageKey: "",
@@ -46,6 +48,7 @@ TeachList.loadData = function(isMore){
             var dataArr = dataList.data || [];
             TeachList.appendArticles(dataArr);
         }
+        TeachList.bindNoviceGuideEnvent();
     });
 };
 
@@ -86,4 +89,13 @@ TeachList.setTitle = function () {
             break;
     }
     $('#teachListTitle').text(currentTitle);
+}
+
+/**
+ * 绑定新手指南事件
+ */
+TeachList.bindNoviceGuideEnvent = function () {
+    $("#teachList_articles li").bind("click",function(){
+        NoviceGuide.load();
+    })
 }

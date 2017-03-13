@@ -253,7 +253,7 @@ var ClassNote = {
 ClassNote.setViewDataHtml = function(dom, data){
     var upOrDown = {'up':'看涨', 'down':'看跌'};
     var articleInfo = data.detailList && data.detailList[0];
-    var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = ClassNote.formatHtml('tradeStrategyHdDetail');
+    var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = ClassNote.formatViewDataHtml('tradeStrategyHdDetail');
     if(articleInfo.tag == 'shout_single' || articleInfo.tag == 'resting_order'){
         $.each(remarkArr, function (i, row) {
             var hideDesc = '';
@@ -267,8 +267,8 @@ ClassNote.setViewDataHtml = function(dom, data){
         dom.parent().children('div.details-item-list.sildeup')[0].remove();
         dom.hide();
     }else if(articleInfo.tag == 'trading_strategy'){
-        var tradeStrategySupport = chatPride.formatHtml('tradeStrategySupport'); //交易支撑位信息
-        var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv');//交易支撑位支撑值
+        var tradeStrategySupport = ClassNote.formatViewDataHtml('tradeStrategySupport'); //交易支撑位信息
+        var tradeStrategySupportDiv = ClassNote.formatViewDataHtml('tradeStrategySupportDiv');//交易支撑位支撑值
         $.each(remarkArr, function (i, row) {
             var hideDesc = '';
             if(Util.isBlank(row.description)){
@@ -287,7 +287,7 @@ ClassNote.setViewDataHtml = function(dom, data){
  * @param region 内容域模块名
  * @returns {string}
  */
-ClassNote.formatHtml = function(region){
+ClassNote.formatViewDataHtml = function(region){
     var formatHtmlArr = [];
     switch(region) {
         case 'tradeStrategyLiveBrief'://课程信息，直播老师
@@ -309,18 +309,7 @@ ClassNote.formatHtml = function(region){
             formatHtmlArr.push('                <span><i class="dot"></i>当前交易策略：</span>');
             formatHtmlArr.push('                <p>{4}</p>');
             formatHtmlArr.push('            </div>');
-            /*formatHtmlArr.push('            <div class="hdbox2 clearfix">');
-             formatHtmlArr.push('                <table width="100%" border="0" cellspacing="0" cellpadding="0">');
-             formatHtmlArr.push('                    <tr>');
-             formatHtmlArr.push('                        <th>品种</th>');
-             formatHtmlArr.push('                        <th width="21%">方向</th>');
-             formatHtmlArr.push('                        <th width="21%">进场点位</th>');
-             formatHtmlArr.push('                        <th width="21%">止盈</th>');
-             formatHtmlArr.push('                        <th width="21%">止损</th>');
-             formatHtmlArr.push('                    </tr>');*/
             formatHtmlArr.push('                    {5}');
-            /*formatHtmlArr.push('                </table>');
-             formatHtmlArr.push('            </div>');*/
             formatHtmlArr.push('            <div class="scbox-shadow"></div>');
             formatHtmlArr.push('        </div>');
             formatHtmlArr.push('        <a href="javascript:void(0);" class="show-ctrl"{11}>点击展开</a>');
@@ -360,14 +349,6 @@ ClassNote.formatHtml = function(region){
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('    </table>');
             formatHtmlArr.push('</div>');
-            /*formatHtmlArr.push('<div class="skilldata clearfix">');
-             formatHtmlArr.push('   {2}');
-             formatHtmlArr.push('    <div class="data_cont">');
-             formatHtmlArr.push('        <div class="pdname"><span>{0}</span><i></i></div>');
-             formatHtmlArr.push('        <b class="br-ctrl"></b>');
-             formatHtmlArr.push('        {1}');
-             formatHtmlArr.push('    </div>');
-             formatHtmlArr.push('</div>');*/
             break;
         case 'tradeStrategySupportDiv':
             //formatHtmlArr.push('<div class="support"><i class="dot"></i><b>第{0}支撑位/阻力位：</b><span class="{3}">{1}/{2}</span></div>');
@@ -386,20 +367,7 @@ ClassNote.formatHtml = function(region){
             formatHtmlArr.push('<div class="hdbox2 clearfix">');
             formatHtmlArr.push('    <span class="hdtit">【{5}】{4}老师{5}了，快来围观！</span>');
             formatHtmlArr.push('    <a href="javascript:void(0);" class="viewdata2"{2} _id="{3}" item="{6}" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_hd_ChaKanShuJu\', \'content_right\', 1, true]);">查看数据</a>');
-            /*formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
-             formatHtmlArr.push('        <thead>');
-             formatHtmlArr.push('            <tr>');
-             formatHtmlArr.push('                <th>品种</th>');
-             formatHtmlArr.push('                <th width="21%">方向</th>');
-             formatHtmlArr.push('                <th width="21%">进场点位</th>');
-             formatHtmlArr.push('                <th width="21%">止盈</th>');
-             formatHtmlArr.push('                <th width="21%">止损</th>');
-             formatHtmlArr.push('            </tr>');
-             formatHtmlArr.push('        </thead>');
-             formatHtmlArr.push('        <tbody>');*/
             formatHtmlArr.push('            {1}');
-            /*formatHtmlArr.push('        </tbody>');
-             formatHtmlArr.push('    </table>');*/
             formatHtmlArr.push('</div>');
             break;
         case 'tradeStrategyHdDetail':
@@ -452,11 +420,13 @@ ClassNote.formatHtml = function(region){
     return formatHtmlArr.join("");
 }
 
-/*替换字符串中占位符 扩展方法 begin*/
-String.prototype.formatStr=function() {
+/**
+ * 替换字符串中占位符 扩展方法
+ * @returns {String}
+ */
+String.prototype.formatStr = function() {
     if(arguments.length==0) return this;
     for(var s=this, i=0; i<arguments.length; i++)
         s=s.replace(new RegExp("\\{"+i+"\\}","g"), (arguments[i] == null || arguments[i] == undefined) ? "" : arguments[i]);
     return s;
 };
-/*替换字符串中占位符 扩展方法 end*/
