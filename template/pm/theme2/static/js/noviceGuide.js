@@ -21,14 +21,14 @@ var NoviceGuide = new Container({
  */
 NoviceGuide.setEvent = function(){
     //返回上一级
-    $('#page_noviceGuide').on('click', '.course-con .head-top .btn-l', Container.back);
+    $('#noviceGuide_back').bind('click', Container.back);
 };
 
 /**
  * 初始化
  */
 NoviceGuide.initData = function () {
-    $('#page_noviceGuide').empty().html(NoviceGuide.formatHtml(NoviceGuide.temp));
+    $('#noviceGuide').empty().html(NoviceGuide.formatHtml(NoviceGuide.temp));
     var mySwiper = new Swiper('.swiper-container', {
         pagination: NoviceGuide.paginationObj,//'.swiper-pagination',
         paginationClickable: true,

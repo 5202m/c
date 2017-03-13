@@ -101,11 +101,11 @@ TeachList.bindNoviceGuideEnvent = function () {
          * 用于测试
          */
         if($(this).attr('_id')=='10000569') {
-            NoviceGuide.url = '/pm/theme2/template/noviceGuide/novice-guide1-1.html';
+            $('#noviceGuideTitle').text('新手初级教程');
             NoviceGuide.paginationObj = '#paginationNoviceGuide1';
             NoviceGuide.temp = 'noviceGuide1';
         }else{
-            NoviceGuide.url = '/pm/theme2/template/noviceGuide/novice-guide2-2.html';
+            $('#noviceGuideTitle').text('新手中级教程');
             NoviceGuide.paginationObj = '#paginationNoviceGuide2';
             NoviceGuide.temp = 'noviceGuide2';
         }
