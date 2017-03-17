@@ -3,14 +3,15 @@
  */
 const constant = require('../constant/constant'); // 引入constant
 const common = require('../util/common'); // 引入common类
-var errorMessage = require('../util/errorMessage');//引入errorMessage类
+var errorMessage = require('../util/errorMessage'); //引入errorMessage类
 const userService = require('../service/userService'); // 引入userService
-const clientTrainService = require('./clientTrainService');// 引入clientTrainService
-const chatService = require('./chatService');// 引入chatService
+const clientTrainService = require('./clientTrainService'); // 引入clientTrainService
+const chatService = require('./chatService'); // 引入chatService
 const logger = require('../resources/logConf').getLogger('studioService'); // 引入log4js
 const liveRoomAPIService = require('./liveRoomAPIService');
 const querystring = require("querystring");
 const Deferred = require("../util/common").Deferred;
+const apiService = require('../service/pmApiService');
 /**
  * 定义直播服务类
  * 
@@ -48,7 +49,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getIndexLoadData! >>getIndexLoadData:", e);
             if (callback) {
                 callback(null);
@@ -72,7 +73,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomList! >>getRoomList:", e);
             if (callback) {
                 callback(null);
@@ -96,7 +97,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getClientGroupList! >>getClientGroupList:", e);
             if (callback) {
                 callback(null);
@@ -123,7 +124,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("resetPwd! >>resetPwd:", e);
             if (callback) {
                 callback(null);
@@ -146,7 +147,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getStudioByGroupId! >>getStudioByGroupId:", e);
             if (callback) {
                 callback(null);
@@ -171,7 +172,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkGroupAuth! >>checkGroupAuth:", e);
             if (callback) {
                 callback(null);
@@ -197,7 +198,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getDefaultRoom! >>getDefaultRoom:", e);
             if (callback) {
                 callback(null);
@@ -224,7 +225,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("studioRegister! >>studioRegister:", e);
             if (callback) {
                 callback(null);
@@ -251,7 +252,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkMemberAndSave! >>checkMemberAndSave:", e);
             if (callback) {
                 callback(null);
@@ -278,7 +279,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkNickName! >>checkNickName:", e);
             if (callback) {
                 callback(null);
@@ -317,7 +318,7 @@ var studioService = {
             userId: userId,
             groupId: newGroupId,
             mobilePhone: mobilePhone
-        }, function (result) {
+        }, function(result) {
             result.isOK = true;
             callback(result);
         });
@@ -329,13 +330,13 @@ var studioService = {
      */
     checkClientGroup: (mobilePhone, accountNo, platformKey, callback) => {
         var clientGroup = constant.clientGroup.register;
-        var apiService = require('../service/' + platformKey + 'ApiService'); // 引入ApiService
+        // 引入ApiService
         apiService.checkAClient({
             mobilePhone: mobilePhone,
             accountNo: accountNo,
             ip: '',
-            isCheckByMobile: mobilePhone?true:false
-        }, function (result) {
+            isCheckByMobile: mobilePhone ? true : false
+        }, function(result) {
             logger.info("checkAClient->flagResult:" + JSON.stringify(result));
             if (result.flag == 2) {
                 clientGroup = constant.clientGroup.notActive;
@@ -344,15 +345,15 @@ var studioService = {
                 clientGroup = constant.clientGroup.active;
                 callback(clientGroup, result.accountNo);
             } else {
-                if(common.isValid(mobilePhone)) {
+                if (common.isValid(mobilePhone)) {
                     // 检查用户是否模拟用户
-                    apiService.checkSmClient(mobilePhone, function (hasRow) {
+                    apiService.checkSmClient(mobilePhone, function(hasRow) {
                         if (hasRow) {
                             clientGroup = constant.clientGroup.simulate;
                         }
                         callback(clientGroup);
                     });
-                }else{
+                } else {
                     callback(clientGroup, result.accountNo);
                 }
             }
@@ -379,7 +380,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("studio.login! >>studio.login:", e);
             if (callback) {
                 callback(null);
@@ -402,11 +403,11 @@ var studioService = {
             apiService.checkAClient({
                 mobilePhone: mobilePhone,
                 isCheckByMobile: true
-            }, function (result) {
+            }, function(result) {
                 logger.info("checkAClient->flagResult:" + JSON.stringify(result));
                 if (result.flag == 2 || result.flag == 3) {
                     var clientGroupTmp = result.flag == 2 ? constant.clientGroup.notActive : constant.clientGroup.active;
-                    studioService.updateClientGroup(groupType, mobilePhone, clientGroupTmp, result.accountNo, function (isOk) {
+                    studioService.updateClientGroup(groupType, mobilePhone, clientGroupTmp, result.accountNo, function(isOk) {
                         if (isOk) {
                             callback(true, clientGroupTmp);
                         } else {
@@ -419,9 +420,9 @@ var studioService = {
             });
         } else if (clientGroup === constant.clientGroup.simulate) {
             // 升级到模拟
-            apiService.checkSmClient(mobilePhone, function (hasRow) {
+            apiService.checkSmClient(mobilePhone, function(hasRow) {
                 if (hasRow) {
-                    studioService.updateClientGroup(groupType, mobilePhone, constant.clientGroup.simulate, null, function (isOk) {
+                    studioService.updateClientGroup(groupType, mobilePhone, constant.clientGroup.simulate, null, function(isOk) {
                         if (isOk) {
                             callback(true, constant.clientGroup.simulate);
                         } else {
@@ -459,7 +460,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateClientGroup! >>updateClientGroup:", e);
             if (callback) {
                 callback(null);
@@ -481,7 +482,7 @@ var studioService = {
         var cacheClient = require('../cache/cacheClient');
         var key = 'highsLowsVote_' + symbol;
         var map = {};
-        cacheClient.hgetall(key, function (err, result) {
+        cacheClient.hgetall(key, function(err, result) {
             if (err) {
                 logger.error("get highs or lows vote fail:" + err);
                 result.highs = 0;
@@ -534,7 +535,7 @@ var studioService = {
         var cacheClient = require('../cache/cacheClient');
         var key = 'highsLowsVote_' + symbol;
         var map = {};
-        cacheClient.hgetall(key, function (err, result) {
+        cacheClient.hgetall(key, function(err, result) {
             if (err) {
                 logger.error("get highs or lows vote fail:" + err);
                 result.highs = 0;
@@ -581,7 +582,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("setUserGroupThemeStyle! >>setUserGroupThemeStyle:", e);
             if (callback) {
                 callback(null);
@@ -605,7 +606,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTrainRoomList! >>getTrainRoomList:", e);
             if (callback) {
                 callback(null);
@@ -630,7 +631,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfoByUserNo! >>getUserInfoByUserNo:", e);
             if (callback) {
                 callback(null);
@@ -646,25 +647,25 @@ var studioService = {
      * @param callback
      */
     getShowTeacher: (params, callback) => {
-	let deferred = new Deferred();
-	 let path = "/studio/getShowTeacher";
-	 path += "?groupType=" + params.groupType;
-	 path += "&groupId=" + params.groupId;
-	 path += "&authorId=" + params.authorId;
+        let deferred = new Deferred();
+        let path = "/studio/getShowTeacher";
+        path += "?groupType=" + params.groupType;
+        path += "&groupId=" + params.groupId;
+        path += "&authorId=" + params.authorId;
 
-	 liveRoomAPIService.get(path).then((result) => {
-	     if(callback){
-		 callback(result);
-	     }
-	     deferred.resolve(result);
-	 }).catch((e) => {
-	     logger.error("getShowTeacher! >>getShowTeacher:", e);
-	     if(callback){
-		 callback(null);
-	     }
-	     deferred.reject(e);
-	 });
-	 return deferred.promise;
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getShowTeacher! >>getShowTeacher:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
     }
 };
 
