@@ -41,7 +41,7 @@ var LoginAuto = {
         if(this.sessionUser && !this.sessionUser.isLogin && storeObj.loginId && storeObj.autoLogin && !storeObj.doLogin){
             var loginRes ={};
             var xhr = new XMLHttpRequest();
-            xhr.open('post','/studio/login',false);
+            xhr.open('post','/login',false);
             xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
             xhr.onreadystatechange = function(){
                 if(xhr.readyState==4){

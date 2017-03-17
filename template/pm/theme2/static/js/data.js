@@ -98,7 +98,7 @@ var Data = {
             callback(Data.roomList);
             return;
         }
-        Util.postJson('/studio/getRoomList',null,function(data){
+        Util.postJson('/getRoomList',null,function(data){
             if(data && data.studioList){
                 Data.roomList = data.studioList;
                 callback(Data.roomList);
@@ -140,7 +140,7 @@ var Data = {
             for(var i = 0, lenI = rooms ? rooms.length : 0; i < lenI; i++){
                 roomIds.push(rooms[i].id);
             }
-            $.getJSON('/studio/getSyllabusList', {roomIds:roomIds}, function(result){
+            $.getJSON('/getSyllabusList', {roomIds:roomIds}, function(result){
                 if(result){
                     Data.syllabusMap = result.syllabuses || {};
                     Data.onlineNumMap = result.onlineNums || {};
@@ -229,7 +229,7 @@ var Data = {
             callback(Data.analysts[userId]);
         }else{
             Data.analysts = {};
-            $.getJSON('/studio/getAnalystList', {systemCategory: 'pm', platform:Data.userInfo.groupType}, function (result) {
+            $.getJSON('/getAnalystList', {systemCategory: 'pm', platform:Data.userInfo.groupType}, function (result) {
                 if (result) {
                     $.each(result.analysts, function (i, row) {
                         row.praiseNum = 0;
@@ -266,7 +266,7 @@ var Data = {
      * 获取积分
      */
     getPointsInfo : function(callback){
-        Util.postJson('/studio/getPointsInfo',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
+        Util.postJson('/getPointsInfo',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
             if(data){
                 var levelPointObj={},nextPointObj={};
                 for(var i=Data.pointLevel.length-1;i>=0;i--){

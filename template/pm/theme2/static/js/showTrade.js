@@ -18,7 +18,7 @@ var ShowTrade = new Container({
  */
 ShowTrade.getShowTrade = function(){
     var params = {groupType:Data.userInfo.groupType};
-    Util.postJson('/studio/getShowTrade',{data:JSON.stringify(params)},function(data){
+    Util.postJson('/getShowTrade',{data:JSON.stringify(params)},function(data){
         if(data.isOK && data.data){
             ShowTrade.tradeList = data.data.tradeList || [];
             ShowTrade.tradeLoadAll = false;
@@ -70,7 +70,7 @@ ShowTrade.setShowTradeList = function(){
  */
 ShowTrade.setShowTradePraise = function(obj){
     var params = {clientId:Data.userInfo.userId, praiseId:obj.attr('id')};
-    Util.postJson("/studio/setTradePraise",{data:JSON.stringify(params)},function(result){
+    Util.postJson("/setTradePraise",{data:JSON.stringify(params)},function(result){
         if(result.isOK) {
             //$this.find('i').fadeIn().delay(400).fadeOut();
             var lb= obj.children("span").children('label');

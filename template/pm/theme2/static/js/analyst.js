@@ -23,7 +23,7 @@ var Analyst = new Container({
 Analyst.setAnalystInfo = function(){
     if(Util.isNotBlank(Analyst.userNo)){
         var analystInfoHtml = '', analystPraiseHtml = '', analystIntroductionHtml = '', analystWechatHtml= '';
-        Util.postJson('/studio/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:Analyst.userNo})},function(data) {
+        Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:Analyst.userNo})},function(data) {
             var userInfo = data.userInfo;//直播老师
             var teacherList = data.teacherList;//分析师列表
             Analyst.tradeList = data.tradeList?data.tradeList.tradeList : [];//直播老师晒单

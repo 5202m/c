@@ -46,7 +46,7 @@ UserShowTrade.setUserShowTradeUserInfo = function(){
  */
 UserShowTrade.getUserShowTrade = function(){
     var params = {groupType:Data.userInfo.groupType, userNo:Data.userInfo.userId};
-    Util.postJson('/studio/getShowTrade',{data:JSON.stringify(params)},function(data){
+    Util.postJson('/getShowTrade',{data:JSON.stringify(params)},function(data){
         if(data.isOK && data.data){
             UserShowTrade.tradeList = data.data.tradeList || [];
             UserShowTrade.tradeLoadAll = false;
@@ -98,7 +98,7 @@ UserShowTrade.setUserShowTradeList = function(){
  */
 UserShowTrade.setUserShowTradePraise = function(obj){
     var params = {clientId:Data.userInfo.userId, praiseId:obj.attr('id')};
-    Util.postJson("/studio/setTradePraise",{data:JSON.stringify(params)},function(result){
+    Util.postJson("/setTradePraise",{data:JSON.stringify(params)},function(result){
         if(result.isOK) {
             //$this.find('i').fadeIn().delay(400).fadeOut();
             var lb= obj.children("span").children('label');

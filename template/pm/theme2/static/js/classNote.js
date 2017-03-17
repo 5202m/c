@@ -79,7 +79,7 @@ var ClassNote = {
             return;
         }
         var data = {type:"prerogative",item:["prerogative_strategy",'prerogative_callTrade']};
-        Util.postJson('/studio/getChatPointsConfig',{data:JSON.stringify(data)}, function(result) {
+        Util.postJson('/getChatPointsConfig',{data:JSON.stringify(data)}, function(result) {
             ClassNote.callTradeIsNotAuth = 0;
             ClassNote.strategyIsNotAuth = 0;
             if (result) {
@@ -215,7 +215,7 @@ var ClassNote = {
     viewData:function(dom){
         var storeData = ClassNote.getStoreViewData()||[];
         var params = {groupType: Data.userInfo.groupType,item: dom.attr('item'),tag: 'viewdata_' + dom.attr('dataid')};
-        Util.postJson('/studio/addPointsInfo', {params: JSON.stringify(params)}, function (result) {
+        Util.postJson('/addPointsInfo', {params: JSON.stringify(params)}, function (result) {
             if (result.isOK) {
                 Index.getArticleInfo(dom.attr('dataid'), function (data) {
                     if (data) {

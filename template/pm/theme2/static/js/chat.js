@@ -571,7 +571,7 @@ var Chat = {
                 closeable : false,
                 autoClose : 2000,
                 onOK : function(){
-                    window.location.href="/studio/logout";
+                    window.location.href="/logout";
                 }
             });
         }
@@ -721,7 +721,7 @@ var Chat = {
             if(data.content.msgType==Data.msgType.img){
                 Chat.removeLoadDom(fromUser.publishTime);//去掉加载框
                 var aObj = $('#'+fromUser.publishTime+' [talk="a"]>a');
-                var url=data.content.needMax?'/studio/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
+                var url=data.content.needMax?'/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
                 aObj.attr("href",url);
             }
             return "";
@@ -743,7 +743,7 @@ var Chat = {
         if(content.msgType == Data.msgType.img){
             var url = content.value;
             if(content.needMax){
-                url = Util.format("/studio/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
+                url = Util.format("/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
             }
             result = Room.formatHtml("chat_dialogImg", url, content.value || "");
             if(isMeSend){
@@ -1018,7 +1018,7 @@ var Chat = {
             if(content.msgType == Data.msgType.img){
                 var url = content.value;
                 if(content.needMax){
-                    url = Util.format("/studio/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
+                    url = Util.format("/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
                 }
                 result = Room.formatHtml("chat_dialogImg", url, content.value || "");
                 if(isMeSend){
@@ -1101,7 +1101,7 @@ var Chat = {
          */
         getCSList : function(){
             try{
-                $.getJSON('/studio/getCS',{groupId:Data.userInfo.groupId},function(data){
+                $.getJSON('/getCS',{groupId:Data.userInfo.groupId},function(data){
                     if(data && data.length>0) {
                         var cs, csTmp;
                         for(var i = 0, lenI = data.length; i < lenI; i++){
@@ -1514,7 +1514,7 @@ var Chat = {
     dataUpload:function(data){
         //上传图片到后端
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/studio/uploadData');
+        xhr.open('POST', '/uploadData');
         xhr.addEventListener("progress", function(e){
             if (e.lengthComputable) {
                 var ra= ((e.loaded / e.total *100)|0)+"%";

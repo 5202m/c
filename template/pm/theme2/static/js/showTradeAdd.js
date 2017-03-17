@@ -90,7 +90,7 @@ ShowTradeAdd.saveShowTrade = function(){
             title:title,
             tradeType:2
         };
-        Util.postJson('/studio/addShowTrade',{data:JSON.stringify(params)},function(data){
+        Util.postJson('/addShowTrade',{data:JSON.stringify(params)},function(data){
             if(data.isOK){
                 Pop.msg('您的晒单已成功提交，等待系统审核！');
                 if(!Data.userInfo.isSetName){

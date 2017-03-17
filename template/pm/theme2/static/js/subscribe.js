@@ -17,7 +17,7 @@ var Subscribe = new Container({
  * 设置老师列表 <label class="u-badge">趋势专家<i class="i-badge-arrowr"></i></label>
  */
 Subscribe.setAnalystList = function(){
-    $.getJSON('/studio/getAuthUsersByGroupId', {groupId : Data.userInfo.groupId}, function(result){
+    $.getJSON('/getAuthUsersByGroupId', {groupId : Data.userInfo.groupId}, function(result){
         if(result) {
             var analystHtml = [];
             $.each(result, function(key, val){
@@ -54,7 +54,7 @@ Subscribe.setAnalystList = function(){
  * @param obj
  */
 Subscribe.setSubscribeData = function(obj){
-    Util.postJson('/studio/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
+    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
         if(data!=null){
             $.each(data,function(i, row){
                 var analystsArr = row.analyst.split(',');
@@ -134,7 +134,7 @@ Subscribe.setEvent = function(){
  * 设置点赞
  */
 Subscribe.setPraise = function(obj, lb){
-    Util.postJson("/studio/setUserPraise",{clientId:Data.userInfo.userId,praiseId:obj.attr('userNo')},function(result){
+    Util.postJson("/setUserPraise",{clientId:Data.userInfo.userId,praiseId:obj.attr('userNo')},function(result){
         if(result.isOK) {
             //$this.find('i').fadeIn().delay(400).fadeOut();
             //var lb= obj.next("label") || obj.find('label');
@@ -163,7 +163,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
     var remark = {'live_reminder':'订阅直播提醒','shout_single_strategy':'订阅喊单策略','trading_strategy':'订阅交易策略'};
     var params = {id:id, groupType:Data.userInfo.groupType, noticeType:'email', noticeCycle:'year', type:type, pointsRemark : remark[type], point:0};
     params.analyst = analysts.join(',');
-    Util.postJson('/studio/subscribe', {params: JSON.stringify(params)}, function (data) {
+    Util.postJson('/subscribe', {params: JSON.stringify(params)}, function (data) {
         if (data.isOK) {
             if(Util.isBlank(params.analyst) || Util.isBlank(params.noticeType)){
                 Pop.msg('取消订阅成功！');

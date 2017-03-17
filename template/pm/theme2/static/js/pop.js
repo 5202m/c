@@ -73,7 +73,7 @@ var Pop = {
          */
         showSignIn : function(){
             if (Data.userInfo.isLogin) {
-                Util.postJson('/studio/checkTodaySignin', null, function (data) {
+                Util.postJson('/checkTodaySignin', null, function (data) {
                     if (null != data) {
                         if(data.isOK == false){
                             var _obj = $('.sign-pop');
@@ -96,7 +96,7 @@ var Pop = {
          */
         addSignIn : function(){
             if (Data.userInfo.isLogin) {
-                Util.postJson('/studio/addSignin', null, function (data) {
+                Util.postJson('/addSignin', null, function (data) {
                     if (data.isOK) {
                         Pop.msg("签到成功!");
                         $('.sign-pop .animatebox .popcon .close-pop').trigger('click');

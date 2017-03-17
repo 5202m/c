@@ -12,7 +12,7 @@ var config = {
         }
     },
     defTemplate:{
-        pm:{usedNum:4,pc:'theme1',mb:'theme2',mini:'theme3',webui:'theme4',routeKey:'/studio',host:'pmchat.24k.hk'}
+        pm:{usedNum:4,pc:'theme1',mb:'theme2',mini:'theme3',webui:'theme4',routeKey:'',host:'pmchat.24k.hk'}
     },//默认模板设置,//默认模板设置
     utm : {
         smsUrl : "http://testweboa.gwfx.com:8070/das_web/smsTemplate/send", //http://dmp.gwghk.com/smsTemplate/send
@@ -25,7 +25,7 @@ var config = {
     },//UTM系统信息
     isDevTest:true,//是否开发或测试环境
     sessionConfig:{key:'connect.sid',secret:'pm@chat'},//session 对应key,secret
-    redisUrlObj:{ host: '192.168.35.236', port: 6379 },	//链接redis缓存客户端连接
+    redisUrlObj:{ host: '192.168.35.81', port: 6379 },	//链接redis缓存客户端连接
     isAllowCopyHomeUrl:true,//是否允许copy链接（针对微信进入聊天室）
 //    pmApiUrl:'http://192.168.35.91:3000/api',//pmApi地址
     pmApiUrl:'http://192.168.35.81:3000/api',//pmApi地址
