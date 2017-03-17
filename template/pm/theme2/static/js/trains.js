@@ -24,7 +24,7 @@ Trains.setTrainList = function(){
     $.getJSON('/studio/getTrainRoomList', {groupType:Data.userInfo.groupType}, function(result){
         if(result!=null){
             $.each(result, function(key, row){
-                var openDate = Util.parseJSON(row.openDate);
+                var openDate = row.openDate;
                 var feature = Trains.getTrainFeature(row, false);
                 var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
                 if(feature.isEnd){

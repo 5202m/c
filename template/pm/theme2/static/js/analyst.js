@@ -248,4 +248,11 @@ Analyst.setEvent = function(){
     $('#analystWechat').on('click', '.popcon .i-close3', function(){
         $('#analystWechat').fadeOut();
     });
+    /**
+     * 私聊
+     */
+    $('#analystPraiseTool').on('click','a.privateChat',function () {
+        PrivateChat.load();
+    });
+
 };

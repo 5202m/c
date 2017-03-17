@@ -30,6 +30,8 @@ Room.currGroupId = null;
 Room.initPage = function(){
     Data.getRoom(function(room){
         var isChangeRoom = room.id != Room.currGroupId;
+        Chat.WhTalk.enable = room.allowWhisper;
+        Chat.WhTalk.whisperRoles = room.whisperRoles;
         if(isChangeRoom){ //房间已经切换，
             Room.currGroupId = room.id;
             $("#room_roomName").html(room.name);
@@ -143,6 +145,18 @@ Room.showLecturer = function(lecturerId){
     }
     Data.getAnalyst(lecturerId, function(lecturer){
         if(lecturer){
+            //设置私聊老师数据
+            var obj = {
+                avatar:lecturer.avatar === '' ? '/pm/theme2/img/h-avatar1.png' : lecturer.avatar,
+                position:lecturer.position,
+                userName:lecturer.userName,
+                userNo:lecturer.userNo,
+                userType : 2,
+                type : 'analyst'};
+            PrivateChat.talkers = [];
+            PrivateChat.talkers.push(obj);
+            Chat.WhTalk.analyst = obj;
+            Chat.WhTalk.setWhCS();
             var tagHtml = [];
             $("#room_teacher,#pride_teacher").attr("userno", lecturer.userNo).show();
             $("#room_teacherAvatar,#pride_teacherAvatar").attr("src", lecturer.avatar || "");
@@ -154,6 +168,8 @@ Room.showLecturer = function(lecturerId){
             $('#roomAnalystTag,#prideAnalystTags').empty().html(tagHtml.join(''));
         }else{
             $("#room_teacher").hide();
+            PrivateChat.talkers = [];
+            Chat.WhTalk.setWhCS();
         }
     });
 };

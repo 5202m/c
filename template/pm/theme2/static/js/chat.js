@@ -19,6 +19,9 @@ var Chat = {
     init : function(){
         this.setSocket();
         this.setOnlineNum(0, false, true);
+        if(Chat.WhTalk.enable){
+            Chat.WhTalk.getCSList(); //加载客服列表
+        }
     },
 
     /**
@@ -109,6 +112,7 @@ var Chat = {
         this.socket.on('loadWhMsg',function(result){
             Chat.WhTalk.loadWhMsg(result.data)
         });
+
     },
 
     /**
@@ -168,7 +172,8 @@ var Chat = {
          * 打开私聊对话页面
          */
         $("#chat_whisper").bind("click", function(){
-            //TODO 打开私聊对话页面
+            //打开私聊对话页面
+            PrivateChat.load();
         });
 
         /**
@@ -228,14 +233,14 @@ var Chat = {
         $("#chat_face").bind("click", function(){
             Chat.showTool("face");
 
-            if(!Chat.face.initFace){
+            if($.inArray(1,Chat.face.initArray) < 0){
                 // 初始化表情
                 Data.getRoom(function(room){
                     //初始化标签
                     Chat.face.init($("#chat_facePanel"),
                         $("#chat_cont"),
                         Data.filePath+'/face/',
-                        !room || (!room.allowVisitor && "visitor"==Data.userInfo.clientGroup));
+                        !room || (!room.allowVisitor && "visitor"==Data.userInfo.clientGroup),1);
                     $("#chat_cont").focusEnd();
                 });
             }else{
@@ -448,9 +453,6 @@ var Chat = {
     setOnlineUsers : function(users, length){
         for(var i in users){
             Chat.setOnlineUser(users[i], true, false);
-        }
-        if(Chat.WhTalk.enable){
-            Chat.WhTalk.getCSList(); //加载客服列表
         }
         Chat.setOnlineNum(length, true, false);
     },
@@ -925,69 +927,49 @@ var Chat = {
         tabCheck : false, //当前是否选中私聊tab
         CSMap : {},       //老师助理列表
         currCS : null,    //当前私聊老师助理
+        analyst : null,   //私聊老师对象
         msgCnt : 0,       //未读消息数
         pushObj : null,   //私聊推送信息
         askMsgObj : null,
         viewSelect : false, //老师助理下拉是否选中
-
+        whObjType : 'cs', //私聊对象类型，默认为客服
+        whisperRoles : null , // 私聊角色
+        whScrolling : false ,
         /**
          * 初始化私聊
          */
         initWH : function(){
-            this.enable = $("#currStudioInfo").attr("aw") == "true";
             this.refreshTips();
-
-            /*在线客服下拉框*/
-            $('#WhTalkBoxTab .view_select').click(function() {
-                var loc_this = $(this);
-                if(loc_this.is(".dw")){
-                    loc_this.removeClass("dw");
-                    Chat.WhTalk.viewSelect = false;
-                }else{
-                    loc_this.addClass("dw");
-                    Chat.WhTalk.viewSelect = true;
-                }
-            }).find(".selectlist a").live("click", function(){
-                if(!$(this).is(".on")){
-                    var userId = $(this).attr("uid");
-                    Chat.WhTalk.setWhCS({userId : userId});
-                }
-            });
-        },
-
-        /**
-         * 私聊开关-标识当前是否选中了老师助理tab
-         * @param isOpen
-         */
-        whSwitch : function(isOpen){
-            if(isOpen){
-                this.tabCheck = true;
-                this.msgCnt = 0;
-                this.refreshTips();
-                this.setWHTalkListScroll();
-                this.pushMsg();
-            }else{
-                this.tabCheck = false;
-            }
         },
 
         /**
          * 加载私聊历史信息
          */
-        getMsgHis : function(csId){
-            if(!this.CSMap.hasOwnProperty(csId) || this.CSMap[csId].load){
-                return;
+        getMsgHis : function(csId,type){
+            var csTmp = null;
+            if(type === 'cs'){
+                if(!this.CSMap.hasOwnProperty(csId) || this.CSMap[csId].load)return;
+                csTmp = this.CSMap[csId];
+            }else {
+                csTmp = this.analyst;
             }
-            var csTmp = this.CSMap[csId];
             csTmp.load = true;
             //加载私聊信息
-            Chat.socket.emit("getWhMsg",{
-                clientStoreId:Data.userInfo.clientStoreId,
-                userType:Data.userInfo.userType,
-                groupId:Data.userInfo.groupId,
-                groupType:Data.userInfo.groupType,
-                userId:Data.userInfo.userId,
-                toUser:{userId:csTmp.userNo,userType:csTmp.userType}});
+            $.post(Data.apiUrl+"/message/getWhMsg", {
+                    data: {
+                        clientStoreId: Data.userInfo.clientStoreId,
+                        userType: Data.userInfo.userType,
+                        groupId: Data.userInfo.groupId,
+                        groupType: Data.userInfo.groupType,
+                        userId: Data.userInfo.userId,
+                        toUser: {
+                            userId: csTmp.userNo,
+                            userType: csTmp.userType
+                        }
+                    }
+                }, function(){
+                    console.log("api getWhMsg ok");
+            });
         },
 
         /**
@@ -995,13 +977,79 @@ var Chat = {
          * @param data
          */
         loadWhMsg : function(data){
+            var html = [],userId = '';
             if(data && $.isArray(data)){
+                data.reverse();
+                userId = data[0].userId == Data.userInfo.userId ? data[0].toUser.userId : data[0].userId;
                 var row;
                 for (var i = 0, lenI = data.length; i < lenI; i++) {
                     row = data[i];
-                    Chat.formatUserToContent(row, true, result.toUserId);
+                    html.push(this.getWhHtml(row));
                 }
+            }else{
+                html.push(this.getWhHtml(data));
+                userId = data.userId == Data.userInfo.userId ? data.toUser.userId : data.userId;
             }
+            this.setWHTalkListScroll('privateChat_msg'+userId);
+            $('#privateChat_msg'+userId).append(html.join(""));
+        },
+
+        /**
+         * 拼装私聊消息Hmtl
+         * @param data
+         */
+        getWhHtml : function (data) {
+
+            //过滤给我会电自动回复
+            if(data.content.value === PrivateChat.callMe && data.userId === Data.userInfo.userId){
+                return '';
+            }
+            return this.formatMsgHtml(data,false);
+        },
+
+        /**
+         * 字符串格式化私聊HTml
+         */
+        formatMsgHtml : function (data,isMeSend) {
+
+            var fromUser=this.getFromUser(data),result = '',content = data.content || {};
+            if(isMeSend){//发送，并检查状态
+                fromUser.publishTime=data.uiId;
+            }
+            var userTag = Chat.getUserTag(fromUser);
+            if(content.msgType == Data.msgType.img){
+                var url = content.value;
+                if(content.needMax){
+                    url = Util.format("/studio/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
+                }
+                result = Room.formatHtml("chat_dialogImg", url, content.value || "");
+                if(isMeSend){
+                    result += Room.formatHtml("chat_dialogLoading");
+                }
+            }else{
+                result = Chat.filterUrl(content.value || "");
+            }
+            //temp字符串应用
+            if(isMeSend || fromUser.userId == Data.userInfo.userId){
+                result = Util.format(this.whDialogMe,
+                    fromUser.publishTime,
+                    userTag.avatar,
+                    userTag.level,
+                    Chat.formatPublishTime(fromUser.publishTime),
+                    fromUser.nickname,
+                    result
+                );
+            }else {
+                result = Util.format(this.whDialogOther,
+                    fromUser.publishTime,
+                    data.avatar ? data.avatar : this.currCS.avatar,
+                    userTag.level,
+                    Chat.formatPublishTime(fromUser.publishTime),
+                    fromUser.nickname,
+                    result
+                );
+            }
+            return result;
         },
 
         /**
@@ -1025,45 +1073,25 @@ var Chat = {
                     this.CSMap[userInfo.userId] = result;
                 }
             }else{
-                //随机选择一个，在线老师助理的优先
-                var csTmp = null;
+                //通常一个房间只有一个客服，或者默认第一个客服
                 for (var csId in this.CSMap) {
-                    csTmp = this.CSMap[csId];
-                    if(!result
-                        ||(result.userType != 3 && csTmp.userType == 3)
-                        ||(result.userType == csTmp.userType && !result.online && csTmp.online))
-                    {
-                        result = csTmp;
+                    result = this.CSMap[csId];
+                    if(result.userNo){
+                        PrivateChat.talkers.push({
+                                                  avatar:result.avatar === '' ? '/pm/theme2/img/h-avatar2.png' : result.avatar,
+                                                  position:result.position,
+                                                  userName:result.userName,
+                                                  userNo:result.userNo,
+                                                  type : 'cs'});
+                        break;
                     }
                 }
             }
             if(!result){
                 return null;
             }
-            if(!result.load){
-                this.getMsgHis(result.userNo);
-            }
             if(result.userNo){
                 this.currCS = result;
-                //设置下拉列表框
-                var csPanel = $("#WhTalkBoxTab .view_select");
-                var csDom = csPanel.find("a[uid=" + this.currCS.userNo + "]");
-                csPanel.find('.selectlist a').removeClass("on");
-                if(csDom.size() == 0){
-                    csPanel.find(".selectlist").append('<a href="javascript:void(0)" class="on" uid="' + this.currCS.userNo + '">' + this.currCS.userName + '</a>');
-                    csPanel.find('.selected').text(this.currCS.userName);
-                }else{
-                    csDom.addClass("on");
-                    csPanel.find('.selected').text(csDom.text());
-                }
-                if(csPanel.find(".selectlist a").size() <= 1){
-                    csPanel.hide();
-                }else{
-                    csPanel.show();
-                    $("#whDialog_list").children().hide();
-                    $("#whDialog_list").children("[csid=" + this.currCS.userNo + "]").show();
-                    this.setWHTalkListScroll();
-                }
                 return result;
             }else{
                 return null;
@@ -1075,7 +1103,7 @@ var Chat = {
          */
         getCSList : function(){
             try{
-                $.getJSON('/fxstudio/getCS',{groupId:Data.userInfo.groupId},function(data){
+                $.getJSON('/studio/getCS',{groupId:Data.userInfo.groupId},function(data){
                     if(data && data.length>0) {
                         var cs, csTmp;
                         for(var i = 0, lenI = data.length; i < lenI; i++){
@@ -1089,9 +1117,10 @@ var Chat = {
                             csTmp.userNo = cs.userNo;
                             csTmp.userName = cs.userName;
                             csTmp.userType = 3;
-                            csTmp.avatar = Util.isValid(cs.avatar)?cs.avatar:'/fx/theme2/img/cm.png';
+                            csTmp.avatar = Util.isNotBlank(cs.avatar)?cs.avatar:'/pm/theme2/img/cm.png';
                             csTmp.load = false;
                         }
+                        Chat.WhTalk.initWH();
                     }
                 });
             }catch (e){
@@ -1127,104 +1156,47 @@ var Chat = {
         /**
          * 设置聊天列表滚动条
          */
-        setWHTalkListScroll:function(){
-            $("#WhTalkPanel").scrollTop($('#WhTalkPanel')[0].scrollHeight);
+        setWHTalkListScroll:function(domId){
+            if(!this.whScrolling){
+                var panel = $("#privateChat_msgalan_cs2");
+                if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
+                    this.whScrolling = true;
+                    window.setTimeout(function(){
+                        $("#privateChat_msgalan_cs2").scrollTop($("#privateChat_msgalan_cs2")[0].scrollHeight);
+                        this.whScrolling = false;
+                    }, 300);
+
+                }
+            }
+        },
+
+        getFromUser : function (data) {
+            if(data.fromUser) return data.fromUser;
+            var fromUser = {userId:data.userId,
+                    publishTime:data.publishTime,
+                    nickname:data.nickname,
+                    userType:data.userType,
+                    toUser:data.toUser,
+                    clientGroup:data.clientGroup};
+            return fromUser;
         },
 
         /**
          * 接收消息
          */
         receiveWhMsg : function(data,isMeSend,isLoadData){
-            var fromUser=data.fromUser;
-            if(isMeSend){//发送，并检查状态
-                fromUser.publishTime=data.uiId;
-            }
-            if(data.isVisitor){
-                $("#"+data.uiId).remove();
+            var fromUser = this.getFromUser(data);
+            if(!data.content.value){//自己发送
                 return;
             }
-            if(isLoadData && $("#"+fromUser.publishTime).length>0){
-                $("#"+fromUser.publishTime+" .dialog em.ruleTipStyle").remove();
-                $("#"+fromUser.publishTime+" input").remove();
-                return;
-            }
-            if(data.rule){
-                if(data.value && data.value.needApproval){
-                    $('#'+data.uiId).attr("id",fromUser.publishTime);
-                }else{
-                    $('#'+data.uiId+' .dialog').append('<em class="ruleTipStyle">'+(data.value.tip)+'</em>');
-                }
-                return;
-            }
-            if(!isMeSend && Data.userInfo.userId==fromUser.userId && data.serverSuccess){//发送成功，则去掉加载框，清除原始数据。
-                $('#'+data.uiId+' .uname span').html(Chat.formatPublishTime(fromUser.publishTime));
-                $('#'+data.uiId).attr("id",fromUser.publishTime);//发布成功id同步成服务器发布日期
-                if(data.content.msgType==Data.msgType.img){
-                    Chat.removeLoadDom(fromUser.publishTime);//去掉加载框
-                    var aObj=$('#'+fromUser.publishTime+' span[contt="a"] a');
-                    var url=data.content.needMax?'/studio/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
-                    aObj.attr("href",url);
-                }
-                return;
-            }
-            var dialog=Chat.formatContentHtml(data,isMeSend,isLoadData, true);
-            var talkPanel = $("#WhTalkPanel");
-            //如果本身就在最底端显示，则自动滚动，否则不滚动
-            var isScroll = talkPanel.scrollTop() + talkPanel.height() + 30 >= talkPanel.get(0).scrollHeight;
-            if(isLoadData){
-                $("#whDialog_list").prepend(dialog);
+            var result = this.formatMsgHtml(data,isMeSend);
+            if(isMeSend || fromUser.userId == Data.userInfo.userId){
+                $("#"+PrivateChat.currentTalker).append(result);
             }else{
-                $("#whDialog_list").append(dialog);
+                $('#privateChat_msg'+fromUser.userId).append(result);
             }
-            if(isScroll && this.tabCheck){
-                Chat.WhTalk.setWHTalkListScroll();
-            }
-            Chat.formatMsgToLink(fromUser.publishTime);//格式链接
-            //昵称点击
-            if(Data.userInfo.userId!=fromUser.userId){
-                $('#'+fromUser.publishTime+' .uname,#'+fromUser.publishTime+' .headimg').click(function(){
-                    var liDom = $(this).parents("li:first");
-                    var csInfo = {
-                        userId : liDom.find(".headimg").attr("uid"),
-                        nickname : liDom.find(".uname strong").text(),
-                        userType : liDom.attr("utype"),
-                        avatar : liDom.find(".headimg img").attr("src")
-                    };
-                    Chat.WhTalk.setWhCS(csInfo);
-                });
-            }
-            //消息数提示
-            if(!this.tabCheck && !isLoadData){
-                Chat.WhTalk.msgCnt++;
-                this.refreshTips();
-            }
-            //设置当前聊天的老师助理
-            if(!isLoadData && Data.userInfo.userId!=fromUser.userId){
-                this.setWhCS(fromUser);
-            }
-            //如果不是加载历史消息记录，则下一次对话不带咨询内容（加载推送私聊消息时，会设定咨询内容，当有新的对话的时候，会清空咨询内容）
-            if(!isLoadData){
-                this.askMsgObj = null;
-            }
-            //私聊消息咨询内容
-            if(isLoadData && fromUser.toUser && Util.isValid(fromUser.toUser.question)){
-                var csTmp = this.setWhCS({userId : fromUser.toUser.userId});
-                this.receiveWhMsg({
-                    content : {
-                        maxValue : "",
-                        msgType : "text",
-                        status : 1,
-                        value : fromUser.toUser.question
-                    },
-                    fromUser : {
-                        nickname : csTmp.userName,
-                        userId : csTmp.userNo,
-                        userType : csTmp.userType,
-                        avatar : csTmp.avatar,
-                        publishTime : fromUser.toUser.publishTime
-                    }
-                },false,true);
-            }
+            //清空输入框
+            $("#contentText").html("").trigger("input");
         },
 
         /**
@@ -1259,6 +1231,28 @@ var Chat = {
         },
 
         /**
+         * 设置私聊发送对象
+         */
+        setToUser : function () {
+            //默认当前客服
+            var toUser = {
+                userId : this.currCS.userNo,
+                nickname : this.currCS.nickname,
+                talkStyle : 1,
+                userType : this.currCS.userType
+            };
+            if(this.whObjType === 'analyst'){//讲师
+                toUser = {
+                    userId : this.analyst.userNo,
+                    nickname : this.analyst.userName,
+                    talkStyle : 1,
+                    userType : this.analyst.userType
+                };
+            }
+            return toUser;
+        },
+
+        /**
          * 发送私聊信息
          * @param sendObj
          */
@@ -1266,27 +1260,52 @@ var Chat = {
             if(!this.currCS){
                 this.setWhCS();
             }
-            if(!this.currCS){
+            if(this.whObjType === 'cs' && !this.currCS.online){
                 Pop.msg("老师助理不在线，暂不可私聊！");
                 return ;
             }
-            sendObj.fromUser.toUser = {
-                userId : this.currCS.userNo,
-                nickname : this.currCS.nickname,
-                talkStyle : 1,
-                userType : this.currCS.userType
-            };
+            if(this.whObjType === 'analyst' && $.inArray(2,this.whisperRoles) < 0){
+                Pop.msg("不好意思，当前房间不允许与老师私聊！");
+                $("#contentText").html("").trigger("input");
+                return ;
+            }
+            sendObj.fromUser.toUser = this.setToUser();
             if(this.askMsgObj){
                 sendObj.fromUser.toUser.question=this.askMsgObj.info;
                 sendObj.fromUser.toUser.questionId=this.askMsgObj.infoId;
                 sendObj.fromUser.toUser.publishTime=this.askMsgObj.publishTime;
             }
-            Chat.WhTalk.receiveWhMsg(sendObj,true,false);//直接把数据填入内容栏
-            if(sendObj.content.msgType != Data.msgType.img) {
-                Chat.socket.emit('sendMsg', sendObj);//发送数据
+            //直接把数据填入内容栏
+            if(sendObj.uiType !== 'callMe'){
+                Chat.WhTalk.receiveWhMsg(sendObj,true,false);
             }
+            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
+                console.log("send WHmessage ok!");
+            });
             chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, Tool.courseTick.course));//统计发言次数
-        }
+        },
+
+        whDialogMe : '<div class="dialog  dialog-me tag-me" temp="privateChat_dialogMe" id="{0}">'
+            + '<div class="headimg">'
+            + '<a href="javascript:void(0);"><img src="{1}"></a>'
+            + '</div>'
+            + '<div class="infobar">{2}'
+            + '<a href="javascript:void(0);" class="uname">{4}</a>'
+            + '<span class="ctime">{3}</span>'
+            + '</div>'
+            + '<div class="dcont" talk="q">{5}</div>'
+            + '</div>',
+
+        whDialogOther : '<div class="dialog dialog-analyst" temp="privateChat_dialog" id="{0}">'
+            + '<div class="headimg">'
+            + '<a href="javascript:void(0);"><img src="{1}"></a>'
+            + '</div>'
+            + '<div class="infobar">{2}<a href="javascript:void(0);" class="uname">{4}</a><span class="ctime">{3}</span></div>'
+            + '<div class="dcont">'
+            + '<span>{5}</span>'
+            + '</div>'
+            + '</div>'
+
     },
 
     /**
@@ -1349,12 +1368,12 @@ var Chat = {
      */
     face:{
         initFace : false,
-
+        initArray : [],//1:公聊，2.私聊
         /**
          * 初始化
          */
-        init : function($panel, $assign, path, disabled){
-            if(this.initFace){
+        init : function($panel, $assign, path, disabled,type){
+            if($.inArray(type,this.initArray) > 0){
                 return;
             }
             this.build($panel, path);
@@ -1378,6 +1397,7 @@ var Chat = {
                 }
             });
             this.initFace = true;
+            this.initArray.push(type);
         },
         /**
          * 构建表情
@@ -1518,5 +1538,5 @@ var Chat = {
                 $tip.data("cnt", cnt).html(cnt).css("display", "inline-block");
             }
         }
-    }
+    },
 };

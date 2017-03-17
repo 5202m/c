@@ -4,9 +4,9 @@
  */
 var NoviceGuide = new Container({
     panel : $("#page_noviceGuide"),
-    url : "/pm/theme2/template/noviceGuide/novice-guide.html",
-    paginationObj : '',
-    temp : '',
+    url : "",
+    title : '',
+    isPaginationHide : false,
     onLoad : function(){
         NoviceGuide.setEvent();
     },
@@ -28,15 +28,15 @@ NoviceGuide.setEvent = function(){
  * 初始化
  */
 NoviceGuide.initData = function () {
-    $('#noviceGuide').empty().html(NoviceGuide.formatHtml(NoviceGuide.temp));
     var mySwiper = new Swiper('.swiper-container', {
-        pagination: NoviceGuide.paginationObj,//'.swiper-pagination',
+        pagination: '.swiper-pagination',
         paginationClickable: true,
         parallax: true,
-        uniqueNavElements :false,
+        //loop: true,
         speed: 600
     });
-    if($('.swiper-container .swiper-slide').length<=1){
+    if($('.swiper-container .swiper-slide').length<=1 || NoviceGuide.isPaginationHide){
         $('.swiper-pagination').hide();
     }
+    $("#noviceGuideTitle").text(NoviceGuide.title);
 }
