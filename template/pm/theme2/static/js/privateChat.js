@@ -7,11 +7,16 @@ var PrivateChat = new Container({
     url : "/pm/theme2/template/privateChat.html",
     privateChatToolView : "none",
     currentTalker : '',
+    isChangeRoom : false,
     onLoad : function(){
         PrivateChat.setEvent();
+        PrivateChat.setWhTab();
     },
     onShow : function () {
-        PrivateChat.setWhTab();
+        if(PrivateChat.isChangeRoom){
+            PrivateChat.setWhTab();
+            PrivateChat.isChangeRoom = false;
+        }
     }
 });
 
@@ -157,7 +162,7 @@ PrivateChat.setWhTab = function () {
             obj.userNo
         ));
     }
-    $('.item-list').empty().html(tabHtml.join(''));
+    $('#privateChatTabs').empty().html(tabHtml.join(''));
     $('#privateChatMsgDiv').empty().html(msgHtml.join(''));
     //切换私聊tab
     $('.item-list a').bind('click',function () {

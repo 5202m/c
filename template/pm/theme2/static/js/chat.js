@@ -928,7 +928,6 @@ var Chat = {
         CSMap : {},       //老师助理列表
         currCS : null,    //当前私聊老师助理
         analyst : null,   //私聊老师对象
-        msgCnt : 0,       //未读消息数
         pushObj : null,   //私聊推送信息
         askMsgObj : null,
         viewSelect : false, //老师助理下拉是否选中
@@ -939,7 +938,6 @@ var Chat = {
          * 初始化私聊
          */
         initWH : function(){
-            this.refreshTips();
         },
 
         /**
@@ -1120,7 +1118,6 @@ var Chat = {
                             csTmp.avatar = Util.isNotBlank(cs.avatar)?cs.avatar:'/pm/theme2/img/cm.png';
                             csTmp.load = false;
                         }
-                        Chat.WhTalk.initWH();
                     }
                 });
             }catch (e){
@@ -1140,17 +1137,6 @@ var Chat = {
                 this.CSMap[csId] = csTmp;
             }
             csTmp.online = isOnline;
-        },
-
-        /**
-         * 显示消息数量
-         */
-        refreshTips : function(){
-            if(Chat.WhTalk.msgCnt > 0){
-                $(".wh_tips").text(Chat.WhTalk.msgCnt).show();
-            }else{
-                $(".wh_tips").hide();
-            }
         },
 
         /**
@@ -1197,6 +1183,26 @@ var Chat = {
             }
             //清空输入框
             $("#contentText").html("").trigger("input");
+            this.setWhUnReadNum(data,isMeSend);
+        },
+
+        /**
+         * 设置私聊未读消息数
+         */
+        setWhUnReadNum : function (data,isMeSend) {
+            if(isMeSend){
+                return;
+            }
+            var userId = data.fromUser.userId;
+            if(userId !== $('#privateChatTabs').children('.selected').attr('uid')){
+                $('#privateChatTabs').children().each(function () {
+                    if($(this).attr('uid') === userId){
+                        var num = $(this).find('.i-tips-txt').text() || 0;
+                        $(this).find('.i-tips-txt').text(parseInt(num)+1);
+                        return;
+                    }
+                })
+            }
         },
 
         /**

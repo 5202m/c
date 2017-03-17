@@ -38,6 +38,7 @@ Room.initPage = function(){
             Player.startPlay();
             Chat.init();
             Room.showCourse();
+            PrivateChat.isChangeRoom = true;
         }
     });
 };
