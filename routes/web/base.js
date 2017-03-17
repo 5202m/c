@@ -32,7 +32,7 @@ var zxFinanceService = require('../../service/zxFinanceService.js');
  * @param baseUrl
  */
 function getGroupType(req,isBase){
-    return isBase?req.baseUrl:req.baseUrl.replace(/\//g,"");
+    return "studio";
 }
 
 /**

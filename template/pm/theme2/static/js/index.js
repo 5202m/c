@@ -73,7 +73,7 @@ var Index = {
 Index.getArticleList = function(params,callback){
     try{
         params = params || {};
-        $.getJSON('/studio/getArticleList',{
+        $.getJSON('/getArticleList',{
             code:params.code || "",
             platform:params.platform || "",
             pageNo:params.pageNo || 1,
@@ -92,6 +92,24 @@ Index.getArticleList = function(params,callback){
         });
     }catch (e){
         console.error("getArticleList->"+e);
+        callback(null);
+    }
+};
+
+
+/**
+ * 文档信息
+ * @param id
+ * @param callback
+ */
+Index.getArticleInfo = function(id,callback){
+    try{
+        $.getJSON('/getArticleInfo',{id:id},function(data){
+            //console.log("getArticleList->data:"+JSON.stringify(data));
+            callback(data);
+        });
+    }catch (e){
+        console.error("getArticleInfo->"+e);
         callback(null);
     }
 };

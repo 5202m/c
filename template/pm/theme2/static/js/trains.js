@@ -21,10 +21,10 @@ var Trains = new Container({
  */
 Trains.setTrainList = function(){
     var trainsHtml = [], trainsEndHtml = [];
-    $.getJSON('/studio/getTrainRoomList', {groupType:Data.userInfo.groupType}, function(result){
+    $.getJSON('/getTrainRoomList', {groupType:Data.userInfo.groupType}, function(result){
         if(result!=null){
             $.each(result, function(key, row){
-                var openDate = Util.parseJSON(row.openDate);
+                var openDate = row.openDate;
                 var feature = Trains.getTrainFeature(row, false);
                 var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
                 if(feature.isEnd){
@@ -54,19 +54,19 @@ Trains.setTrainList = function(){
  * @param groupId
  */
 Trains.changeRoomOrSignup = function(groupId){
-    Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result1){
+    Util.postJson("/checkGroupAuth",{groupId:groupId},function(result1){
         if(!result1 || !result1.errcode){
             Room.toRefreshView(groupId);
         }else{
             var msg = result1.errmsg + "已为你自动跳转到默认房间。";
             var trainCfg = Trains.getTrainConfig(result1.data && result1.data.trainConfig);
             if(result1.data && result1.data.roomType == "train" && !trainCfg && result1.errcode == "4007"){
-                Util.postJson('/studio/addClientTrain',{
+                Util.postJson('/addClientTrain',{
                     groupId : groupId,
                     noApprove : 1
                 },function(result2){
                     if(!result2 || result2.errcode == "4016"){
-                        Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result3){
+                        Util.postJson("/checkGroupAuth",{groupId:groupId},function(result3){
                             if(!result3 || !result3.errcode){
                                 Room.toRefreshView(groupId);
                             }else{
@@ -93,7 +93,7 @@ Trains.changeRoomOrSignup = function(groupId){
  * @param groupName
  */
 Trains.changeRoom = function(groupId){
-    Util.postJson("/studio/checkGroupAuth",{groupId:groupId},function(result){
+    Util.postJson("/checkGroupAuth",{groupId:groupId},function(result){
         if(!result || !result.errcode){
             Room.toRefreshView(groupId);
             return;
@@ -137,7 +137,7 @@ Trains.trainSignUp = function(groupId, groupName, noApprove){
     if(!Data.userInfo.isLogin) {
         Login.load();
     }else{
-        Util.postJson('/studio/addClientTrain',{groupId : groupId,noApprove : noApprove ? 1 : 0},function(data){
+        Util.postJson('/addClientTrain',{groupId : groupId,noApprove : noApprove ? 1 : 0},function(data){
             if(!data || data.errcode == "4016"){
                 Trains.changeRoom(groupId, groupName);
             }else{
@@ -219,7 +219,7 @@ Trains.trainDetail = function(trainCfg, analystId, groupId, groupName){
         /*$('.train_detail .pop_tit label').attr("roomid", groupId).text(groupName);
         $("#panel_popupBox_train").attr("class", cfg.cls);
         LazyLoad.css(["/fx/theme1/css/train.css"]);
-        $("#train_info_id").empty().load("/studio/getTrDetail?uid="+analystId,function(){
+        $("#train_info_id").empty().load("/getTrDetail?uid="+analystId,function(){
             $("#train_info_id > .scrollbox").mCustomScrollbar({theme:"light-thick",scrollbarPosition:"outside",scrollButtons:false});
             common.openPopup('.blackbg,.train_detail');
         });*/
@@ -240,11 +240,11 @@ Trains.trainEntryByPoints = function(roomInfo){
                 var point = roomInfo.point;
                 var params = {groupType:Data.userInfo.groupType,item:"prerogative_room",tag:'user_'+Data.userInfo.userId,val:-roomInfo.point,groupId:roomInfo._id};
                 if(point != 0){
-                    Util.postJson('/studio/addPointsInfo',{params:JSON.stringify(params)}, function(result) {
+                    Util.postJson('/addPointsInfo',{params:JSON.stringify(params)}, function(result) {
                         if (!result.isOK) {
                             Pop.msg(result.msg);
                         }else{
-                            Util.postJson('/studio/updateSession',{params:JSON.stringify(params)}, function(result) {
+                            Util.postJson('/updateSession',{params:JSON.stringify(params)}, function(result) {
                                 if(result.isOK){
                                     Room.toRefreshView(roomInfo._id);
                                 }
@@ -252,7 +252,7 @@ Trains.trainEntryByPoints = function(roomInfo){
                         }
                     });
                 }else{
-                    Util.postJson('/studio/updateSession',{params:JSON.stringify(params)}, function(result) {
+                    Util.postJson('/updateSession',{params:JSON.stringify(params)}, function(result) {
                         if(result.isOK){
                             Room.toRefreshView(roomInfo._id);
                         }

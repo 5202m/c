@@ -90,11 +90,11 @@ let chatPointsService = {
         liveRoomAPIService.post(path, params).then(data => {
             defer.resolve(data);
             if (callback) {
-                callback(data);
+                callback(null, data);
             }
         }, err => {
             if (callback) {
-                callback(err);
+                callback(err, null);
             }
             defer.resolve(err);
         });

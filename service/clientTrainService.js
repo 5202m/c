@@ -137,7 +137,8 @@ let clientTrainService = {
             mobilePhone: userInfo.mobilePhone,
             groupType: userInfo.groupType,
             avatar: userInfo.avatar,
-            clientip: clientip
+            clientip: clientip,
+            clientGroup: userInfo.clientGroup
         };
         liveRoomAPIService.post(path, params).then((result) => {
             if (callback) {

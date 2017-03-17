@@ -113,7 +113,7 @@ Login.setEvent = function(){
      * 提取验证码
      */
     $('#verMalCodeId').bind('click', function () {
-        $("#verMalCodeId img").attr("src",'/studio/getVerifyCode?code=acLogin&t='+new Date().getTime());
+        $("#verMalCodeId img").attr("src",'/getVerifyCode?code=acLogin&t='+new Date().getTime());
     });
     $('#verMalCodeId').click();//获取图片验证码
 };
@@ -196,7 +196,7 @@ Login.getMobileVerifyCode = function($this, vcKey){
     var mobile=config.$input.val();
     var useType=config.useType;
     try{
-        $.getJSON('/studio/getMobileVerifyCode?t=' + new Date().getTime(),{mobilePhone:mobile, useType:useType},function(data){
+        $.getJSON('/getMobileVerifyCode?t=' + new Date().getTime(),{mobilePhone:mobile, useType:useType},function(data){
             if(!data || data.result != 0){
                 if(data.errcode == "1005"){
                     //studioMbPop.showMessage(data.errmsg);
@@ -238,7 +238,7 @@ Login.getMobileVerifyCode = function($this, vcKey){
     }
     function handler(data){
         el.addClass("pressed").html("发送中...");
-        $.getJSON('/studio/getMobileVerifyCode?group=studio&t=' + new Date().getTime(),data,function (result) {
+        $.getJSON('/getMobileVerifyCode?group=studio&t=' + new Date().getTime(),data,function (result) {
             if (!result || result.result != 0) {
                 if (result.errcode == "1019") {
                     box.getMobileVerifyCode(data,el,true,fn);
@@ -254,7 +254,7 @@ Login.getMobileVerifyCode = function($this, vcKey){
  */
 Login.doLogin = function(){
     Data.getRoom(function(roomInfo){
-        var url = '/studio/login';
+        var url = '/login';
         var params = {cookieId:chatAnalyze.getUTMCookie(),visitorId:(Data.userInfo.visitorId||''),clientStoreId:(Data.userInfo.clientStoreId||'')};
         params.roomId = roomInfo?roomInfo.id:'';
         params.roomName = roomInfo?roomInfo.name:'';
@@ -289,7 +289,7 @@ Login.doLogin = function(){
                 }
             }
         }else if($('#accountLogin').hasClass('current')){
-            url = '/studio/pmLogin';
+            url = '/pmLogin';
             params.accountNo = $('#accountNo').val();
             params.pwd = $('#npasswordRaw').val();
             params.verMalCode = $('#verMalCode').val();
@@ -343,7 +343,7 @@ Login.doLogin = function(){
  * params :{{[groupId]:String, [roomType]:String}}
  */
 Login.changeRoom = function(params){
-    Util.postJson("/studio/checkGroupAuth",params,function(result){
+    Util.postJson("/checkGroupAuth",params,function(result){
         if(!result.isOK){
             if(result.error && result.error.errcode === "1000"){
                 Login.changeRoomMsg({msg: "您长时间未操作，请刷新页面后重试，"});
