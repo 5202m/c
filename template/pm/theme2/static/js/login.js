@@ -176,7 +176,7 @@ Login.setVerifyCodeTime = function(key){
         }
         if(config.time > 1){
             config.time--;
-            config.$btn.text("重新获取(" + (config.time-1) + ")");
+            config.$btn.val("重新获取(" + (config.time-1) + ")");
         }else{
             Login.resetVerifyCode(key);
         }

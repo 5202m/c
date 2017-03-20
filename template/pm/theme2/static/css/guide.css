@@ -116,7 +116,7 @@ a:hover {
 .i-dot {
   width: 11px;
   height: 11px;
-  background-position: 0 -24px;
+  background-image: url(../img/slice/i-dot.png);
   background-repeat: no-repeat;
   display: inline-block;
   *display: inline;
@@ -125,7 +125,7 @@ a:hover {
 .i-dollar {
   width: 10px;
   height: 14px;
-  background-position: 0 -41px;
+  background-image: url(../img/slice/i-dollar.png);
   background-repeat: no-repeat;
   display: inline-block;
   *display: inline;
@@ -134,7 +134,7 @@ a:hover {
 .i-arrow-t {
   width: 12px;
   height: 6px;
-  background-position: 0 0;
+  background-image: url(../img/slice/i-arrow-t.png);
   background-repeat: no-repeat;
   display: inline-block;
   *display: inline;
@@ -143,7 +143,7 @@ a:hover {
 .i-arrow-b {
   width: 12px;
   height: 6px;
-  background-position: 0 -12px;
+  background-image: url(../img/slice/i-arrow-b.png);
   background-repeat: no-repeat;
   display: inline-block;
   *display: inline;
@@ -152,7 +152,7 @@ a:hover {
 .i-light {
   width: 13px;
   height: 17px;
-  background-position: 0 -61px;
+  background-image: url(../img/slice/i-light.png);
   background-repeat: no-repeat;
   display: inline-block;
   *display: inline;
@@ -889,7 +889,7 @@ a:hover {
 .imgcon,
 .imgpiccon,
 .txtcon,
-.btn-group .btn,
+.sroll-box .swiper-slide .btn-group .btn,
 .titleeg,
 .numcon,
 .ollisttxt {
@@ -1783,16 +1783,3 @@ a:hover {
   -o-transition-delay: 1.9s;
   transition-delay: 1.9s;
 }
-
-
-/* ../img/guide.png */
-.i-dot,
-.i-dollar,
-.i-arrow-t,
-.i-arrow-b,
-.i-light{
-background-image: url(../img/guide.png);
-background-image: -webkit-image-set(url(../img/guide.png) 1x, url(../img/guide@2x.png) 2x); background-image: -moz-image-set(url(../img/guide.png) 1x, url(../img/guide@2x.png) 2x); background-image: -ms-image-set(url(../img/guide.png) 1x, url(../img/guide@2x.png) 2x); background-image: image-set(url(../img/guide.png) 1x, url(../img/guide@2x.png) 2x);
-}
-
-.css_stamp{ content:"";}

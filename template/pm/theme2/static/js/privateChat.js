@@ -181,6 +181,8 @@ PrivateChat.setWhTab = function () {
     });
     if(Chat.WhTalk.currCS.userNo){
         Chat.WhTalk.getMsgHis(Chat.WhTalk.currCS.userNo,'cs');
+    }
+    if(Chat.WhTalk.analyst && Chat.WhTalk.analyst.userNo){
         Chat.WhTalk.getMsgHis(Chat.WhTalk.analyst.userNo,'analyst');
     }
 }
