@@ -216,7 +216,7 @@
 		</div>
 		<div class="chat-block clearfix" id="chat_msg">
 			<div class="dialog{0}" temp="chat_dialog" id="{1}">
-				<div class="headimg" uid="{2}">
+				<div class="headimg" uid="{2}" utype="{8}">
 					<a href="javascript:void(0);"><img src="{3}"></a>
 				</div>
 				<div class="infobar">
@@ -252,6 +252,10 @@
 					<span>回复：</span>
 					<span talk="a">{2}</span>
 				</div>
+			</div>
+			<div class="dcont" temp="chat_dialogTxt3" talk="q">
+				<span class="txt_dia" uid="{1}" utype="-1">@<label>{2}</label></span>
+				{0}
 			</div>
 			<a href="javascript:void(0)" temp="chat_dialogImg" onclick="Chat.showImgInWindow(this)" url="{0}">
 				<img src="{1}" alt="图片" />

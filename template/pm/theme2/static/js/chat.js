@@ -173,6 +173,10 @@ var Chat = {
          */
         $("#chat_whisper").bind("click", function(){
             //打开私聊对话页面
+/*            if(!Data.userInfo.isLogin){
+                Login.load();
+                return false;
+            }*/
             PrivateChat.load();
         });
 
@@ -303,6 +307,45 @@ var Chat = {
             //studioChatMb.view.boardCtrl(1);
             $(this).val("");
         });
+
+
+
+    },
+
+    setContentEvent : function () {
+
+        $('#chat_msg .headimg').bind('click',function(){
+            if($(this).parent('.tag-me').length == 1){
+                return;
+            }
+            Chat.setDialog($(this).attr('uid'),$(this).parent().find('.uname').text(),
+                        1,$(this).attr('utype'),$(this).find('img').attr('src'));
+        });
+
+        $('#chat_msg .infobar').bind('click',function(){
+            $(this).prev().trigger("click");
+        });
+
+    },
+
+    /**
+     * 设置对话
+     * @param userId
+     * @param nickname
+     * @param talkStyle 聊天方式（0对话，1私聊）
+     * @param userType 用户类别(0客户；1管理员；2分析师；3客服）
+     * @param [avatar]
+     */
+    setDialog:function(userId,nickname,talkStyle,userType,avatar){
+        Data.getRoom(function(room){
+            if(!room.visitorSpeak && "visitor"==room.clientGroup){
+                return;
+            }
+        });
+
+        $("#chat_cont .txt_dia").remove();
+        $("#chat_cont").html($("#chat_cont").html().replace(/^((&nbsp;)+)/g,''));
+        $("#chat_cont").prepend('&nbsp;<span class="txt_dia" contenteditable="false" uid="'+userId+'" utype="'+userType+'" avatar="'+avatar+'">@<label>'+nickname+'</label></span>&nbsp;').focusEnd();
     },
 
     /**
@@ -633,6 +676,7 @@ var Chat = {
         if(!isLoadData){
             Chat.showChatMsgNumTip(false);
         }
+        Chat.setContentEvent();
     },
 
     /**
@@ -759,6 +803,8 @@ var Chat = {
                 fromUser.toUser.question || "",
                 result
             );
+        }else if(fromUser.toUser && fromUser.toUser.userId){
+            result = Room.formatHtml("chat_dialogTxt3", result,fromUser.toUser.userId,fromUser.toUser.nickname);
         }else{
             result = Room.formatHtml("chat_dialogTxt1", result);
         }
@@ -782,7 +828,8 @@ var Chat = {
                 userTag.level,
                 userTag.appellation + fromUser.nickname,
                 Chat.formatPublishTime(fromUser.publishTime),
-                result
+                result,
+                fromUser.userType
             );
         }
         return result;
@@ -1002,13 +1049,13 @@ var Chat = {
             if(data.content.value === PrivateChat.callMe && data.userId === Data.userInfo.userId){
                 return '';
             }
-            return this.formatMsgHtml(data,false);
+            return this.formatWhMsgHtml(data,false);
         },
 
         /**
          * 字符串格式化私聊HTml
          */
-        formatMsgHtml : function (data,isMeSend) {
+        formatWhMsgHtml : function (data,isMeSend) {
 
             var fromUser=this.getFromUser(data),result = '',content = data.content || {};
             if(isMeSend){//发送，并检查状态
@@ -1027,6 +1074,17 @@ var Chat = {
             }else{
                 result = Chat.filterUrl(content.value || "");
             }
+
+            if(fromUser.toUser && fromUser.toUser.question){ //问答模式
+                result = Room.formatHtml("chat_dialogTxt2",
+                    fromUser.toUser.nickname || "",
+                    fromUser.toUser.question || "",
+                    result
+                );
+            }else{
+                result = Room.formatHtml("chat_dialogTxt1", result);
+            }
+
             //temp字符串应用
             if(isMeSend || fromUser.userId == Data.userInfo.userId){
                 result = Util.format(this.whDialogMe,
@@ -1143,16 +1201,15 @@ var Chat = {
          * 设置聊天列表滚动条
          */
         setWHTalkListScroll:function(domId){
-            if(!this.whScrolling){
-                var panel = $("#privateChat_msgalan_cs2");
-                if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
-                    this.whScrolling = true;
-                    window.setTimeout(function(){
-                        $("#privateChat_msgalan_cs2").scrollTop($("#privateChat_msgalan_cs2")[0].scrollHeight);
-                        this.whScrolling = false;
-                    }, 300);
-
-                }
+            var panel = $("#"+domId);
+            if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
+                this.whScrolling = true;
+                window.setTimeout(function(){
+                    $("#"+domId).height($('#page_privateChat').height()-$('#page_privateChat .head-top').height()-$('#page_privateChat .chat-con .fixed-con .chat-op').height());
+                    $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
+                }, 300);
+            }else{
+                $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
             }
         },
 
@@ -1172,14 +1229,16 @@ var Chat = {
          */
         receiveWhMsg : function(data,isMeSend,isLoadData){
             var fromUser = this.getFromUser(data);
-            if(!data.content.value){//自己发送
+            if(!data.content.value && data.content.msgType==Data.msgType.text){//自己发送
                 return;
             }
-            var result = this.formatMsgHtml(data,isMeSend);
+            var result = this.formatWhMsgHtml(data,isMeSend);
             if(isMeSend || fromUser.userId == Data.userInfo.userId){
                 $("#"+PrivateChat.currentTalker).append(result);
+                this.setWHTalkListScroll(PrivateChat.currentTalker);
             }else{
                 $('#privateChat_msg'+fromUser.userId).append(result);
+                this.setWHTalkListScroll('privateChat_msg'+fromUser.userId);
             }
             //清空输入框
             $("#contentText").html("").trigger("input");
@@ -1291,7 +1350,7 @@ var Chat = {
             chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, Tool.courseTick.course));//统计发言次数
         },
 
-        whDialogMe : '<div class="dialog  dialog-me tag-me" temp="privateChat_dialogMe" id="{0}">'
+        whDialogMe : '<div class="dialog  dialog-me tag-me"  id="{0}">'
             + '<div class="headimg">'
             + '<a href="javascript:void(0);"><img src="{1}"></a>'
             + '</div>'
@@ -1302,7 +1361,7 @@ var Chat = {
             + '<div class="dcont" talk="q">{5}</div>'
             + '</div>',
 
-        whDialogOther : '<div class="dialog dialog-analyst" temp="privateChat_dialog" id="{0}">'
+        whDialogOther : '<div class="dialog dialog-analyst"  id="{0}">'
             + '<div class="headimg">'
             + '<a href="javascript:void(0);"><img src="{1}"></a>'
             + '</div>'
@@ -1442,7 +1501,7 @@ var Chat = {
         Util.copyObject(formUser,Data.userInfo,true);
         formUser.toUser=toUser;
         var sendObj={uiId:uiId,fromUser:formUser,content:{msgType:Data.msgType.img,value:'',needMax:0,maxValue:''}};
-        if(Chat.WhTalk.tabCheck) {
+        if(toUser && toUser.talkStyle === 1) {
             Chat.WhTalk.sendWhMsg(sendObj);
         }else{
             this.receiveMsg(sendObj,true,false);

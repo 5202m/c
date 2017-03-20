@@ -100,6 +100,10 @@ Subscribe.setEvent = function(){
      * 订阅
      */
     $('#subscribeAnalyst').on('click', '.item-con .item-main .social-op a.btnSubscribe', function(){
+        if(!Data.userInfo.isLogin){
+            Login.load();
+            return false;
+        }
         var $this = $(this), id = '', types = $this.attr('type').split(',');
         $this.addClass('clicked');
         var typeLen = types.length;

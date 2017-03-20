@@ -135,6 +135,66 @@ PrivateChat.setEvent = function(){
         Chat.WhTalk.receiveWhMsg(sendWhObj,false,false)
         $('.select-callmethod .cancel-btn').click();
     });
+
+    /**
+     * 发送图片--选择图片
+     */
+    $("#privateChat_pic").click(function () {
+        Data.getRoom(function(room) {
+            if (!FileReader) {
+                alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
+                return false;
+            }
+            if (!room.allowVisitor && Data.userInfo.clientGroup == 'visitor') {
+                Login.load();
+                return false;
+            }
+            if (Data.userInfo.isSetName === false) {
+                return false;
+            }
+        });
+    });
+
+    /**
+     * 发送图片
+     */
+    $("#privateChat_pic .sfile-input").bind("change", function () {
+        var _this = this;
+        var img = _this.files[0];
+        // 判断是否图片
+        if (!img) {
+            return false;
+        }
+        // 判断图片格式
+        if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
+            alert('目前暂支持jpg,gif,png格式的图片！');
+            return false;
+        }
+        var fileSize = img.size;
+        if (fileSize >= 1024 * 1024) {
+            alert('发送的图片大小不要超过1MB.');
+            return false;
+        }
+        //加载文件转成URL所需的文件流
+        var reader = new FileReader();
+        reader.readAsDataURL(img);
+
+        reader.onload = function (e) {
+            var utype = $('#privateChatTabs .selected').attr('utype');
+            var toUser = {
+                userId : $('#privateChatTabs .selected').attr('uid'),
+                nickname : $('#privateChatTabs .selected').find('.u-name').text(),
+                talkStyle : 1,  //0 公聊  1：私聊
+                userType : utype === 'cs' ? 3 : 2, // 1:系统管理员  2：分析师  3：客服
+                avatar : $('#privateChatTabs .selected').find('img').attr('src')
+            }
+            Chat.setUploadImg(e.target.result, toUser);//处理并发送图片
+        };
+        reader.onprogress = function (e) {};
+        reader.onloadend = function (e) {};
+        $(this).val("");
+    });
+
 };
 
 /**
@@ -179,10 +239,10 @@ PrivateChat.setWhTab = function () {
         $('#'+PrivateChat.currentTalker).show();
         $(this).find('.i-tips-txt').text('');
     });
-    if(Chat.WhTalk.currCS.userNo){
+    if(Chat.WhTalk.currCS && Chat.WhTalk.currCS.userNo && Data.userInfo.isLogin){
         Chat.WhTalk.getMsgHis(Chat.WhTalk.currCS.userNo,'cs');
     }
-    if(Chat.WhTalk.analyst && Chat.WhTalk.analyst.userNo){
+    if(Chat.WhTalk.analyst && Chat.WhTalk.analyst.userNo && Data.userInfo.isLogin){
         Chat.WhTalk.getMsgHis(Chat.WhTalk.analyst.userNo,'analyst');
     }
 }
