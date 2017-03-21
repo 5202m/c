@@ -121,7 +121,7 @@ router.post('/pmLogin',function(req, res){
                         req.session.studioUserInfo.visitorId = visitorId;
                         req.session.studioUserInfo.roomName = roomName;
                         var snUser = req.session.studioUserInfo;
-                        var dasData = {mobile:snUser.mobilePhone,cookieId:cookieId,clientGroup:snUser.clientGroup,roomName:roomName,roomId:(snUser.groupId||roomId),platform:'',userAgent:req.headers['user-agent'],sessionId:req.sessionID,clientStoreId:snUser.clientStoreId,groupType:snUser.groupType,userName:(snUser.userName||''),email:(snUser.email||''),ip:common.getClientIp(req),visitorId:visitorId,nickName:(snUser.nickname||''),courseName:courseName,courseId:courseId,teacherId:teacherId,teacherName:teacherName,accountNo:accountNo};
+                        var dasData = {mobile:snUser.mobilePhone,cookieId:cookieId,clientGroup:snUser.clientGroup,roomName:roomName,roomId:(snUser.groupId||roomId),platform:'',userAgent:req.headers['user-agent'],sessionId:req.sessionID,clientStoreId:snUser.clientStoreId,groupType:snUser.groupType,userName:(snUser.userName||''),email:(snUser.email||''),ip:Common.getClientIp(req),visitorId:visitorId,nickName:(snUser.nickname||''),courseName:courseName,courseId:courseId,teacherId:teacherId,teacherName:teacherName,accountNo:accountNo};
                         visitorService.saveVisitorRecord("login", dasData);
                         res.json(saveResult);
                     });
@@ -160,14 +160,30 @@ function saveLoginInfo(res,req,userSession,mobilePhone,accountNo,clientStoreId,c
             firstLogin: true,
             isLogin: true,
             mobilePhone: userInfo.mobilePhone,
-            userId: userInfo.userId,
+            userId: userInfo.userId || result.userId,
             defGroupId: userInfo.defGroupId,
-            clientGroup: userInfo.clientGroup,
-            nickname: userInfo.nickname,
+            clientGroup: userInfo.clientGroup || result.userInfo.clientGroup,
+            nickname: userInfo.nickname || result.userInfo.nickname,
             avatar:userInfo.avatar,
             defTemplate:userInfo.defTemplate
         };
-        result.userInfo = {clientGroup: userInfo.clientGroup};
+        let snUser = req.session.studioUserInfo;
+        result.userInfo = {
+            mobilePhone:snUser.mobilePhone,
+            userId:snUser.userId,
+            nickname:snUser.nickname,
+            groupType:snUser.groupType,
+            clientGroup:snUser.clientGroup,
+            email:"",
+            userName:"",
+            password:"",
+            isLogin:true,
+            clientStoreId:snUser.clientStoreId,
+            firstLogin:true,
+            cookieId:snUser.cookieId,
+            visitorId:snUser.visitorId,
+            roomName:""
+        };
         callback(result);
         if(isNew){
             //新注册

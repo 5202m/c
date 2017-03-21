@@ -628,7 +628,7 @@ router.get('/logout', function(req, res) {
             req.session.logoutToGroup=groupInfo._id;
         }
         var target=getGroupType(req,true);
-        res.redirect(target+"?ko=1");
+        res.redirect("/?ko=1");
     });
 });
 
