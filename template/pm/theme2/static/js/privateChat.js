@@ -239,6 +239,8 @@ PrivateChat.setWhTab = function () {
         $('#'+PrivateChat.currentTalker).show();
         $(this).find('.i-tips-txt').text('');
     });
+    //出发选中tab点击事件--》其他tab对应的div则display：none
+    $('.item-list .selected').trigger('click');
     if(Chat.WhTalk.currCS && Chat.WhTalk.currCS.userNo && Data.userInfo.isLogin){
         Chat.WhTalk.getMsgHis(Chat.WhTalk.currCS.userNo,'cs');
     }

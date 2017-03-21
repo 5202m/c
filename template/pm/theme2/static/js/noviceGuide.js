@@ -33,7 +33,11 @@ NoviceGuide.initData = function () {
         paginationClickable: true,
         parallax: true,
         //loop: true,
-        speed: 600
+        speed: 600,
+        longSwipesRatio: 0.3,
+        touchRatio:1,
+        observer:true,//修改swiper自己或子元素时，自动初始化swiper
+        observeParents:true,//修改swiper的父元素时，自动初始化swipe
     });
     if($('.swiper-container .swiper-slide').length<=1 || NoviceGuide.isPaginationHide){
         $('.swiper-pagination').hide();

@@ -15,6 +15,8 @@ var Room = new Container({
     onShow : function(){
         Room.initPage();
         ClassNote.init();
+        ClassNote.lastTimeStamp = 0;
+        ClassNote.lastScrollTop = 0;
     },
     onHide : function(){
         Player.player.clear($("#roomVideo"));

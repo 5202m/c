@@ -8,7 +8,8 @@ var ClassNote = {
 
     strategyIsNotAuth: -1,//查看交易策略是否授权
     callTradeIsNotAuth: -1,//查看喊单/挂单是否授权
-
+    lastScrollTop : 0,
+    lastTimeStamp : 0,
     /**
      * 初始化
      */
@@ -33,9 +34,26 @@ var ClassNote = {
             }
         });
 
-        $("#room_classnote").on("scroll","#classNote_panel",function() {//定义滚动条位置改变时触发的事件。
-            alert(1);
-        });
+        /**
+         * 滚动到末尾加载数据
+         */
+        $('#page_room').scroll(function (e) {
+            console.log(e.timeStamp );
+            if((e.timeStamp - ClassNote.lastTimeStamp)<150){
+                return;
+            }else {
+                ClassNote.lastTimeStamp = e.timeStamp;
+            }
+            var viewH =$(this).height(),//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(scrollTop/(contentH -viewH)>=0.95 && scrollTop > ClassNote.lastScrollTop){
+                ClassNote.lastScrollTop = scrollTop;
+                ClassNote.load(true);
+            }else{
+                ClassNote.lastTimeStamp = 0;
+            }
+        })
 
     },
 
@@ -64,8 +82,7 @@ var ClassNote = {
         }, function (dataList) {
             if (dataList && dataList.result == 0) {
                 var dataArr = dataList.data || [];
-                ClassNote.appendClassNote(dataArr, false);
-                // if(dataArr.length < dataList.pageSize){} TODO 已加载全部
+                ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
             }
         });
     },
@@ -106,13 +123,13 @@ var ClassNote = {
      * @param dataArr
      * @param isPrepend
      */
-    appendClassNote : function(dataArr, isPrepend){
+    appendClassNote : function(dataArr, isMore){
         var html = [];
         for(var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++){
             html.push(ClassNote.getClassNoteHtml(dataArr[i]));
         }
-        if(isPrepend){
-            $("#classNote_panel").prepend(html.join(""));
+        if(isMore){
+            $("#classNote_panel").append(html.join(""));
         }else{
             $("#classNote_panel").prepend(html.join(""));
         }
@@ -260,7 +277,7 @@ ClassNote.setViewDataHtml = function(dom, data){
             if(Util.isBlank(row.description)){
                 hideDesc = ' style="display:none;"';
             }
-            tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+            tradeStrategyHdDetailHtml.push(Util.format(tradeStrategyHdDetail,row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
         });
         dom.parent().children().children('table').remove();
         dom.parent().children('div.details-item-list.sildeup').after(tradeStrategyHdDetailHtml.join(''));
@@ -274,7 +291,7 @@ ClassNote.setViewDataHtml = function(dom, data){
             if(Util.isBlank(row.description)){
                 hideDesc = ' style="display:none;"';
             }
-            tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+            tradeStrategySupportHtml.push(Util.format(tradeStrategySupport,row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
         });
         var hdBoxDom = dom.parent('div.hdbox').children('div.showpart').children('div.hdbox2');
         hdBoxDom.children('table').remove();
@@ -419,14 +436,3 @@ ClassNote.formatViewDataHtml = function(region){
     }
     return formatHtmlArr.join("");
 }
-
-/**
- * 替换字符串中占位符 扩展方法
- * @returns {String}
- */
-String.prototype.formatStr = function() {
-    if(arguments.length==0) return this;
-    for(var s=this, i=0; i<arguments.length; i++)
-        s=s.replace(new RegExp("\\{"+i+"\\}","g"), (arguments[i] == null || arguments[i] == undefined) ? "" : arguments[i]);
-    return s;
-};
