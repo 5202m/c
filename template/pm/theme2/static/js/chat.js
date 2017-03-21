@@ -209,8 +209,14 @@ var Chat = {
                 return false;
             }
         }).bind("keyup", function(e){
-
-        }).bind("input", function(){
+            if(e.keyCode == 8){
+                var text = $(this).text();
+                var arrayText = text.split(/\s/);//空格
+                if(arrayText.length == 2 && arrayText[1].indexOf("@") > -1){
+                    $(this).text("");
+                }
+            }
+        }).bind("input", function(e){
             var isOk = ($.trim($(this).text()) != $(this).find(".txt_dia").text() || $(this).find("img").size() > 0);
             if(isOk){
                 $("#chat_send").fadeIn();
@@ -345,7 +351,7 @@ var Chat = {
 
         $("#chat_cont .txt_dia").remove();
         $("#chat_cont").html($("#chat_cont").html().replace(/^((&nbsp;)+)/g,''));
-        $("#chat_cont").prepend('&nbsp;<span class="txt_dia" contenteditable="false" uid="'+userId+'" utype="'+userType+'" avatar="'+avatar+'">@<label>'+nickname+'</label></span>&nbsp;').focusEnd();
+        $("#chat_cont").prepend('&nbsp;<span class="txt_dia txt_atname" contenteditable="false" uid="'+userId+'" utype="'+userType+'" avatar="'+avatar+'">@<label>'+nickname+'</label></span>&nbsp;').focusEnd();
     },
 
     /**
@@ -816,7 +822,7 @@ var Chat = {
                 userTag.avatar,
                 userTag.level,
                 Chat.formatPublishTime(fromUser.publishTime),
-                fromUser.nickname,
+                '我',
                 result
             );
         }else{
@@ -882,7 +888,7 @@ var Chat = {
                         break;
 
                     case "active":
-                        var idTmp = 0;
+                        var idTmp = 0,userId = userInfo.userId;
                         if(userId && userId.length > 0){
                             idTmp += (userId.charCodeAt(0) + userId.charCodeAt(userId.length - 1));
                         }

@@ -38,7 +38,6 @@ var ClassNote = {
          * 滚动到末尾加载数据
          */
         $('#page_room').scroll(function (e) {
-            console.log(e.timeStamp );
             if((e.timeStamp - ClassNote.lastTimeStamp)<150){
                 return;
             }else {

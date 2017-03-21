@@ -127,12 +127,12 @@ var Player = {
             audioPanel.hide();
         }else if(type == "video"){
             playerCtrl.show().removeClass('switch-video').find(".top-icons").attr("class", "top-icons i-volume");
-            playerCtrlTxt.text("转声音直播");
+            playerCtrlTxt.text("转声音");
             videoPanel.slideDown();
             audioPanel.slideUp();
         }else if(type == "audio"){
             playerCtrl.show().addClass('switch-video').find(".top-icons").attr("class", "top-icons i-video");
-            playerCtrlTxt.text("转视频直播");
+            playerCtrlTxt.text("转视频");
             audioPanel.slideDown();
             videoPanel.slideUp();
         }
