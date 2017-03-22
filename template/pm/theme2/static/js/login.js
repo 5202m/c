@@ -160,7 +160,7 @@ Login.resetVerifyCode = function(key){
             config.intervalId = null;
         }
         config.time = Login.defaultTime;
-        config.$btn.text("获取验证码");
+        config.$btn.val("获取验证码");
         config.$input.trigger("input");
     }
 };
@@ -173,6 +173,7 @@ Login.setVerifyCodeTime = function(key){
         var config = Login.verifyCodeMap[key];
         if(!config.intervalId){
             config.intervalId=window.setInterval('Login.setVerifyCodeTime("'+key+'")', 1000);
+            config.time = 120;
         }
         if(config.time > 1){
             config.time--;
@@ -270,14 +271,14 @@ Login.doLogin = function(){
                 $('.error-bar').removeClass('dn').find('.tips-txt').text('手机号码不能为空！');
                 return false;
             }else if(!Util.isMobilePhone(params.mobilePhone)){
-                $('.error-bar').removeClass('dn').find('.tips-txt').text('手机号码不能为空！');
+                $('.error-bar').removeClass('dn').find('.tips-txt').text('请输入合法手机号码！');
                 return false;
             }
             if($('#usePwd').hasClass('active')){
                 params.loginType = 'pwd';
                 params.password = $('#passwordRaw').val();
                 if(Util.isBlank(params.password)){
-                    $('.error-bar').removeClass('dn').find('.tips-txt').text('手机号码不能为空！');
+                    $('.error-bar').removeClass('dn').find('.tips-txt').text('密码不能为空！');
                     return false;
                 }
             }else if($('#useVcb').hasClass('active')) {
