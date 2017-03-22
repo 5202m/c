@@ -148,7 +148,7 @@ Room.showLecturer = function(lecturerId){
     }
     Data.getAnalyst(lecturerId, function(lecturer){
         if(lecturer){
-            //设置私聊老师数据
+/*            //设置私聊老师数据    （目前屏蔽私聊老师功能）
             var obj = {
                 avatar:lecturer.avatar === '' ? '/pm/theme2/img/h-avatar1.png' : lecturer.avatar,
                 position:lecturer.position,
@@ -159,7 +159,7 @@ Room.showLecturer = function(lecturerId){
             PrivateChat.talkers = [];
             PrivateChat.talkers.push(obj);
             Chat.WhTalk.analyst = obj;
-            Chat.WhTalk.setWhCS();
+            Chat.WhTalk.setWhCS();*/
             var tagHtml = [];
             $("#room_teacher,#pride_teacher").attr("userno", lecturer.userNo).show();
             $("#room_teacherAvatar,#pride_teacherAvatar").attr("src", lecturer.avatar || "");
@@ -171,8 +171,8 @@ Room.showLecturer = function(lecturerId){
             $('#roomAnalystTag,#prideAnalystTags').empty().html(tagHtml.join(''));
         }else{
             $("#room_teacher").hide();
-            PrivateChat.talkers = [];
-            Chat.WhTalk.setWhCS();
+/*            PrivateChat.talkers = [];
+            Chat.WhTalk.setWhCS();*/
         }
     });
 };

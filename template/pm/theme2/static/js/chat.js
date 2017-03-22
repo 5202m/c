@@ -1092,7 +1092,7 @@ var Chat = {
             }
 
             //temp字符串应用
-            if(isMeSend || fromUser.userId == Data.userInfo.userId){
+            if(isMeSend || fromUser.userId == Data.userInfo.userId || Data.userInfo.visitorId === fromUser.userId){
                 result = Util.format(this.whDialogMe,
                     fromUser.publishTime,
                     userTag.avatar,
@@ -1182,6 +1182,8 @@ var Chat = {
                             csTmp.avatar = Util.isNotBlank(cs.avatar)?cs.avatar:'/pm/theme2/img/cm.png';
                             csTmp.load = false;
                         }
+                        PrivateChat.talkers = [];
+                        Chat.WhTalk.setWhCS();
                     }
                 });
             }catch (e){
