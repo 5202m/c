@@ -314,24 +314,45 @@ var Chat = {
             $(this).val("");
         });
 
-
-
-    },
-
-    setContentEvent : function () {
-
-        $('#chat_msg .headimg').bind('click',function(){
-            if($(this).parent('.tag-me').length == 1){
+        /**
+         * 公聊框点击@事件
+         */
+        $('#chat_msg').on('click','.headimg',function () {
+            if($(this).parent('.tag-me').length == 1){//排除@自己
                 return;
             }
             Chat.setDialog($(this).attr('uid'),$(this).parent().find('.uname').text(),
-                        1,$(this).attr('utype'),$(this).find('img').attr('src'));
+                1,$(this).attr('utype'),$(this).find('img').attr('src'));
         });
-
-        $('#chat_msg .infobar').bind('click',function(){
+        //同上
+        $('#chat_msg').on('click','.infobar',function(){
             $(this).prev().trigger("click");
         });
 
+    },
+
+    /**
+     * 连接socket
+     */
+    connectSocket : function(){
+        Data.userInfo.socketId = Chat.socket.id;
+        Data.getSyllabusPlan(function(syllabusPlan){
+            Util.postJson(Data.getApiUrl("/message/join"), {
+                courseId:syllabusPlan && syllabusPlan.courseId || "",
+                courseName:syllabusPlan && syllabusPlan.courseName || "",
+                cookieId:chatAnalyze.getUTMCookie(),
+                userName:Data.userInfo.userName,
+                roomName:Data.userInfo.roomName,
+                email:Data.userInfo.email,
+                userInfo:Data.userInfo,
+                lastPublishTime : $("#chat_msg .dialog:last").attr("id"),
+                fromPlatform : Data.options.platform,
+                allowWhisper : Chat.WhTalk.enable,
+                userAgent : navigator.userAgent
+            }, function(){
+                console.log("login socket server success!");
+            })
+        });
     },
 
     /**
@@ -577,69 +598,7 @@ var Chat = {
                 break;
         }
     },
-    /**
-     * 连接socket
-     */
-    connectSocket : function(){
-        Data.userInfo.socketId = Chat.socket.id;
-        Data.getSyllabusPlan(function(syllabusPlan){
-            Util.postJson(Data.getApiUrl("/message/join"), {
-                courseId:syllabusPlan && syllabusPlan.courseId || "",
-                courseName:syllabusPlan && syllabusPlan.courseName || "",
-                cookieId:chatAnalyze.getUTMCookie(),
-                userName:Data.userInfo.userName,
-                roomName:Data.userInfo.roomName,
-                email:Data.userInfo.email,
-                userInfo:Data.userInfo,
-                lastPublishTime : $("#chat_msg .dialog:last").attr("id"),
-                fromPlatform : Data.options.platform,
-                allowWhisper : Chat.WhTalk.enable,
-                userAgent : navigator.userAgent
-            }, function(){
-                console.log("login socket server success!");
-            })
-        });
-    },
 
-    /**
-     * 离开房间提示
-     */
-    leaveRoomTip:function(flag){
-        if(flag=="roomClose"){
-            Pop.msg({
-                msg : "注意：房间已停用，正自动退出房间...",
-                closeable : false,
-                autoClose : 2000,
-                onOK : function(){
-                    Rooms.load();
-                }
-            });
-        }else if(flag=="otherLogin"){
-            Pop.msg({
-                msg : "注意：房间已停用，正自动退出房间...",
-                closeable : false,
-                autoClose : 2000,
-                onOK : function(){
-                    window.location.href="/logout";
-                }
-            });
-        }
-    },
-
-    /**
-     * 推送消息
-     * @param data
-     */
-    pushMsg : function(data){
-        if(data.position==1){//私聊框
-            Data.pushWHTalk = data.infos || [];
-        }else if(data.position==3){ //公聊框
-            Data.pushTalk = data.infos || [];
-            for(var i = 0, len = Data.pushTalk.length; i < len; i++){
-                Data.pushTalk[i].nextTm = Data.pushTalk[i].serverTime + Data.pushTalk[i].onlineMin * 60 * 1000;
-            }
-        }
-    },
 
     /**
      * 加载消息
@@ -682,45 +641,6 @@ var Chat = {
         if(!isLoadData){
             Chat.showChatMsgNumTip(false);
         }
-        Chat.setContentEvent();
-    },
-
-    /**
-     * 格式发布日期
-     */
-    formatPublishTime : function(time){
-        if(!time){
-            return "";
-        }
-        var timeLS = Number(time.replace(/_.+/g,""));
-        timeLS += Data.options.timezoneLs ; //时区转换
-        return Util.formatDate(timeLS, "HH:mm");
-    },
-
-    /**
-     * 设置聊天列表滚动条
-     * @param [force] {boolean}
-     */
-    setTalkScroll : function(force){
-        if(!Chat.scrolling){
-            var panel = $("#chat_msg");
-            if(force || panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
-                Chat.scrolling = true;
-                window.setTimeout(function(){
-                    $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight);
-                    Chat.scrolling = false;
-                }, 300);
-
-            }
-        }
-    },
-
-    /**
-     * 移除加载提示的dom
-     * @param uiId
-     */
-    removeLoadDom:function(uiId){
-        $('#'+uiId+' .img-loading,#'+uiId+' .img-load-gan,#'+uiId+' .shadow-box,#'+uiId+' .shadow-conut').remove();
     },
 
     /**
@@ -841,6 +761,103 @@ var Chat = {
         return result;
     },
 
+
+    /**
+     * 离开房间提示
+     */
+    leaveRoomTip:function(flag){
+        if(flag=="roomClose"){
+            Pop.msg({
+                msg : "注意：房间已停用，正自动退出房间...",
+                closeable : false,
+                autoClose : 2000,
+                onOK : function(){
+                    Rooms.load();
+                }
+            });
+        }else if(flag=="otherLogin"){
+            Pop.msg({
+                msg : "注意：房间已停用，正自动退出房间...",
+                closeable : false,
+                autoClose : 2000,
+                onOK : function(){
+                    window.location.href="/logout";
+                }
+            });
+        }
+    },
+
+    /**
+     * 审核信息
+     * @param data
+     */
+    approveMsg : function(data){
+        var i = 0;
+        if(data.refuseMsg){
+            var publishTimeArr=data.publishTimeArr;
+            for(i in publishTimeArr){
+                $("#"+publishTimeArr[i]+" .dialog em[class=ruleTipStyle]").html("已拒绝");
+            }
+        }else{
+            for (i in data) {
+                Chat.formatUserToContent(data[i]);
+            }
+        }
+    },
+
+    /**
+     * 移除信息
+     * @param ids
+     */
+    removeMsg : function(ids){
+        if(ids){
+            $("#"+ids.replace(/,/g,",#")).remove();
+        }
+    },
+
+    /**
+     * 移除加载提示的dom
+     * @param uiId
+     */
+    removeLoadDom:function(uiId){
+        $('#'+uiId+' .img-loading,#'+uiId+' .img-load-gan,#'+uiId+' .shadow-box,#'+uiId+' .shadow-conut').remove();
+    },
+
+    /**
+     * 推送消息
+     * @param data
+     */
+    pushMsg : function(data){
+        if(data.position==1){//私聊框
+            Data.pushWHTalk = data.infos || [];
+        }else if(data.position==3){ //公聊框
+            Data.pushTalk = data.infos || [];
+            for(var i = 0, len = Data.pushTalk.length; i < len; i++){
+                Data.pushTalk[i].nextTm = Data.pushTalk[i].serverTime + Data.pushTalk[i].onlineMin * 60 * 1000;
+            }
+        }
+    },
+
+    /**
+     * 格式化超链接
+     */
+    filterUrl : function(msg){
+        if(!msg){
+            return "";
+        }
+        var reg = /((?=[^"'])|^)http(s)?:\/\/[^"'\s]+((?=\s)|$)/gi;
+        var matches = msg.match(reg), matchTmp, matchesMap = {};
+        for(var i = 0, lenI = matches ? matches.length : 0; i < lenI; i++){
+            matchTmp = matches[i];
+            if(!matchTmp || matchesMap.hasOwnProperty(matchTmp)){
+                continue;
+            }
+            matchesMap[matchTmp] = true;
+            msg = Util.replaceAll(msg, matchTmp, Room.formatHtml('chat_dialogUrl', matchTmp));
+        }
+        return msg;
+    },
+
     /**
      * 获取用户标签
      * @param userInfo
@@ -874,7 +891,7 @@ var Chat = {
                     result.level = Room.formatHtml("chat_dialogLevel", Data.getUserLevel(userInfo.pointsGlobal));
                     break;
             }
-            if(userInfo.userId == Data.userInfo.userId || (userInfo.toUser && userInfo.toUser.userId == Data.userInfo.userId)){
+            if(userInfo.userId == Data.userInfo.userId){
                 result.cls += " tag-me";
             }
 
@@ -924,50 +941,32 @@ var Chat = {
     },
 
     /**
-     * 格式化超链接
+     * 格式发布日期
      */
-    filterUrl : function(msg){
-        if(!msg){
+    formatPublishTime : function(time){
+        if(!time){
             return "";
         }
-        var reg = /((?=[^"'])|^)http(s)?:\/\/[^"'\s]+((?=\s)|$)/gi;
-        var matches = msg.match(reg), matchTmp, matchesMap = {};
-        for(var i = 0, lenI = matches ? matches.length : 0; i < lenI; i++){
-            matchTmp = matches[i];
-            if(!matchTmp || matchesMap.hasOwnProperty(matchTmp)){
-                continue;
-            }
-            matchesMap[matchTmp] = true;
-            msg = Util.replaceAll(msg, matchTmp, Room.formatHtml('chat_dialogUrl', matchTmp));
-        }
-        return msg;
+        var timeLS = Number(time.replace(/_.+/g,""));
+        timeLS += Data.options.timezoneLs ; //时区转换
+        return Util.formatDate(timeLS, "HH:mm");
     },
 
     /**
-     * 审核信息
-     * @param data
+     * 设置聊天列表滚动条
+     * @param [force] {boolean}
      */
-    approveMsg : function(data){
-        var i = 0;
-        if(data.refuseMsg){
-            var publishTimeArr=data.publishTimeArr;
-            for(i in publishTimeArr){
-                $("#"+publishTimeArr[i]+" .dialog em[class=ruleTipStyle]").html("已拒绝");
-            }
-        }else{
-            for (i in data) {
-                Chat.formatUserToContent(data[i]);
-            }
-        }
-    },
+    setTalkScroll : function(force){
+        if(!Chat.scrolling){
+            var panel = $("#chat_msg");
+            if(force || panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
+                Chat.scrolling = true;
+                window.setTimeout(function(){
+                    $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight);
+                    Chat.scrolling = false;
+                }, 300);
 
-    /**
-     * 移除信息
-     * @param ids
-     */
-    removeMsg : function(ids){
-        if(ids){
-            $("#"+ids.replace(/,/g,",#")).remove();
+            }
         }
     },
 
@@ -994,7 +993,7 @@ var Chat = {
         },
 
         /**
-         * 加载私聊历史信息
+         * 发送请求道api-加载私聊历史信息
          */
         getMsgHis : function(csId,type){
             var csTmp = null;
@@ -1024,7 +1023,7 @@ var Chat = {
         },
 
         /**
-         * 加载消息
+         * 加载私聊消息-渲染页面
          * @param data
          */
         loadWhMsg : function(data){
@@ -1206,34 +1205,36 @@ var Chat = {
         },
 
         /**
-         * 设置聊天列表滚动条
+         * 发送私聊信息
+         * @param sendObj
          */
-        setWHTalkListScroll:function(domId){
-            var panel = $("#"+domId);
-            if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
-                this.whScrolling = true;
-                window.setTimeout(function(){
-                    $("#"+domId).height($('#page_privateChat').height()
-                        -$('#page_privateChat .head-top').height()
-                        -$('#page_privateChat .chat-con .fixed-con .chat-op').height()
-                        -40
-                    );
-                    $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
-                }, 300);
-            }else{
-                $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
+        sendWhMsg : function(sendObj){
+            if(!this.currCS){
+                this.setWhCS();
             }
-        },
-
-        getFromUser : function (data) {
-            if(data.fromUser) return data.fromUser;
-            var fromUser = {userId:data.userId,
-                    publishTime:data.publishTime,
-                    nickname:data.nickname,
-                    userType:data.userType,
-                    toUser:data.toUser,
-                    clientGroup:data.clientGroup};
-            return fromUser;
+            if(this.whObjType === 'cs' && !this.currCS.online){
+                Pop.msg("老师助理不在线，暂不可私聊！");
+                return ;
+            }
+            if(this.whObjType === 'analyst' && $.inArray(2,this.whisperRoles) < 0){
+                Pop.msg("不好意思，当前房间不允许与老师私聊！");
+                $("#contentText").html("").trigger("input");
+                return ;
+            }
+            sendObj.fromUser.toUser = this.setToUser();
+            if(this.askMsgObj){
+                sendObj.fromUser.toUser.question=this.askMsgObj.info;
+                sendObj.fromUser.toUser.questionId=this.askMsgObj.infoId;
+                sendObj.fromUser.toUser.publishTime=this.askMsgObj.publishTime;
+            }
+            //直接把数据填入内容栏
+            if(sendObj.uiType !== 'callMe'){
+                Chat.WhTalk.receiveWhMsg(sendObj,true,false);
+            }
+            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
+                console.log("send WHmessage ok!");
+            });
+            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#room_roomName').val()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
         },
 
         /**
@@ -1330,36 +1331,39 @@ var Chat = {
         },
 
         /**
-         * 发送私聊信息
-         * @param sendObj
+         * 数据转换
+         * @param data
+         * @returns {*}
          */
-        sendWhMsg : function(sendObj){
-            if(!this.currCS){
-                this.setWhCS();
+        getFromUser : function (data) {
+            if(data.fromUser) return data.fromUser;
+            var fromUser = {userId:data.userId,
+                publishTime:data.publishTime,
+                nickname:data.nickname,
+                userType:data.userType,
+                toUser:data.toUser,
+                clientGroup:data.clientGroup};
+            return fromUser;
+        },
+
+        /**
+         * 设置聊天列表滚动条
+         */
+        setWHTalkListScroll:function(domId){
+            var panel = $("#"+domId);
+            if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
+                this.whScrolling = true;
+                window.setTimeout(function(){
+                    $("#"+domId).height($('#page_privateChat').height()
+                        -$('#page_privateChat .head-top').height()
+                        -$('#page_privateChat .chat-con .fixed-con .chat-op').height()
+                        -40
+                    );
+                    $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
+                }, 300);
+            }else{
+                $("#"+domId).scrollTop($("#"+domId)[0].scrollHeight);
             }
-            if(this.whObjType === 'cs' && !this.currCS.online){
-                Pop.msg("老师助理不在线，暂不可私聊！");
-                return ;
-            }
-            if(this.whObjType === 'analyst' && $.inArray(2,this.whisperRoles) < 0){
-                Pop.msg("不好意思，当前房间不允许与老师私聊！");
-                $("#contentText").html("").trigger("input");
-                return ;
-            }
-            sendObj.fromUser.toUser = this.setToUser();
-            if(this.askMsgObj){
-                sendObj.fromUser.toUser.question=this.askMsgObj.info;
-                sendObj.fromUser.toUser.questionId=this.askMsgObj.infoId;
-                sendObj.fromUser.toUser.publishTime=this.askMsgObj.publishTime;
-            }
-            //直接把数据填入内容栏
-            if(sendObj.uiType !== 'callMe'){
-                Chat.WhTalk.receiveWhMsg(sendObj,true,false);
-            }
-            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
-                console.log("send WHmessage ok!");
-            });
-            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#currStudioInfo').attr('rn')}, Data.userInfo, Tool.courseTick.course));//统计发言次数
         },
 
         whDialogMe : '<div class="dialog  dialog-me tag-me"  id="{0}">'

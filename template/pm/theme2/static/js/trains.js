@@ -167,7 +167,7 @@ Trains.getTrainFeature = function(roomInfo, noLP){
         clientSize : "已报名" + Math.abs(roomInfo.clientSize || 0) + "人",  //已报名人数
         isEnd : false    //是否已结束
     };
-    var openDate = Util.parseJSON(roomInfo.openDate);
+    var openDate = roomInfo.openDate;
     var currDate = Util.formatDate(Data.serverTime, "yyyy-MM-dd");
     var analystNo = roomInfo.defaultAnalyst && roomInfo.defaultAnalyst.userNo;
     var trainCfgKey = roomInfo.trainConfig || "";

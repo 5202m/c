@@ -128,6 +128,9 @@ PrivateChat.setEvent = function(){
         var uiId = Chat.getUiId();
         var sendWhObj={uiId:uiId,fromUser:Data.userInfo,content:{msgType:Data.msgType.text,value:PrivateChat.callMe},uiType:'callMe'};
         Chat.WhTalk.sendWhMsg(sendWhObj);
+        if(!Chat.WhTalk.currCS.online){
+            return;
+        }
         sendWhObj={uiId:uiId,fromUser:Chat.WhTalk.currCS,content:{msgType:Data.msgType.text,value:'收到了您的回电请求，我会在第一时间给您回电的。额，如果未能及时回电，请您谅解，我一定在飞奔而来的路上...'}}
         sendWhObj.fromUser.userId = Chat.WhTalk.currCS.userNo;
         sendWhObj.fromUser.publishTime = uiId;
