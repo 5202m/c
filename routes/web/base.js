@@ -510,8 +510,23 @@ router.post('/login',function(req, res){
                             visitorService.saveVisitorRecord("login", dasData);
                         }
                         if(!loginRes.isOK){
-                            res.json(loginRes);
-                            return;
+                            studioService.checkClientGroup(mobilePhone,null,common.getTempPlatformKey(userSession.groupType),function(clientGroup, accountNo){
+                                var userInfo={mobilePhone:mobilePhone, ip:common.getClientIp(req), groupType:userSession.groupType, accountNo: accountNo, thirdId:null};
+                                studioService.studioRegister(userInfo,clientGroup,function(result){
+                                    if(result.isOK){
+                                        req.session.studioUserInfo={cookieId:cookieId,visitorId : visitorId,roomName:roomName,groupType:userSession.groupType,clientStoreId:clientStoreId,firstLogin:true,isLogin:true,mobilePhone:result.mobilePhone,userId:result.userId,groupId:result.groupId,clientGroup:result.clientGroup,nickname:result.nickname};
+                                        result.userInfo = req.session.studioUserInfo;
+                                        delete  result.groupId;
+                                        delete result.userId;
+                                    }
+                                    var dasData = {mobile:mobilePhone,cookieId:cookieId,clientGroup:'register',roomName:snUser.roomName,roomId:snUser.groupId,platform:'',userAgent:req.headers['user-agent'],sessionId:req.sessionID,roomId:snUser.groupId,clientStoreId:clientStoreId,groupType:snUser.groupType,userName:snUser.userName,email:snUser.email,ip:common.getClientIp(req),visitorId:visitorId,nickName:snUser.nickname,courseName:snUser.courseName,accountNo:snUser.accountNo};
+                                    visitorService.saveVisitorRecord("register", dasData);
+                                    res.json(result);
+                                    return ;
+                                });
+                            });
+                            //res.json(loginRes);
+                            //return;
                         }else if(constant.clientGroup.real != loginRes.userInfo.clientGroup){
                             //real 类型客户将拆分成A和N客户
                             loginRes.userInfo.isLogin=true;
@@ -608,7 +623,7 @@ router.post('/login',function(req, res){
 router.get('/logout', function(req, res) {
     var snUser=req.session.studioUserInfo;
     if(!snUser){
-        res.redirect(getGroupType(req,true));
+        res.redirect('/');
         return;
     }
     var options=req.session.studioOptions;

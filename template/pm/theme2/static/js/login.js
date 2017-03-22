@@ -311,6 +311,9 @@ Login.doLogin = function(){
                 $('.error-bar').removeClass('dn').find('.tips-txt').text(result.error.errmsg);
                 return false;
             }else{
+                if(Util.isBlank(result.userInfo.nickname)){
+                    result.userInfo.nickname = '匿名_'+result.userInfo.userId.substring(0,4);
+                }
                 $('#header_ui').text(result.userInfo.nickname);
                 Data.userInfo.clientGroup = result.userInfo.clientGroup;
                 Data.userInfo.clientStoreId = result.userInfo.clientStoreId;
