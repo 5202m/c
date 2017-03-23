@@ -7,6 +7,7 @@ var Teach = new Container({
     url : "/pm/theme2/template/teach.html",
     currentRank : 'primary',
     currentCode : 'teach_video_initial_mb',
+    currentLevel : 1,  // 1:文章视频列表页  2:视频播放页
     onLoad : function(){
         Teach.setEvent();
     },
@@ -20,8 +21,21 @@ var Teach = new Container({
  */
 Teach.setEvent = function(){
     //返回上一级
-    $('#teach_back').bind('click', Container.back);
+    $('#teach_back').bind('click', function () {
+        if(Teach.currentLevel === 2){
+            $('#teachVideo').hide();
+            Player.player.videoData($('#teachVideo'),'currVideoTitle','');
+            Player.player.videoData($('#teachVideo'),'currVideoUrl','');
+            Teach.currentLevel = 1;
+            Teach.initPage();
+            return;
+        }
+        Container.back();
+    });
 
+    /**
+     * 文章点击事件
+     */
     $('.list-item-desced.border-bt').bind('click', function(){
         var num = $(this).parent().attr("t");
         var rank = $(this).parent().parent().parent().attr("id");
@@ -38,6 +52,24 @@ Teach.setEvent = function(){
         }
         NoviceGuide.load();
     });
+
+    /**
+     * 视频点击事件
+     */
+    $('section .listblock.bgfff').on('click','.list-item-desced.border-bt',function () {
+        var utype = $(this).parent().attr("utype");
+        Teach.currentLevel = 2;
+        if(utype === 'video'){
+            $('.listblock.bgfff').each(function () {
+                $(this).hide();
+            });
+            $('#teachVideo').css({ "height": "227.7px","display": "block"});
+            var uurl = $(this).parent().attr("uurl");
+            var title = $(this).children('.list-main').children('a').text();
+            $('#teach_title').text(title);
+            Player.play(uurl, title,$('#teachVideo'));
+        }
+    })
 
 };
 
@@ -108,7 +140,8 @@ Teach.appendVideos = function(dataArr){
             row.mediaImgUrl,
             row.detailList[0].title,
             row.detailList[0].remark,
-            row._id
+            row._id,
+            row.mediaUrl
         ));
 
     });
@@ -116,7 +149,7 @@ Teach.appendVideos = function(dataArr){
     var _select = Teach.currentRank === 'advanced' ?
                     '#' + Teach.currentRank + ' ul li' :
                     '#' + Teach.currentRank + ' ul li:gt(4)';
-    $(_select).html('');
+    $(_select).remove();
     _select = '#' + Teach.currentRank + ' ul';
     $(_select).append(html.join());
 };

@@ -53,8 +53,8 @@ var Player = {
      * @param url
      * @param title
      */
-    play : function(url, title){
-        var $panel = $("#roomVideo");
+    play : function(url, title,dom){
+        var $panel = dom || $("#roomVideo");
         if(this.player.videoData($panel, "currVideoUrl") == url && this.player.videoData($panel, "currVideoTitle") == title){
             return;
         }
