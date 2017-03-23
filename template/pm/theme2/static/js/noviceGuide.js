@@ -21,6 +21,7 @@ var NoviceGuide = new Container({
  */
 NoviceGuide.setEvent = function(){
     //返回上一级
+    Teach.currentLevel = 1;
     $('#noviceGuide_back').bind('click', Container.back);
 };
 

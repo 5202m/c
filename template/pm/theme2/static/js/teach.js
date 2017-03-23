@@ -24,6 +24,7 @@ Teach.setEvent = function(){
     $('#teach_back').bind('click', function () {
         if(Teach.currentLevel === 2){
             $('#teachVideo').hide();
+            $('#teachVideo').html('');
             Player.player.videoData($('#teachVideo'),'currVideoTitle','');
             Player.player.videoData($('#teachVideo'),'currVideoUrl','');
             Teach.currentLevel = 1;
@@ -63,7 +64,7 @@ Teach.setEvent = function(){
             $('.listblock.bgfff').each(function () {
                 $(this).hide();
             });
-            $('#teachVideo').css({ "height": "227.7px","display": "block"});
+            $('#teachVideo').css({ "height": "227.7px","display": "block"});//227.7
             var uurl = $(this).parent().attr("uurl");
             var title = $(this).children('.list-main').children('a').text();
             $('#teach_title').text(title);
