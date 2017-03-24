@@ -53,9 +53,9 @@ let doRequestSuccess = (data, defer) => {
 let pmAPI = {
     get: (path, callback) => {
         path = addCompanyIdToPath(path);
-        logger.info("Getting data from liveRoom API with path: " + path);
+        logger.debug("Getting data from liveRoom API with path: " + path);
         let defer = new Deferred();
-        request(baseUrl + path, (err, res, data) => {
+        request(encodeURI(baseUrl + path), (err, res, data) => {
             if (err) {
                 logger.error("Get " + path.split("?")[0] + ">>>error:" + err);
                 if (callback) {
@@ -70,7 +70,7 @@ let pmAPI = {
     },
     post: (path, data, callback) => {
         data = addCompanyIdToBody(data);
-        logger.info("Posting data to liveRoom API with path: " + path);
+        logger.debug("Posting data to liveRoom API with path: " + path);
         let defer = new Deferred();
         request.post({
             url: baseUrl + path,

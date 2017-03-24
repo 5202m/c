@@ -57,6 +57,8 @@ UUID.rand = function(max) {
 // 初始化
 var chatAnalyze = {
     localHref:window.location.href,
+    dasUrl:"",
+    requestParamsCookie:'requestParamsCookie',
     utmStore:{//utm 数据统计全局数据
         userIp:'',
         storeKey:'GWAFLGPHONECOOIKETRACK',//userId key
@@ -83,14 +85,19 @@ var chatAnalyze = {
         courseId:'',
         courseName:'',
         teacherId:'',
-        teacherName:''
+        teacherName:'',
+        requestParams:''
+
     },
     /**
      * 是否本地访问
      * @returns {boolean}
      */
     isLocalHref:function(){
-       return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(chatAnalyze.localHref);
+        return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(chatAnalyze.localHref);
+    },
+    getDasURL: function(){
+        return this.dasUrl;
     },
     /**
      * 初始化
@@ -98,39 +105,16 @@ var chatAnalyze = {
     init:function(){
         //引入GA分析
         if(!this.isLocalHref()){
-            var type = "";
-            if(chatAnalyze.localHref.indexOf("/studio")!=-1){
-                type = "studio";
-            }else if(chatAnalyze.localHref.indexOf("/fxstudio")!=-1){
-                type = "fxstudio"
-            }else if(chatAnalyze.localHref.indexOf("/hxstudio")!=-1){
-                type = "hxstudio"
-            }
-            if(type!="") {
-                this.initGA(type);
-                this.setGA();
-                this.setBaidu();
-                //window.setTimeout('chatAnalyze.sendUTM()',1000*10);
-            }
+            this.initGA();
+            this.setGA();
+            this.setBaidu();
         }
     },
     //初始化GA
-    initGA : function(type){
-        if(type == "studio"){
-            _gaq.push(['_setAccount', 'UA-31478987-1']);
-            _gaq.push(['_setDomainName', '24k.hk']);
-            _gaq.push(['_addIgnoredRef', '24k.hk']);
-        }
-        if(type == "fxstudio"){
-            _gaq.push([ '_setAccount', 'UA-49389835-1' ]);
-            _gaq.push([ '_setDomainName', 'gwfx.com' ]);
-            _gaq.push([ '_addIgnoredRef', 'gwfx.com' ]);
-        }
-        if(type == "hxstudio"){
-        	 _gaq.push(['_setAccount', '']);
-             _gaq.push(['_setDomainName', 'handan.hx9999']);
-             _gaq.push(['_addIgnoredRef', 'handan.hx9999']);
-        }
+    initGA : function(){
+        _gaq.push([ '_setAccount', 'UA-49389835-1' ]);
+        _gaq.push([ '_setDomainName', 'gwfx.com' ]);
+        _gaq.push([ '_addIgnoredRef', 'gwfx.com' ]);
         _gaq.push(['_setAllowLinker', true]);
         _gaq.push(['_addOrganic', 'soso', 'w']);
         _gaq.push(['_addOrganic', 'sogou', 'query']);
@@ -171,12 +155,14 @@ var chatAnalyze = {
      * @param callback
      */
     getIp:function(callback){
-        $.getJSON('https://oa.24k.hk/ajax/getIp?callback=ip&_='+ Math.random(), function(datas) {
-            chatAnalyze.utmStore.userIp=datas.Ip;
-            if(callback){
-                callback();
-            }
-        });
+        if(chatAnalyze.utmStore.userIp){
+            callback && callback();
+        }else{
+            $.getJSON('https://oa.24k.hk/ajax/getIp?callback=ip&_='+ Math.random(), function(datas) {
+                chatAnalyze.utmStore.userIp=datas.Ip;
+                callback && callback();
+            });
+        }
     },
     /**
      * 获取utm cookie
@@ -192,14 +178,7 @@ var chatAnalyze = {
                 return arr[1];
             }
         }
-        var dm=document.domain;
-        if($.inArray(dm,['pmchat.24k.hk','chat.gwfx.com','handan.hx9999.com'])>-1) {
-            if (chatAnalyze.localHref.indexOf("/studio") != -1) {
-                dm = '.24k.hk';
-            } else if (chatAnalyze.localHref.indexOf("/fxstudio") != -1) {
-                dm = '.gwfx.com';
-            }
-        }
+        var dm='.gwfx.com';
         var cval=UUID.prototype.createUUID(dm.indexOf("gwfx")!=-1?'':'G');
         document.cookie = this.utmStore.storeKey+ '='+ escape(cval)+ '; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/;domain='+dm;
         return cval;
@@ -210,7 +189,7 @@ var chatAnalyze = {
     setUTM:function(init,data){
         try{
             //this.getIp();
-            if(init){
+            /*if(init){
                 this.utmStore.roomId=data.groupId;
                 this.utmStore.userId=data.userId;
                 this.utmStore.userTel=data.userTel;
@@ -218,10 +197,11 @@ var chatAnalyze = {
                 this.utmStore.groupType=data.groupType;
                 $(window).unload(function(){
                     chatAnalyze.utmStore.onlineETM=new Date().getTime();
-                    //chatAnalyze.sendUTM(null);
+                    chatAnalyze.sendUTM(null);
                     window.event.returnValue=true;
                 });
-            }else{
+            }else{*/
+                var isLocal = this.isLocalHref();
                 chatAnalyze.utmStore.userId = chatAnalyze.getUTMCookie();//用户id
                 chatAnalyze.utmStore.userType = chatAnalyze.getClientGroup(data.clientGroup);
                 chatAnalyze.utmStore.businessPlatform = chatAnalyze.getGroupType(data.groupType);
@@ -240,10 +220,9 @@ var chatAnalyze = {
                 chatAnalyze.utmStore.courseName = data.courseName;
                 chatAnalyze.utmStore.teacherId = data.lecturerId||'';
                 chatAnalyze.utmStore.teacherName = data.lecturer||'';
+                chatAnalyze.utmStore.requestParams = data.requestParams||'';
                 if(isLocal) {
                     chatAnalyze.utmStore.userIp = data.ip;
-                }else{
-                    this.getIp();
                 }
                 chatAnalyze.utmStore.operationType = data.operationType;
                 chatAnalyze.utmStore.tradingAccount = data.accountNo||'';
@@ -255,22 +234,19 @@ var chatAnalyze = {
                 }
                 data = chatAnalyze.utmStore;
                 if(common.isValid(data.sessionId) && common.isValid(data.userId) && (common.isValid(data.touristId) || common.isValid(data.userTel)) && /*(*/common.isValid(data.operationType) /*|| $.inArray(data.userType, [7,8,9])>-1)*/){
-                    var isLocal = this.isLocalHref();
-                    var sendUrl = isLocal ? "http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom" : "https://das.gwfx.com/put/insertRoom";
-                    chatAnalyze.utmAjax(sendUrl, data, true);
-                    /*if(data.speakCount){
-                     this.utmStore.speakCount+=data.speakCount;
-                     }else{
-                     if(chatAnalyze.utmStore.ip){
-                     chatAnalyze.sendUTM(data);
-                     }else{
-                     this.getIp(function(){
-                     chatAnalyze.sendUTM(data);
-                     });
-                     }
-                     }*/
+                    if(isLocal) {
+                        console.log("into utm--");
+                        chatAnalyze.getIp(function() {
+                            chatAnalyze.utmAjax(data, true);
+                        });
+                    }else{
+                        data = chatAnalyze.utmStore;
+                        chatAnalyze.getIp(function(){
+                            chatAnalyze.utmAjax(data, true)
+                        });
+                    }
                 }
-            }
+           /* }*/
         }catch(e){
             console.log("Set UTM fail!"+e);
         }
@@ -278,29 +254,18 @@ var chatAnalyze = {
     /**
      * utm AJAX
      * @param url
+     * @param sendData
      */
-    utmAjax:function(url,sendData,async){
-        // $.ajaxSetup({contentType:'application/json; charset=UTF-8'});
-        $.post(url,{data:JSON.stringify(sendData),callback:'?'},function(result){
-
-        });
-        /*$.ajax({
-            type : 'POST',
-            async : async,
-            url : url,
-            cache : false,
-            dataType : (async?'jsonp':'json'),
-            data : {data:JSON.stringify(sendData)},
-            success : function(t) {}
-        });*/
+    utmAjax:function(sendData){
+        var url = chatAnalyze.getDasURL();
+        $.post(url,{data:JSON.stringify(sendData),callback:'?'});
     },
     /**
      * 发送utm数据
      */
     sendUTM:function(data){
-        return false;
         try{
-            if (!store.enabled){
+            if (!store.enabled){// for more information, please refer to https://github.com/marcuswestin/store.js/
                 console.log('Local storage is not supported by your browser.');
                 return;
             }
@@ -309,44 +274,115 @@ var chatAnalyze = {
                 return;
             }
             if(!tmpData.userTel && !tmpData.userId){
-                var st=store.get('storeInfo_'+tmpData.groupType);
+                var st=store.get('storeInfos_'+tmpData.groupType);
                 if(!st){
-                   return;
+                    return;
                 }
                 tmpData.userId=st.userId;
             }
             var bPlatform=tmpData.groupType.indexOf('fx')!=-1?1:2;
             var userId = this.getUTMCookie();
-            var isLocal=this.isLocalHref();
+            var hrefSplit = this.hrefSplit();
             var sendData={
                 userId:userId,
                 customerType: tmpData.clientGroup,
                 ip:tmpData.ip,
                 businessPlatform:bPlatform,
                 platformType:(common.isMobile()?1:0),
-                roomId:tmpData.roomId
+                roomId:tmpData.roomId,
+                requestParams:hrefSplit
             };
             if(tmpData.userTel){
                 sendData.operationTel=tmpData.userTel;
             }else{
                 sendData.visitorId=tmpData.userId;
             }
-            var sendUrl=isLocal?"http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom":"http://das.gwfx.com/put/insertRoom";
             if(data && data.courseId){
                 sendData.courseId=data.courseId;
-                this.utmAjax(sendUrl,sendData,true);
+                this.utmAjax(sendData,true);
             }else{
                 sendData.startDateTime=tmpData.onlineSTM;
                 sendData.endDateTime=tmpData.onlineETM;
                 sendData.speakCount=tmpData.speakCount;
+                sendData.operationType = 6;
                 if(navigator.sendBeacon){
-                    navigator.sendBeacon(sendUrl+"Close",JSON.stringify(sendData));
+                    navigator.sendBeacon(chatAnalyze.getDasURL()+"Close",JSON.stringify(sendData));
                 }else{
-                    this.utmAjax(sendUrl,sendData,false);
+                    this.utmAjax(sendData,false);
                 }
             }
         }catch(e){
             console.log("send UTM fail!"+e);
+        }
+    },
+    /**
+     * 截取url问号后面的参数传给追踪系统接口
+     * @returns {string}
+     */
+    hrefSplit:function(){
+        var href = chatAnalyze.localHref;
+        var hrefSplit = "";
+        try{
+            if(href.indexOf("?")!=-1){
+                hrefSplit = href.split("?")[1];
+                console.log("href="+href+";hrefSplit="+hrefSplit);
+            }
+        }catch(e){
+            console.log("send hrefSplit fail!"+e);
+        }
+        return hrefSplit;
+    },
+    /**
+     * 把追踪代码放到Cookie
+     * @param id
+     * @returns {*}
+     */
+    setUtmCookies:function(id){
+        var reqid = "";
+        if(typeof(id) != "undefined" && id!="" && id!=null){
+            reqid = id;
+        }else{
+            reqid = chatAnalyze.requestParamsCookie;
+        }
+        var spli = chatAnalyze.hrefSplit();
+        if(typeof(spli) == "undefined" || spli=="" || spli==null){
+            spli = "";
+        }else{
+
+        }
+        spli = encodeURIComponent(spli);
+        chatAnalyze.setHC(reqid, spli);
+    },
+    //设置HTTP COOKIE;domain=.gwfx.com
+    setHC : function(cname,cval) {
+        if(typeof(cval) != "undefined" && cval!="" && cval!=null){
+            //s20是代表20秒
+            //h是指小时，如12小时则是：h12
+            //d是天数，30天则：d30
+            var strsec = chatAnalyze.setExpiryTime("1h");
+            var exp = new Date();
+            //.gwfx.com
+            exp.setTime(exp.getTime() + strsec*1);
+            document.cookie = cname + '=; expires='+exp.toGMTString()+'; path=/;domain=.gwfx.com';
+            document.cookie = cname + '=' + escape(cval) + '; expires='+exp.toGMTString()+'; path=/;domain=.gwfx.com';
+        }
+    },
+    //cookie失效时间
+    setExpiryTime:function(str)
+    {
+        var str1=str.substring(1,str.length)*1;
+        var str2=str.substring(0,1);
+        if (str2=="s")
+        {
+            return str1*1000;
+        }
+        else if (str2=="h")
+        {
+            return str1*60*60*1000;
+        }
+        else if (str2=="d")
+        {
+            return str1*24*60*60*1000;
         }
     },
     /**
@@ -409,4 +445,5 @@ var chatAnalyze = {
 };
 $(function() {
     chatAnalyze.init();
+    chatAnalyze.setUtmCookies("");
 });
