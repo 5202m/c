@@ -1,82 +1,57 @@
-/**
- * 路由入口
- * @type {exports}
- */
-var apiChatRoutes = require('./api/chatAPI');//配置聊天室api路由
-var path = require('path');
-/**
- * 初始化入口
- * @param app
- */
-exports.init = function(app,express){
-    /**
-     * 设置静态目录映射
-     */
-    var dirname=global.rootdir;
-    app.use('/base',express.static(path.join(dirname, 'template/base')));
-    app.use('/admin',express.static(path.join(dirname, 'template/admin/static')));
-    var config=require('../resources/config');//资源文件
-    /**
-     * 域名拦截跳转
-     */
-    app.all('/', function(req, res, next) {
-        var defTmpObj=null;
-        for(var key in config.defTemplate){
-            defTmpObj=config.defTemplate[key];
-            if(req.hostname && req.hostname.indexOf(defTmpObj.host)!=-1){
-                res.redirect(defTmpObj.routeKey);
-                return;
-            }
-        }
-        next();
-    });
-    /**
-     * 设置路由入口拦截
-     */
-    app.all('/studio|fxstudio|hxstudio', function(req, res, next) {
-        var useSession=req.session.studioUserInfo;
-        var currGroupType=req.path.replace(/\/(.*studio)(\/.*)?/g,"$1");
-        if(useSession && useSession.groupType && currGroupType!=useSession.groupType){//请求访问的直播间类别有变化，清除session
-            console.log("req.path:"+req.path);
-            req.session.studioUserInfo=null;
-            if(req.query["platform"]){
-                next();
-            }else{
-                res.redirect("/"+currGroupType);
-            }
-        }else{
-            next();
-        }
-    });
-    var tempPrefix=null,defTemp=null,viewPathArr=[];
-    var baseRouter=require('./web/base');
-    for(var key in config.defTemplate){
-        defTemp=config.defTemplate[key];
-        if(defTemp.usedNum<=0){
-            continue;
-        }
-        for(var i=1;i<=defTemp.usedNum;i++){
-            tempPrefix='/'+key+'/theme'+i;
-            viewPathArr.push(path.join(dirname, 'template'+tempPrefix+'/view'));
-            app.use(tempPrefix,express.static(path.join(dirname, 'template'+tempPrefix+'/static')));
-        }
-        app.use(defTemp.routeKey,require('./web/'+key),baseRouter);
-        if(key=='hx' && Object.getOwnPropertyNames(config.defTemplate).length==1){
-            app.all('/v/HXPM',function(req, res, next) {
-                res.redirect(defTemp.routeKey);
-            });
-        }
-    }
+const baseRoute = require('./web/base');
+const adminRoute = require('./web/admin');
+var config = require('../resources/config');
+const path = require('path');
+const fs = require('fs');
 
-    /**
-     * 设置路由入口
-     */
-    app.use('/api', apiChatRoutes);
-    viewPathArr.push(path.join(dirname, 'template/admin/view'));//设置后台模板
-    /**
-     * 设置模板映射
-     */
-    app.set('views', viewPathArr);
-    app.set( 'view engine', 'html' );
-    app.engine('.html',require('ejs').__express);//两个下划线
-};
+class Index {
+    constructor() {}
+    _setStaticPath() {
+        let _this = this;
+        this._getThemePaths().forEach(themePath => {
+            _this._app.use(`/${themePath}`, _this._express.static(path.join(__dirname, `../template/${themePath}/static`)));
+        });
+        _this._app.use('/base', _this._express.static(path.join(__dirname, `../template/base`)));
+        _this._app.use('/admin', _this._express.static(path.join(__dirname, `../template/admin/static`)));
+    }
+    _setRouteEntrance() {
+        this._app.use('/', baseRoute);
+        this._app.use('/admin', adminRoute);
+        this._app.use(`/${config.defaultGroupType}`, (req, res) => {
+            let params = [];
+            for (var key in req.query) {
+                req.query[key] = encodeURIComponent(req.query[key]);
+                params.push(`${key}=${req.query[key]}`);
+            }
+            let path = params.length == 0 ? '/' : `/?${params.join("&")}`;
+            res.writeHead(302, { 'Location': path });
+            res.end();
+        });
+    }
+    _getThemePaths() {
+        let folderNames = fs.readdirSync(path.join(__dirname, '../template'));
+        return folderNames.filter(folderName => {
+            if (folderName === 'base') {
+                return false;
+            }
+            return folderName.indexOf(".") === -1;
+        });
+    }
+    _setViews() {
+        let viewPathes = this._getThemePaths().map(themePath => path.join(__dirname, `../template/${themePath}/view`));
+        viewPathes.push(path.join(__dirname, '../template/error.html'));
+        viewPathes.push(path.join(__dirname, 'template/admin/view')); //设置后台模板
+        this._app.set('views', viewPathes);
+        this._app.set('view engine', 'html');
+        this._app.engine('.html', require('ejs').__express); //两个下划线
+    }
+    init(app, express) {
+        this._app = app;
+        this._express = express;
+        this._setRouteEntrance();
+        this._setViews();
+        this._setStaticPath();
+    }
+}
+
+module.exports = new Index();

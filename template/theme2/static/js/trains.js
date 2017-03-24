@@ -1,0 +1,286 @@
+/**
+ * 培训班列表操作类 JS
+ * Created by Jade.zhu on 2017/1/22.
+ */
+var Trains = new Container({
+    panel : $("#page_trains"),
+    url : "/theme2/template/trains.html",
+    trainConfig : null,/*{
+        "joe_chung_1" : {"cls" : "popup_box tbox train_detail zwytrain dn", "lp" : "http://www.24k.hk/lp_v154_zwy.html"},
+         "tonylee_1" : {"cls" : "popup_box tbox train_detail dn", "lp" : "http://www.24k.hk/lp_v142_lgg.html"},
+         "tracey_jiang_1" : {"cls" : "popup_box tbox train_detail cctrain_detail dn", "lp" : "http://www.24k.hk/lp_v137_cls.html"}
+    },*/
+    onLoad : function(){
+        Trains.setTrainList();
+        Trains.setEvent();
+    }
+});
+
+/**
+ * 设置培训班列表
+ */
+Trains.setTrainList = function(){
+    var trainsHtml = [], trainsEndHtml = [];
+    $.getJSON('/getTrainRoomList', {groupType:Data.userInfo.groupType}, function(result){
+        if(result!=null){
+            $.each(result, function(key, row){
+                var openDate = row.openDate;
+                var feature = Trains.getTrainFeature(row, false);
+                var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
+                if(feature.isEnd){
+                    dateStr = '已结束';
+                }
+                var html = Trains.formatHtml('train',
+                        row.name,
+                        dateStr,//时间/状态
+                        row.remark,
+                        feature.handleTxt,//状态，报名/进入/结束
+                        row._id,
+                        feature.handler
+                    );
+                if(feature.isEnd){
+                    trainsEndHtml.push(html);
+                }else {
+                    trainsHtml.push(html);
+                }
+            });
+            trainsHtml = $.merge(trainsHtml,trainsEndHtml);
+            $('#trainsList').empty().html(trainsHtml.join(''));
+        }
+    });
+};
+/**
+ * 切换房间，如果失败并且是不含
+ * @param groupId
+ */
+Trains.changeRoomOrSignup = function(groupId){
+    Util.postJson("/checkGroupAuth",{groupId:groupId},function(result1){
+        if(!result1 || !result1.errcode){
+            Room.toRefreshView(groupId);
+        }else{
+            var msg = result1.errmsg + "已为你自动跳转到默认房间。";
+            var trainCfg = Trains.getTrainConfig(result1.data && result1.data.trainConfig);
+            if(result1.data && result1.data.roomType == "train" && !trainCfg && result1.errcode == "4007"){
+                Util.postJson('/addClientTrain',{
+                    groupId : groupId,
+                    noApprove : 1
+                },function(result2){
+                    if(!result2 || result2.errcode == "4016"){
+                        Util.postJson("/checkGroupAuth",{groupId:groupId},function(result3){
+                            if(!result3 || !result3.errcode){
+                                Room.toRefreshView(groupId);
+                            }else{
+                                alert(msg);
+                                Room.toRefreshView(groupId);
+                            }
+                        });
+                    }else{
+                        alert(result2.errmsg + "已为你自动跳转到默认房间。");
+                        Room.toRefreshView(groupId);
+                    }
+                });
+            }else{
+                alert(msg);
+                Room.toRefreshView(groupId);
+            }
+        }
+    });
+};
+
+/**
+ * 切换房间
+ * @param groupId
+ * @param groupName
+ */
+Trains.changeRoom = function(groupId){
+    Util.postJson("/checkGroupAuth",{groupId:groupId},function(result){
+        if(!result || !result.errcode){
+            Room.toRefreshView(groupId);
+            return;
+        }else if(result.data && result.data.roomType == "train"){
+            var roomInfo = result.data;
+            roomInfo.defaultAnalyst = roomInfo.defaultAnalyst || {};
+            var trainCfg = Trains.getTrainConfig(roomInfo.trainConfig);
+            if(trainCfg && trainCfg.cls && result.errcode == "4007"){
+                Trains.trainDetail(roomInfo.trainConfig, roomInfo.defaultAnalyst.userNo, roomInfo._id, roomInfo.name);
+                return;
+            }else if(!trainCfg && result.errcode == "4007"){
+                Trains.trainSignUp(roomInfo._id, roomInfo.name, true);
+                return;
+            }else if(result.errcode == "4007" && $(".pop_train").is(":hidden")){
+                //$("#trains").trigger("click"); //显示培训班列表页
+                return;
+            }else if((result.errcode == "4009" || result.errcode == "4007") && $(".pop_train").is(":visible")){
+                if(Trains.trainEntryByPoints(roomInfo)){//使用积分进入房间
+                    return;
+                }
+            }
+        }
+        Pop.msg(result.errmsg);
+    });
+};
+
+/**
+ * 培训班详情内页报名
+ */
+Trains.trainSignUpDetail = function(){
+    var $item = $('.train_detail .pop_tit label');
+    Trains.trainSignUp($item.attr("roomid"), $item.text());
+};
+/**
+ * 培训班报名
+ * @param groupId String
+ * @param groupName String
+ * @param [noApprove] boolean
+ */
+Trains.trainSignUp = function(groupId, groupName, noApprove){
+    if(!Data.userInfo.isLogin) {
+        Login.load();
+    }else{
+        Util.postJson('/addClientTrain',{groupId : groupId,noApprove : noApprove ? 1 : 0},function(data){
+            if(!data || data.errcode == "4016"){
+                Trains.changeRoom(groupId, groupName);
+            }else{
+                if(data.errcode == "4019"){//报名成功
+                    $("#trainsList .u-ch-class .u-ch-con .btn[rid='" + groupId + "']")
+                    .attr("href", "javascript:Trains.changeRoom('" + groupId + "', '" + groupName + "')")
+                    .text("已报名");
+                }
+                Pop.msg(data.errmsg);
+            }
+        });
+    }
+};
+
+/**
+ * 获取培训班特征
+ * @param roomInfo
+ * @param noLP
+ * @returns {{handleTxt: string, handleCls: String, handler: string, handleTarget: string, clientSize: string, isEnd: boolean}}
+ */
+Trains.getTrainFeature = function(roomInfo, noLP){
+    var result = {
+        handleTxt : "", //按钮文字
+        handleCls : "", //按钮样式， b2是灰色按钮
+        handler : "",   //按钮方法
+        handleTarget : "",//按钮方法
+        clientSize : "已报名" + Math.abs(roomInfo.clientSize || 0) + "人",  //已报名人数
+        isEnd : false    //是否已结束
+    };
+    var openDate = roomInfo.openDate;
+    var currDate = Util.formatDate(Data.serverTime, "yyyy-MM-dd");
+    var analystNo = roomInfo.defaultAnalyst && roomInfo.defaultAnalyst.userNo;
+    var trainCfgKey = roomInfo.trainConfig || "";
+    var trainCfg = Trains.getTrainConfig(trainCfgKey);
+    if(roomInfo.status == 0 || (openDate && openDate.endDate < currDate)){
+        if(trainCfg && trainCfg.lp && !noLP){
+            result.handleTxt = "已结束，精彩回顾";
+            result.handler = trainCfg.lp;
+            result.handleTarget = " target='_blank'";
+        }else{
+            result.handleTxt = "已结束";
+            result.handler = "javascript:void(0)";
+            result.handleCls = " b2";
+        }
+        result.clientSize = "&nbsp;";
+        result.isEnd = true;
+    }else if(openDate && openDate.beginDate > currDate){
+        if(trainCfg && trainCfg.cls){
+            result.handleTxt = "详情";
+            result.handler = "javascript:Trains.trainDetail('" + trainCfgKey + "', '" + analystNo + "', '" + roomInfo._id + "', '" + roomInfo.name+ "')";
+        }else if(roomInfo.trainAuth == -1){
+            result.handleTxt = "报名";
+            result.handler = "javascript:Trains.trainSignUp('" + roomInfo._id + "', '" + roomInfo.name + "', true)";
+        }else if(roomInfo.trainAuth == 0){
+            result.handleTxt = "待审核";
+            result.handler = "javascript:void(0)";
+        }else{
+            result.handleTxt = "已报名";
+            result.handler = "javascript:Trains.changeRoom('" + roomInfo._id + "', '" + roomInfo.name + "')";
+        }
+    }else{
+        if((!trainCfg || !trainCfg.cls) && roomInfo.trainAuth == -1){
+            result.handleTxt = "报名";
+            result.handler = "javascript:Trains.trainSignUp('" + roomInfo._id + "', '" + roomInfo.name + "', true)";
+        }else{
+            result.handleTxt = "进入";
+            result.handler = "javascript:Trains.changeRoom('" + roomInfo._id + "', '" + roomInfo.name + "')";
+        }
+    }
+    return result;
+};
+
+/**
+ * 培训班报名
+ */
+Trains.trainDetail = function(trainCfg, analystId, groupId, groupName){
+    var cfg = Trains.getTrainConfig(trainCfg);
+    if(cfg && cfg.cls){
+        /*$('.train_detail .pop_tit label').attr("roomid", groupId).text(groupName);
+        $("#panel_popupBox_train").attr("class", cfg.cls);
+        LazyLoad.css(["/fx/theme1/css/train.css"]);
+        $("#train_info_id").empty().load("/getTrDetail?uid="+analystId,function(){
+            $("#train_info_id > .scrollbox").mCustomScrollbar({theme:"light-thick",scrollbarPosition:"outside",scrollButtons:false});
+            common.openPopup('.blackbg,.train_detail');
+        });*/
+    }else{
+        Trains.trainSignUp(groupId, groupName, true);
+    }
+};
+
+/**
+ * 使用积分进入培训班房间
+ */
+Trains.trainEntryByPoints = function(roomInfo){
+    if(roomInfo && roomInfo.point){
+        var tip='您未报名培训班或者未通过审核，是否消耗'+roomInfo.point+'积分直接进入房间？';
+        Pop.msg({
+            msg : tip,
+            onOK : function(){
+                var point = roomInfo.point;
+                var params = {groupType:Data.userInfo.groupType,item:"prerogative_room",tag:'user_'+Data.userInfo.userId,val:-roomInfo.point,groupId:roomInfo._id};
+                if(point != 0){
+                    Util.postJson('/addPointsInfo',{params:JSON.stringify(params)}, function(result) {
+                        if (!result.isOK) {
+                            Pop.msg(result.msg);
+                        }else{
+                            Util.postJson('/updateSession',{params:JSON.stringify(params)}, function(result) {
+                                if(result.isOK){
+                                    Room.toRefreshView(roomInfo._id);
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    Util.postJson('/updateSession',{params:JSON.stringify(params)}, function(result) {
+                        if(result.isOK){
+                            Room.toRefreshView(roomInfo._id);
+                        }
+                    });
+                }
+            }
+        });
+        return true;
+    }
+    return false;
+};
+
+/**
+ * 获取培训班配置，用于有详情内页
+ */
+Trains.getTrainConfig = function(cfgKey){
+    if(Trains.trainConfig && cfgKey && Trains.trainConfig.hasOwnProperty(cfgKey)){
+        return Trains.trainConfig[cfgKey];
+    }
+    return null;
+};
+
+/**
+ * 设置事件
+ */
+Trains.setEvent = function(){
+    /**
+     * 返回首页
+     */
+    $('#train_back').bind('click', Container.back);
+};
