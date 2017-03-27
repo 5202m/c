@@ -29,7 +29,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfo! >>getUserInfo:", e);
             if (callback) {
                 callback(null);
@@ -53,7 +53,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfoByUserNo! >>getUserInfoByUserNo:", e);
             if (callback) {
                 callback(null);
@@ -77,7 +77,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserList! >>getUserList:", e);
             if (callback) {
                 callback(null);
@@ -98,7 +98,7 @@ var userService = {
 
         liveRoomAPIService.get(path).then((result) => {
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("batchOfflineStatus! >>batchOfflineStatus:", e);
             deferred.reject(e);
         });
@@ -133,7 +133,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("verifyRule! >>verifyRule:", e);
             if (callback) {
                 callback(null);
@@ -155,7 +155,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getMemberList! >>getMemberList:", e);
             if (callback) {
                 callback(null);
@@ -177,7 +177,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getAuthUsersByGroupId! >>getAuthUsersByGroupId:", e);
             if (callback) {
                 callback(null);
@@ -201,7 +201,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("createUser! >>createUser:", e);
             if (callback) {
                 callback(null);
@@ -229,7 +229,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("joinNewRoom! >>joinNewRoom:", e);
             if (callback) {
                 callback(null);
@@ -241,7 +241,7 @@ var userService = {
     /**
      * 检查后台进入聊天室的用户，是则直接登录聊天室
      */
-    checkSystemUserInfo: function (userInfo, callback) {
+    checkSystemUserInfo: function(userInfo, callback) {
         var result = {
             isOK: false
         };
@@ -258,9 +258,8 @@ var userService = {
         }
         logger.info("checkSystemUserInfo=>newUserInfo:" + JSON.stringify(newUserInfo));
         userService.createUser(newUserInfo).then(result => {
-            result.isOK = true;
-            callback(result);
-        }).catch (err => {
+            callback({ isOK: result });
+        }).catch(err => {
             logger.error("checkSystemUserInfo=>createUser:" + err);
         });
     },
@@ -279,7 +278,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateMemberInfo! >>updateMemberInfo:", e);
             if (callback) {
                 callback(null);
@@ -305,7 +304,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateMemberInfo! >>updateMemberInfo:", e);
             if (callback) {
                 callback(null);
@@ -337,7 +336,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkUserLogin! >>checkUserLogin:", e);
             if (callback) {
                 callback(null);
@@ -355,12 +354,12 @@ var userService = {
      *            房间号
      * @returns {*}
      */
-    checkUserGag: function (row, groupId) {
+    checkUserGag: function(row, groupId) {
         var subRow = row.loginPlatform.chatUserGroup[0];
         if (common.isBlank(subRow.gagDate)) {
             var currRoom = !subRow.rooms ? null : subRow.rooms.find(ele => {
-                    return ele._id === groupId;
-                });
+                return ele._id === groupId;
+            });
             if (currRoom) {
                 if (common.dateTimeWeekCheck(currRoom.gagDate, false)) {
                     return {
@@ -406,7 +405,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomCsUser! >>getRoomCsUser:", e);
             if (callback) {
                 callback(null);
@@ -430,7 +429,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomCsUserList! >>getRoomCsUserList:", e);
             if (callback) {
                 callback(null);
@@ -458,7 +457,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkRoomStatus! >>checkRoomStatus:", e);
             if (callback) {
                 callback(null);
@@ -487,7 +486,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyNickname! >>modifyNickname:", e);
             if (callback) {
                 callback(null);
@@ -512,7 +511,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyAvatar! >>modifyAvatar:", e);
             if (callback) {
                 callback(null);
@@ -538,7 +537,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTeacherList! >>getTeacherList:", e);
             if (callback) {
                 callback(null);
@@ -563,7 +562,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTeacherByUserId! >>getTeacherByUserId:", e);
             if (callback) {
                 callback(null);
@@ -592,7 +591,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyUserName! >>modifyUserName:", e);
             if (callback) {
                 callback(null);
@@ -617,7 +616,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyEmail! >>modifyEmail:", e);
             if (callback) {
                 callback(null);
@@ -646,7 +645,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyPwd! >>modifyPwd:", e);
             if (callback) {
                 callback(null);
@@ -671,7 +670,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getClientGroupByMId! >>getClientGroupByMId:", e);
             if (callback) {
                 callback(null);
@@ -688,14 +687,14 @@ var userService = {
      *            是否需要更新数据
      * @param callback
      */
-    removeOnlineUser: function (userInfo, isUpdate, callback) {
+    removeOnlineUser: function(userInfo, isUpdate, callback) {
         if (common.hasPrefix(constant.clientGroup.visitor, userInfo.userId) || !isUpdate) {
             callback(true);
             return;
         }
         // 更新用户记录表的在线状态(下线设置为0）
         if (common.isValid(userInfo.userId) && common.isValid(userInfo.groupId) && common.isValid(userInfo.groupType)) {
-            userService.updateChatUserGroupStatus(userInfo, 0, userInfo.sendMsgCount, function (err) {});
+            userService.updateChatUserGroupStatus(userInfo, 0, userInfo.sendMsgCount, function(err) {});
             callback(true);
         } else {
             callback(false);
@@ -717,7 +716,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getAnalystList! >>getAnalystList:", e);
             if (callback) {
                 callback(null);
