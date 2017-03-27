@@ -797,13 +797,11 @@ router.post('/checkGroupAuth', function(req, res) {
         result = errorMessage.code_1000;
     }
     if (!result) {
-        studioService.checkGroupAuth(roomType, groupId, chatUser.clientGroup, chatUser.userId, function(err, groupInfo) {
-            if (!err && groupInfo) {
+        studioService.checkGroupAuth(roomType, groupId, chatUser.clientGroup, chatUser.userId, function(groupInfo) {
+            if (groupInfo) {
                 req.session.studioUserInfo.toGroup = groupInfo._id;
             }
-            result = err || {};
-            result.data = groupInfo;
-            res.json(result);
+            res.json(groupInfo);
         });
     } else {
         res.json(result);
