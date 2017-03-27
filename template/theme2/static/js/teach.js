@@ -138,12 +138,11 @@ Teach.appendVideos = function(dataArr){
     var html = [];
     $.each(dataArr,function (key, row) {
         html.push(Teach.formatHtml('primaryVideo',
-            row.mediaImgUrl,
             row.detailList[0].title,
             row.detailList[0].remark,
             row._id,
             row.mediaUrl
-        ));
+        ).replace('/theme2/img/pic-11.jpg',row.mediaImgUrl));
 
     });
     //由于高级教程异于初。中，此处特殊处理

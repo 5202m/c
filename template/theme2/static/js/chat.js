@@ -538,7 +538,7 @@ var Chat = {
         }
         //快捷@
         if(user.userType==1 || user.userType==2 || user.userType==3){
-            Chat.setUsersMap(user, isOnline);
+            //Chat.setUsersMap(user, isOnline);
         }
         if(setOnlineNum){
             Chat.setOnlineNum(isOnline ? 1 : -1, false, false);
