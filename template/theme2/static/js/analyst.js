@@ -46,7 +46,7 @@ Analyst.setAnalystInfo = function(){
                 );
                 analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
-                analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCodeImg, userInfo.wechatCode);
+                analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
                 $('#analystPraiseTool').empty().html(analystPraiseHtml);
                 $('#analystIntro').empty().html(analystIntroductionHtml);
@@ -55,6 +55,8 @@ Analyst.setAnalystInfo = function(){
             if(Analyst.tradeList.length>0) {
                 Analyst.loadAll = false;
                 Analyst.setShowTradeList();
+            }else{
+                $("#analystShowTrade").empty();
             }
             Analyst.setTrain(trainList, trAndClNum);
         });
@@ -84,9 +86,9 @@ Analyst.setShowTradeList = function(){
         }
         html.push(Analyst.formatHtml('analystShowTrade',
             proFit,
-            tradeImg,
+            //tradeImg,
             Util.formatDate(trade.showDate, 'MM-dd HH:mm')
-        ));
+        ).replace('/theme2/img/pic-4.png',tradeImg));
     }
     if(i >= lenI - 1){
         Analyst.loadAll = true;
@@ -156,16 +158,16 @@ Analyst.setVideoList = function(){
                             article.categoryId,
                             article._id,
                             article.mediaUrl
-                        ));
+                        ).replace('/theme2/img/cm.png',article.mediaImgUrl));
                         teachLiveCount++;
                     }
                 }else  if(article.categoryId == "student_style" ){ //学员风采
                     if(studentLiveCount <= 3){
                         studentLiveHtml.push(Analyst.formatHtml('analystStudentVideo',
-                            article.mediaUrl,
+                            //article.mediaUrl,
                             articleDetail.title,
                             articleDetail.tag
-                        ));
+                        ).replace('/theme2/img/cm.png',article.mediaImgUrl));
                         studentLiveCount++;
                     }
                 }else{//教学视频
@@ -176,7 +178,7 @@ Analyst.setVideoList = function(){
                             article.categoryId,
                             article._id,
                             article.mediaUrl
-                        ));
+                        ).replace('/theme2/img/cm.png',article.mediaImgUrl));
                         teachVideoCount++;
                     }
                 }

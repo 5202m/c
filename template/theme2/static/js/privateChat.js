@@ -215,12 +215,12 @@ PrivateChat.setWhTab = function () {
         }
         tabHtml.push(PrivateChat.formatHtml("privateChat_whTalker",
             clazz,
-            obj.avatar,
+            //obj.avatar,
             obj.unreadNum > 0 ? obj.unreadNum : '',
             obj.userName,
             obj.userNo,
             obj.type
-        ));
+        ).replace('/theme2/img/cm.png',obj.avatar));
         msgHtml.push(PrivateChat.formatHtml("privateChat_msgTemp",
             obj.userNo
         ));

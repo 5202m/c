@@ -744,7 +744,7 @@ var Chat = {
                 Chat.formatPublishTime(fromUser.publishTime),
                 '我',
                 result
-            );
+            ).replace('/theme2/img/user_c.png',userTag.avatar);
         }else{
             result = Room.formatHtml("chat_dialog",
                 userTag.cls,
@@ -756,7 +756,7 @@ var Chat = {
                 Chat.formatPublishTime(fromUser.publishTime),
                 result,
                 fromUser.userType
-            );
+            ).replace('/theme2/img/user_c.png',userTag.avatar);
         }
         return result;
     },
@@ -1072,7 +1072,7 @@ var Chat = {
                 if(content.needMax){
                     url = Util.format("/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
                 }
-                result = Room.formatHtml("chat_dialogImg", url, content.value || "");
+                result = Room.formatHtml("chat_dialogImg", url).replace('/theme2/img/user_c.png',(content.value || ""));
                 if(isMeSend){
                     result += Room.formatHtml("chat_dialogLoading");
                 }
