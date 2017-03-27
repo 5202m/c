@@ -39,7 +39,6 @@ class Index {
     }
     _setViews() {
         let viewPathes = this._getThemePaths().map(themePath => path.join(__dirname, `../template/${themePath}/view`));
-        viewPathes.push(path.join(__dirname, '../template/error.html'));
         viewPathes.push(path.join(__dirname, 'template/admin/view')); //设置后台模板
         this._app.set('views', viewPathes);
         this._app.set('view engine', 'html');
