@@ -231,15 +231,19 @@ var Data = {
             Data.analysts = {};
             $.getJSON('/getAnalystList', {systemCategory: 'pm', platform:Data.userInfo.groupType}, function (result) {
                 if (result) {
-                    $.each(result.analysts, function (i, row) {
-                        row.praiseNum = 0;
-                        Data.analysts[row.userNo] = row;
-                    });
-                    $.each(result.praise, function(i, row){
-                        if(Data.analysts.hasOwnProperty(row.praiseId)){
-                            Data.analysts[row.praiseId].praiseNum = row.praiseNum;
-                        }
-                    });
+                    if(result.analysts){
+                        $.each(result.analysts, function (i, row) {
+                            row.praiseNum = 0;
+                            Data.analysts[row.userNo] = row;
+                        });
+                    }
+                    if(result.praise){
+                        $.each(result.praise, function(i, row){
+                            if(Data.analysts.hasOwnProperty(row.praiseId)){
+                                Data.analysts[row.praiseId].praiseNum = row.praiseNum;
+                            }
+                        });
+                    }
                 }
                 callback(Data.analysts[userId]);
             });

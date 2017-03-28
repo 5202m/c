@@ -73,8 +73,8 @@ Novice.setAdvertisement = function(){
             for(var i in data){
                 html.push(Novice.formatHtml("noviceBanner"
                     , (Util.isBlank(data[i].linkUrl)?"javascript:void(0);":data[i].linkUrl)
-                    , data[i].mediaUrl
-                    , data[i].detailList[0].title));
+                    //, data[i].mediaUrl
+                    , data[i].detailList[0].title).replace('/theme2/img/noviceGuide/banner-1.jpg',data[i].mediaUrl));
                 if(data.length>1){
                     $("#novicePosition").append('<span class="'+(parseInt(i)==0?'p-click':'')+'"></span>');
                 }

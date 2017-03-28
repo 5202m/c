@@ -34,7 +34,7 @@ Rooms.setAdvertisement = function(){
                 html.push(Rooms.formatHtml("banner"
                     , (Util.isBlank(data[i].linkUrl)?"javascript:void(0);":data[i].linkUrl)
                     , data[i].mediaUrl
-                    , data[i].detailList[0].title));
+                    , data[i].detailList[0].title).replace('/theme2/img/noviceGuide/banner-1.jpg',data[i].mediaUrl));
                 if(data.length>1){
                     $("#position").append('<span class="'+(parseInt(i)==0?'p-click':'')+'"></span>');
                 }
@@ -57,7 +57,7 @@ Rooms.setAdvertisement = function(){
  * 获取房间列表
  */
 Rooms.setStudioRoomList = function(){
-    var html = [], trainObj = null, currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
+    var html = [], trainObj = null, currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd'),alreadyArray = [];
     Data.getRoomList(function(rooms){
         var cls = ['blue','red','green','brown'], trainNum = 0;
         $.each(rooms, function(i, row){
@@ -65,7 +65,7 @@ Rooms.setStudioRoomList = function(){
                 if(trainNum == 0) {
                     html.push(Rooms.formatHtml("roomInfo",
                         '',
-                        4,
+                        //4,
                         'brown',
                         '精品培训班',
                         row.roomType
@@ -76,13 +76,18 @@ Rooms.setStudioRoomList = function(){
                     trainObj = row;
                 }
             } else {
-                var loc_index = Util.randomIndex(4);
+                var loc_index = Util.randomIndex(3), uurl = '';
+                while($.inArray(loc_index,alreadyArray) > -1){
+                    loc_index = Util.randomIndex(3)
+                }
+                alreadyArray.push(loc_index);
+                uurl = Util.format('/theme2/img/block-bg{0}.jpg',loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
-                    (loc_index == 0 ? loc_index + 1 : loc_index),
+                    //(loc_index == 0 ? loc_index + 1 : loc_index),
                     cls[loc_index],
                     row.name,
-                    row.roomType));
+                    row.roomType).replace('/theme2/img/block-bg4.jpg',uurl));
             }
         });
         $('#roomList').empty().html(html.join(''));

@@ -7,6 +7,7 @@ var NoviceGuide = new Container({
     url : "",
     title : '',
     isPaginationHide : false,
+    currentPage : '11',
     onLoad : function(){
         NoviceGuide.setEvent();
     },
@@ -29,8 +30,8 @@ NoviceGuide.setEvent = function(){
  * 初始化
  */
 NoviceGuide.initData = function () {
-    var mySwiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
+    var mySwiper = new Swiper('.swiper-container'.concat(NoviceGuide.currentPage), {
+        pagination: '.swiper-pagination'.concat(NoviceGuide.currentPage),
         paginationClickable: true,
         parallax: true,
         //loop: true,

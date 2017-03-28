@@ -100,7 +100,7 @@ Syllabus.setSyllabusList = function(day){
                                 courseObj.lecturerId,
                                 hideBtn,
                                 (courseObj.context||'&nbsp')
-                            ));
+                            ).replace('/theme2/img/any.png',(analyst && analyst.avatar)));
                             courseDataHtml.push('<div class="blk7 blke3e3ea"></div>');
                         });
                     }
