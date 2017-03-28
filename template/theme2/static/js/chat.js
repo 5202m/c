@@ -159,6 +159,8 @@ var Chat = {
             $("#room_classnote").show();
             $("#room_foot").show();
             $("#room_talk").hide();
+            $('#page_room').removeClass('bgf2f2f2');
+            $('#page_room').addClass('bgfff');
         });
 
         /**

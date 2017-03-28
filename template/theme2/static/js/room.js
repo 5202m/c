@@ -74,6 +74,8 @@ Room.setEvent = function(){
         Chat.setHeight();
         Chat.setTalkScroll(true);
         Chat.showChatMsgNumTip(true);
+        $('#page_room').removeClass('bgfff');
+        $('#page_room').addClass('bgf2f2f2');
     });
 
     /** 老师简介 */
