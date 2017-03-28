@@ -57,7 +57,7 @@ Rooms.setAdvertisement = function(){
  * 获取房间列表
  */
 Rooms.setStudioRoomList = function(){
-    var html = [], trainObj = null, currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
+    var html = [], trainObj = null, currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd'),alreadyArray = [];
     Data.getRoomList(function(rooms){
         var cls = ['blue','red','green','brown'], trainNum = 0;
         $.each(rooms, function(i, row){
@@ -76,8 +76,12 @@ Rooms.setStudioRoomList = function(){
                     trainObj = row;
                 }
             } else {
-                var loc_index = Util.randomIndex(4),
-                    uurl = Util.format('/theme2/img/block-bg{0}.jpg',(loc_index == 0 ? loc_index + 1 : loc_index));
+                var loc_index = Util.randomIndex(3), uurl = '';
+                while($.inArray(loc_index,alreadyArray) > -1){
+                    loc_index = Util.randomIndex(3)
+                }
+                alreadyArray.push(loc_index);
+                uurl = Util.format('/theme2/img/block-bg{0}.jpg',loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
                     //(loc_index == 0 ? loc_index + 1 : loc_index),

@@ -43,6 +43,7 @@ Teach.setEvent = function(){
         var rankNum = rank === 'primary' ? '1' :(rank === 'middle' ? '2' : '3');
         NoviceGuide.url = Util.format('/theme2/template/noviceGuide/novice-guide{0}-{1}.html',rankNum,num);
         NoviceGuide.status = 0;
+        NoviceGuide.currentPage = rankNum.concat(num);
         //手动处理下隐藏swiper的分页下标
         if(rankNum === "1" && (num === "2" || num === "4" || num === "5")){
             NoviceGuide.isPaginationHide = true;
