@@ -34,7 +34,6 @@ var room = {
     }, //历史会话记录
     init: function() {
         this.setSocket();
-        this.setVideo();
         this.setEvent();
     },
     /**
@@ -43,9 +42,8 @@ var room = {
      */
     setVideo: function() {
         try {
-            $.getJSON('/admin/getSyllabus?t=' + new Date().getTime(), { groupType: room.userInfo.groupType, groupId: room.userInfo.groupId }, function(result) {
-                var loc_html = null,
-                    data = result.data;
+            $.getJSON('/admin/getSyllabus?t=' + new Date().getTime(), { groupType: room.userInfo.groupType, groupId: room.userInfo.groupId }, function(data) {
+                var loc_html = null;
                 if (data && common.isValid(data.studioLink)) {
                     var studioLinkArr = JSON.parse(data.studioLink),
                         url = '';
@@ -56,21 +54,7 @@ var room = {
                         }
                     }
                     if (common.isValid(url)) {
-                        if ($("#yyVideoDiv embed").length == 0) {
-                            if (url.indexOf('rtmp:') != -1) {
-                                var sdHtml = '<div style="position: relative; width: 100%; height: 100%; left: 0px; top: 0px;">' +
-                                    '<object type="application/x-shockwave-flash" id="sewise_player" name="sewise_player" data="/base/lib/flash/SewisePlayer.swf" width="100%" height="100%">' +
-                                    '<param name="allowfullscreen" value="true">' +
-                                    '<param name="wmode" value="transparent">' +
-                                    '<param name="allowscriptaccess" value="always">' +
-                                    '<param name="flashvars" value="autoStart=true&amp;programId=&amp;shiftTime=&amp;lang=zh_CN&amp;type=rtmp&amp;serverApi=ServerApi.execute&amp;skin=/base/lib/flash/skins/liveOrange.swf&amp;title=&amp;draggable=true&amp;published=0&amp;streamUrl=' + url + '&amp;duration=3600&amp;poster=&amp;flagDatas=&amp;videosJsonUrl=&amp;adsJsonData=&amp;statistics=&amp;customDatas=&amp;playerName=Sewise Player&amp;clarityButton=enable&amp;timeDisplay=disable&amp;controlBarDisplay=enable&amp;topBarDisplay=disable&amp;customStrings=&amp;volume=0.6&amp;key=&amp;trackCallback=">' +
-                                    '</object>' +
-                                    '</div>';
-                                $("#yyVideoDiv").html(sdHtml);
-                            } else {
-                                $('#yyVideoDiv').html('<embed src="' + url + '" quality="high" width="100%" height="100%" align="middle" allowScriptAccess="never" allowFullScreen="true" mode="transparent" type="application/x-shockwave-flash"></embed>');
-                            }
-                        }
+                        obsPlayer.init(url, 'yyVideoDiv', true);
                     }
                 }
             });
@@ -1018,9 +1002,11 @@ var room = {
 
         $('.right-teacher .teacher .open-video').click(function() {
             $('.video').removeClass('dn');
+			room.setVideo();
         });
         $(".video .video-close").click(function() {
             $('.video').addClass('dn');
+			$('#yyVideoDiv').empty();
         });
         $('.video').draggable({ handle: ".close-title" }).resizable({ minWidth: 450, minHeight: 420, maxWidth: 1024, maxHeight: 900 });
         $('.video').resize(function(e) {
