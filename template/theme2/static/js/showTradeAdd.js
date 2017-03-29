@@ -61,16 +61,17 @@ ShowTradeAdd.uploadShowTradeImg = function(fileObj){
     }catch(es){
         console.error("上传图片失败",es);
     }
+
 };
 
 /**
  * 保存晒单数据
  */
 ShowTradeAdd.saveShowTrade = function(){
-    var title = $('#showTradeAddForm .title').text();
-    var userName = $('#showTradeAddForm .userName').text();
+    var title = $('#ttitle').text();
+    var userName = $('#tuserName').text();
     var tradeImg = $('#tradeImg').val();
-    var remark = $('#showTradeAddForm .remark').text();
+    var remark = $('#tremark').text();
     if(Util.isBlank(title)){
         Pop.msg('请输入标题');
     }else if(Util.isBlank(userName)){
@@ -115,8 +116,8 @@ ShowTradeAdd.setEvent = function(){
      * 设置晒单人
      */
     if(Data.userInfo.isLogin && (Util.isBlank(Data.userInfo.isSetName) || Data.userInfo.isSetName)) {
-        $('#showTradeAddForm .userName').text(Data.userInfo.nickname).attr('contenteditable', 'false');
-        $('#showTradeAddForm .userName').next('.placeholder').hide();
+        $('#tuserName').text(Data.userInfo.nickname).attr('contenteditable', 'false');
+        $('#tuserName').next('.placeholder').hide();
     }
     /**
      * 后退回到我的晒单
@@ -126,21 +127,6 @@ ShowTradeAdd.setEvent = function(){
      * 返回我的晒单
      */
     $('#to_userShowTrade').bind('click', Container.back);
-    /**
-     * 输入框获得焦点后隐藏提示
-     */
-    $('#showTradeAddForm .contentText').bind('click', function(){
-        $(this).parent().find('.placeholder').hide();
-    });
-    /**
-     * 输入框失去焦点后无内容显示提示
-     */
-    $('#showTradeAddForm .contentText').bind('blur', function(){
-        var _con = $(this).text();
-        if(_con.length<=0){
-            $(this).parent().find('.placeholder').show();
-        }
-    });
     /**
      * 上传图片
      */
@@ -153,9 +139,44 @@ ShowTradeAdd.setEvent = function(){
     /**
      * 提交晒单
      */
-    $('#showTradeAddForm .submit-btn').bind('click', function(){
+    $('#tsubmit').bind('click', function(){
         if(Data.userInfo.isLogin) {
             ShowTradeAdd.saveShowTrade();
         }
     });
+
+    /**
+     * 晒单标题事件绑定
+     */
+    $("#ttitle").bind("focus", function(){
+        $(this).next().hide();
+    }).bind("blur", function(e){
+        var msg = $.trim($(this).html());
+        if(!msg){
+            $(this).next().fadeIn();
+        }
+    });
+    /**
+     * 晒单人事件绑定
+     */
+    $("#tuserName").bind("focus", function(){
+        $(this).next().hide();
+    }).bind("blur", function(e){
+        var msg = $.trim($(this).html());
+        if(!msg){
+            $(this).next().fadeIn();
+        }
+    });
+    /**
+     * 晒单备注事件绑定
+     */
+    $("#tremark").bind("focus", function(){
+        $(this).next().hide();
+    }).bind("blur", function(e){
+        var msg = $.trim($(this).html());
+        if(!msg){
+            $(this).next().fadeIn();
+        }
+    });
+
 };

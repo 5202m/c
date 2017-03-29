@@ -13,6 +13,7 @@ var Analyst = new Container({
     },
     onShow : function(){
         Analyst.setAnalystInfo();
+        Analyst.setSubscribeAttr();
         Analyst.setVideoList();
     }
 });
@@ -46,7 +47,7 @@ Analyst.setAnalystInfo = function(){
                 );
                 analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
-                analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+                analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
                 $('#analystPraiseTool').empty().html(analystPraiseHtml);
                 $('#analystIntro').empty().html(analystIntroductionHtml);
@@ -257,4 +258,103 @@ Analyst.setEvent = function(){
         PrivateChat.load();
     });
 
+    /**
+     * 下载微信图片
+     */
+    $('#analystWechat').on('click','i.i-download',function (e) {
+        //图片存在，则下载
+        if($(this).parent().prev().attr('src')){
+            Analyst.oDownLoad($(this).parent().prev().attr('src'),$(this).parent()[0]);
+        }else{
+            e.preventDefault();
+        }
+
+    })
+
 };
+
+/**
+ * 设置老师的订阅属性
+ */
+Analyst.setSubscribeAttr = function(){
+    $('#analystSubscribe').attr('analystId', Analyst.userNo);
+    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
+        if(data!=null){
+            $.each(data,function(i, row){
+                if(row.type == 'live_reminder'){
+                    $('#analystSubscribe').attr('lrid', row._id);
+                }else if(row.type == 'shout_single_strategy'){
+                    $('#analystSubscribe').attr('ssid', row._id);
+                }else if(row.type == 'trading_strategy'){
+                    $('#analystSubscribe').attr('tsid', row._id);
+                }
+                var analystsArr = row.analyst.split(',');
+                if($.inArray(Analyst.userNo,analystsArr) === -1)return;
+                $.each(analystsArr, function(k, v){
+                    if(v === Analyst.userNo){
+                        $('#analystSubscribe').text('已订阅');
+                    }
+                });
+            });
+        }
+    });
+};
+/**
+ * 下载图片
+ * @param url
+ */
+Analyst.oDownLoad = function(url,target){
+    var odownLoad = target;
+    var browserType = Analyst.myBrowser();
+    if (browserType==="IE"||browserType==="Edge"){
+        //IE
+        odownLoad.href="#";
+        var oImg=document.createElement("img");
+        oImg.src=url;
+        oImg.id="downImg";
+        var odown=document.getElementById("down");
+        odown.appendChild(oImg);
+        Analyst.SaveAs5(document.getElementById('downImg').src)
+    }else{
+        //!IE
+        odownLoad.href=url;
+        odownLoad.download="";
+    }
+};
+
+/**
+ * 判断浏览器类型
+ * @returns {*}
+ */
+Analyst.myBrowser = function(){
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf("Opera") > -1;
+    if (isOpera) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+        return "Chrome";
+    }
+    if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+    if (userAgent.indexOf("Trident") > -1) {
+        return "Edge";
+    } //判断是否Edge浏览器
+};
+
+Analyst.SaveAs5 = function(imgURL) {
+    var oPop = window.open(imgURL,"","width=1, height=1, top=5000, left=5000");
+    for(; oPop.document.readyState != "complete"; )
+    {
+        if (oPop.document.readyState == "complete")break;
+    }
+    oPop.document.execCommand("SaveAs");
+    oPop.close();
+}
