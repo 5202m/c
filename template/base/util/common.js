@@ -946,6 +946,13 @@ var common = {
         d.setDate(d.getDate() + days);
         var m = d.getMonth() + 1;
         return d.getFullYear() + '-' + m + '-' + d.getDate();
+    },
+    /**
+     * 是否本地访问
+     * @returns {boolean}
+     */
+    isLocalHref: function() {
+        return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(window.location.href);
     }
 };
 /**
