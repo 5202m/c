@@ -15,29 +15,29 @@ const liveRoomAPIService = require('./liveRoomAPIService');
 const Deferred = require("../util/common").Deferred;
 
 let zxFinanceService = {
-    /**
-     * 获取最后点评的数据
-     * 
-     * @param callback
-     */
-    getFinanceDataLastReview: function (callback) {
-        let deferred = new Deferred();
-        let path = "/zxFinanceData/getFinanceDataLastReview";
+  /**
+   * 获取最后点评的数据
+   *
+   * @param callback
+   */
+  getFinanceDataLastReview: function (callback) {
+    let deferred = new Deferred();
+    let path = "/zxFinanceData/getFinanceDataLastReview";
 
-        liveRoomAPIService.get(path).then((result) => {
-            if (callback) {
-                callback(result);
-            }
-            deferred.resolve(result);
-        }).catch ((e) => {
-            logger.error("getFinanceDataLastReview! >>getFinanceDataLastReview:", e);
-            if (callback) {
-                callback(null);
-            }
-            deferred.reject(e);
-        });
-        return deferred.promise;
-    }
+    liveRoomAPIService.get(path).then((result) => {
+      if (callback) {
+        callback(result);
+      }
+      deferred.resolve(result);
+    }).catch((e) => {
+      logger.error("getFinanceDataLastReview! >>getFinanceDataLastReview:", e);
+      if (callback) {
+        callback(null);
+      }
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  }
 };
 
 // 导出服务类
