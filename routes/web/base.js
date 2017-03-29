@@ -13,7 +13,7 @@ var errorMessage = require('../../util/errorMessage');
 var messageService = require('../../service/messageService'); //引入messageService
 var userService = require('../../service/userService'); //引入userService
 var baseApiService = require('../../service/baseApiService'); //引入baseApiService
-var pmApiService = require('../../service/pmApiService'); //引入pmApiService
+var apiService = require('../../service/pmApiService'); //引入pmApiService
 var syllabusService = require('../../service/syllabusService'); //引入syllabusService
 var studioService = require('../../service/studioService'); //引入studioService
 var chatService = require('../../service/chatService'); //引入chatService
@@ -2329,17 +2329,17 @@ router.post('/rob', function(req, res) {
     var robParams = {
         ac_periods: "20161202",
         phone: userInfo.mobilePhone,
-        nper: Common.formatDate(new Date(today + periods), "yyyyMMddHHmmss")
+        nper: common.formatDate(new Date(today + periods), "yyyyMMddHHmmss")
     };
     cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
         if (err) {
-            Logger.error("redPacket get cache fail:" + err);
+            logger.error("redPacket get cache fail:" + err);
         } else if (result != true && result != periods) {
             cacheClient.set("redPacket_" + robParams.phone, periods);
             Request.post({ url: (Config.pmOAPath + '/activity20161202/draw'), form: robParams }, function(error, response, data) {
                 var result = { result: 0, money: 0, msg: "" };
                 if (data) {
-                    Logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
+                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
                     try {
                         data = JSON.parse(data);
                         if (data.infoNo == 1 && data.infoGiftNumber) {
@@ -2382,9 +2382,9 @@ router.post('/pmLogin', function(req, res) {
         res.json(result);
         return;
     }
-    if (Common.isBlank(accountNo) || Common.isBlank(pwd)) {
+    if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (Common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
@@ -2393,8 +2393,8 @@ router.post('/pmLogin', function(req, res) {
     if (result.error) {
         res.json(result);
     } else {
-        apiService.checkAccountLogin({ loginname: accountNo, password: pwd, ip: Common.getClientIp(req) }, function(checkAResult) {
-            Logger.info("checkAccountLogin->flagResult:" + JSON.stringify(checkAResult));
+        apiService.checkAccountLogin({ loginname: accountNo, password: pwd, ip: common.getClientIp(req) }, function(checkAResult) {
+            logger.info("checkAccountLogin->flagResult:" + JSON.stringify(checkAResult));
             if (checkAResult != null) {
                 var clientGroup = '';
                 if (checkAResult.clientGroup != 'A' && checkAResult.clientGroup != 'N') {
@@ -2412,7 +2412,7 @@ router.post('/pmLogin', function(req, res) {
                         req.session.studioUserInfo.visitorId = visitorId;
                         req.session.studioUserInfo.roomName = roomName;
                         var snUser = req.session.studioUserInfo;
-                        var dasData = { mobile: snUser.mobilePhone, cookieId: cookieId, clientGroup: snUser.clientGroup, roomName: roomName, roomId: (snUser.groupId || roomId), platform: '', userAgent: req.headers['user-agent'], sessionId: req.sessionID, clientStoreId: snUser.clientStoreId, groupType: snUser.groupType, userName: (snUser.userName || ''), email: (snUser.email || ''), ip: Common.getClientIp(req), visitorId: visitorId, nickName: (snUser.nickname || ''), courseName: courseName, courseId: courseId, teacherId: teacherId, teacherName: teacherName, accountNo: accountNo };
+                        var dasData = { mobile: snUser.mobilePhone, cookieId: cookieId, clientGroup: snUser.clientGroup, roomName: roomName, roomId: (snUser.groupId || roomId), platform: '', userAgent: req.headers['user-agent'], sessionId: req.sessionID, clientStoreId: snUser.clientStoreId, groupType: snUser.groupType, userName: (snUser.userName || ''), email: (snUser.email || ''), ip: common.getClientIp(req), visitorId: visitorId, nickName: (snUser.nickname || ''), courseName: courseName, courseId: courseId, teacherId: teacherId, teacherName: teacherName, accountNo: accountNo };
                         visitorService.saveVisitorRecord("login", dasData);
                         res.json(saveResult);
                     });
@@ -2438,7 +2438,7 @@ router.post('/pmLogin', function(req, res) {
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo, clientStoreId, clientGroup, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
-        ip: Common.getClientIp(req),
+        ip: common.getClientIp(req),
         groupType: userSession.groupType,
         accountNo: accountNo,
         thirdId: null,
