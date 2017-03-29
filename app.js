@@ -2,6 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./resources/config');
+const index = require('./routes/index');
+const chatSession = require('./routes/chatSession');
 
 global.rootdir = __dirname;
 let app = express();
@@ -15,8 +17,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 // 设置session
-require('./routes/chatSession').startSession(app);
-require('./routes/index').init(app, express); // 配置同源页面路由
+chatSession.startSession(app);
+index.init(app, express); // 配置同源页面路由
 app.use((req, res, next) => {
     let err = new Error('Not Found');
     err.status = 404;

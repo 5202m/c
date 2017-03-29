@@ -895,6 +895,7 @@ var box = {
                     return false;
                 } else {
                     box.showMsg("修改成功");
+                    indexJS.userInfo.isSetName = true;
                     $('#myUserName').prop('disabled', true);
                     $('#saveUserName').addClass('dn');
                     $('#setUserName').removeClass('dn');

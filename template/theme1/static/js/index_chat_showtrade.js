@@ -322,13 +322,22 @@ var chatShowTrade = {
                     pointsConsumeDetail = [],
                     pointsGetHtml = chatShowTrade.formatHtml('getPoint'),
                     pointsConsumeHtml = chatShowTrade.formatHtml('pointConsume');
-                $.each(data.journal, function(i, row) {
-                    if (row.change > 0) {
-                        pointsGetDetail.unshift(pointsGetHtml.formatStr(common.formatterDate(row.date, '.'), (row.remark ? row.remark + '，' : ''), row.change));
-                    } else if (row.change < 0) {
-                        pointsConsumeDetail.unshift(pointsConsumeHtml.formatStr(common.formatterDate(row.date, '.'), (row.remark ? row.remark + '，' : ''), Math.abs(row.change)));
-                    }
-                });
+                if (common.isValid(data.journal)) {
+                    $.each(data.journal, function(i, row) {
+                        if (row.change > 0) {
+                            pointsGetDetail.unshift(pointsGetHtml.formatStr(
+                                common.formatterDate(row.date, '.'),
+                                (row.remark ? row.remark + '，' : ''),
+                                row.change));
+                        } else if (row.change < 0) {
+                            pointsConsumeDetail.unshift(
+                                pointsConsumeHtml.formatStr(
+                                    common.formatterDate(row.date, '.'),
+                                    (row.remark ? row.remark + '，' : ''),
+                                    Math.abs(row.change)));
+                        }
+                    });
+                }
                 $('#myPointsDetail .get .borbox table tbody').html(pointsGetDetail.join(''));
                 $('#myPointsDetail .consume .borbox table tbody').html(pointsConsumeDetail.join(''));
                 $('#myPointsDetail').css('height', '280px');

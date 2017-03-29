@@ -159,7 +159,9 @@ var videosSubscribe = {
             params.pointsRemark = '订阅' + $this.attr('tn');
             params.id = common.isBlank($this.attr('id')) ? '' : $this.attr('id');
             params.orip = common.isBlank($this.attr('orip')) ? 0 : $this.attr('orip');
-            if (common.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(',')) > -1) {
+            if (common.isBlank($('#myEmail').val()) &&
+                common.isValid(params.noticeType) &&
+                $.inArray('email', params.noticeType.split(',')) > -1) {
                 box.showMsg('请先绑定邮箱！');
                 $('#infotab a[t="accountInfo"]').click();
             } else if (common.isBlank(params.id) && common.isBlank(params.analyst)) {

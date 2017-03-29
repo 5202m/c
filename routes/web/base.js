@@ -27,7 +27,22 @@ var chatSubscribeService = require('../../service/chatSubscribeService'); //引�
 var chatPointsService = require('../../service/chatPointsService'); //引入chatPointsService
 var clientTrainService = require('../../service/clientTrainService'); //引入chatTeacherService
 var zxFinanceService = require('../../service/zxFinanceService.js');
+var activityService = require("../../service/activityService");
+
 var Geetest = require('geetest');
+var geetest = {};
+for (var i in config.geetest) {
+    geetest[i] = {
+        pc: new Geetest({
+            geetest_id: config.geetest[i].pc.id,
+            geetest_key: config.geetest[i].pc.key
+        }),
+        mobile: new Geetest({
+            geetest_id: config.geetest[i].mobile.id,
+            geetest_key: config.geetest[i].mobile.key
+        })
+    };
+}
 
 /**
  * 从基本路径提取groupType
@@ -36,6 +51,16 @@ var Geetest = require('geetest');
  */
 function getGroupType(req, isBase) {
     return "studio";
+}
+
+/**
+ * 判断是否微盘
+ * @param platform
+ * @param req
+ */
+function isWetrade(platform, req) {
+    return platform && platform.indexOf("wr_") != -1 &&
+        constant.fromPlatform.hxstudio == getGroupType(req);
 }
 
 /**
@@ -261,7 +286,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 rowTmp = null;
             var isVisitor = (constant.clientGroup.visitor == clientGroup);
             var viewDataObj = {
-                apiUrl: common.formatHostUrl(req.hostname, config.pmApiUrl),
+                apiUrl: common.formatHostUrl(req.hostname, config.apiUrl),
                 filePath: common.formatHostUrl(req.hostname, config.filesDomain),
                 web24kPath: config.web24kPath,
                 mobile24kPath: config.mobile24kPath
@@ -1066,10 +1091,7 @@ router.post('/checkGroupAuth', function(req, res) {
         roomType = req.body["roomType"],
         result = null,
         chatUser = req.session.studioUserInfo;
-    /*if(common.isBlank(groupId) || !chatUser){
-     result.error=errorMessage.code_1000;
-     }
-     if(!result.error){*/
+
     if ((common.isBlank(groupId) && common.isBlank(roomType)) || !chatUser) {
         result = errorMessage.code_1000;
     }
@@ -1539,10 +1561,10 @@ router.post('/setUserPraise', function(req, res) {
                                 params.opUser = userInfo.userId;
                                 params.opIp = common.getClientIp(req);
                                 params.remark = "每日点赞";
-                                chatPointsService.add(params, function(err, result) {
-                                    if (err) {
-                                        console.error("点赞添加积分失败!");
-                                    }
+                                chatPointsService.add(params, function(result) {
+                                    logger.debug("点赞添加积分成功!", result);
+                                }).then(e => {
+                                    logger.error("点赞添加积分失败!", e);
                                 });
                             }
                         });
@@ -2325,25 +2347,25 @@ router.post('/addClientTrain', function(req, res) {
  */
 router.post('/getShowTeacher', function(req, res) {
     var params = req.body['data'];
-    var nullResult = {};
-    nullResult["userInfo"] = null;
-    nullResult["tradeList"] = null;
-    nullResult["teacherList"] = null;
-    nullResult["trAndClNum"] = null;
-    nullResult["trainList"] = null;
+    var showTeacher = {};
+    showTeacher["userInfo"] = null;
+    showTeacher["tradeList"] = null;
+    showTeacher["teacherList"] = null;
+    showTeacher["trAndClNum"] = null;
+    showTeacher["trainList"] = null;
     if (typeof params == 'string') {
         try {
             params = JSON.parse(params);
         } catch (e) {
             logger.warn("[getShowTeacher] Illegal Parameters, ", params);
-            res.json(nullResult);
+            res.json(showTeacher);
             return;
         }
         var chatUser = req.session.studioUserInfo;
         if (!chatUser) {
             logger.warn("[getShowTeacher] Illegal Session studioUserInfo, ",
                 req.session.studioUserInfo);
-            res.json(nullResult);
+            res.json(showTeacher);
             return;
         }
         params.groupType = chatUser.groupType;
@@ -2356,7 +2378,7 @@ router.post('/getShowTeacher', function(req, res) {
                 res.json(result);
             });
         } else {
-            res.json(nullResult);
+            res.json(showTeacher);
         }
     }
 });
@@ -2663,6 +2685,7 @@ router.post('/getRoomList', function(req, res) {
                     }
                     rowTmp.defTemplate = row.defTemplate;
                     rowTmp.defaultAnalyst = row.defaultAnalyst || {};
+                    rowTmp.defaultCS = row.defaultCS;
                     newStudioList.push(rowTmp);
                 });
             }
@@ -2720,6 +2743,39 @@ router.post('/checkTodaySignin', function(req, res) {
     var userInfo = req.session.studioUserInfo;
     var clientip = common.getClientIp(req);
     clientTrainService.checkTodaySignin(userInfo, clientip, function(result) {
+        res.json(result);
+    });
+});
+
+
+/**
+ * 获取打赏排行
+ */
+router.get('/activity/getRewardMoneyInfo', function(req, res) {
+    var phoneNo = req.query["phoneNo"];
+    var page = req.query["page"];
+    activityService.getRewardMoneyInfo(phoneNo, page, function(result) {
+        res.json(result);
+    });
+});
+
+/**
+ * 获取奖池总金额
+ */
+router.get('/activity/getTotalMoneyInfo', function(req, res) {
+    var periods = req.query["periods"];
+    activityService.getTotalMoneyInfo(periods, function(result) {
+        res.json(result);
+    });
+});
+
+/**
+ * 获取抢红包金额
+ */
+router.get('/activity/getLotteryInfo', function(req, res) {
+    var phoneNo = req.query["phoneNo"];
+    var periods = req.query["periods"];
+    activityService.getLotteryInfo(phoneNo, periods, function(result) {
         res.json(result);
     });
 });

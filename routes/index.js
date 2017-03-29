@@ -1,6 +1,6 @@
 const baseRoute = require('./web/base');
 const adminRoute = require('./web/admin');
-var config = require('../resources/config');
+const config = require('../resources/config');
 const path = require('path');
 const fs = require('fs');
 
@@ -48,6 +48,7 @@ class Index {
         let viewPathes = this._getThemePaths().map(
             themePath => path.join(__dirname, `../template/${themePath}/view`));
         viewPathes.push(path.join(__dirname, 'template/admin/view')); //设置后台模板
+        viewPathes.push(path.join(__dirname, '../template/'));
         this._app.set('views', viewPathes);
         this._app.set('view engine', 'html');
         this._app.engine('.html', require('ejs').__express); //两个下划线

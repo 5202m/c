@@ -70,7 +70,7 @@ router.get('/room', function(req, res) {
     var roomName = req.query['roomName'];
     var adminUserInfo = req.session.adminUserInfo;
     var viewDataObj = {
-        apiUrl: common.formatHostUrl(req.hostname, config.pmApiUrl),
+        apiUrl: common.formatHostUrl(req.hostname, config.apiUrl),
         filePath: common.formatHostUrl(req.hostname, config.filesDomain)
     };
     viewDataObj.isNw = isNw ? isNw : false;
@@ -96,8 +96,11 @@ router.get('/room', function(req, res) {
                 }
             },
             function(err, results) {
-                if (results.checkResult != null && !results.checkResult.isOK) {
-                    res.render('error', errorMessage.code_12);
+                if (!results.checkResult) {
+                    var error = {};
+                    common.copyObject(error, errorMessage.code_4003, true);
+                    error.err = err || "";
+                    res.render('error', error);
                 } else {
                     if (results.checkResult != null) {
                         viewDataObj.userInfo = JSON.stringify(userInfo);
@@ -119,7 +122,9 @@ router.get('/room', function(req, res) {
                 }
             });
     } else {
-        res.render('error', errorMessage.code_11);
+        var error = { err: "" };
+        common.copyObject(error, errorMessage.code_11, true);
+        res.render('error', error);
     }
 });
 
@@ -146,7 +151,7 @@ router.post('/addArticle', function(req, res) {
                     var eDateTime = new Date(dataObj.publishEndDate).getTime();
                     var currTime = new Date().getTime();
                     if (isNotice || (currTime >= bDateTime && currTime <= eDateTime)) {
-                        chatService.sendNoticeArticle(dataObj.platform, dataObj);
+                        chatService.sendMsgToRoom(dataObj.platform, dataObj);
                     }
                     res.json(result);
                 } else {

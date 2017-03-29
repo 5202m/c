@@ -144,11 +144,13 @@ var common = {
         return eval('/(^' + val + '$)|(^' + val + '_{1}.+)/g');
     },
     /**
-     * 验证是否符合手机号码格式
-     * @param val
+     * 验证是否符合手机号码格式, 6-11位的纯数字就认为是合法的手机号码.
+     * @param num 手机号码
+     * @param reg 正则表达式
      */
-    isMobilePhone: function(val) {
-        return /(^[0-9]{11})$|(^86(-){0,3}[0-9]{11})$/.test(val);
+    isMobilePhone: function(num, reg) {
+        reg = reg ? reg : /(^[0-9]{6,11})$/;
+        return reg.test(num);
     },
     /**
      * 检查当前日期是否符合日期插件数据

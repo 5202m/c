@@ -6,7 +6,7 @@
  */
 
 const app = require('../app');
-const debug = require('debug')('chat-cf:server');
+const debug = require('debug')('chat-pm:server');
 const http = require('http');
 const logConf = require('../resources/logConf');
 const logger = logConf.getLogger('applicationScript');
@@ -37,9 +37,9 @@ server.on('listening', onListening);
 process.on('uncaughtException', err => {
     logger.error("this is some error,please check:", err);
 });
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', (reason, ...args) => {
     let strReason = JSON.stringify(reason);
-    logger.info(`Promise unhandledRejection >> Reason: ${strReason}`);
+    logger.info(`Promise unhandledRejection >> Reason: ${strReason}`, args || "");
 });
 
 /**

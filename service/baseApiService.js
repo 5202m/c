@@ -13,7 +13,7 @@ var baseApiService = {
      * 格式url
      */
     formatApiUrl: function(url) {
-        return config.pmApiUrl + url;
+        return config.apiUrl + url;
     },
     /**
      * 销毁访问主页的token
@@ -86,7 +86,7 @@ var baseApiService = {
      * @param callback
      */
     getMobileVerifyCode: function(mobilePhone, useType, ip, callback) {
-        request.post(config.pmApiUrl + "/sms/send",
+        request.post(config.apiUrl + "/sms/send",
             function(error, response, data) {
                 if (!error && response.statusCode == 200 && common.isValid(data)) {
                     data = JSON.parse(data);
@@ -113,7 +113,7 @@ var baseApiService = {
      * @param callback
      */
     checkMobileVerifyCode: function(mobilePhone, useType, verifyCode, callback) {
-        request.post(config.pmApiUrl + "/sms/checkAuth",
+        request.post(config.apiUrl + "/sms/checkAuth",
             function(error, response, data) {
                 if (!error && response.statusCode == 200 && common.isValid(data)) {
                     data = JSON.parse(data);
