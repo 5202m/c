@@ -151,7 +151,7 @@ var ClassNote = {
             var isHideData = ClassNote.isHideData(data._id, dataDetail.tag, storeClassNote);
             var dimHtml = isHideData ? Room.formatHtml("classNote_dim1") : "";
             var dataHtml = [];
-            var txtHtml = dataDetail.content && Room.formatHtml("classNote_txt", dataDetail.content) || "";
+            var txtHtml = dataDetail.tag == 'trading_strategy' ? dataDetail.content : dataDetail.content && Room.formatHtml("classNote_txt", dataDetail.content) || "";
             var item = dataDetail.tag == 'resting_order'? 'prerogative_callTrade' : 'prerogative_callTrade';
             var lookHtml = isHideData ? (dataDetail.tag == "trading_strategy" ? Room.formatHtml("classNote_trading_strategy_look", data._id) : Room.formatHtml("classNote_look", data._id, item)) : "";
             var dataDataArr = Util.parseJSON(dataDetail.remark || ""), dataDataTemp;
@@ -166,10 +166,12 @@ var ClassNote = {
                 ));
                 if(dataDataTemp.description){
                     dataHtml.push(Room.formatHtml("classNote_data2", isHideData ? Room.formatHtml("classNote_dim2") : dataDataTemp.description));
+                }else{
+                    dataHtml.push('<br/>')
                 }
             }
             if(dataHtml.length > 0){
-                dataHtml = Room.formatHtml("classNote_data", dataHtml.join(""));
+                dataHtml = dataDetail.tag == "trading_strategy" ? Room.formatHtml("classNote_data", dataHtml.join("")) : dataHtml.join('');
             }else{
                 dataHtml = "";
             }
@@ -181,7 +183,8 @@ var ClassNote = {
                     timeStr,
                     dataDetail.tag == "shout_single" ? "喊单" : "挂单",
                     dataDetail.authorInfo && dataDetail.authorInfo.name || "",
-                    txtHtml + dataHtml + lookHtml
+                    dataHtml + lookHtml,
+                    txtHtml
                 );
             }
         }else{ //普通直播精华

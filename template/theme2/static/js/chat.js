@@ -130,10 +130,12 @@ var Chat = {
                     setTimeout(function(){
                         $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-down4');
                         Chat.setHeight();
+                        Chat.setTalkScroll();
                     }, 300);
                 }else{
                     $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-down4');
                     Chat.setHeight();
+                    Chat.setTalkScroll();
                 }
             }else{
                 if(Player.type != "text"){
@@ -141,10 +143,12 @@ var Chat = {
                     setTimeout(function(){
                         $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-up4');
                         Chat.setHeight();
+                        Chat.setTalkScroll();
                     }, 300);
                 }else{
                     $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-up4');
                     Chat.setHeight();
+                    Chat.setTalkScroll();
                 }
             }
         });
@@ -159,6 +163,8 @@ var Chat = {
             $("#room_classnote").show();
             $("#room_foot").show();
             $("#room_talk").hide();
+            $('#page_room').removeClass('bgf2f2f2');
+            $('#page_room').addClass('bgfff');
         });
 
         /**
@@ -512,6 +518,8 @@ var Chat = {
         if(!Chat.fullscreen){
             height = height - 44 //$("#room_header").height()
             - (Player.type == "text" ? 0 : $("#chat_player").height());
+        }else{
+            height = height - 44;
         }
         $("#chat_msg").height(height);
     },
@@ -966,6 +974,8 @@ var Chat = {
                     Chat.scrolling = false;
                 }, 300);
 
+            }else {
+                $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight)
             }
         }
     },
