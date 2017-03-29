@@ -3,16 +3,16 @@
  * author Jade.zhu
  */
 var videosSubscribe = {
-    subscribeData:null,
-    init: function(){
+    subscribeData: null,
+    init: function() {
         this.setEvent();
     },
-    setEvent: function(){
-        $('#subscribe').click(function(){
-            if(indexJS.userInfo.isLogin){
+    setEvent: function() {
+        $('#subscribe').click(function() {
+            if (indexJS.userInfo.isLogin) {
                 common.openPopup('.blackbg,.personal_center');
                 $('#infotab a[t="mySubscribe"]').click();
-            }else{
+            } else {
                 common.openPopup('.blackbg,.login');
             }
         });
@@ -20,35 +20,35 @@ var videosSubscribe = {
     /**
      * 获取已订阅列表
      */
-    setSubscribe:function(){
-        common.getJson('/getSubscribe',{params:JSON.stringify({groupType:indexJS.userInfo.groupType})},function(data){
-            if(data!=null){
+    setSubscribe: function() {
+        common.getJson('/getSubscribe', { params: JSON.stringify({ groupType: indexJS.userInfo.groupType }) }, function(data) {
+            if (data != null) {
                 videosSubscribe.subscribeData = data;
-                $.each(data,function(i, row){
+                $.each(data, function(i, row) {
                     var analystsArr = row.analyst.split(',');
                     var noticeTypeArr = row.noticeType.split(',');
-                    $('input[name="'+row.type+'_analysts"]').val(row.analyst);
-                    $('input[name="'+row.type+'_noticeTypes"]').val(row.noticeType);
-                    $.each(analystsArr, function(k, v){
-                        $('#'+v+'_'+row.type).prop('checked', true);
+                    $('input[name="' + row.type + '_analysts"]').val(row.analyst);
+                    $('input[name="' + row.type + '_noticeTypes"]').val(row.noticeType);
+                    $.each(analystsArr, function(k, v) {
+                        $('#' + v + '_' + row.type).prop('checked', true);
                     });
-                    $.each(noticeTypeArr, function(k, v){
-                        $('#'+v+'_'+row.type).prop('checked', true);
+                    $.each(noticeTypeArr, function(k, v) {
+                        $('#' + v + '_' + row.type).prop('checked', true);
                     });
-                    var weekParentDiv = $('#week_'+row.type).parent().parent().parent();
-                    var monthParentDiv = $('#month_'+row.type).parent().parent().parent();
-                    if(common.getDateDiff(row.startDate, row.endDate)>7){
-                        $('#month_'+row.type).prop('checked',true);
+                    var weekParentDiv = $('#week_' + row.type).parent().parent().parent();
+                    var monthParentDiv = $('#month_' + row.type).parent().parent().parent();
+                    if (common.getDateDiff(row.startDate, row.endDate) > 7) {
+                        $('#month_' + row.type).prop('checked', true);
                         monthParentDiv.children('div.item').hide();
                         monthParentDiv.children('div.item').hide();
-                        monthParentDiv.children('div.mydytime').html(common.formatterDate(row.startDate,'/')+' <b>至</b> '+common.formatterDate(row.endDate,'/')).removeClass('dn');
-                    }else{
-                        $('#week_'+row.type).prop('checked',true);
+                        monthParentDiv.children('div.mydytime').html(common.formatterDate(row.startDate, '/') + ' <b>至</b> ' + common.formatterDate(row.endDate, '/')).removeClass('dn');
+                    } else {
+                        $('#week_' + row.type).prop('checked', true);
                         weekParentDiv.children('div.item').hide();
                         weekParentDiv.children('div.item').hide();
-                        weekParentDiv.children('div.mydytime').html(common.formatterDate(row.startDate,'/')+' <b>至</b> '+common.formatterDate(row.endDate,'/')).removeClass('dn');
+                        weekParentDiv.children('div.mydytime').html(common.formatterDate(row.startDate, '/') + ' <b>至</b> ' + common.formatterDate(row.endDate, '/')).removeClass('dn');
                     }
-                    $('.dytable .'+row.type+' a[t="'+row.type+'"]').attr({'id':row._id,'orip':row.point});
+                    $('.dytable .' + row.type + ' a[t="' + row.type + '"]').attr({ 'id': row._id, 'orip': row.point });
                 });
             }
         });
@@ -56,56 +56,59 @@ var videosSubscribe = {
     /**
      * 获取订阅服务类型
      */
-    setSubscribeType:function(){
-        common.getJson('/getSubscribeType',{params:JSON.stringify({groupType:indexJS.userInfo.groupType})},function(data){
-            if(data!=null){
-                var subscribeTypeHtml=[],//noticeCycleObj={'week':'1周','month':'1月'},noticeTypesObj={'email':'邮件','sms':'短信','wechat':'微信'},
-                    subscribeType=videosSubscribe.formatHtml('subscribeType'),
-                    analysts=videosSubscribe.formatHtml('analysts'),
-                    analyst=videosSubscribe.formatHtml('analyst'),
-                    noticeTypes=videosSubscribe.formatHtml('noticeTypes'),
-                    noticeType=videosSubscribe.formatHtml('noticeType'),
-                    noticeCycle=videosSubscribe.formatHtml('noticeCycle'),
-                    subscribeBtn=videosSubscribe.formatHtml('subscribeBtn');
-                    cls1=cls2='';
-                $.each(data,function(i,row){
-                    if(row.code == 'shout_single_strategy'){
+    setSubscribeType: function() {
+        common.getJson('/getSubscribeType', { params: JSON.stringify({ groupType: indexJS.userInfo.groupType }) }, function(data) {
+            if (data != null) {
+                var subscribeTypeHtml = [], //noticeCycleObj={'week':'1周','month':'1月'},noticeTypesObj={'email':'邮件','sms':'短信','wechat':'微信'},
+                    subscribeType = videosSubscribe.formatHtml('subscribeType'),
+                    analysts = videosSubscribe.formatHtml('analysts'),
+                    analyst = videosSubscribe.formatHtml('analyst'),
+                    noticeTypes = videosSubscribe.formatHtml('noticeTypes'),
+                    noticeType = videosSubscribe.formatHtml('noticeType'),
+                    noticeCycle = videosSubscribe.formatHtml('noticeCycle'),
+                    subscribeBtn = videosSubscribe.formatHtml('subscribeBtn');
+                cls1 = cls2 = '';
+                $.each(data, function(i, row) {
+                    if (row.code == 'shout_single_strategy') {
                         return true;
                     }
 
-                    var analystsHtml=[],noticeTypesHtml=[],noticeCycleHtml=[],subscribeBtnHtml=[];
+                    var analystsHtml = [],
+                        noticeTypesHtml = [],
+                        noticeCycleHtml = [],
+                        subscribeBtnHtml = [];
                     var analystsArr = JSON.parse(row.analysts),
                         analystSize = analystsArr.length;
-                    $.each(analystsArr, function(key, row1){
+                    $.each(analystsArr, function(key, row1) {
                         var analystName = row1.name;
-                        if(row1.name.indexOf('(')>-1){
-                            analystName = row1.name.substring(0,row1.name.indexOf('('));
+                        if (row1.name.indexOf('(') > -1) {
+                            analystName = row1.name.substring(0, row1.name.indexOf('('));
                         }
                         analystsHtml.push(analysts.formatStr(row1.userId, analystName, row1.point, row.code));
                     });
                     var noticeTypesArr = JSON.parse(row.noticeTypes),
                         noticeTypeSize = noticeTypesArr.length;
-                    $.each(noticeTypesArr, function(key, row1){
-                            if(key==0){
-                                noticeTypesHtml.push('<div class="itembox w1">');
-                            }
-                            noticeTypesHtml.push(noticeTypes.formatStr(row1.type, row1.name, row1.point, row.code));
-                            if(key==noticeTypeSize-1){
-                                noticeTypesHtml.push('</div>');
-                                subscribeBtnHtml.push(subscribeBtn.formatStr(row.code, row.name,row.analysts,row.noticeTypes,row.noticeCycle));
-                            }
+                    $.each(noticeTypesArr, function(key, row1) {
+                        if (key == 0) {
+                            noticeTypesHtml.push('<div class="itembox w1">');
+                        }
+                        noticeTypesHtml.push(noticeTypes.formatStr(row1.type, row1.name, row1.point, row.code));
+                        if (key == noticeTypeSize - 1) {
+                            noticeTypesHtml.push('</div>');
+                            subscribeBtnHtml.push(subscribeBtn.formatStr(row.code, row.name, row.analysts, row.noticeTypes, row.noticeCycle));
+                        }
                     });
-                    if(common.isValid(row.noticeCycle)) {
-                        cls2=' w1';
+                    if (common.isValid(row.noticeCycle)) {
+                        cls2 = ' w1';
                         var noticeCycleArr = JSON.parse(row.noticeCycle);
-                        $.each(noticeCycleArr, function (key, row1) {
+                        $.each(noticeCycleArr, function(key, row1) {
                             noticeCycleHtml.push(noticeCycle.formatStr(row1.cycle, row1.name, row1.point, row.code));
                         });
                     }
-                    subscribeTypeHtml.push(subscribeType.formatStr(row.name,analystsHtml.join(''), noticeTypesHtml.join(''), noticeCycleHtml.join(''),subscribeBtnHtml.join(''), cls1, cls2, row.code));
+                    subscribeTypeHtml.push(subscribeType.formatStr(row.name, analystsHtml.join(''), noticeTypesHtml.join(''), noticeCycleHtml.join(''), subscribeBtnHtml.join(''), cls1, cls2, row.code));
                 });
                 $('.dytable .tody tbody').html(subscribeTypeHtml.join(''));
-                indexJS.setListScroll($("#dy-scbox"));//我的订阅
+                indexJS.setListScroll($("#dy-scbox")); //我的订阅
                 videosSubscribe.setSubscribeEvent();
                 videosSubscribe.setSubscribe();
             }
@@ -114,66 +117,69 @@ var videosSubscribe = {
     /**
      * 订阅按钮事件
      */
-    setSubscribeEvent:function(){
+    setSubscribeEvent: function() {
         /**
          * 计算订阅所需积分
          */
         $('.dytable .tody input[type="checkbox"],.dytable .tody input[type="radio"],.dytable .pdbox a').unbind('click');
-        $('.dytable .tody input[type="checkbox"],.dytable .tody input[type="radio"],.dytable .pdbox a').click(function(){
-            var totalPoint = 0,analystsArr = [], noticeTypesArr = [];
-            $('.dytable .tody tr[t="'+$(this).attr('t')+'"] input[t="'+$(this).attr('t')+'"]').each(function(){
-                if($(this).is(':checked')){
+        $('.dytable .tody input[type="checkbox"],.dytable .tody input[type="radio"],.dytable .pdbox a').click(function() {
+            var totalPoint = 0,
+                analystsArr = [],
+                noticeTypesArr = [];
+            $('.dytable .tody tr[t="' + $(this).attr('t') + '"] input[t="' + $(this).attr('t') + '"]').each(function() {
+                if ($(this).is(':checked')) {
                     totalPoint += parseInt($(this).attr('p'));
-                    if($(this).attr('name')=='analyst'){
+                    if ($(this).attr('name') == 'analyst') {
                         analystsArr.push($(this).val());
                     }
-                    if($(this).attr('name')=='noticeType'){
+                    if ($(this).attr('name') == 'noticeType') {
                         noticeTypesArr.push($(this).val());
                     }
                 }
             });
-            $('input[name="'+$(this).attr('t')+'_analysts"]').val(analystsArr.join(','));
-            $('input[name="'+$(this).attr('t')+'_noticeTypes"]').val(noticeTypesArr.join(','));
-            $('.dytable .'+$(this).attr('t')+' b').text(totalPoint+'分');
-            $('.dytable .'+$(this).attr('t')+' a[t="'+$(this).attr('t')+'"]').attr('p',totalPoint);
+            $('input[name="' + $(this).attr('t') + '_analysts"]').val(analystsArr.join(','));
+            $('input[name="' + $(this).attr('t') + '_noticeTypes"]').val(noticeTypesArr.join(','));
+            $('.dytable .' + $(this).attr('t') + ' b').text(totalPoint + '分');
+            $('.dytable .' + $(this).attr('t') + ' a[t="' + $(this).attr('t') + '"]').attr('p', totalPoint);
         });
         /**
          * 订阅结算按钮
          */
         $('.dytable .pdbox a').unbind('click');
-        $('.dytable .pdbox a').click(function(){
+        $('.dytable .pdbox a').click(function() {
             var $this = $(this);
-            if($this.hasClass('clicked')){
+            if ($this.hasClass('clicked')) {
                 return false;
             }
             $this.addClass('clicked');
-            var params = {groupType:indexJS.userInfo.groupType,type:$this.attr('t'),point:(common.isBlank($this.attr('p'))?0:parseInt($this.attr('p')))};
-            params.noticeCycle = common.isBlank($('input[name="noticeCycle_'+$this.attr('t')+'"]:checked').val())?'':$('input[name="noticeCycle_'+$this.attr('t')+'"]:checked').val();
-            params.analyst = $('input[name="'+$this.attr('t')+'_analysts"]').val();
-            params.noticeType = common.isBlank($('input[name="'+$this.attr('t')+'_noticeTypes"]').val())?$this.attr('nts'):$('input[name="'+$this.attr('t')+'_noticeTypes"]').val();
-            params.pointsRemark = '订阅'+$this.attr('tn');
-            params.id = common.isBlank($this.attr('id'))?'':$this.attr('id');
-            params.orip = common.isBlank($this.attr('orip'))?0:$this.attr('orip');
-            if(common.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(','))>-1){
+            var params = { groupType: indexJS.userInfo.groupType, type: $this.attr('t'), point: (common.isBlank($this.attr('p')) ? 0 : parseInt($this.attr('p'))) };
+            params.noticeCycle = common.isBlank($('input[name="noticeCycle_' + $this.attr('t') + '"]:checked').val()) ? '' : $('input[name="noticeCycle_' + $this.attr('t') + '"]:checked').val();
+            params.analyst = $('input[name="' + $this.attr('t') + '_analysts"]').val();
+            params.noticeType = common.isBlank($('input[name="' + $this.attr('t') + '_noticeTypes"]').val()) ? $this.attr('nts') : $('input[name="' + $this.attr('t') + '_noticeTypes"]').val();
+            params.pointsRemark = '订阅' + $this.attr('tn');
+            params.id = common.isBlank($this.attr('id')) ? '' : $this.attr('id');
+            params.orip = common.isBlank($this.attr('orip')) ? 0 : $this.attr('orip');
+            if (common.isBlank($('#myEmail').val()) && $.inArray('email', params.noticeType.split(',')) > -1) {
                 box.showMsg('请先绑定邮箱！');
                 $('#infotab a[t="accountInfo"]').click();
-            }else if(common.isBlank(params.id) && common.isBlank(params.analyst)){
+            } else if (common.isBlank(params.id) && common.isBlank(params.analyst)) {
                 box.showMsg('请选择订阅老师！');
-            }else if(common.isBlank(params.id) && common.isBlank(params.noticeType)){
+            } else if (common.isBlank(params.id) && common.isBlank(params.noticeType)) {
                 box.showMsg('请选择订阅方式！');
-            }else if(common.isBlank(params.id) && common.isBlank(params.noticeCycle)){
+            } else if (common.isBlank(params.id) && common.isBlank(params.noticeCycle)) {
                 box.showMsg('请选择订阅周期！');
-            }else{
-                if(common.isBlank(params.analyst) || common.isBlank(params.noticeType)){
+            } else {
+                if (common.isBlank(params.analyst) || common.isBlank(params.noticeType)) {
                     params.point = 0;
                     params.analyst = '';
                     params.noticeType = '';
                     params.noticeCycle = '';
                 }
-                var lecturerIdArr = [], manyUid = null;
-                $('#course_panel .main_tab .live_prevlist li').each(function(){
+                var lecturerIdArr = [],
+                    manyUid = null;
+                $('#course_panel .main_tab .live_prevlist li').each(function() {
                     var tuid = $(this).attr('tuid');
-                    if(common.isValid(tuid)) {
+                    if (common.isValid(tuid)) {
                         if (tuid.indexOf(',') > -1) {
                             manyUid = tuid.split(',');
                             lecturerIdArr = $.merge(lecturerIdArr, manyUid);
@@ -183,47 +189,50 @@ var videosSubscribe = {
                     }
                 });
                 $.unique(lecturerIdArr);
-                var analystArr = params.analyst.split(','), notInAnalyst = [], isModify = true;
-                if(common.isValid(params.analyst)) {
-                    $.each(analystArr, function (k, v) {
+                var analystArr = params.analyst.split(','),
+                    notInAnalyst = [],
+                    isModify = true;
+                if (common.isValid(params.analyst)) {
+                    $.each(analystArr, function(k, v) {
                         if ($.inArray(v, lecturerIdArr) < 0) {
                             notInAnalyst.push($('#' + v + '_' + $this.attr('t')).attr('cval'));
                         }
                     });
                 }
-                $.each(videosSubscribe.subscribeData, function(i, row){
-                    if($this.attr('t') == row.type && params.analyst == row.analyst && params.noticeType == row.noticeType){
-                        var cycle = common.getDateDiff(row.startDate, row.endDate)>7?'month':'week';
-                        if(params.noticeCycle == cycle) {
+                $.each(videosSubscribe.subscribeData, function(i, row) {
+                    if ($this.attr('t') == row.type && params.analyst == row.analyst && params.noticeType == row.noticeType) {
+                        var cycle = common.getDateDiff(row.startDate, row.endDate) > 7 ? 'month' : 'week';
+                        if (params.noticeCycle == cycle) {
                             isModify = false;
                             return false;
                         }
                     }
                 });
-                if(isModify) {
+                if (isModify) {
                     if (notInAnalyst.length > 0 && $.inArray($this.attr('t'), ['live_reminder', 'shout_single_strategy', 'trading_strategy']) > -1) {
                         var msgOps = {
                             title: '温馨提醒',
                             msg: notInAnalyst.join(',') + '老师没有课程安排，确定订阅？',
                             btns: [{
-                                txt: "确定",
-                                fn: function () {
-                                    videosSubscribe.saveSubscribe(params, $this);
-                                }
-                            },
+                                    txt: "确定",
+                                    fn: function() {
+                                        videosSubscribe.saveSubscribe(params, $this);
+                                    }
+                                },
                                 {
                                     txt: '取消',
-                                    fn: function () {
+                                    fn: function() {
                                         box.hideMsg();
                                         $this.removeClass('clicked');
                                     }
-                                }]
+                                }
+                            ]
                         };
                         box.showMsg(msgOps);
                     } else {
                         videosSubscribe.saveSubscribe(params, $this);
                     }
-                }else {
+                } else {
                     box.showMsg('你已订阅相关课程，无需重复订阅！');
                 }
             }
@@ -234,16 +243,16 @@ var videosSubscribe = {
      * @param params
      * @param $this
      */
-    saveSubscribe: function(params, $this){
-        if(parseInt(params.point) != parseInt(params.orip) || params.analyst != $this.attr('a') || params.noticeType != $this.attr('t') || params.noticeCycle != $this.attr('c')) {
-            common.getJson('/subscribe', {params: JSON.stringify(params)}, function (data) {
+    saveSubscribe: function(params, $this) {
+        if (parseInt(params.point) != parseInt(params.orip) || params.analyst != $this.attr('a') || params.noticeType != $this.attr('t') || params.noticeCycle != $this.attr('c')) {
+            common.getJson('/subscribe', { params: JSON.stringify(params) }, function(data) {
                 if (data.isOK) {
                     chatShowTrade.getPointsInfo();
-                    if(common.isBlank(params.analyst) || common.isBlank(params.noticeType)){
+                    if (common.isBlank(params.analyst) || common.isBlank(params.noticeType)) {
                         box.showMsg('取消订阅成功！');
-                    } else if(common.isValid(params.id)) {
+                    } else if (common.isValid(params.id)) {
                         box.showMsg('修改订阅成功！');
-                    }else{
+                    } else {
                         box.showMsg('订阅成功！');
                     }
                     videosSubscribe.setSubscribeType();
@@ -252,7 +261,7 @@ var videosSubscribe = {
                 }
                 $this.removeClass('clicked');
             });
-        }else{
+        } else {
             box.showMsg('订阅内容无变化！');
             $this.removeClass('clicked');
         }
@@ -262,9 +271,9 @@ var videosSubscribe = {
      * @param region 内容域模块名
      * @returns {string}
      */
-    formatHtml:function(region){
+    formatHtml: function(region) {
         var formatHtmlArr = [];
-        switch(region) {
+        switch (region) {
             case 'subscribe':
                 formatHtmlArr.push('<tr>');
                 formatHtmlArr.push('    <td><span class="fz12">{0}</span></td>');
