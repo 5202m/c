@@ -3,23 +3,23 @@
  * author Jade.zhu
  */
 var chatPride = {
-    classNoteInfo:[],//直播精华非交易策略数据
-    strategyIsNotAuth:0,//查看交易策略是否授权
-    callTradeIsNotAuth:0,//查看喊单/挂单是否授权
+    classNoteInfo: [], //直播精华非交易策略数据
+    strategyIsNotAuth: 0, //查看交易策略是否授权
+    callTradeIsNotAuth: 0, //查看喊单/挂单是否授权
     /**
      * 初始化
      */
-    init: function(){
+    init: function() {
         this.setTradeStrategyNote(null, true);
         this.setEvent();
     },
     /**
      * 设置各种事件
      */
-    setEvent: function(){
+    setEvent: function() {
         /**课堂笔记加载更多*/
-        $("#textliveMore").bind("click", function(){
-            if(!$(this).is(".all")){
+        $("#textliveMore").bind("click", function() {
+            if (!$(this).is(".all")) {
                 var lastId = $("#textlivePanel li[aid]:last").attr("aid");
                 chatPride.setTradeStrategyNote(lastId, false);
             }
@@ -28,38 +28,41 @@ var chatPride = {
     /**
      * 设置广告
      */
-    setAdvertisement:function(){
-        if(!$(".live_banner").hasClass('loaded')) {
-            indexJS.getArticleList("advertisement", indexJS.userInfo.groupId, "0", 1, 5, '{"sequence":"desc","publishStartDate":"desc"}', null, function (dataList) {
+    setAdvertisement: function() {
+        if (!$(".live_banner").hasClass('loaded')) {
+            indexJS.getArticleList("advertisement", indexJS.userInfo.groupId, "0", 1, 5, '{"sequence":"desc","publishStartDate":"desc"}', null, function(dataList) {
                 if (dataList && dataList.result == 0) {
                     var data = dataList.data;
                     $(".ban_ul").empty();
-                    var html = [],dataTmp=null,url=null,target=null;
+                    var html = [],
+                        dataTmp = null,
+                        url = null,
+                        target = null;
                     for (var i in data) {
                         dataTmp = data[i];
-                        if(common.isBlank(dataTmp.linkUrl)){
-                            switch (dataTmp.detailList[0].tag){
+                        if (common.isBlank(dataTmp.linkUrl)) {
+                            switch (dataTmp.detailList[0].tag) {
                                 case "live800":
                                     url = "javascript:openLive800Chat(null)";
                                     break;
                                 case "qq":
                                     url = "javascript:openQQChatByCommonv3('','800018282');";
                                     break;
-                                default :
+                                default:
                                     url = "javascript:";
                             }
                             target = '';
-                        }else{
+                        } else {
                             url = dataTmp.linkUrl;
                             target = ' target="_blank"';
                         }
-                        html.push('<li><a href="'
-                            + url
-                            + '" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_banner\', \'' + dataTmp.detailList[0].title + '\', 1, true]);"'
-                            + target
-                            + '><img width="100%" alt="" src="'
-                            + dataTmp.mediaUrl
-                            + '"></a></li>');
+                        html.push('<li><a href="' +
+                            url +
+                            '" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_banner\', \'' + dataTmp.detailList[0].title + '\', 1, true]);"' +
+                            target +
+                            '><img width="100%" alt="" src="' +
+                            dataTmp.mediaUrl +
+                            '"></a></li>');
                     }
                     $(".ban_ul:first").html(html.join("")).parent().addClass("livebrief_ad");
                     /**
@@ -77,8 +80,8 @@ var chatPride = {
                     $(".live_banner").addClass('loaded');
                 }
             });
-        }else{
-            if($(".live_banner:first").is(".livebrief_ad") == false){
+        } else {
+            if ($(".live_banner:first").is(".livebrief_ad") == false) {
                 $(".live_banner:first").after($(".livebrief_ad")).remove();
             }
         }
@@ -86,25 +89,25 @@ var chatPride = {
     /**
      * 加载直播精华
      */
-    setTradeStrategyNote : function(noteId, isLoad){
-        if(!isLoad || !$("#textlivePanel").data("loaded")){
-            if(isLoad){
+    setTradeStrategyNote: function(noteId, isLoad) {
+        if (!isLoad || !$("#textlivePanel").data("loaded")) {
+            if (isLoad) {
                 $("#textlivePanel").data("loaded", true);
-                if(!noteId){
+                if (!noteId) {
                     noteId = $("#textlivePanel li[aid]:last").attr("aid");
                 }
             }
-            var data = {type:"prerogative",item:["prerogative_strategy",'prerogative_callTrade']};
-            common.getJson('/getChatPointsConfig',{data:JSON.stringify(data)}, function(result) {
+            var data = { type: "prerogative", item: ["prerogative_strategy", 'prerogative_callTrade'] };
+            common.getJson('/getChatPointsConfig', { data: JSON.stringify(data) }, function(result) {
                 if (result) {
-                    $.each(result,function(i,row) {
+                    $.each(result, function(i, row) {
                         var clientGroups = row.clientGroup;
                         for (var i = 0, lenI = !clientGroups ? 0 : clientGroups.length; i < lenI; i++) {
                             var clientGroup = clientGroups[i];
                             if (clientGroup == indexJS.userInfo.clientGroup) {
-                                if(row.item == 'prerogative_callTrade'){
+                                if (row.item == 'prerogative_callTrade') {
                                     chatPride.callTradeIsNotAuth = 1;
-                                }else if(row.item == 'prerogative_strategy'){
+                                } else if (row.item == 'prerogative_strategy') {
                                     chatPride.strategyIsNotAuth = 1;
                                 }
                             }
@@ -117,10 +120,10 @@ var chatPride = {
                     pageKey: noteId || "",
                     pageLess: 1,
                     ids: storeViewData.join(','),
-                    callTradeIsNotAuth:chatPride.callTradeIsNotAuth,
-                    strategyIsNotAuth:chatPride.strategyIsNotAuth
+                    callTradeIsNotAuth: chatPride.callTradeIsNotAuth,
+                    strategyIsNotAuth: chatPride.strategyIsNotAuth
                 };
-                indexJS.getArticleList("class_note", indexJS.userInfo.groupId, 1, 1, 30, '{"publishStartDate":"desc","createDate":"desc"}', params, function (dataList) {
+                indexJS.getArticleList("class_note", indexJS.userInfo.groupId, 1, 1, 30, '{"publishStartDate":"desc","createDate":"desc"}', params, function(dataList) {
                     if (dataList && dataList.result == 0) {
                         var data = dataList.data;
                         for (var i in data) {
@@ -129,13 +132,13 @@ var chatPride = {
                         for (var i in chatPride.classNoteInfo) {
                             chatPride.appendClassNoteInfo(chatPride.classNoteInfo[i], false, false, false);
                         }
-                        chatPride.classNoteInfo = [];//完成后清空数据
+                        chatPride.classNoteInfo = []; //完成后清空数据
                         if (data.length < dataList.pageSize) {
                             $("#textliveMore").addClass("all").html("已加载全部");
                         }
                     }
                     chatPride.setAdvertisement();
-                    indexJS.setListScroll($(".tabcont .main_tab .livebrief_list .scrollbox"));//直播精华
+                    indexJS.setListScroll($(".tabcont .main_tab .livebrief_list .scrollbox")); //直播精华
                 });
             });
         }
@@ -143,42 +146,49 @@ var chatPride = {
     /**
      * 追加直播精华
      */
-    appendTradeStrategyNote : function(articleInfo, isPrepend, showNum, isPush){
-        var articleDetail,publishTime, $panel = $("#textlivePanel"),$panelUL,tradeStrategyLiveBriefHtml='';
+    appendTradeStrategyNote: function(articleInfo, isPrepend, showNum, isPush) {
+        var articleDetail, publishTime, $panel = $("#textlivePanel"),
+            $panelUL, tradeStrategyLiveBriefHtml = '';
         var tradeStrategyLiveBrief = chatPride.formatHtml('tradeStrategyLiveBrief'); //课程老师信息
         var tradeStrategySupport = chatPride.formatHtml('tradeStrategySupport'); //交易策略信息
         //var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv');//交易支撑位支撑值
-        var tagFormat = chatPride.formatHtml('tag');//分析师标签
+        var tagFormat = chatPride.formatHtml('tag'); //分析师标签
         var tradeStrategyNoteImg = chatPride.formatHtml('tradeStrategyNoteImg'); //图片信息
-        var imgReg = /<img\s+[^>]*src=['"]([^'"]+)['"][^>]*>/,matches;
-        articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+        var imgReg = /<img\s+[^>]*src=['"]([^'"]+)['"][^>]*>/,
+            matches;
+        articleDetail = articleInfo.detailList && articleInfo.detailList[0];
         var aid = articleInfo._id || articleInfo.id;
-        var storeViewData = chatPride.getStoreViewData()||[];
-        var upOrDown = {'up':'看涨', 'down':'看跌'};
+        var storeViewData = chatPride.getStoreViewData() || [];
+        var upOrDown = { 'up': '看涨', 'down': '看跌' };
         var hideCut = '';
         if (common.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
             publishTime = new Date(articleInfo.publishStartDate).getTime();
             //课程信息
             $panelUL = $panel.find(".livebrief[pt='" + publishTime + "']>div.te_info");
             if ($panelUL.size() == 0) {
-                var author = '', avatar = '', style = '', tag = [], tagHtml = [], tUserId = '';
+                var author = '',
+                    avatar = '',
+                    style = '',
+                    tag = [],
+                    tagHtml = [],
+                    tUserId = '';
                 if (articleDetail.authorInfo) {
                     author = articleDetail.authorInfo.name || "";
                     avatar = articleDetail.authorInfo.avatar || "";
                     tUserId = articleDetail.authorInfo.userId || "";
                     tag = common.isValid(articleDetail.authorInfo.tag) ? articleDetail.authorInfo.tag.replace(/\s*，\s*/g, ',').split(',') : [];
-                    $.each(tag, function (key, val) {
+                    $.each(tag, function(key, val) {
                         if (common.isValid(val)) {
                             tagHtml.push(tagFormat.formatStr(val));
                         }
                     });
                 }
-                var publishTimeStr = common.formatterDateTime(publishTime, '-').substring(0, 16)
-                    + "-" + common.formatterDateTime(articleInfo.publishEndDate, '-').substring(11, 16);
+                var publishTimeStr = common.formatterDateTime(publishTime, '-').substring(0, 16) +
+                    "-" + common.formatterDateTime(articleInfo.publishEndDate, '-').substring(11, 16);
                 var tradeStrategySupportHtml = [];
                 if (common.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
                     var remarkArr = common.isValid(articleDetail.remark) ? JSON.parse(articleDetail.remark) : [];
-                    if(remarkArr.length==0){
+                    if (remarkArr.length == 0) {
                         hideCut = ' style="display:none;"';
                     }
                     /*var remarkMap = {};
@@ -192,15 +202,15 @@ var chatPride = {
                     if (indexJS.userInfo.isLogin && !chatPride.strategyIsNotAuth || $.inArray(aid, storeViewData) > -1) {
                         style = ' style="display:none;"';
                         //var idx = 0, lenI = Object.keys(remarkMap).length - 1;
-                        $.each(remarkArr, function (i, row) {
+                        $.each(remarkArr, function(i, row) {
                             var hideDesc = '';
-                            if(common.isBlank(row.description)){
+                            if (common.isBlank(row.description)) {
                                 hideDesc = ' style="display:none;"';
                             }
                             tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
                             //var tradeStrategySupportDivHtml = [];
                             //$.each(row, function (j, r) {
-                                //tradeStrategySupportDivHtml.push(tradeStrategySupportDiv.formatStr((j + 1), r.support_level, r.drag_level, ''));
+                            //tradeStrategySupportDivHtml.push(tradeStrategySupportDiv.formatStr((j + 1), r.support_level, r.drag_level, ''));
                             //});
                             //tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row[0].name, tradeStrategySupportDivHtml.join(''), (idx == 0 ? '<a href="javascript:void(0);" class="viewdata"' + style + ' _id="' + aid + '" item="prerogative_strategy" onclick="_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_zb_cl_ChaKanShuJu\', \'content_right\', 1, true]);">查看数据</a>' : '')));
                             //idx++;
@@ -210,9 +220,9 @@ var chatPride = {
                             style = ' style="display:none;"';
                         }
                         //var idx = 0, lenI = Object.keys(remarkMap).length - 1;
-                        $.each(remarkArr, function (i, row) {
+                        $.each(remarkArr, function(i, row) {
                             var hideDesc = '';
-                            if(common.isBlank(row.description)){
+                            if (common.isBlank(row.description)) {
                                 hideDesc = ' style="display:none;"';
                             }
                             tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], '****', '****', '****', '****', 'dim', hideDesc));
@@ -238,31 +248,36 @@ var chatPride = {
                 tradeStrategyLiveBriefHtml = tradeStrategyLiveBrief.formatStr(avatar, author, publishTimeStr, (articleDetail.title || ""), contentHtml, tradeStrategySupportHtml.join(''), publishTime, style, tagHtml.join(''), aid, tUserId, hideCut);
                 if (isPrepend) {
                     var $financeDataAndReview = $("#financeDataAndReview");
-                    if($financeDataAndReview.size() > 0){
+                    if ($financeDataAndReview.size() > 0) {
                         $financeDataAndReview.after(tradeStrategyLiveBriefHtml);
-                    }else{
+                    } else {
                         $panel.prepend(tradeStrategyLiveBriefHtml);
                     }
                 } else {
                     $panel.append(tradeStrategyLiveBriefHtml);
                 }
-                $panel.find(".picpart>.imgbox").each(function () {
+                $panel.find(".picpart>.imgbox").each(function() {
                     var $this = $(this);
                     $this.find("a>img").attr("src", $this.attr("url"));
                 });
             } else if ($panelUL.size() > 0 && isPush) {
-                var author = '', avatar = '', style = '', tag = [], tagHtml = [], tUserId = '';
+                var author = '',
+                    avatar = '',
+                    style = '',
+                    tag = [],
+                    tagHtml = [],
+                    tUserId = '';
                 if (articleDetail.authorInfo) {
                     author = articleDetail.authorInfo.name || "";
                     avatar = articleDetail.authorInfo.avatar || "";
                     tUserId = articleDetail.authorInfo.userId || "";
                     tag = common.isValid(articleDetail.authorInfo.tag) ? articleDetail.authorInfo.tag.replace(/\s*，\s*/g, ',').split(',') : [];
-                    $.each(tag, function (key, val) {
+                    $.each(tag, function(key, val) {
                         tagHtml.push(tagFormat.formatStr(val));
                     });
                 }
-                var publishTimeStr = common.formatterDateTime(publishTime, '-').substring(0, 16)
-                    + "-" + common.formatterDateTime(articleInfo.publishEndDate, '-').substring(11, 16);
+                var publishTimeStr = common.formatterDateTime(publishTime, '-').substring(0, 16) +
+                    "-" + common.formatterDateTime(articleInfo.publishEndDate, '-').substring(11, 16);
                 var tradeStrategySupportHtml = [];
                 var remarkArr = common.isValid(articleDetail.remark) ? JSON.parse(articleDetail.remark) : [];
                 /*var remarkMap = {};
@@ -277,9 +292,9 @@ var chatPride = {
                     if (indexJS.userInfo.isLogin && !chatPride.strategyIsNotAuth || $.inArray(aid, storeViewData) > -1) {
                         style = ' style="display:none;"';
                         //var idx = 0, lenI = Object.keys(remarkMap).length - 1;
-                        $.each(remarkArr, function (i, row) {
+                        $.each(remarkArr, function(i, row) {
                             var hideDesc = '';
-                            if(common.isBlank(row.description)){
+                            if (common.isBlank(row.description)) {
                                 hideDesc = ' style="display:none;"';
                             }
                             tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
@@ -295,9 +310,9 @@ var chatPride = {
                             style = ' style="display:none;"';
                         }
                         //var idx = 0, lenI = Object.keys(remarkMap).length - 1;
-                        $.each(remarkArr, function (i, row) {
+                        $.each(remarkArr, function(i, row) {
                             var hideDesc = '';
-                            if(common.isBlank(row.description)){
+                            if (common.isBlank(row.description)) {
                                 hideDesc = ' style="display:none;"';
                             }
                             tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], '****', '****', '****', '****', 'dim', hideDesc));
@@ -328,7 +343,7 @@ var chatPride = {
                 $panelUL.find('div.hdbox>div.skill').html('<span><i class="dot"></i>当前交易策略：</span>' + contentHtml);
                 $panelUL.find('div.hdbox>div.hdbox2').remove();
                 $panelUL.find('div.hdbox>div.skill').after(tradeStrategySupportHtml.join(''));
-                if(remarkArr.length==0){
+                if (remarkArr.length == 0) {
                     $panelUL.find('div.hdbox>a.show-ctrl').hide();
                 }
             }
@@ -337,41 +352,41 @@ var chatPride = {
         }
 
         var $cnt = $('#livePrideCount');
-        if(showNum){
-            if(!$cnt.parent().parent().parent().parent().is(".on")){
+        if (showNum) {
+            if (!$cnt.parent().parent().parent().parent().is(".on")) {
                 var cnt = ($cnt.data("cnt") || 0) + 1;
                 $cnt.data("cnt", cnt).html(cnt).css("display", "inline-block");
-            }else{
+            } else {
                 $cnt.data("cnt", 0).html("").hide();
             }
-        }else{
+        } else {
             $cnt.data("cnt", 0).html("").hide();
         }
         /*交易策略的收缩与展开*/
         $('.show-ctrl').unbind('click');
-        $('.hdbox .show-ctrl').click(function(){
-            if($(this).parent().find('.showpart').hasClass('cut')){
+        $('.hdbox .show-ctrl').click(function() {
+            if ($(this).parent().find('.showpart').hasClass('cut')) {
                 $(this).parent().find('.showpart').removeClass('cut');
                 $(this).text('收起');
-            }else{
+            } else {
                 $(this).parent().find('.showpart').addClass('cut');
                 $(this).text('点击展开');
             }
         });
         //查看数据
         $('.viewdata').unbind('click');
-        $('.viewdata').click(function(){
-            if(!indexJS.userInfo.isLogin){
+        $('.viewdata').click(function() {
+            if (!indexJS.userInfo.isLogin) {
                 $('#login_a').click();
-            }else{
+            } else {
                 chatPride.viewData($(this));
             }
         });
         /*交易策略大于某一高度*/
-        var livebriefDom = $('.livebrief[_aid='+aid+'] .hdbox');
-        if(livebriefDom.find('.hdbox2').size()>=2 || livebriefDom.find('.hdbox2').height()>=55 || livebriefDom.find('.skill').height()>=55){
+        var livebriefDom = $('.livebrief[_aid=' + aid + '] .hdbox');
+        if (livebriefDom.find('.hdbox2').size() >= 2 || livebriefDom.find('.hdbox2').height() >= 55 || livebriefDom.find('.skill').height() >= 55) {
             livebriefDom.find('.show-ctrl').show();
-        }else{
+        } else {
             livebriefDom.find('.show-ctrl').hide();
         }
     },
@@ -382,21 +397,23 @@ var chatPride = {
      * @param showNum
      * @param isPush
      */
-    appendClassNoteInfo:function(articleInfo, isPrepend, showNum, isPush){
-        var articleDetail,publishTime, $panel = $("#textlivePanel"),html,$li,publishTimeStr;
+    appendClassNoteInfo: function(articleInfo, isPrepend, showNum, isPush) {
+        var articleDetail, publishTime, $panel = $("#textlivePanel"),
+            html, $li, publishTimeStr;
         var tradeStrategyNote = chatPride.formatHtml('tradeStrategyNote'); //文档信息
         var tradeStrategyHd = chatPride.formatHtml('tradeStrategyHd'); //文档信息喊单
         var tradeStrategyHdDetail = chatPride.formatHtml('tradeStrategyHdDetail'); //文档信息喊单内容
         var tradeStrategyNoteDetail = chatPride.formatHtml('tradeStrategyNoteDetail'); //文档信息内容
         var tradeStrategyNoteImg = chatPride.formatHtml('tradeStrategyNoteImg'); //图片信息
-        var imgReg = /<img\s+[^>]*src=['"]([^'"]+)['"][^>]*>/,matches;
-        var upOrDown = {'up':'看涨', 'down':'看跌'};
-        articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+        var imgReg = /<img\s+[^>]*src=['"]([^'"]+)['"][^>]*>/,
+            matches;
+        var upOrDown = { 'up': '看涨', 'down': '看跌' };
+        articleDetail = articleInfo.detailList && articleInfo.detailList[0];
         publishTime = new Date(articleInfo.publishStartDate).getTime();
         //课程信息
         var aid = articleInfo._id || articleInfo.id;
-        var storeViewData = chatPride.getStoreViewData()||[];
-        if(isPush){
+        var storeViewData = chatPride.getStoreViewData() || [];
+        if (isPush) {
             $panel.find("li[aid='" + aid + "']").remove();
         }
         if ($panel.find("li[aid='" + aid + "']").size() > 0) {
@@ -404,7 +421,7 @@ var chatPride = {
         }
         var author = '';
         if (articleDetail.authorInfo) {
-            author = articleDetail.authorInfo.name.substring(0,1) || "";
+            author = articleDetail.authorInfo.name.substring(0, 1) || "";
         }
         html = articleDetail.content;
         matches = imgReg.exec(html);
@@ -413,21 +430,23 @@ var chatPride = {
             matches = imgReg.exec(html);
         }
         if (common.isValid(articleDetail.tag) && common.isValid(articleDetail.remark) && (articleDetail.tag == 'shout_single' || articleDetail.tag == 'resting_order')) {
-            var tradeStrategyHdDetailHtml = [], remarkArr = JSON.parse(articleDetail.remark), style = '';
+            var tradeStrategyHdDetailHtml = [],
+                remarkArr = JSON.parse(articleDetail.remark),
+                style = '';
             if (indexJS.userInfo.isLogin && !chatPride.callTradeIsNotAuth || $.inArray(aid, storeViewData) > -1) {
                 style = ' style="display:none;"';
-                $.each(remarkArr, function (i, row) {
+                $.each(remarkArr, function(i, row) {
                     var hideDesc = '';
-                    if(common.isBlank(row.description)){
+                    if (common.isBlank(row.description)) {
                         hideDesc = ' style="display:none;"';
                     }
                     //tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, (row.longshort == 'long' ? '看涨' : '看跌'), row.point, row.profit, row.loss, ''));
                     tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
                 });
             } else {
-                $.each(remarkArr, function (i, row) {
+                $.each(remarkArr, function(i, row) {
                     var hideDesc = '';
-                    if(common.isBlank(row.description)){
+                    if (common.isBlank(row.description)) {
                         hideDesc = ' style="display:none;"';
                     }
                     tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], '***', '***', '***', '***', 'dim', hideDesc));
@@ -439,7 +458,8 @@ var chatPride = {
                 contentHtml = html.replace(imgReg, tradeStrategyNoteImg.formatStr(matches[1]));
                 matches = imgReg.exec(contentHtml);
             }
-            var label = "喊单",item = 'prerogative_callTrade';
+            var label = "喊单",
+                item = 'prerogative_callTrade';
             if (articleDetail.tag == 'resting_order') {
                 label = "挂单";
                 item = 'prerogative_callTrade';
@@ -447,11 +467,11 @@ var chatPride = {
             html = tradeStrategyHd.formatStr(contentHtml, tradeStrategyHdDetailHtml.join(''), style, aid, author, label, item);
         }
         publishTimeStr = common.formatterDateTime(articleInfo.createDate, '-').substring(11);
-        if(articleDetail.tag == 'trading_strategy'){
+        if (articleDetail.tag == 'trading_strategy') {
             return;
         }
         $li = $(tradeStrategyNote.formatStr(publishTimeStr, html, aid));
-        $li.find(".imgbox").each(function () {
+        $li.find(".imgbox").each(function() {
             $(this).find("img").attr("src", $(this).attr("url"));
         });
         if (isPrepend) {
@@ -461,22 +481,22 @@ var chatPride = {
         }
 
         var $cnt = $('#livePrideCount');
-        if(showNum){
-            if(!$cnt.parent().parent().parent().parent().is(".on")){
+        if (showNum) {
+            if (!$cnt.parent().parent().parent().parent().is(".on")) {
                 var cnt = ($cnt.data("cnt") || 0) + 1;
                 $cnt.data("cnt", cnt).html(cnt).show();
-            }else{
+            } else {
                 $cnt.data("cnt", 0).html("").hide();
             }
-        }else{
+        } else {
             $cnt.data("cnt", 0).html("").hide();
         }
         //查看数据
         $('.viewdata2').unbind('click');
-        $('.viewdata2').click(function(){
-            if(!indexJS.userInfo.isLogin){
+        $('.viewdata2').click(function() {
+            if (!indexJS.userInfo.isLogin) {
                 $('#login_a').click();
-            }else{
+            } else {
                 chatPride.viewData($(this));
             }
         });
@@ -484,33 +504,33 @@ var chatPride = {
     /**
      * 老师喊单后推送消息提醒
      */
-    pushShoutSingleInfo:function(articleInfo){
+    pushShoutSingleInfo: function(articleInfo) {
         var infoPushHtml = chatPride.formatHtml('pushShortSingle');
-        var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
+        var articleDetail = articleInfo.detailList && articleInfo.detailList[0];
         var aid = articleInfo._id || articleInfo.id;
         var txt = null;
         if (common.isValid(articleDetail.tag) && common.isValid(articleDetail.remark) && (articleDetail.tag == 'shout_single' || articleDetail.tag == 'resting_order')) {
             var label = "老师喊单啦";
-            if(articleDetail.tag == 'resting_order'){
+            if (articleDetail.tag == 'resting_order') {
                 label = "老师挂单啦";
             }
-            txt = (common.isBlank(articleDetail.content) ? (articleDetail.authorInfo.userName||'')+label : articleDetail.content.replace('<p>','').replace('</p>',''));
+            txt = (common.isBlank(articleDetail.content) ? (articleDetail.authorInfo.userName || '') + label : articleDetail.content.replace('<p>', '').replace('</p>', ''));
             $('#chatMsgContentDiv .dialoglist').append(infoPushHtml.formatStr(txt, aid));
             chat.showSystemTopInfo("class_note", aid, txt);
             $('#chatMsgContentDiv .dialoglist .pushclose').unbind('click');
-            $('#chatMsgContentDiv .dialoglist .pushclose').click(function () {
+            $('#chatMsgContentDiv .dialoglist .pushclose').click(function() {
                 $(this).parent().hide();
             });
             $('#chatMsgContentDiv .dialoglist .shoutsingle').unbind('click');
-            $('#chatMsgContentDiv .dialoglist .shoutsingle').click(function () {
+            $('#chatMsgContentDiv .dialoglist .shoutsingle').click(function() {
                 chatPride.gotoLook($(this).attr('_id'));
             });
         }
     },
     /**去看看-策略、喊单、挂单*/
-    gotoLook : function(articleId){
+    gotoLook: function(articleId) {
         $('.main_tabnav a[t="livepride"]').click();
-        if(common.isValid(articleId)) {
+        if (common.isValid(articleId)) {
             /*滚动到指定位置*/
             indexJS.setListScroll($(".tabcont .main_tab .livebrief_list .scrollbox"), $('.livebrief_list .livebrief .brieflist ul li[aid="' + articleId + '"]').offset().top);
         }
@@ -519,37 +539,37 @@ var chatPride = {
      * 获取交易策略或喊单store数据
      * @returns {*}
      */
-    getStoreViewData:function(){
-        if (!store.enabled){
+    getStoreViewData: function() {
+        if (!store.enabled) {
             console.log('Local storage is not supported by your browser.');
             return;
         }
-        return store.get('point_'+indexJS.userInfo.userId);
+        return store.get('point_' + indexJS.userInfo.userId);
     },
     /**
      * 扣积分查看数据
      * @param dom
      */
-    viewData:function(dom){
-        var storeData = chatPride.getStoreViewData()||[];
-        var params = {groupType: indexJS.userInfo.groupType,item: dom.attr('item'),tag: 'viewdata_' + dom.attr('_id')};
-        common.getJson('/addPointsInfo', {params: JSON.stringify(params)}, function (result) {
+    viewData: function(dom) {
+        var storeData = chatPride.getStoreViewData() || [];
+        var params = { groupType: indexJS.userInfo.groupType, item: dom.attr('item'), tag: 'viewdata_' + dom.attr('_id') };
+        common.getJson('/addPointsInfo', { params: JSON.stringify(params) }, function(result) {
             if (result.isOK) {
-                indexJS.getArticleInfo(dom.attr('_id'), function (data) {
+                indexJS.getArticleInfo(dom.attr('_id'), function(data) {
                     if (data) {
-                        if(common.isValid(result.msg) && typeof result.msg.change == 'number') {
+                        if (common.isValid(result.msg) && typeof result.msg.change == 'number') {
                             box.showMsg('消费' + Math.abs(result.msg.change) + '积分');
                         }
                         chatPride.setViewDataHtml(dom, data);
-                        if($.inArray(dom.attr('_id'), storeData)<0) {
+                        if ($.inArray(dom.attr('_id'), storeData) < 0) {
                             storeData.push(dom.attr('_id'));
                         }
-                        if(store && store.enabled){
-                            store.set('point_'+indexJS.userInfo.userId, storeData);
+                        if (store && store.enabled) {
+                            store.set('point_' + indexJS.userInfo.userId, storeData);
                         }
                     }
                 });
-            }else{
+            } else {
                 box.showMsg(result.msg);
             }
         });
@@ -559,14 +579,17 @@ var chatPride = {
      * @param dom
      * @param data
      */
-    setViewDataHtml:function(dom, data){
-        var upOrDown = {'up':'看涨', 'down':'看跌'};
+    setViewDataHtml: function(dom, data) {
+        var upOrDown = { 'up': '看涨', 'down': '看跌' };
         var articleInfo = data.detailList && data.detailList[0];
-        var remarkArr = JSON.parse(articleInfo.remark),tradeStrategyHdDetailHtml = [],tradeStrategySupportHtml = [], tradeStrategyHdDetail = chatPride.formatHtml('tradeStrategyHdDetail');
-        if(articleInfo.tag == 'shout_single' || articleInfo.tag == 'resting_order'){
-            $.each(remarkArr, function (i, row) {
+        var remarkArr = JSON.parse(articleInfo.remark),
+            tradeStrategyHdDetailHtml = [],
+            tradeStrategySupportHtml = [],
+            tradeStrategyHdDetail = chatPride.formatHtml('tradeStrategyHdDetail');
+        if (articleInfo.tag == 'shout_single' || articleInfo.tag == 'resting_order') {
+            $.each(remarkArr, function(i, row) {
                 var hideDesc = '';
-                if(common.isBlank(row.description)){
+                if (common.isBlank(row.description)) {
                     hideDesc = ' style="display:none;"';
                 }
                 tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
@@ -574,9 +597,9 @@ var chatPride = {
             dom.parent().children('table').remove()
             dom.after(tradeStrategyHdDetailHtml.join(''));
             dom.hide();
-        }else if(articleInfo.tag == 'trading_strategy'){
+        } else if (articleInfo.tag == 'trading_strategy') {
             var tradeStrategySupport = chatPride.formatHtml('tradeStrategySupport'); //交易支撑位信息
-            var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv');//交易支撑位支撑值
+            var tradeStrategySupportDiv = chatPride.formatHtml('tradeStrategySupportDiv'); //交易支撑位支撑值
             /*var remarkMap = {};
             $.each(remarkArr, function(i, row){
                 if(remarkMap.hasOwnProperty(row.symbol)){
@@ -586,9 +609,9 @@ var chatPride = {
                 }
             });
             var idx = 0, lenI = Object.keys(remarkMap).length-1;*/
-            $.each(remarkArr, function (i, row) {
+            $.each(remarkArr, function(i, row) {
                 var hideDesc = '';
-                if(common.isBlank(row.description)){
+                if (common.isBlank(row.description)) {
                     hideDesc = ' style="display:none;"';
                 }
                 tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
@@ -609,10 +632,10 @@ var chatPride = {
      * @param region 内容域模块名
      * @returns {string}
      */
-    formatHtml:function(region){
+    formatHtml: function(region) {
         var formatHtmlArr = [];
-        switch(region) {
-            case 'tradeStrategyLiveBrief'://课程信息，直播老师
+        switch (region) {
+            case 'tradeStrategyLiveBrief': //课程信息，直播老师
                 formatHtmlArr.push('<div class="livebrief" pt="{6}" _aid="{9}">');
                 formatHtmlArr.push('    <div class="te_info" tid="{10}">');
                 formatHtmlArr.push('        <div class="himg"><img src="{0}" alt="" width="120" height="120"></div>');
@@ -671,8 +694,8 @@ var chatPride = {
                 formatHtmlArr.push('            <th width="21%">止损</th>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr>');
-                formatHtmlArr.push('            <td>{0}</td>');//品种
-                formatHtmlArr.push('            <td>{1}</td>');//涨跌
+                formatHtmlArr.push('            <td>{0}</td>'); //品种
+                formatHtmlArr.push('            <td>{1}</td>'); //涨跌
                 formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
