@@ -2026,7 +2026,7 @@ router.post('/modifyEmail', function(req, res) {
             email: params.email,
             url: urls.join("")
         };
-        pmApiService.sendEmailByUTM(emailParams, "VerityEmail", params.email,
+        apiService.sendEmailByUTM(emailParams, "VerityEmail", params.email,
             userInfo.groupType,
             function(result) {
                 if (result.isOK) {
