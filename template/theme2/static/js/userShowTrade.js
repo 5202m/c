@@ -28,7 +28,7 @@ UserShowTrade.setUserShowTradeUserInfo = function(){
                 widthPer = row.pointsGlobal / nextPointObj.points * 100;
             }
             $('#userShowTradeUserInfo').html(UserShowTrade.formatHtml('userInfo',
-                Data.userInfo.avatar,
+                //Data.userInfo.avatar || '/theme2/img/user.png',
                 Data.userInfo.nickname,
                 Util.clientGroupStr[Data.userInfo.clientGroup],
                 levelPointObj ? levelPointObj.name : '',
@@ -36,7 +36,7 @@ UserShowTrade.setUserShowTradeUserInfo = function(){
                 row ? row.pointsGlobal : 0,
                 nextPointObj ? nextPointObj.points : 0,
                 widthPer
-            ));
+            ).replace('/theme2/img/user.png',Data.userInfo.avatar || '/theme2/img/user.png'));
         }
     });
 };
@@ -77,11 +77,11 @@ UserShowTrade.setUserShowTradeList = function(){
             showTradeDate,
             showTradeTime,
             row.title,
-            row.tradeImg,
+            //row.tradeImg,
             row.remark,
             row.praise||0,
             row._id
-        ));
+        ).replace('/theme2/img/pic-1.png',row.tradeImg));
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');
         }

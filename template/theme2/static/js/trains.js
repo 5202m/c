@@ -24,19 +24,27 @@ Trains.setTrainList = function(){
     $.getJSON('/getTrainRoomList', {groupType:Data.userInfo.groupType}, function(result){
         if(result!=null){
             $.each(result, function(key, row){
-                var openDate = row.openDate;
+                var openDate = JSON.parse(row.openDate);
                 var feature = Trains.getTrainFeature(row, false);
                 var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
+                var statusArray = ['报名','进入','已结束'],bgcss = 0;
+                if(openDate.weekTime && openDate.weekTime[0].beginTime && openDate.weekTime[0].endTime){
+                    var timeStr = openDate.weekTime[0];
+                    dateStr = dateStr + '&nbsp;&nbsp;' + timeStr.beginTime.substr(0,5) + '~' + timeStr.endTime.substr(0,5)
+                }
                 if(feature.isEnd){
                     dateStr = '已结束';
                 }
+                bgcss = $.inArray(feature.handleTxt,statusArray) || bgcss;
                 var html = Trains.formatHtml('train',
                         row.name,
-                        dateStr,//时间/状态
+                        dateStr,//时间
                         row.remark,
                         feature.handleTxt,//状态，报名/进入/结束
                         row._id,
-                        feature.handler
+                        feature.handler,
+                        feature.clientSize,
+                        bgcss
                     );
                 if(feature.isEnd){
                     trainsEndHtml.push(html);

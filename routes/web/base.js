@@ -27,8 +27,22 @@ var chatSubscribeService = require('../../service/chatSubscribeService'); //引�
 var chatPointsService = require('../../service/chatPointsService'); //引入chatPointsService
 var clientTrainService = require('../../service/clientTrainService'); //引入chatTeacherService
 var zxFinanceService = require('../../service/zxFinanceService.js');
-var Geetest = require('geetest');
+var activityService = require("../../service/activityService");
 var cacheClient = require('../../cache/cacheClient');
+var Geetest = require('geetest');
+var geetest = {};
+for (var i in config.geetest) {
+    geetest[i] = {
+        pc: new Geetest({
+            geetest_id: config.geetest[i].pc.id,
+            geetest_key: config.geetest[i].pc.key
+        }),
+        mobile: new Geetest({
+            geetest_id: config.geetest[i].mobile.id,
+            geetest_key: config.geetest[i].mobile.key
+        })
+    };
+}
 
 
 /**
@@ -40,6 +54,16 @@ function getGroupType(req, isBase) {
     return "studio";
 }
 
+
+/**
+ * 判断是否微盘
+ * @param platform
+ * @param req
+ */
+function isWetrade(platform, req) {
+    return platform && platform.indexOf("wr_") != -1 &&
+        constant.fromPlatform.hxstudio == getGroupType(req);
+}
 
 /**
  * 获取重定向URL参数
@@ -264,7 +288,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 rowTmp = null;
             var isVisitor = (constant.clientGroup.visitor == clientGroup);
             var viewDataObj = {
-                apiUrl: common.formatHostUrl(req.hostname, config.pmApiUrl),
+                apiUrl: common.formatHostUrl(req.hostname, config.apiUrl),
                 filePath: common.formatHostUrl(req.hostname, config.filesDomain),
                 web24kPath: config.web24kPath,
                 mobile24kPath: config.mobile24kPath
@@ -396,6 +420,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             viewDataObj.studioList = newStudioList;
             viewDataObj.isDevTest = config.isDevTest;
             viewDataObj.isRedPacket = config.isRedPacket;
+
             //记录访客信息
             var fromPlatform = options.platform;
             var snUser = req.session.studioUserInfo;
@@ -1070,10 +1095,7 @@ router.post('/checkGroupAuth', function(req, res) {
         roomType = req.body["roomType"],
         result = null,
         chatUser = req.session.studioUserInfo;
-    /*if(common.isBlank(groupId) || !chatUser){
-     result.error=errorMessage.code_1000;
-     }
-     if(!result.error){*/
+
     if ((common.isBlank(groupId) && common.isBlank(roomType)) || !chatUser) {
         result = errorMessage.code_1000;
     }
@@ -1543,6 +1565,44 @@ router.post('/addShowTradeComment', function(req, res) {
         }).catch(e => {
             res.json({ isOK: false, msg: '系统错误，请稍后再试！' });
         });
+    }
+});
+router.post('/setUserPraise', function(req, res) {
+    var clientId = req.body.clientId,
+        praiseId = req.body.praiseId;
+    if (common.isBlank(clientId) || common.isBlank(praiseId)) {
+        res.json({ isOK: false });
+    } else {
+        var fromPlatform = getGroupType(req);
+        baseApiService.checkChatPraise(clientId, praiseId, fromPlatform,
+            function(isOK) {
+                if (isOK) {
+                    chatPraiseService.setPraise(praiseId, constant.chatPraiseType.user,
+                        fromPlatform,
+                        function(result) {
+                            if (result.isOK) {
+                                var params = {};
+                                var userInfo = req.session.studioUserInfo;
+                                params.userId = userInfo.mobilePhone;
+                                params.clientGroup = userInfo.clientGroup;
+                                params.groupType = userInfo.groupType;
+                                params.type = "daily";
+                                params.item = "daily_praise";
+                                params.tag = "trade_" + praiseId;
+                                params.isGlobal = false;
+                                params.opUser = userInfo.userId;
+                                params.opIp = common.getClientIp(req);
+                                params.remark = "每日点赞";
+                                chatPointsService.add(params, function(result) {
+                                    logger.debug("点赞添加积分成功!", result);
+                                }).then(e => {
+                                    logger.error("点赞添加积分失败!", e);
+                                });
+                            }
+                        });
+                }
+                res.json({ isOK: isOK });
+            });
     }
 });
 
@@ -2040,7 +2100,7 @@ router.post('/modifyEmail', function(req, res) {
             email: params.email,
             url: urls.join("")
         };
-        pmApiService.sendEmailByUTM(emailParams, "VerityEmail", params.email,
+        apiService.sendEmailByUTM(emailParams, "VerityEmail", params.email,
             userInfo.groupType,
             function(result) {
                 if (result.isOK) {
@@ -2361,25 +2421,25 @@ router.post('/addClientTrain', function(req, res) {
  */
 router.post('/getShowTeacher', function(req, res) {
     var params = req.body['data'];
-    var nullResult = {};
-    nullResult["userInfo"] = null;
-    nullResult["tradeList"] = null;
-    nullResult["teacherList"] = null;
-    nullResult["trAndClNum"] = null;
-    nullResult["trainList"] = null;
+    var showTeacher = {};
+    showTeacher["userInfo"] = null;
+    showTeacher["tradeList"] = null;
+    showTeacher["teacherList"] = null;
+    showTeacher["trAndClNum"] = null;
+    showTeacher["trainList"] = null;
     if (typeof params == 'string') {
         try {
             params = JSON.parse(params);
         } catch (e) {
             logger.warn("[getShowTeacher] Illegal Parameters, ", params);
-            res.json(nullResult);
+            res.json(showTeacher);
             return;
         }
         var chatUser = req.session.studioUserInfo;
         if (!chatUser) {
             logger.warn("[getShowTeacher] Illegal Session studioUserInfo, ",
                 req.session.studioUserInfo);
-            res.json(nullResult);
+            res.json(showTeacher);
             return;
         }
         params.groupType = chatUser.groupType;
@@ -2392,7 +2452,7 @@ router.post('/getShowTeacher', function(req, res) {
                 res.json(result);
             });
         } else {
-            res.json(nullResult);
+            res.json(showTeacher);
         }
     }
 });
@@ -2699,6 +2759,7 @@ router.post('/getRoomList', function(req, res) {
                     }
                     rowTmp.defTemplate = row.defTemplate;
                     rowTmp.defaultAnalyst = row.defaultAnalyst || {};
+                    rowTmp.defaultCS = row.defaultCS;
                     newStudioList.push(rowTmp);
                 });
             }
@@ -2761,6 +2822,37 @@ router.post('/checkTodaySignin', function(req, res) {
 });
 
 /**
+ * 获取打赏排行
+ */
+router.get('/activity/getRewardMoneyInfo', function(req, res) {
+    var phoneNo = req.query["phoneNo"];
+    var page = req.query["page"];
+    activityService.getRewardMoneyInfo(phoneNo, page, function(result) {
+        res.json(result);
+    });
+});
+
+/**
+ * 获取奖池总金额
+ */
+router.get('/activity/getTotalMoneyInfo', function(req, res) {
+    var periods = req.query["periods"];
+    activityService.getTotalMoneyInfo(periods, function(result) {
+        res.json(result);
+    });
+});
+
+/**
+ * 获取抢红包金额
+ */
+router.get('/activity/getLotteryInfo', function(req, res) {
+    var phoneNo = req.query["phoneNo"];
+    var periods = req.query["periods"];
+    activityService.getLotteryInfo(phoneNo, periods, function(result) {
+        res.json(result);
+    });
+});
+/**
  * 直播间交易账号密码登录
  */
 router.post('/pmLogin', function(req, res) {
@@ -2784,10 +2876,11 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
-        result.error = errorMessage.code_1002;
     }
+    // else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    //         userSession.verMalCode)) {
+    //     result.error = errorMessage.code_1002;
+    // }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
      result.error=errorMessage.code_1014;
      }*/
@@ -2981,7 +3074,11 @@ router.post('/rob', function(req, res) {
         is_depart: isDepart
     };
 
-    /*如果整点且非真实客户-未激活或者模拟用户,直接返回*/
+    if (periods < 0) {
+        return;
+    }
+
+    /*如果整点且非未激活或者模拟用户,直接返回*/
     if (1 == isDepart) {
         logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
         if (userInfo.clientGroup != "notActive" && userInfo.clientGroup != "simulate") {

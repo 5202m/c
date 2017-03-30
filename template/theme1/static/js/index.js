@@ -218,7 +218,11 @@ var indexJS = {
     },
     isNeedOnlineCS: function() {
         var roomType = $('#roomInfoId').attr('rt');
-        return roomType == 'vip' || roomType == "train";
+        if (roomType == 'vip' || roomType == "train") {
+            return true;
+        } else {
+            return false;
+        }
     },
     /**
      * 填充课程，直播预告
@@ -463,9 +467,7 @@ var indexJS = {
     getArticleInfo: function(id, callback) {
         try {
             $.getJSON('/getArticleInfo', { id: id }, function(json) {
-                //console.log("getArticleList->data:"+JSON.stringify(data));
-
-                callback(json.data || json);
+                callback(json.data || json || null);
             });
         } catch (e) {
             console.error("getArticleInfo->" + e);

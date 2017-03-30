@@ -7,11 +7,26 @@ var common = {
     /**
      * 日期变量
      */
-    daysCN: { "0": "星期天", "1": "星期一", "2": "星期二", "3": "星期三", "4": "星期四", "5": "星期五", "6": "星期六" },
+    daysCN: {
+        "0": "星期天",
+        "1": "星期一",
+        "2": "星期二",
+        "3": "星期三",
+        "4": "星期四",
+        "5": "星期五",
+        "6": "星期六"
+    },
     /**
      * 组类型
      */
-    clientGroupStr: { vip: 'VIP会员', active: '激活会员', notActive: '真实会员', simulate: '模拟会员', register: '注册会员', 'visitor': '游客' },
+    clientGroupStr: {
+        vip: 'VIP会员',
+        active: '激活会员',
+        notActive: '真实会员',
+        simulate: '模拟会员',
+        register: '注册会员',
+        'visitor': '游客'
+    },
     /**
      * 功能：删除数组中某个下标的元素
      */
@@ -953,6 +968,59 @@ var common = {
      */
     isLocalHref: function() {
         return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(window.location.href);
+    },
+    /**组类型**/
+    clientGroup: {
+        active: 'active',
+        notActive: 'notActive',
+        simulate: 'simulate',
+        register: 'register',
+        'visitor': 'visitor',
+        vip: "vip"
+    },
+    sortOnlineUserList: function(userList, myUserId) {
+        var sysArr = [],
+            vipArr = [],
+            activeArr = [],
+            notActiveArr = [],
+            simulateArr = [],
+            registerArr = [],
+            visitorArr = [],
+            sortedList = [];
+        $.each(userList, function(i, user) {
+            user.userType = parseInt(user.userType);
+            if (user.userId === myUserId) {
+                sortedList.push(user);
+                return true;
+            }
+            if (user.userType > 0) {
+                sysArr.push(user);
+                return true;
+            }
+            if (user.clientGroup === common.clientGroup.vip) {
+                vipArr.push(user);
+                return true;
+            }
+            if (user.clientGroup === common.clientGroup.active) {
+                activeArr.push(user);
+                return true;
+            }
+            if (user.clientGroup === common.clientGroup.notActive) {
+                notActiveArr.push(user);
+                return true;
+            }
+            if (user.clientGroup === common.clientGroup.simulate) {
+                simulateArr.push(user);
+                return true;
+            }
+            if (user.clientGroup === common.clientGroup.register) {
+                registerArr.push(user);
+                return true;
+            }
+            visitorArr.push(user);
+        });
+        return sortedList.concat(sysArr, vipArr, activeArr, notActiveArr,
+            simulateArr, registerArr, visitorArr);
     }
 };
 /**

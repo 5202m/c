@@ -138,6 +138,7 @@ Syllabus.setEvent = function(){
      */
     $('#syllabusList').on('click', '.item-cell .item-bd .avatar-info', function(){
         Analyst.userNo = $(this).attr('userNo');
+        Analyst.subscribeStr = $(this).parent().next().find('a').attr('subscribed') == 'true' ? '已订阅' : '订阅';
         Analyst.load();
         return false;
     });
@@ -159,8 +160,16 @@ Syllabus.setEvent = function(){
             var idx = $.inArray(currAnalyst, analystArr);
             if ($this.attr('subscribed') == 'true' && idx > -1) {
                 analystArr.splice(idx, 1);//如果点击已订阅，则删除当前订阅的老师
+                $this.removeClass('btn-green');
+                $this.addClass('btn-blue');
+                $this.removeAttr('subscribed');
+                $this.html('订阅')
             } else {
                 analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
+                $this.removeClass('btn-blue');
+                $this.addClass('btn-green');
+                $this.attr('subscribed','true');
+                $this.html('<i class="i-selected"></i>已订阅');
             }
             $.each(types, function (k, v) {
                 if (v == 'live_reminder') {
@@ -174,5 +183,26 @@ Syllabus.setEvent = function(){
             });
         }
         return false;
+    });
+};
+
+/**
+ * 设置订阅属性
+ * @param obj
+ */
+Syllabus.setSubscribeAttr = function(obj,analyst){
+    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
+        if(data!=null){
+            $.each(data,function(i, row){
+                if(analyst !== row.analyst) return;
+                if(row.type == 'live_reminder'){
+                    obj.attr('lrid', row._id);
+                }else if(row.type == 'shout_single_strategy'){
+                    obj.attr('ssid', row._id);
+                }else if(row.type == 'trading_strategy'){
+                    obj.attr('tsid', row._id);
+                }
+            });
+        }
     });
 };

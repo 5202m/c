@@ -10,63 +10,63 @@ let Deferred = require("../util/common").Deferred;
  * @type {{}}
  */
 var pushInfoService = {
-  /**
-   * 提取信息推送列表
-   */
-  getPushInfo: (groupType, roomId, clientGroup, position, callback) => {
-    let deferred = new Deferred();
-    let path = "/pushInfo/getPushInfo";
-    path += "?groupType=" + groupType;
-    path += "&roomId=" + roomId;
-    path += "&clientGroup=" + clientGroup;
-    path += "&position=" + position;
-    liveRoomAPIService.get(path).then((result) => {
-      if (callback) {
-        callback(result);
-      }
-      deferred.resolve(result);
-    }).catch((e) => {
-      logger.error("getPushInfo! >>getPushInfo:", e);
-      if (callback) {
-        callback(null);
-      }
-      deferred.reject(e);
-    });
-    return deferred.promise;
-  },
-  /**
-   * 检查推送是否符合条件
-   *
-   * @param groupType
-   * @param roomId
-   * @param clientGroup
-   * @param position
-   * @param filterTime
-   * @param callback
-   */
-  checkPushInfo: (groupType, roomId, clientGroup, position, filterTime,
-      callback) => {
-    let deferred = new Deferred();
-    let path = "/pushInfo/checkPushInfo";
-    path += "?groupType=" + groupType;
-    path += "&roomId=" + roomId;
-    path += "&clientGroup=" + (clientGroup || "");
-    path += "&position=" + position;
-    path += "&filterTime=" + filterTime;
-    liveRoomAPIService.get(path).then((result) => {
-      if (callback) {
-        callback(result);
-      }
-      deferred.resolve(result);
-    }).catch((e) => {
-      logger.error("checkPushInfo! >>checkPushInfo:", e);
-      if (callback) {
-        callback(null);
-      }
-      deferred.reject(e);
-    });
-    return deferred.promise;
-  }
+    /**
+     * 提取信息推送列表
+     */
+    getPushInfo: (groupType, roomId, clientGroup, position, callback) => {
+        let deferred = new Deferred();
+        let path = "/pushInfo/getPushInfo";
+        path += "?groupType=" + groupType;
+        path += "&roomId=" + roomId;
+        path += "&clientGroup=" + clientGroup;
+        path += "&position=" + position;
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getPushInfo! >>getPushInfo:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
+    },
+    /**
+     * 检查推送是否符合条件
+     *
+     * @param groupType
+     * @param roomId
+     * @param clientGroup
+     * @param position
+     * @param filterTime
+     * @param callback
+     */
+    checkPushInfo: (groupType, roomId, clientGroup, position, filterTime,
+        callback) => {
+        let deferred = new Deferred();
+        let path = "/pushInfo/checkPushInfo";
+        path += "?groupType=" + groupType;
+        path += "&roomId=" + roomId;
+        path += "&clientGroup=" + (clientGroup || "");
+        path += "&position=" + position;
+        path += "&filterTime=" + filterTime;
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("checkPushInfo! >>checkPushInfo:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
+    }
 };
 
 // 导出服务类

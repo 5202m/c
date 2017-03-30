@@ -7,66 +7,66 @@ let Deferred = require("../util/common").Deferred;
  */
 var showTradeService = {
 
-  /**
-   * 查询分析师晒单数据
-   *
-   * @param groupType
-   * @param userNo
-   *            如果有多个分析师，只取第一个
-   * @param callback
-   */
-  getShowTrade: function (groupType, userNo, callback) {
-    let deferred = new Deferred();
-    let path = "/showTrade/getShowTrade";
-    path += "?groupType=" + groupType;
-    path += "&userNo=" + userNo;
-    liveRoomAPIService.get(path).then((result) => {
-      if (callback) {
-        callback(result);
-      }
-      deferred.resolve(result);
-    }).catch((e) => {
-      logger.error("getShowTrade! >>getShowTrade:", e);
-      if (callback) {
-        callback(null);
-      }
-      deferred.reject(e);
-    });
-    return deferred.promise;
-  },
-  /**
-   * 查询指定条数数据
-   *
-   * @param params
-   * @param callback
-   */
-  getShowTradeList: function (params, callback) {
-    let deferred = new Deferred();
-    let path = "/showTrade/getShowTradeList";
-    path += "?" + querystring.stringify(params);
-    liveRoomAPIService.get(path).then((result) => {
-      if (callback) {
-        callback(result);
-      }
-      deferred.resolve(result);
-    }).catch((e) => {
-      logger.error("getShowTradeList! >>getShowTradeList:", e);
-      if (callback) {
-        callback(null);
-      }
-      deferred.reject(e);
-    });
-    return deferred.promise;
-  },
-  /**
-   * 新增晒单
-   *
-   * @param params
-   * @param callback
-   */
-  addShowTrade: function (params, callback) {
-    let deferred = new Deferred();
-    let path = "/showTrade/addShowTrade";
+    /**
+     * 查询分析师晒单数据
+     *
+     * @param groupType
+     * @param userNo
+     *            如果有多个分析师，只取第一个
+     * @param callback
+     */
+    getShowTrade: function(groupType, userNo, callback) {
+        let deferred = new Deferred();
+        let path = "/showTrade/getShowTrade";
+        path += "?groupType=" + groupType;
+        path += "&userNo=" + userNo;
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getShowTrade! >>getShowTrade:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
+    },
+    /**
+     * 查询指定条数数据
+     *
+     * @param params
+     * @param callback
+     */
+    getShowTradeList: function(params, callback) {
+        let deferred = new Deferred();
+        let path = "/showTrade/getShowTradeList";
+        path += "?" + querystring.stringify(params);
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getShowTradeList! >>getShowTradeList:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
+    },
+    /**
+     * 新增晒单
+     *
+     * @param params
+     * @param callback
+     */
+    addShowTrade: function(params, callback) {
+        let deferred = new Deferred();
+        let path = "/showTrade/addShowTrade";
 
     liveRoomAPIService.post(path, params).then((result) => {
       if (callback) {
