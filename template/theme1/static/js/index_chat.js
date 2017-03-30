@@ -1070,7 +1070,7 @@ var chat = {
         $.post(indexJS.apiUrl + "/message/sendMsg", {
             data: sendObj
         }, function() {
-            console.log("ok");
+            console.log("sendWhMsg ok");
         });
         chat.setWhContent(sendObj, true, false); //直接把数据填入内容栏
         txtObj.html(""); //清空内容
@@ -1452,6 +1452,7 @@ var chat = {
         });
         //进入聊天室加载的在线用户
         this.socket.on('onlineUserList', function(data, dataLength) {
+            data = common.sortOnlineUserList(data, indexJS.userInfo.userId);
             //如客户数小于200，则追加额外游客数
             var onLineNum = dataLength;
             if ($("#roomInfoId").attr("av") == "true") {
