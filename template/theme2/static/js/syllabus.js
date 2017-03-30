@@ -72,7 +72,7 @@ Syllabus.setSyllabusList = function(day){
                                 btn = '不可回看';
                                 btnCls = clsObj.grey;
                                 hideBtn = ' style="display:none;"';
-                            }else if(curDay > day || tmk[k].startTime<=curTime && tmk[k].endTime<curTime){
+                            }else if(curDay > day || (curDay == day && tmk[k].startTime<=curTime && tmk[k].endTime<curTime)){
                                 status = '已结束';
                                 statusCls = clsObj.grey;
                                 btn = '不可回看';

@@ -63,13 +63,20 @@ Subscribe.setSubscribeData = function(obj){
                         $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
                     }
                 });
-                if(row.type == 'live_reminder'){
-                    $(obj+' a.btnSubscribe').attr('lrid', row._id);
-                }else if(row.type == 'shout_single_strategy'){
-                    $(obj+' a.btnSubscribe').attr('ssid', row._id);
-                }else if(row.type == 'trading_strategy'){
-                    $(obj+' a.btnSubscribe').attr('tsid', row._id);
-                }
+                $(obj+' a.btnSubscribe').each(function (k,v) {
+                   if(row.analyst == v.getAttribute('analystid')){
+                       if(row.type == 'live_reminder'){
+                           //$(obj+' a.btnSubscribe').attr('lrid', row._id);
+                           v.setAttribute('lrid', row._id)
+                       }else if(row.type == 'shout_single_strategy'){
+                          // $(obj+' a.btnSubscribe').attr('ssid', row._id);
+                           v.setAttribute('ssid', row._id)
+                       }else if(row.type == 'trading_strategy'){
+                          // $(obj+' a.btnSubscribe').attr('tsid', row._id);
+                           v.setAttribute('tsid', row._id)
+                       }
+                   }
+                });
             });
         }
     });
