@@ -46,7 +46,7 @@ var indexJS = {
         chatShowTrade.init();
         noticeJS.init();
         indexTool.SimpleRoom.init();
-        // indexTool.RedPacket.init();
+        indexTool.RedPacket.init();
         indexJS.initGeetest();
         indexJS.initGeetest();
     },
@@ -332,7 +332,7 @@ var indexJS = {
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            // indexTool.RedPacket.tick();
+            indexTool.RedPacket.tick();
         }, 1000); //每秒一次
     },
     /**

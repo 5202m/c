@@ -1449,79 +1449,77 @@
     </div>
 </div>
 
-<!--
-&lt;!&ndash; 抢红包-未登录状态 &ndash;&gt;
+<%if(isRedPacket) {%>
+<!--抢红包-未登录状态 -->
 <div class="redbag_pop nologin dn" id="redPacket_noLogin">
     <div class="cont">
         <div class="rb_top">
             <span>马上登录金道直播间</span>
-            &lt;!&ndash;<h4>抢大量<b>5</b>~<b>10</b>元微信现金红包</h4>&ndash;&gt;
-            <h4>抢新春奖池大量微信现金红包</h4>
+            <h4>点阳春之花魁 赢大量现金红包</h4>
         </div>
-        <a href="javascript:void(0)" class="rb_btn" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_bigmfzc', 'content_middle', 1, true]);">
-            <i class="reg">免费注册</i><b class="bg"><b></b></b>
-        </a>
+        <a href="javascript:void(0)" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_bigmfzc', 'content_middle', 1, true]);" class="rb_btn"><i class="reg">免费注册</i><b class="bg"><b></b></b></a>
         <div class="rb_tip">
-            <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_madl', 'content_middle', 1, true]);">马上登录</a></span>
-            <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
+            <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_madl', 'content_middle', 1, true]);">马上登录</a></span>
+            <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
         </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
     </div>
 </div>
-&lt;!&ndash; 抢红包-已登录状态 &ndash;&gt;
-<div class="redbag_pop dn" id="redPacket_normal" style="top:50%; left:50%; opacity:1;">
+
+<!--抢红包-已登录状态 -->
+<div class="redbag_pop dn" id="redPacket_normal">
     <div class="cont">
         <div class="rb_top2">
-            <span>开抢倒计时</span>
+            <span>阳春点花魁！试试红包花落谁家</span>
             <div class="timecount">
-                <span><b rp="minutesLabel"></b>分</span>
-                <span><b rp="secondsLabel"></b>秒</span>
+                <span class="tc">开抢倒计时</span>
+                <div class="tc-figure">
+                    <span><b rp="minutesLabel"></b>分</span>
+                    <span><b rp="secondsLabel"></b>秒</span>
+                </div>
             </div>
         </div>
-        <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_qiang', 'content_middle', 1, true]);" style="display: none;">
-            <i class="">抢</i><b class="bg"><b></b></b>
-        </a>
-        <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_ddks', 'content_middle', 1, true]);">
-            <i class="wait">等待开抢</i><b class="bg"><b></b></b>
-        </a>
+        <!-- 抢 -->
+        <div class="rb_flowers" id="redPacket_rob">
+            <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
+            <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
+            <a href="javascri？pt:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
+        </div>
+        <div class="rb_flowers wait" id="redPacket_wait">
+            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
+            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
+            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
+        </div>
 
         <div class="rb_tip">
             <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
-            <p class="al-l">目前奖池已累积<b t="totalBonus"></b>元，人人有份！</p>
-            <p class="al-l">直播时段内每30分钟就有一大波红包来袭，即刻开抢啦！</p>
-            <a href="javascript:void(0)" class="tip-btn2" id="getHitList2" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_qiang_ds', 'content_middle', 1, true]);"><b>打赏</b><span>&gt;</span></a>
+            <p class="tspan">直播时段内每10分钟就有一大波红包来袭，即刻开抢啦！</p>
         </div>
         <div class="dashang_rule">
-            <a href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_qiang_gz', 'content_middle', 1, true]);">活动规则<i></i></a>
+            <a href="javascript:void(0)">活动规则<i></i></a>
             <div class="ds_rulecont">
                 <div class="arr"><i></i><i class="i2"></i></div>
                 <div class="scrollbox">
                     <span><b>•</b>活动规则</span>
                     <ul>
-                        <li>1.活动时间：02-13至02-26直播时间段内；</li>
-                        <li>2.活动期间，新春奖池金道会注入初始奖池启动金8888元；</li>
-                        <li>3.活动期间，客户可以随时打赏分析师，金额不限，同时金道将翻倍金额奖金注入奖池，供直播间所有注册客户抽奖；</li>
-                        <li>4.活动期间，金道直播间直播时段内每半小时抽奖，奖金将通过微信发放；</li>
-                        <li>5.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系直播间助理登记验证，以发放双倍红包奖金；</li>
-                        <li>6.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                        <li>7.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户2月15日中奖，则奖金红包于2月16日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
-                        <li>8.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权；</li>
+                        <li>1.活动期间，金道直播间直播时段内，每隔10分钟将发放一波奖金红包，所有直播间注册客户皆可参与“点花魁抢红包”活动，客户所中奖金将通过微信发放；</li>
+                        <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系直播间助理登记验证，以发放双倍红包奖金；</li>
+                        <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                        <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户3月30日中奖，则奖金红包于3月31日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放；</li>
+                        <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权；</li>
                     </ul>
                 </div>
             </div>
         </div>
-
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
     </div>
 </div>
-&lt;!&ndash; 抢红包-结果页-无奖 &ndash;&gt;
+<!-- 抢红包-结果页-无奖 -->
 <div class="redbag_pop rb_result dn" id="redPacket_resNo">
     <div class="cont">
         <div class="rb_top2">
             <span>很遗憾，此次未中奖！</span>
-            <span class="sp2">
-                没关系！<b>30分钟</b>后又将有一大波红包来袭，再接再厉哦！
-            </span>
+            <span class="sp2"><b>10分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
         </div>
         <div class="qrcode-con">
             <div class="rb_tip2">
@@ -1529,25 +1527,14 @@
             </div>
             <img src="" alt="" rp="wechatImg">
             <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
-            <p class="p2"><img src="../theme1/img/img-txt.png"/></p>
         </div>
-        &lt;!&ndash;<div class="rb_tip2">
-            <div class="tspan">
-                <b>欢迎扫码关注下方分析师微信，</b>
-                <br>实时领取分析师交易/喊单策略！
-            </div>
-        </div>
-        <div class="qrbox">
-            <img src="" alt="" rp="wechatImg">
-        </div>&ndash;&gt;
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
     </div>
 </div>
-&lt;!&ndash; 抢红包-结果页-中奖！ &ndash;&gt;
+<!-- 抢红包-结果页-中奖！ -->
 <div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
     <div class="cont">
-        <div class="congratulation">
-            恭喜获得<b rp="money"></b>元微信红包
+        <div class="congratulation">恭喜获得<b rp="money"></b>元微信红包
             <p>若当天注资激活可获得翻倍红包<b rp="doubleMoney"></b>元！</p>
         </div>
         <div class="qrcode-con">
@@ -1555,210 +1542,41 @@
             <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
             <p class="p2"><b>兑奖办法：</b>请扫码关注上方分析师微信，并提供您的<span>中奖手机号码给分析师验证并领取现金红包！</span> </p>
         </div>
-
-        &lt;!&ndash;<div class="rb_tip2">
-            <div class="tspan">
-                <b>请扫码关注下方分析师微信，</b><br>并提供您的<strong>中奖手机号码</strong>给分析师验证<br>即可领取现金红包！
-            </div>
-        </div>
-        <div class="qrbox">
-            <img src="" alt="" rp="wechatImg">
-        </div>&ndash;&gt;
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
     </div>
 </div>
-&lt;!&ndash; 抢红包-5秒倒计时 &ndash;&gt;
+
+<!--抢红包-5秒倒计时 -->
 <div class="redbag_pop_box dn" id="redPacket_mini">
     <div class="redbag_pop pop2" id="redPacket_mini2">
         <div class="cont">
             <div class="rb_top2">
                 <span>开抢倒计时</span>
             </div>
-            <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_miniRob" style="display: none;">
-                <i class="">抢</i><b class="bg"><b></b></b>
-            </a>
-            <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_miniWait">
-                <i class="t5" rp="seconds"></i><b class="bg"><b></b></b>
-            </a>
+
+            <!-- 倒计时 -->
+            <div class="rb_flowers countdown" id="redPacket_miniWait">
+                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
+                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
+                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
+            </div>
+
+            <!--抢 -->
+            <div class="rb_flowers" id="redPacket_miniRob">
+                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
+                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
+                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
+            </div>
+
             <div class="rb_tip">
-                <div class="rbnum">
-                    第<span rp="timesLabel"></span>波微信红包
-                </div>
+                <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
                 <div class="rb_check">
-                    <span class="rb_checkbox">
-                        <input type="checkbox" id="redPacket_popFlag" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_gx', 'content_middle', 1, true]);"><label for="redPacket_popFlag"><i></i></label>
-                    </span>
+                    <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
                     <span class="ctext">勾选后不再弹出提醒</span>
                 </div>
             </div>
-            <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+            <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
         </div>
     </div>
 </div>
-
-&lt;!&ndash; 打赏层 &ndash;&gt;
-<div class="popup_box pop_tip dn">
-    <div class="cont">
-        <div class="pop_tit i-panel-tit">我坚信，赞赏是不耍流氓的鼓励</div>
-        <div class="dashang_rule">
-            <a href="javascript:void(0)">打赏规则<i></i></a>
-            <div class="ds_rulecont">
-                <div class="arr"><i></i><i class="i2"></i></div>
-                <p>活动期间，客户可以随时打赏分析师，金额不限，同时金道将翻倍金额奖金注入奖池，供直播间所有注册客户抽奖；</p>
-            </div>
-        </div>
-
-        <div class="tip-list">
-            <ul class="clearfix">
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132456_58263254.jpg"/>
-                        <p class="tip-name">陈丞</p>
-                        <img src="../theme1/img/redbag_qr1_chen.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >chan24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '陈丞', 1, true]);"
-                        >打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132532_20792939.jpg"/>
-                        <p class="tip-name">方宥楷</p>
-                        <img src="../theme1/img/redbag_qr2_fang.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >fang_24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '方宥楷', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132640_41386418.jpg"/>
-                        <p class="tip-name">李呱呱</p>
-                        <img src="../theme1/img/redbag_qr3_li.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >lee_24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '李呱呱', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132514_30511167.jpg"/>
-                        <p class="tip-name">叶航</p>
-                        <img src="../theme1/img/redbag_qr4_ye.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >yehang24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '叶航', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132545_13859096.jpg"/>
-                        <p class="tip-name">庄蓝玉</p>
-                        <img src="../theme1/img/redbag_qr5_zhuang.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >zhuang24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '庄蓝玉', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161103150004_81450109.jpg"/>
-                        <p class="tip-name">周游</p>
-                        <img src="../theme1/img/redbag_qr6_zhou.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >zhou_24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '周游', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161107185629_99635038.jpg"/>
-                        <p class="tip-name">赵相宾</p>
-                        <img src="../theme1/img/redbag_qr7_zhao.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >zhao_24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '赵相宾', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161123145629_79323367.jpg"/>
-                        <p class="tip-name">刘策</p>
-                        <img src="../theme1/img/redbag_qr8_liu.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >liu_gw24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '刘策', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161128103718_38563023.jpg"/>
-                        <p class="tip-name">陈铎</p>
-                        <img src="../theme1/img/redbag_qr9_chen.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >chen_gw24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '陈铎', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132428_37547950.jpg"/>
-                        <p class="tip-name">盖盖</p>
-                        <img src="../theme1/img/redbag_qr10_gai.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >gai24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '盖盖', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132353_29498046.jpg"/>
-                        <p class="tip-name">钟文耀</p>
-                        <img src="../theme1/img/redbag_qr11_zhong.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >chung24K</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '钟文耀', 1, true]);">打赏</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="tip-item">
-                        <img src="https://chatfiles.kgold852.com/upload/pic/header/chat/201611/20161101132414_54553720.jpg"/>
-                        <p class="tip-name">高登</p>
-                        <img src="../theme1/img/redbag_qr12_gao.png" style="display:none;"/>
-                        <span style="display:none;" rp="wechat" >kao_24k</span>
-                        <a href="javascript:void(0)" class="tip-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsanalyst', '高登', 1, true]);">打赏</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
-    </div>
-</div>-->
-
-<!--打赏榜 -->
-<!--<div class="popup_box pop_tip2 dn">-->
-    <!--<div class="cont">-->
-        <!--<div class="pop_tit i-panel-tit2">打赏榜</div>-->
-        <!--<div class="hit-list">-->
-            <!--<div class="hit-list-item">-->
-                <!--<table id="hitItem">-->
-
-                <!--</table>-->
-            <!--</div>-->
-            <!--<div class="hit-list-item" style="display: none" id="hitRight">-->
-                <!--<table>-->
-
-                <!--</table>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="hit-btn-op">-->
-            <!--<a href="javascript:void(0)" class="btn btn-prev"><span>&lt;</span>上一页</a>-->
-            <!--<a href="javascript:void(0)" class="btn btn-next">下一页<span>&gt;</span></a>-->
-            <!--<a href="javascript:void(0)" class="hit-tips-btn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_dsb_button', 'content_middle', 1, true]);"><b>打赏</b></a>-->
-        <!--</div>-->
-        <!--<a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>-->
-    <!--</div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; 弹出老师微信收款二维码 &ndash;&gt;-->
-<!--<div class="popup_box pop_collection dn">-->
-    <!--<div class="cont">-->
-        <!--<div class="pop_tit">赏识之情 涌泉相报 </div>-->
-        <!--<div class="collection-con">-->
-            <!--<p class="p1"><b>加老师微信，给老师发红包 <span>打赏后，金道将翻倍金额注入奖池。</span></b></p>-->
-            <!--<img src="" alt="" />-->
-            <!--<p class="p2">老师微信二维码 <span>微信号：<label rp="wechat"></label> </span>  </p>-->
-        <!--</div>-->
-        <!--<a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>-->
-    <!--</div>-->
-<!--</div>-->
+<%}%>

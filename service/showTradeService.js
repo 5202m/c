@@ -129,7 +129,27 @@ var showTradeService = {
       deferred.reject(e);
     });
     return deferred.promise;
-  }
+  },
+    /**
+     * 添加评论
+     * @param id
+     * @param userInfo
+     * @param content
+     * @param refId
+     * @param callback
+     */
+    addComments : function(params){
+        let deferred = new Deferred();
+        let path = "/showTrade/addComments";
+        liveRoomAPIService.post(path, params).then((result) => {
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("addComments! >>addComments:", e);
+            deferred.reject(e);
+        });
+        return deferred.promise;
+    }
+
 };
 // 导出服务类
 module.exports = showTradeService;

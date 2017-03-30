@@ -1,0 +1,237 @@
+@font-face {
+    font-family: 'redbag-figure';
+    src: url('../font/din1451m-webfont.eot') format('eot'),
+    url('../font/din1451m-webfont.woff') format('woff'),
+    url('../font/din1451m-webfont.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 抢红包活动 */
+.box-header h1{ position: relative; z-index: 2 }
+.header_redbag{ display: inline-block; *display: inline; *zoom: 1; vertical-align: top; margin-right:30px; position: relative; cursor: pointer; background: url(../img/pinkbg1.jpg) 0 center no-repeat; padding: 9px 0 8px 57px; height: 70px; margin-left: -15px; z-index: 1; text-align: left; width: 435px; box-sizing: border-box; white-space: nowrap;font-size: 0}
+.header_redbag .redbag_pic{ width: 44px; height: 53px; background: url(../img/redbag.png) 0 0 no-repeat; background-size: 100% auto; display: inline-block;*display: inline;*zoom: 1; vertical-align: top; margin-left: -5px; }
+.header_redbag .rb_text{ display: inline-block; *display: inline; *zoom: 1; padding-top: 5px;}
+.header_redbag .rb_text .te1{ display: inline-block; *display: inline; *zoom: 1; padding: 0 10px; vertical-align: top; text-align: center; color: #e1514b; font-size: 14px; line-height: 22px; height: 45px; white-space: nowrap; min-width: 105px; border-right: 1px solid #efd5da; }
+.header_redbag .te1 strong{ display: block; font-size: 20px; }
+.header_redbag .te1 b{ font-size: 18px; font-weight: normal; font-family: 'redbag-figure','Futura Lt BT'; padding: 0 1px }
+.header_redbag .rb_text .timecount{ display: inline-block; *display: inline; *zoom: 1; padding: 0 10px; vertical-align: top; white-space: nowrap; }
+.header_redbag .timecount span{ color: #858585; font-size: 12px; vertical-align: bottom; line-height: 40px;}
+.header_redbag .timecount b{ color: #e74341; font-size: 40px; font-family: 'redbag-figure'; font-weight: normal; vertical-align: bottom; line-height: 50px;  padding: 0 2px; display: inline-block;*display: inline;*zoom: 1; text-align: center; }
+.tab_redbag{ width: 100%; position: relative; background: url(../img/pinkbg2.jpg) center 0 no-repeat; background-size: 100% 100%; z-index: 1; height: 156px; }
+.tab_redbag .rb_cont{ padding: 17px 0 0 24px; font-size: 0; text-align: left; white-space: nowrap;}
+.tab_redbag .redbag_pic{ display: inline-block; vertical-align: top; background: url(../img/redbag2.png); width: 60px; height: 58px; }
+.tab_redbag + .livebrief,.livebrief_list #textlivePanel{ margin-top: -80px; position: relative; z-index: 2; }
+.tab_redbag .te1{ display: inline-block; height: 40px; margin-top: 10px; background: url(../img/redbag_text.jpg) center bottom no-repeat; min-width: 115px; color: #e1514b; font-size: 15px; text-align: center; line-height: 1.1; border-right: 1px solid #fac7d2; padding: 0 14px 0 18px  }
+.tab_redbag .te1 b{ font-size: 18px; font-weight: normal; font-family: 'redbag-figure','Futura Lt BT'; padding: 0 1px}
+.tab_redbag .timecount{ display: inline-block; *display: inline; *zoom: 1; padding: 0 10px; vertical-align: top; white-space: nowrap; margin-top: 8px; }
+.tab_redbag .timecount span{ color: #858585; font-size: 13px; vertical-align: bottom; line-height: 40px;}
+.tab_redbag .timecount b{ color: #e74341; font-size: 43px; font-family: 'redbag-figure'; font-weight: normal; vertical-align: bottom; line-height: 50px;  padding: 0 2px; display: inline-block;*display: inline;*zoom: 1; min-width: 42px; text-align: center; }
+.tab_redbag .te2{ display: none; font-size: 13px; color: #4c4c4c; margin-top: 10px; vertical-align: top; padding-left: 5px;text-align: left; }
+.tab_redbag .te2 b{ font-size: 22px; color: #e74341; display: block; }
+.tab_redbag .te2 span{ letter-spacing: 2.3px }
+.tab_redbag .rb_topic{ display: inline-block; vertical-align: top; background: url(../img/rb_topic.png) 0 center no-repeat; position: relative; margin-top: -1px; height: 60px; width: 277px; }
+.tab_redbag .rb_topic a{ display: block; width: 20%; height: 100%; font-size: 0; line-height: 0; margin-left: 18px;}
+
+
+.redbag_pop{ position: absolute; left: 30%; top: 30%; margin: -190px 0 0 -301px; width: 632px; height: 393px; background: url(../img/redbag_pop2.png) center no-repeat; z-index: 90; opacity: 0;}
+.redbag_pop.nologin{ background-image: url(../img/redbag_pop.png); }
+.redbag_pop .cont{ margin: 11px 24px; position: relative; }
+.redbag_pop .rb_top { text-align: center; padding-top: 50px; }
+.redbag_pop .rb_top span{ color: #ffe2b1; font-size: 20px; letter-spacing: 8px; padding-left: 8px; display: block; background: url(../img/rbpop_t.png) center 5px no-repeat; }
+.redbag_pop .rb_top h4{ color: #feeac8; font-size: 29px; line-height: 50px; padding-top: 15px; margin-bottom: 10px;}
+.redbag_pop .rb_top b{font-family: 'redbag-figure'; font-size: 36px; vertical-align: middle; padding: 0 1px; font-weight: normal; }
+.redbag_pop .rb_tip{ color: #f9c59c; font-size: 16px; text-align: center; padding-top: 15px; }
+.redbag_pop .rb_tip a{ color: #fff9ef; }
+.redbag_pop .rb_tip .t2{ padding-left: 10px; }
+.redbag_pop .rb_btn{ display: block; width: 100px; height: 100px; margin: 0 auto; font-size: 0; line-height: 0;  position: relative; padding: 10px}
+.redbag_pop .rb_btn .bg{display: block;width: 90px; height: 90px; padding: 5px; background: #f0d19f; background: rgb(242,213,164);background: -moz-linear-gradient(-45deg,  rgba(242,213,164,1) 0%, rgba(249,223,180,1) 40%, rgba(233,199,143,1) 100%);background: -webkit-linear-gradient(-45deg,  rgba(242,213,164,1) 0%,rgba(249,223,180,1) 40%,rgba(233,199,143,1) 100%);background: linear-gradient(135deg,  rgba(242,213,164,1) 0%,rgba(249,223,180,1) 40%,rgba(233,199,143,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2d5a4', endColorstr='#e9c78f',GradientType=1 ); transition: transform 0.1s ease; border-radius: 50%;  }
+.redbag_pop .rb_btn .bg b{ border: 1px solid #d0b17b; display: block; width:88px; height: 88px;border-radius: 50%; }
+.redbag_pop .rb_btn i{background: url(../img/redbag_btn.png) center -120px no-repeat; display: block; height: 60px; position: absolute; width: 100px; z-index: 2; top: 50%; left: 50%; margin-top: -30px; margin-left: -50px;  }
+.redbag_pop .rb_btn i.wait{ background-position: center -190px; }
+.redbag_pop .rb_btn i.reg{ background-position: center -260px; }
+.redbag_pop .rb_btn:hover .bg{ transform: scale(1.05); -webkit-transform: scale(1.05); -moz-transform: scale(1.05); -o-transform: scale(1.05) }
+.redbag_pop .rb_btn.wait:hover{ cursor: default; }
+.redbag_pop .rb_btn.wait:hover b{transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+
+.redbag_pop .pop_close i{ background-position: -65px -300px; }
+.redbag_pop .pop_close:hover{ background:none; }
+.redbag_pop .rb_top2{ text-align: center; padding-top: 25px; }
+.redbag_pop .rb_top2 > span{ font-size: 16px; color: #ffebc9; font-weight: bold; letter-spacing: 2px; display: block; }
+.redbag_pop .timecount{ font-size: 0; text-align: center; display: inline-block; *display: inline; *zoom: 1; margin: 10px 0 26px; border: 2px solid #ffe2b1; border-radius: 34px; height: 34px; line-height: 34px; overflow: hidden; }
+.redbag_pop .timecount .tc{ color: #ffe2b1; font-size: 22px; padding: 0 8px 0 15px }
+.redbag_pop .timecount .tc-figure{ display: inline-block; vertical-align: top; background: #ffe2b1; padding: 0 12px 0 8px }
+.redbag_pop .timecount .tc-figure span{ font-size: 12px; color: #d94741; line-height: 34px;}
+.redbag_pop .timecount .tc-figure span:first-child{ padding-right: 5px; }
+.redbag_pop .timecount b{ font-size: 30px; font-family: 'redbag-figure'; font-weight: normal; padding-right: 2px; line-height: 38px;}
+.redbag_pop .rbnum { font-size: 24px; color: #ffe2b1; line-height: 26px; letter-spacing: 1px; vertical-align: top; }
+.redbag_pop .rbnum span{ display: inline-block; *display: inline; *zoom: 1; background: #f76f65; color: #fffdf9; border-radius: 3px; padding: 0 3px; font-size: 26px; font-family: 'redbag-figure'; height: 26px; vertical-align: top; line-height: 28px; letter-spacing: 0; margin: 2px 2px 0}
+.redbag_pop .rb_tip .tspan{ font-size: 14px; line-height: 22px; padding: 8px 0 }
+.rb_flowers{ font-size: 0; text-align: center; height: 120px; }
+.rb_flowers a{ display: inline-block; width: 100px; height: 100px; position: relative; margin: 0 15px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.rb_flowers a span{ display: block; width: 100px; height: 100px; background: url(../img/rb_flowers.png) center center no-repeat; position: absolute; left: 50%; top: 50%; margin: -50px 0 0 -50px ; background-size: 100% auto;}
+.rb_flowers a:first-child span{ background-position: center 0 }
+.rb_flowers a:last-child span{ background-position: center bottom }
+.rb_flowers a.ani span{ -webkit-animation: btnscale 0.7s ease-in-out infinite both;-o-animation: btnscale 0.7s ease-in-out infinite both;animation: btnscale 0.7s ease-in-out infinite both; }
+.rb_flowers a:hover span{background: url(../img/redbag_btn.png) center 0 no-repeat; background-size: 100% auto}
+.rb_flowers a.ani:hover span{ animation: none;transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1); }
+
+.rb_flowers a:hover b{background: url(../img/redbag_btn.png) center -120px no-repeat; display: block; height: 60px; position: absolute; width: 100px; z-index: 2; top: 50%; left: 50%; margin-top: -30px; margin-left: -50px;  }
+.rb_flowers.wait a:hover b{ background-position: center -190px; }
+
+
+.redbag_pop.rb_result{ background-image: url(../img/redbag_pop3.png);height: 554px; margin-top: -270px; left: 50%; top: 50%;}
+.rb_result > .cont,.rb_result2 > .cont{ height: 439px; }
+.rb_result .pop_close{ top: 93px; }
+.rb_result2 .pop_close{ top: 74px; }
+.rb_result .rb_top2{ padding-top: 74px; }
+.rb_result .rb_top2 > span{ color: #fff0d7; font-size: 26px; letter-spacing: 1px}
+.rb_result .rb_top2 > span.sp2{ color: #f9c59c; font-size: 16px; font-weight: normal; padding-top: 5px;}
+.rb_result .rb_top2 > span.sp2 b{ color: #fff0d7; }
+.redbag_pop .rb_tip2{ padding-top: 50px; text-align: center; }
+.redbag_pop .rb_tip2 .tspan{ font-size: 16px; line-height: 27px; color: #f9c59c; }
+.redbag_pop .rb_tip2 .tspan b{ color: #ffe2b1; }
+.rb_result .qrcode-con{padding:60px 50px 50px;text-align: center;}
+.rb_result .qrcode-con .rb_tip2{padding-top: 20px;padding-bottom: 20px;}
+.rb_result .qrcode-con .p1{font-size: 14px;color: #f7a382;line-height: 24px; padding-top: 10px;}
+.rb_result .qrcode-con .p1 span{display: block;}
+.rb_result .qrcode-con .p1 span b{color:#ffe2b1;font-weight: 100;}
+.rb_result .qrcode-con .p2{font-size: 18px;color: #ffe2b1;line-height: 30px;font-weight: 700;margin-top:15px;}
+.rb_result .qrcode-con .p2 span{display: block;}
+.rb_result .qrcode-con .p2 b{color:#ffc86c;}
+
+.redbag_pop.rb_result2{ background-image: url(../img/redbag_pop4.png);height: 554px;margin-top: -270px;left: 50%; top: 50%;}
+.redbag_pop.rb_result2 .rb_tip2{ padding-top: 15px; }
+.redbag_pop.rb_result2 .rb_tip2 strong{ color: #ffc86c; }
+
+.rb_result2 .congratulation{font-size: 36px;color: #b28a35;text-align: center;padding-top: 50px;font-weight: 700;}
+.rb_result2 .congratulation b{font-size: 45px;font-family:'redbag-figure';color: #d7483f;display: inline;padding: 0 1px;margin: 0;line-height: 100%; vertical-align: middle;}
+.rb_result2 .congratulation p{font-size: 20px;padding-top: 10px;}
+.rb_result2 .congratulation p b{font-size: 24px;}
+.rb_result2 .qrcode-con{padding:70px 50px 50px;text-align: center;}
+.rb_result2 .qrcode-con .p1{font-size: 14px;color: #f7a382;line-height: 24px;}
+.rb_result2 .qrcode-con .p1 span{display: block;}
+.rb_result2 .qrcode-con .p1 span b{color:#ffe2b1;font-weight: 100;}
+.rb_result2 .qrcode-con .p2{font-size: 18px;color: #ffe2b1;line-height: 30px;font-weight: 700;margin-top:15px;}
+.rb_result2 .qrcode-con .p2 span{display: block;}
+.rb_result2 .qrcode-con .p2 b{color:#ffc86c;}
+
+
+.redbag_pop_box{ position: absolute; width: 40%; right: 0; height: 251px; margin-top: -125px; top: 50%; }
+.redbag_pop.pop2{ background-image: url(../img/redbag_pop5.png);height: 262px; width: 410px; margin: 0 0 0 -205px; top: -10%;left: 50%; }
+.redbag_pop.pop2 .cont{ margin: 10px 15px }
+.redbag_pop.pop2 .rb_top2{ padding-top: 20px; padding-bottom: 10px; }
+.redbag_pop.pop2 .rb_top2 > span{ font-size: 16px; font-weight: normal; }
+.redbag_pop.pop2 .rb_btn{ padding: 5px;width: 80px; height: 80px; }
+.redbag_pop.pop2 .rb_btn .bg{display: block; width: 72px; height: 72px; padding: 4px}
+.redbag_pop.pop2 .rb_btn .bg b{ height: 70px; width: 70px; }
+.redbag_pop.pop2 .rb_btn i{background: url(../img/redbag_btn2.png) center -340px no-repeat; width: 80px; margin-left: -40px; height: 40px; margin-top: -20px; }
+.redbag_pop.pop2 .rb_btn i.t5{ background-position: center -290px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
+.redbag_pop.pop2 .rb_btn i.t4{ background-position: center -240px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.redbag_pop.pop2 .rb_btn i.t3{ background-position: center -190px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
+.redbag_pop.pop2 .rb_btn i.t2{ background-position: center -140px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.redbag_pop.pop2 .rb_btn i.t1{ background-position: center -90px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.redbag_pop.pop2 .rbnum{ font-size: 22px; }
+.redbag_pop.pop2 .rbnum span{ font-size: 20px; height: 23px; line-height: 25px;}
+.rb_check{ padding-top: 10px; }
+.rb_checkbox{ display: inline-block;*display: inline;*zoom: 1; vertical-align: top;position: relative; width: 16px;height: 16px; cursor: pointer; }
+.rb_checkbox label{width: 14px;height: 14px; border: 1px solid #ebb285; border-radius: 2px; position: absolute; left: 0;top: 0; z-index: 2; background: none;cursor: pointer;}
+.rb_checkbox label:hover{ border-color: #eb9b5e }
+.rb_checkbox input[type=checkbox]{visibility: hidden;}
+.rb_checkbox input[type=checkbox]:checked + label > i{display: block;width: 100%;height: 14px;background-position: -85px -280px}
+.rb_check .ctext{ vertical-align: top; font-size: 14px; color: #f9c59c; line-height: 16px;  }
+.redbag_pop .rb_btn.ani .bg{ -webkit-animation: btnscale 0.7s ease-in-out infinite both;-o-animation: btnscale 0.7s ease-in-out infinite both;animation: btnscale 0.7s ease-in-out infinite both; }
+.redbag_pop .rb_btn.ani:hover .bg{ animation: none;transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1) }
+.redbag_pop.pop2 .rb_tip{ padding-top: 0; }
+.pop2 .rb_flowers{ height: 100px; padding-top: 5px; }
+.pop2 .rb_flowers a{ margin: 0 12px }
+.pop2 .rb_flowers a span,.pop2 .rb_flowers a{ width: 80px; height: 80px; }
+.pop2 .rb_flowers a span{ margin: -40px 0 0 -40px }
+.pop2 .rb_flowers a:hover b{ background-size: 100% auto; width: 80px; height: 48px; background-position: center -96px; margin-top: -24px; margin-left: -40px; }
+.pop2 .rb_flowers.countdown a:hover b{ display: none; }
+.pop2 .rb_flowers.countdown a span{ background-image: url(../img/rb_flowers.png); background-position: center;}
+.pop2 .rb_flowers.countdown a:first-child span{ background-position: center 0; }
+.pop2 .rb_flowers.countdown a:last-child span{ background-position: center bottom; }
+.rb_flowers.countdown a i{background: url(../img/redbag_count.png) center -340px no-repeat;display: block; position: absolute; left: 50%; top: 50%; width: 80px; margin-left: -40px; height: 41px; margin-top: -24px; }
+.rb_flowers.countdown a i.t5{ background-position: center -200px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
+.rb_flowers.countdown a i.t4{ background-position: center -150px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.rb_flowers.countdown a i.t3{ background-position: center -100px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
+.rb_flowers.countdown a i.t2{ background-position: center -50px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+.rb_flowers.countdown a i.t1{ background-position: center 0; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
+
+@keyframes btnscale
+{
+    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+}
+
+@-webkit-keyframes btnscale
+{
+    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+}
+
+@-moz-keyframes btnscale
+{
+    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+}
+
+
+
+
+.dashang_rule{ width: 90px; margin: 0 auto; position: relative; }
+.dashang_rule .ds_rulecont{ display: none; position: absolute; width: 360px; background: rgba(255,255,255,.9); box-shadow: 0 0 10px rgba(0,0,0,.2); right: 0; top: 40px; border-radius: 3px }
+.dashang_rule >a{ color: #d44543; font-size: 16px; display: inline-block;*display: inline;*zoom: 1; }
+.dashang_rule >a i{ display: inline-block;*display: inline;*zoom: 1; width: 16px; height: 16px; vertical-align: top; background-position: -130px -310px; margin: 4px 0 0 8px }
+.dashang_rule >a:hover{ text-decoration: none; }
+.dashang_rule >a:hover + .ds_rulecont{ display: block; }
+.ds_rulecont p{ padding: 10px 20px; font-size: 14px; color: #4d4d4d; line-height: 24px; }
+.ds_rulecont .arr i{ display: block; width: 0; height: 0; border-style: solid; border-width: 6px; border-color: transparent transparent #eae4d8; position: absolute; top: -12px; right: 40px; }
+.ds_rulecont .arr i.i2{ border-color: transparent transparent #fff; top: -10px; }
+.redbag_pop .dashang_rule{}
+.redbag_pop .dashang_rule >a{ color: #fff; font-size: 14px; cursor: pointer; }
+.redbag_pop .dashang_rule >a i{ background-position: -130px -330px; margin-top: 2px; }
+.redbag_pop .ds_rulecont{ right: 50%; margin-right: -180px; bottom: 30px; top: auto; z-index: 10; }
+.redbag_pop .ds_rulecont .scrollbox{ margin: 10px 25px 10px 15px; color: #4d4d4d; font-size: 14px; line-height: 24px; height: 282px }
+.ds_rulecont span{ font-size: 16px; font-weight: bold; }
+.ds_rulecont span b{ color: #d44543; padding-right: 8px; font-size: 18px; }
+.ds_rulecont li{ padding-left: 15px; }
+.redbag_pop .dashang_rule:hover .ds_rulecont{ display: block; }
+.redbag_pop .ds_rulecont .arr{ position: absolute; bottom: -30px; width: 100%; height: 30px; }
+.redbag_pop .ds_rulecont .arr i{ right: 50%; margin-right: -6px; top: 0; border-color: #b63d35 transparent transparent }
+.redbag_pop .ds_rulecont .arr i.i2{ top: -2px; border-color: #fff transparent transparent }
+.ds_rulecont .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ background: #ec908b; }
+
+.hit-list .nodata { height: 350px;text-align: center; display: block; font-size: 20px; line-height: 1.6; margin: 30px 0;}
+
+@media(max-width: 1640px){
+    .tab_redbag .rb_topic{ background-size: 100% auto; width: 220px; }
+}
+
+@media(max-width: 1500px){
+    .tab_redbag .te1{ padding: 0 8px; background-size: 90px auto; font-size: 12px; min-width: 90px; height: 38px; }
+    .tab_redbag .timecount b{ font-size: 40px; }
+    .tab_redbag .timecount{ padding: 0 5px }
+    .tab_redbag .rb_topic{ width: 200px; }
+    .tab_redbag .rb_topic a{ margin-left: 12px; }
+}
+
+@media(max-width: 1350px){
+    .tab_redbag .te1{ display: none;}
+    .tab_redbag .te2{ display: inline-block; }
+    .tab_redbag .timecount{ position: relative; z-index: 1 }
+    .tab_redbag .rb_topic{ position: relative; z-index: 0; margin-left: -50px; background-image: url(../img/rb_topic2.png); width: 111px; height: 73px; }
+    .tab_redbag .rb_topic a{ margin-left: 50px; width: 60px; height: 60px; }
+    .header_redbag{ margin-left: -30px; width: auto; background-size:315px 100%; padding-left: 46px; margin-right: 0;  min-width: 300px }
+    .header_redbag .redbag_pic{ width: 30px; background-size: 100% auto; height: 37px; margin-top: 5px; }
+    .header_redbag .rb_text .timecount{ padding: 0 5px; line-height: 45px; }
+    .header_redbag .timecount b{ font-size: 32px; }
+    .header_redbag .rb_text .te1{padding: 2px 5px 0; font-size: 12px; line-height: 20px; min-width: auto }
+    .header_redbag .te1 strong{ font-size: 16px; }
+    .header_redbag .rb_text{ padding-top: 0; }
+
+}
