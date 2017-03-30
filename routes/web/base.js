@@ -18,7 +18,7 @@ var syllabusService = require('../../service/syllabusService'); //引入syllabus
 var studioService = require('../../service/studioService'); //引入studioService
 var chatService = require('../../service/chatService'); //引入chatService
 var visitorService = require('../../service/visitorService'); //引入visitorService
-var logger = require('../../resources/logConf').getLogger('base'); //引入log4js
+var logger = require('../../resources/logConf').getlogger('base'); //引入log4js
 var chatPraiseService = require('../../service/chatPraiseService'); //引入chatPraiseService
 var showTradeService = require('../../service/showTradeService'); //引入chatPraiseService
 var chatSubscribeTypeService = require(
@@ -3089,7 +3089,7 @@ router.post('/rob', function(req, res) {
 
     cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
         if (err) {
-            Logger.error("redPacket get cache fail:" + err);
+            logger.error("redPacket get cache fail:" + err);
         } else if (result != true && 0 == periods) {
             res.json({ result: 0, money: 0, msg: "" });
         } else if (result != true && result != periods) {
