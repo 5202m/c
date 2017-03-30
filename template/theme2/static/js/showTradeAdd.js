@@ -84,30 +84,30 @@ ShowTradeAdd.saveShowTrade = function(){
         var params = {groupType:Data.userInfo.groupType,
             groupId:Data.userInfo.groupId,
             userNo:Data.userInfo.userId,
-            avatar:Data.userInfo.avatar || '',
+            avatar:Data.userInfo.avatar || '/theme2/img/user.png',
             userName:userName,
             tradeImg:tradeImg,
-            telePhone : '',
             remark:remark,
             title:title,
-            Ip: '127.0.0.1',
             tradeType:2
         };
         Util.postJson('/addShowTrade',{data:JSON.stringify(params)},function(data){
             if(data.isOK){
-                Pop.msg('您的晒单已成功提交，等待系统审核！');
-                if(!Data.userInfo.isSetName){
-                    //TODO 设置更新昵称
-                    //$('#myNickName').val(userName);
-                    //$('#setNkBtn').click();
-                }
-                //$('.pop_addsd').hide();
-                $('#showTradeAddForm .contentText,#tradeImg').empty();
+                Pop.msg({msg:'您的晒单已成功提交，等待系统审核！',onOK:ShowTradeAdd.resetForm()});
             }else{
                 Pop.msg(data.msg);
             }
         });
     }
+};
+
+ShowTradeAdd.resetForm = function () {
+    if(!Data.userInfo.isSetName){
+    }
+    $('#ttitle').text('').trigger('blur');
+    $('#tremark').text('').trigger('blur');
+    $('#tradeImg').val('');
+    $('#flTradeImg').parent().find('.obj-upload').attr('src','').addClass('dn')
 };
 
 /**
