@@ -84,11 +84,13 @@ ShowTradeAdd.saveShowTrade = function(){
         var params = {groupType:Data.userInfo.groupType,
             groupId:Data.userInfo.groupId,
             userNo:Data.userInfo.userId,
-            avatar:Data.userInfo.avatar,
+            avatar:Data.userInfo.avatar || '',
             userName:userName,
             tradeImg:tradeImg,
+            telePhone : '',
             remark:remark,
             title:title,
+            Ip: '127.0.0.1',
             tradeType:2
         };
         Util.postJson('/addShowTrade',{data:JSON.stringify(params)},function(data){
