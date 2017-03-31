@@ -45,7 +45,7 @@ Analyst.setAnalystInfo = function(){
                     userInfo.earningsM ? userInfo.earningsM.replace(/%/, '') : 0,
                     0
                 );
-                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo,Analyst.subscribeStr);
+                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo,Analyst.subscribeStr,Analyst.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
                 analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
@@ -275,8 +275,31 @@ Analyst.setEvent = function(){
     /**
      * 订阅
      */
-    $('#analystSubscribe').bind('click',function (e) {
-
+    $('#analystPraiseTool').on('click','a.subscribe',function (e) {
+        if(!Data.userInfo.isLogin){
+            Login.load();
+            return false;
+        }
+        var $this = $(this), id = '', types = $this.attr('type').split(',');
+        var typeLen = types.length;
+        var analystArr = [];
+        var currAnalyst = $this.attr('analystId');
+        if ($this.attr('subscribed') == 'true') {
+            $this.children('label').html('订阅')
+        } else {
+            analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
+            $this.children('label').html('已订阅');
+        }
+        $.each(types, function (k, v) {
+            if (v == 'live_reminder') {
+                id = $this.attr('lrid');
+            } else if (v == 'shout_single_strategy') {
+                id = $this.attr('ssid');
+            } else if (v == 'trading_strategy') {
+                id = $this.attr('tsid');
+            }
+            Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
+        });
     });
 };
 

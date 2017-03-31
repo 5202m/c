@@ -201,7 +201,7 @@ var Chat = {
             }
             //如果是点击小加号的话，不执行
             window.setTimeout(function(){
-                if(Chat.chatToolView == "analyst" || Chat.chatToolView == "face"){
+                if(Chat.chatToolView == "analyst"){
                     Chat.showTool("none");
                 }
             }, 100);
@@ -248,7 +248,6 @@ var Chat = {
          */
         $("#chat_face").bind("click", function(){
             Chat.showTool("face");
-
             if($.inArray(1,Chat.face.initArray) < 0){
                 // 初始化表情
                 Data.getRoom(function(room){
@@ -271,13 +270,14 @@ var Chat = {
         /**
          * 发送图片--选择图片
          */
-        $(".file-img").click(function () {
+        $(".file-img").click(function (e) {
             Data.getRoom(function(room) {
                 if (!FileReader) {
                     alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
                     return false;
                 }
                 if (!Chat.WhTalk.tabCheck && !room.allowVisitor && Data.userInfo.clientGroup == 'visitor') {
+                    e.preventDefault();
                     Login.load();
                     return false;
                 }
@@ -316,8 +316,8 @@ var Chat = {
             };
             reader.onprogress = function (e) {};
             reader.onloadend = function (e) {};
-            //studioChatMb.view.boardCtrl(1);
             $(this).val("");
+            $("#chat_contTool").trigger('click');
         });
 
         /**
