@@ -2084,8 +2084,9 @@ router.post('/modifyEmail', function(req, res) {
         var ref = req.headers.referer.indexOf('?') > -1 ?
             req.headers.referer.substring(0, req.headers.referer.indexOf('?')) :
             req.headers.referer;
+        ref = ref.lastIndexOf('/') > -1 ? ref : ref + '/';
         var urls = [ref];
-        urls.push("/confirmMail?grouptype=");
+        urls.push("confirmMail?grouptype=");
         urls.push(userInfo.groupType);
         urls.push("&userid=");
         urls.push(userInfo.userId);
