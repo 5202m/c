@@ -12,6 +12,7 @@
     <script type="text/javascript" src="/base/lib/store.min.js"></script>
     <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
     <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
+    <link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css"/>
     <link rel="stylesheet" media="screen" href="/theme2/css/index<%=isDevTest? '.css' : ('.min.css?v=' + version)%>" />
     <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
 </head>
@@ -90,6 +91,13 @@
                 Data.serverTime = Number('<%= serverTime %>');
                 Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
                 Index.init();
+                lightbox.option({
+                    'resizeDuration': 200,
+                    'wrapAround': true,
+                    'disableScrolling':true,
+                    'positionFromTop':200,
+                    'showImageNumberLabel' : false
+                });
             }
         </script>
         <% if(isDevTest) { %>
@@ -139,6 +147,8 @@
                         url: "/base/lib/jquery-1.7.min.js"
                     }, {
                         url: "/base/lib/swipe/swiper.min.js"
+                    }, {
+                        url: "/base/lib/lightbox/lightbox.min.js"
                     }, {
                         url: "/theme2/js/index.min.js?v=<%=version%>"
                     }, null).then(pageFunc);

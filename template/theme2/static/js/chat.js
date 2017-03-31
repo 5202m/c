@@ -189,7 +189,7 @@ var Chat = {
         /**
          * 聊天框相关事件
          */
-        $("#chat_cont").bind("focus", function(){
+        $("#chat_cont").bind("focus", function(e){
             $("#chat_contHolder").hide();
             if(Chat.chatToolView == "none"){
                 Chat.showTool("analyst");
@@ -303,8 +303,8 @@ var Chat = {
                 return false;
             }
             var fileSize = img.size;
-            if (fileSize >= 1024 * 1024) {
-                alert('发送的图片大小不要超过1MB.');
+            if (fileSize >= 1024 * 1024 * 3) {
+                alert('发送的图片大小不要超过3MB.');
                 return false;
             }
             //加载文件转成URL所需的文件流
@@ -694,11 +694,11 @@ var Chat = {
             return "";
         }
         if(!isMeSend && Data.userInfo.userId==fromUser.userId && data.serverSuccess){//发送成功，则去掉加载框，清除原始数据。
-            $('#'+data.uiId+' .uname span').html(Chat.formatPublishTime(fromUser.publishTime));
+            $('#'+data.uiId+' .infobar .uname').next().html(Chat.formatPublishTime(fromUser.publishTime));
             $('#'+data.uiId).attr("id",fromUser.publishTime);//发布成功id同步成服务器发布日期
             if(data.content.msgType==Data.msgType.img){
                 Chat.removeLoadDom(fromUser.publishTime);//去掉加载框
-                var aObj = $('#'+fromUser.publishTime+' [talk="a"]>a');
+                var aObj = $('#'+fromUser.publishTime).children('.dcont').find('a');
                 var url=data.content.needMax?'/getBigImg?publishTime='+fromUser.publishTime+'&userId='+fromUser.userId:aObj.children("img").attr("src");
                 aObj.attr("href",url);
             }
