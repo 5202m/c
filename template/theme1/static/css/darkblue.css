@@ -1,6 +1,6 @@
 body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ background: #21507f }
 .left_row,.right_row,.left_cont{ border-color: #143862 }
-.mod_infotab .tabnav,.mod_infotab .tabnav .nav-a,.tabnav .khbtn,.myaid,.sub-tabnav,.infocont .rbox.fr,.ratiobox .data span.b,.courseintro .cpic,.sd_show,.tebox_train,.tebox_video,.tebox_video li .imga,.mod_main .sd_list .sd_bot{ border-color: #18426d }
+.mod_infotab .tabnav,.mod_infotab .tabnav .nav-a,.tabnav .khbtn,.myaid,.sub-tabnav,.infocont .rbox.fr,.ratiobox .data span.b,.courseintro .cpic,.sd_show,.tebox_train,.tebox_video,.tebox_video li .imga,.mod_main .sd_list .sd_bot,.courselist li img{ border-color: #18426d }
 .sub-tabnav > a i,.tabnav .khbtn i,.myaid i,.numctrl i,.mod_main .taglist .tag i,.skilldata .pdname i,.mod_main .dialog .bubble > i,.toolbar .tbtn,.wechatbox .wechatbtn i,.info_push .pushclose i,.view_select i,.userlist i{ background-image: url(../img/darkblue/icons.png) }
 
 .box-header h1{ background-image: url(../img/darkblue/pm-logo.png); }
@@ -56,7 +56,7 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .numctrl i.n{ background-position: -70px -60px}
 .numctrl.disabled i{ background-position: -60px -60px}
 .numctrl.disabled i.n{  background-position: -70px -60px}
-.introtext p{ color: #b4c6da }
+.introtext p,.courselist li a{ color: #b4c6da }
 .calenda_show li .ca_item{ color: #fff ;border-color: #18426d}
 .calenda_show li table,.message_list li b{ color: #abb9cb }
 .message_list li span{ color: #fff }
@@ -77,7 +77,7 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .mod_main .main_tabnav a.on{ color: #fff; }
 .mod_main .main_tabnav a i{ background: #ba954a }
 .mod_main .main_tabnav a .ibox{ border-color: #1d4774 }
-.mod_main .main_tabnav a:hover .hoverbox{ border-color: #2b5e93; background: #306aa6 
+.mod_main .main_tabnav a:hover .hoverbox{ border-color: #2b5e93; background: #306aa6
 }
 .mod_main .main_tabnav a.on:hover .hoverbox{ border: 0 }
 .mod_main .main_tabnav a.on:hover{ line-height: 40px; }
@@ -96,8 +96,8 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .wid3 .skilldata .pdname i{ width: 9px; height: 5px; bottom: -5px; background-position: -30px -75px; }
 .skilldata .explain,.hdbox .skill span,.skilldata .support,.brieflist .hdbox2 .hdtit,.hdbox2 table,.brieflist .ltime{ color: #fff }
 .hdbox .dot{ background: #2ca5da }
-.newbie_guide .input_area .sendbtn,.info_push .detailbtn,.mod_main .input_area .sendbtn,.hdbox .viewdata,.brieflist .hdbox2 .viewdata2,.tebox_train .trainbtn,.data_query input.querybtn{ background: #ba954a }
-.info_push .detailbtn:hover,.mod_main .input_area .sendbtn:hover,.hdbox .viewdata:hover,.brieflist .hdbox2 .viewdata2:hover,.tebox_train .trainbtn:hover,.data_query input.querybtn:hover,.casel_more:hover,.calenda_sel a.on:hover{ background: #e0b45b }
+.mod_main .add_comment .addc_btn,.newbie_guide .input_area .sendbtn,.info_push .detailbtn,.mod_main .input_area .sendbtn,.hdbox .viewdata,.brieflist .hdbox2 .viewdata2,.tebox_train .trainbtn,.data_query input.querybtn{ background: #ba954a }
+.mod_main .add_comment .addc_btn:hover,.info_push .detailbtn:hover,.mod_main .input_area .sendbtn:hover,.hdbox .viewdata:hover,.brieflist .hdbox2 .viewdata2:hover,.tebox_train .trainbtn:hover,.data_query input.querybtn:hover,.casel_more:hover,.calenda_sel a.on:hover{ background: #e0b45b }
 .brieflist .textcont{ color: #dfe3e9; border-color: #235382 }
 .brieflist ul{ border-color: #366ca1 }
 .brieflist .dot{ background: #366ca1 }
@@ -172,17 +172,28 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .tebox_train .trainbtn.b2{ background: #a4adb3 }
 .tebox_video li .vlink{ color: #fff; }
 
-.sd_show .sd_tit .sdtime,.mod_main .sd_list .sd_p{ color: #a5b1c3 }
-.sd_list .sd_author{ color: #e9b445 }
+.sd_show .sd_tit .sdtime,.mod_main .sd_list .sd_p,.mod_main .sd_comment{ color: #a5b1c3 }
+.mod_main .sd_list .sd_author{ color: #e9b445 }
 .mod_main .sd_bot .support span{ color: #dfe3e9 }
 .sdbtn_bar a{ background: #ba954a; border-color: #ba954a }
 .sdbtn_bar a:hover{ background: #e0b45b; border-color: #e0b45b }
 .sdbtn_bar a.r{ background: #2ca5da; border-color: #2ca5da; color: #fff }
 .sdbtn_bar a.r:hover{ background: #36c2ff; border-color: #36c2ff }
+.mod_main .sd_comment{ background: #316496; }
+.mod_main .sd_comment:before{ border-color: transparent transparent #316496 }
+.sd_loadcomment{ border-color: #4779ab }
+.sd_loadcomment a{ color: #77a1b8; }
+.sd_loadcomment a:hover{ background: #2b5e93 }
 
-/*.newbie_guide .n_guide.g1{ background-image: url(../img/darkblue/guide_pic1.png) }
-.newbie_guide .n_guide.g3{ background-image: url(../img/darkblue/guide_pic3.png) }
-.newbie_guide .n_guide.g4{ background-image: url(../img/darkblue/guide_pic4.png) }
-.newbie_guide .n_guide.g5{ background-image: url(../img/darkblue/guide_pic5.png) }*/
 .newbie_guide .h_menu1,.newbie_guide .myaidbox,.newbie_guide .contactbar,.newbie_guide .sub-tabnav{ background: #21507f;}
 .newbie_guide .input_box .input_area .ctextarea{ color: #b4c6da; }
+
+/*redbag201703*/
+.header_redbag{ background-image: url(../img/darkblue/pinkbg1.jpg); }
+.tab_redbag{ background-image: url(../img/darkblue/pinkbg2.png); margin: 0 20px; width: auto;}
+.tab_redbag .rb_cont{ padding-left: 0; }
+
+@media(max-width: 1350px){
+    .header_redbag{margin-left: -25px; background-size: 323px 60px;padding-left: 45px;margin-right: 0;background-position: right 2px;}
+    .header_redbag .rb_text .te1{ height: 40px; margin-top: 2px;}
+}

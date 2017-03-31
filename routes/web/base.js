@@ -28,7 +28,7 @@ var chatPointsService = require('../../service/chatPointsService'); //引入chat
 var clientTrainService = require('../../service/clientTrainService'); //引入chatTeacherService
 var zxFinanceService = require('../../service/zxFinanceService.js');
 var activityService = require("../../service/activityService");
-
+var cacheClient = require('../../cache/cacheClient');
 var Geetest = require('geetest');
 var geetest = {};
 for (var i in config.geetest) {
@@ -44,6 +44,7 @@ for (var i in config.geetest) {
     };
 }
 
+
 /**
  * 从基本路径提取groupType
  * 备注：route的基本路径配置的字符基本是与groupType保持一致的，所以可以直接从baseUrl中提取
@@ -52,6 +53,7 @@ for (var i in config.geetest) {
 function getGroupType(req, isBase) {
     return "studio";
 }
+
 
 /**
  * 判断是否微盘
@@ -417,6 +419,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             }
             viewDataObj.studioList = newStudioList;
             viewDataObj.isDevTest = config.isDevTest;
+            viewDataObj.isRedPacket = config.isRedPacket;
+
             //记录访客信息
             var fromPlatform = options.platform;
             var snUser = req.session.studioUserInfo;
@@ -1533,8 +1537,36 @@ router.get('/getShowTradeInfo', function(req, res) {
 });
 
 /**
- * 设置点赞
+ * 新增晒单评论
  */
+router.post('/addShowTradeComment', function(req, res) {
+    var reqParam = req.body['data'];
+    try {
+        reqParam = JSON.parse(reqParam);
+    } catch (e) {
+        res.json(null);
+        return;
+    }
+    var params = {
+        userInfo: (req.session.studioUserInfo && req.session.studioUserInfo.isLogin) ? req.session.studioUserInfo : {
+            userId: reqParam.userId || "",
+            nickname: reqParam.nickname || "",
+            avatar: reqParam.avatar || ""
+        },
+        id: reqParam.id,
+        refId: reqParam.refId,
+        content: reqParam.content
+    };
+    if (!params.id || !params.content) {
+        res.json({ 'isOK': false, 'msg': '参数错误！' });
+    } else {
+        showTradeService.addComments(params).then(result => {
+            res.json(result);
+        }).catch(e => {
+            res.json({ isOK: false, msg: '系统错误，请稍后再试！' });
+        });
+    }
+});
 router.post('/setUserPraise', function(req, res) {
     var clientId = req.body.clientId,
         praiseId = req.body.praiseId;
@@ -1565,6 +1597,48 @@ router.post('/setUserPraise', function(req, res) {
                                     logger.debug("点赞添加积分成功!", result);
                                 }).then(e => {
                                     logger.error("点赞添加积分失败!", e);
+                                });
+                            }
+                        });
+                }
+                res.json({ isOK: isOK });
+            });
+    }
+});
+
+/**
+ * 设置点赞
+ */
+router.post('/setUserPraise', function(req, res) {
+    var clientId = req.body.clientId,
+        praiseId = req.body.praiseId;
+    if (common.isBlank(clientId) || common.isBlank(praiseId)) {
+        res.json({ isOK: false });
+    } else {
+        var fromPlatform = getGroupType(req);
+        baseApiService.checkChatPraise(clientId, praiseId, fromPlatform,
+            function(isOK) {
+                if (isOK) {
+                    chatPraiseService.setPraise(praiseId, constant.chatPraiseType.user,
+                        fromPlatform,
+                        function(result) {
+                            if (result.isOK) {
+                                var params = {};
+                                var userInfo = req.session.studioUserInfo;
+                                params.userId = userInfo.mobilePhone;
+                                params.clientGroup = userInfo.clientGroup;
+                                params.groupType = userInfo.groupType;
+                                params.type = "daily";
+                                params.item = "daily_praise";
+                                params.tag = "trade_" + praiseId;
+                                params.isGlobal = false;
+                                params.opUser = userInfo.userId;
+                                params.opIp = common.getClientIp(req);
+                                params.remark = "每日点赞";
+                                chatPointsService.add(params, function(err, result) {
+                                    if (err) {
+                                        console.error("点赞添加积分失败!");
+                                    }
                                 });
                             }
                         });
@@ -2747,7 +2821,6 @@ router.post('/checkTodaySignin', function(req, res) {
     });
 });
 
-
 /**
  * 获取打赏排行
  */
@@ -2779,64 +2852,6 @@ router.get('/activity/getLotteryInfo', function(req, res) {
         res.json(result);
     });
 });
-
-router.post('/rob', function(req, res) {
-    //没有登录
-    var userInfo = req.session.studioUserInfo;
-    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
-        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
-        return;
-    }
-    var clientTime = req.body['t'];
-    var minutes = clientTime - new Date().getTime();
-    if (Math.abs(minutes) >= 60000) {
-        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
-        return;
-    }
-    var cacheClient = require('../../cache/cacheClient');
-    var start = 30600000; //8:30
-    var cycle = 300000; //周期5分钟
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var time = now.getTime() - today;
-    //确定期数
-    var periods = time - ((time - start) % cycle);
-    var robParams = {
-        ac_periods: "20161202",
-        phone: userInfo.mobilePhone,
-        nper: common.formatDate(new Date(today + periods), "yyyyMMddHHmmss")
-    };
-    cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
-        if (err) {
-            logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && result != periods) {
-            cacheClient.set("redPacket_" + robParams.phone, periods);
-            Request.post({ url: (Config.pmOAPath + '/activity20161202/draw'), form: robParams },
-                function(error, response, data) {
-                    var result = { result: 0, money: 0, msg: "" };
-                    if (data) {
-                        logger.info("redPacket<<rob :", robParams.phone, robParams.nper,
-                            data);
-                        try {
-                            data = JSON.parse(data);
-                            if (data.infoNo == 1 && data.infoGiftNumber) {
-                                cacheClient.set("redPacket_" + robParams.phone, true);
-                                result.result = 0;
-                                result.money = data.infoGiftName;
-                                res.json(result);
-                                return;
-                            }
-                            result.msg = data.infoMsg;
-                        } catch (e) {}
-                    }
-                    res.json(result);
-                });
-        } else {
-            res.json({ result: 0, money: 0, msg: "" });
-        }
-    });
-});
-
 /**
  * 直播间交易账号密码登录
  */
@@ -2861,10 +2876,11 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
-        result.error = errorMessage.code_1002;
     }
+    // else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    //         userSession.verMalCode)) {
+    //     result.error = errorMessage.code_1002;
+    // }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
      result.error=errorMessage.code_1014;
      }*/
@@ -3020,6 +3036,87 @@ router.get("/geetest/register", function(req, res) {
             res.send(data);
         } else {
             res.send(data);
+        }
+    });
+});
+
+router.post('/rob', function(req, res) {
+    //没有登录
+    var userInfo = req.session.studioUserInfo;
+    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
+        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
+        return;
+    }
+    var clientTime = req.body['t'];
+    var minutes = clientTime - new Date().getTime();
+    if (Math.abs(minutes) >= 60000) {
+        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
+        return;
+    }
+    var start = 30600000; //8:30
+    var cycle = 300000 * 2; //周期10分钟
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var time = now.getTime() - today;
+    //确定期数
+    var periods = parseInt((time - start) / cycle);
+    var isDepart = 0;
+    //获取整点时间
+    var temp = (time - ((time - start) % cycle));
+    var curTime = temp % 3600000;
+    if (0 == curTime) {
+        isDepart = 1;
+    }
+    var robParams = {
+        ac_periods: "20170302",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        nper: periods,
+        is_depart: isDepart
+    };
+
+    if (periods < 0) {
+        return;
+    }
+
+    /*如果整点且非未激活或者模拟用户,直接返回*/
+    if (1 == isDepart) {
+        logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
+        if (userInfo.clientGroup != "notActive" && userInfo.clientGroup != "simulate") {
+            res.json({ result: 0, money: 0, msg: "" });
+            return;
+        }
+    }
+
+    cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
+        if (err) {
+            logger.error("redPacket get cache fail:" + err);
+        } else if (result != true && 0 == periods) {
+            res.json({ result: 0, money: 0, msg: "" });
+        } else if (result != true && result != periods) {
+            var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
+            cacheClient.set("redPacket_" + robParams.phone, periods);
+            cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
+            request.post({ url: (config.pmOAPath + '/activity20170302/draw'), form: robParams }, function(error, response, data) {
+                var result = { result: 0, money: 0, msg: "" };
+                if (data) {
+                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
+                    try {
+                        data = JSON.parse(data);
+                        if (data.infoNo == 1) {
+                            cacheClient.set("redPacket_" + robParams.nper, true);
+                            cacheClient.expire("redPacket_" + robParams.nper, cacheTime);
+                            result.result = 0;
+                            result.money = data.infoGiftName;
+                            res.json(result);
+                            return;
+                        }
+                        result.msg = data.infoMsg;
+                    } catch (e) {}
+                }
+                res.json(result);
+            });
+        } else {
+            res.json({ result: 0, money: 0, msg: "" });
         }
     });
 });

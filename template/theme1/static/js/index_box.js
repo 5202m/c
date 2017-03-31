@@ -278,9 +278,11 @@ var box = {
                 $('#acclogtip').html('<i></i>请输入交易账号').show();
             } else if (common.isBlank($('#loginForm [name="pwd"]').val())) {
                 $('#acclogtip').html('<i></i>请输入密码').show();
-            } else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
-                $('#acclogtip').html('<i></i>请输入验证码').show();
-            } else {
+            }
+            // else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
+            //     $('#acclogtip').html('<i></i>请输入验证码').show();
+            // } 
+            else {
                 $(this).prop('disabled', true);
                 var _this = this;
                 $('#formBtnLoad').show();
