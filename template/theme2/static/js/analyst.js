@@ -6,6 +6,7 @@ var Analyst = new Container({
     panel : $("#page_analyst"),
     url : "/theme2/template/analyst.html",
     userNo : null,
+    subscribeStr : '订阅',
     tradeList : [],
     loadAll : false,
     onLoad : function(){
@@ -13,7 +14,6 @@ var Analyst = new Container({
     },
     onShow : function(){
         Analyst.setAnalystInfo();
-        Analyst.setSubscribeAttr();
         Analyst.setVideoList();
     }
 });
@@ -45,7 +45,7 @@ Analyst.setAnalystInfo = function(){
                     userInfo.earningsM ? userInfo.earningsM.replace(/%/, '') : 0,
                     0
                 );
-                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
+                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo,Analyst.subscribeStr,Analyst.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
                 analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
@@ -60,6 +60,7 @@ Analyst.setAnalystInfo = function(){
                 $("#analystShowTrade").empty();
             }
             Analyst.setTrain(trainList, trAndClNum);
+            Syllabus.setSubscribeAttr($('#analystSubscribe'),Analyst.userNo);
         });
     }
 };
@@ -269,36 +270,39 @@ Analyst.setEvent = function(){
             e.preventDefault();
         }
 
-    })
+    });
 
-};
-
-/**
- * 设置老师的订阅属性
- */
-Analyst.setSubscribeAttr = function(){
-    $('#analystSubscribe').attr('analystId', Analyst.userNo);
-    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
-        if(data!=null){
-            $.each(data,function(i, row){
-                if(row.type == 'live_reminder'){
-                    $('#analystSubscribe').attr('lrid', row._id);
-                }else if(row.type == 'shout_single_strategy'){
-                    $('#analystSubscribe').attr('ssid', row._id);
-                }else if(row.type == 'trading_strategy'){
-                    $('#analystSubscribe').attr('tsid', row._id);
-                }
-                var analystsArr = row.analyst.split(',');
-                if($.inArray(Analyst.userNo,analystsArr) === -1)return;
-                $.each(analystsArr, function(k, v){
-                    if(v === Analyst.userNo){
-                        $('#analystSubscribe').text('已订阅');
-                    }
-                });
-            });
+    /**
+     * 订阅
+     */
+    $('#analystPraiseTool').on('click','a.subscribe',function (e) {
+        if(!Data.userInfo.isLogin){
+            Login.load();
+            return false;
         }
+        var $this = $(this), id = '', types = $this.attr('type').split(',');
+        var typeLen = types.length;
+        var analystArr = [];
+        var currAnalyst = $this.attr('analystId');
+        if ($this.attr('subscribed') == 'true') {
+            $this.children('label').html('订阅')
+        } else {
+            analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
+            $this.children('label').html('已订阅');
+        }
+        $.each(types, function (k, v) {
+            if (v == 'live_reminder') {
+                id = $this.attr('lrid');
+            } else if (v == 'shout_single_strategy') {
+                id = $this.attr('ssid');
+            } else if (v == 'trading_strategy') {
+                id = $this.attr('tsid');
+            }
+            Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
+        });
     });
 };
+
 /**
  * 下载图片
  * @param url

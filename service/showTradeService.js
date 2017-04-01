@@ -68,68 +68,88 @@ var showTradeService = {
         let deferred = new Deferred();
         let path = "/showTrade/addShowTrade";
 
+    liveRoomAPIService.post(path, params).then((result) => {
+      if (callback) {
+        callback(result);
+      }
+      deferred.resolve(result);
+    }).catch((e) => {
+      logger.error("addShowTrade! >>addShowTrade:", e);
+      if (callback) {
+        callback(null);
+      }
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  },
+  /**
+   * 更新点赞数
+   *
+   * @param params
+   * @param callback
+   */
+  setShowTradePraise: function (params, callback) {
+    let deferred = new Deferred();
+    let path = "/showTrade/setShowTradePraise";
+    path += "?" + querystring.stringify(params);
+    liveRoomAPIService.get(path).then((result) => {
+      if (callback) {
+        callback(result);
+      }
+      deferred.resolve(result);
+    }).catch((e) => {
+      logger.error("setShowTradePraise! >>setShowTradePraise:", e);
+      if (callback) {
+        callback(null);
+      }
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  },
+  /**
+   * 根据晒单id查询晒单数据
+   *
+   * @param tradeIds
+   * @param callback
+   */
+  getShowTradeByIds: function (tradeIds, callback) {
+    let deferred = new Deferred();
+    let path = "/showTrade/getShowTradeByIds";
+    path += "?tradeIds=" + tradeIds;
+    liveRoomAPIService.get(path).then((result) => {
+      if (callback) {
+        callback(result);
+      }
+      deferred.resolve(result);
+    }).catch((e) => {
+      logger.error("getShowTradeByIds! >>getShowTradeByIds:", e);
+      if (callback) {
+        callback(null);
+      }
+      deferred.reject(e);
+    });
+    return deferred.promise;
+  },
+    /**
+     * 添加评论
+     * @param id
+     * @param userInfo
+     * @param content
+     * @param refId
+     * @param callback
+     */
+    addComments : function(params){
+        let deferred = new Deferred();
+        let path = "/showTrade/addComments";
         liveRoomAPIService.post(path, params).then((result) => {
-            if (callback) {
-                callback(result);
-            }
             deferred.resolve(result);
         }).catch((e) => {
-            logger.error("addShowTrade! >>addShowTrade:", e);
-            if (callback) {
-                callback(null);
-            }
-            deferred.reject(e);
-        });
-        return deferred.promise;
-    },
-    /**
-     * 更新点赞数
-     *
-     * @param params
-     * @param callback
-     */
-    setShowTradePraise: function(params, callback) {
-        let deferred = new Deferred();
-        let path = "/showTrade/setShowTradePraise";
-        path += "?" + querystring.stringify(params);
-        liveRoomAPIService.get(path).then((result) => {
-            if (callback) {
-                callback(result);
-            }
-            deferred.resolve(result);
-        }).catch((e) => {
-            logger.error("setShowTradePraise! >>setShowTradePraise:", e);
-            if (callback) {
-                callback(null);
-            }
-            deferred.reject(e);
-        });
-        return deferred.promise;
-    },
-    /**
-     * 根据晒单id查询晒单数据
-     *
-     * @param tradeIds
-     * @param callback
-     */
-    getShowTradeByIds: function(tradeIds, callback) {
-        let deferred = new Deferred();
-        let path = "/showTrade/getShowTradeByIds";
-        path += "?tradeIds=" + tradeIds;
-        liveRoomAPIService.get(path).then((result) => {
-            if (callback) {
-                callback(result);
-            }
-            deferred.resolve(result);
-        }).catch((e) => {
-            logger.error("getShowTradeByIds! >>getShowTradeByIds:", e);
-            if (callback) {
-                callback(null);
-            }
+            logger.error("addComments! >>addComments:", e);
             deferred.reject(e);
         });
         return deferred.promise;
     }
+
 };
 // 导出服务类
 module.exports = showTradeService;

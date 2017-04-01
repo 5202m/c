@@ -6,6 +6,8 @@ var chatShowTrade = {
     tradeForUser: null, //指定用户的晒单(userNo)
     tradeList: [], //晒单数据
     tradeLoadAll: false,
+    cur_status: "less",
+    showComment: "",
     init: function() {
         this.setEvent();
     },
@@ -100,22 +102,135 @@ var chatShowTrade = {
             common.openPopup($('.sdking_rule'));
         });
 
-        // $(document).on("click","#contentText#",function () {
-        //
-        // }).keydown(function(e){
-        //     var counter = $(this).find(".ui-autocomplete-input").text().length;
-        //     var limitNum = 140;
-        //     var pattern = '还可以输入' + '<b>' +limitNum +'</b>'+ '字符';
-        //     if(counter > limitNum){
-        //         pattern ="已超出" + '<b>' +(counter-limitNum)+'</b>' +"字";
-        //     }else {
-        //         var result = limitNum - counter;
-        //         pattern = '还可以输入' + '<b>' +result +'</b>' + '字符';
-        //     }
-        //     var $temp = e.target.nextSibling.nextSibling;
-        //     $($temp).html(pattern);
-        // });
+        //发表晒单评论
+        $(document).on("click", ".addc_btn", function(e) {
+            var $this = $(this);
+            var nickname = indexJS.userInfo.nickname;
+            var divinput = $this.parent().find(".ui-autocomplete-input");
+            var content = divinput.text();
+            var commentAt = divinput.attr("data");
+            var cid = divinput.attr("cid");
+            var replyInit = divinput.attr("replyInit");
+            var replyComment = null;
+            var refId = $this.parents('li').attr("sid");
+            if (typeof(commentAt) == "undefined") { //自己评论
+                replyComment = '<p cid="' + cid + '"><a href="javascript:void(0)" class="sd_author">' + nickname + '</a>：<span>' + content + '</span><span class="time">' + common.formatterDateTime(new Date(), '/').substr(5, 11) + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+            } else {
+                if (content.indexOf(replyInit) >= 0) { //如果包含回复xx
+                    content = content.substr(replyInit.length, content.length);
+                }
+                //if回复内容如果去掉回复xx
+                //if回复内容如果包含有多个:
+                if (commentAt == nickname) { //自己评论自己
+                    replyComment = '<p cid="' + cid + '"><a href="javascript:void(0)" class="sd_author">' + nickname + '</a>：<span>' + content + '</span><span class="time">' + common.formatterDateTime(new Date(), '/').substr(5, 11) + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                    cid = "";
+                } else { //自己评论别人
+                    replyComment = '<p cid="' + cid + '"><a href="javascript:void(0)" class="sd_author">' + nickname + '</a>  回复 <a href="javascript:void(0)" class="sd_author">' + commentAt + '</a>：<span>' + content + '</span><span class="time">' + common.formatterDateTime(new Date(), '/').substr(5, 11) + ' <a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                }
+            }
+            if ("" == content) {
+                box.showMsg("您尚未输入内容，请随便写点什么吧");
+                return false;
+            }
+            if (content.length > 140) {
+                box.showMsg("已超出字数限制140字!");
+                return false;
+            }
+            if (typeof(cid) == "undefined") {
+                cid = "";
+            }
+            var content = common.clearMsgHtml(content); //评论内容校验
+            var params = {
+                id: refId,
+                refId: cid,
+                content: content,
+                nickname: nickname
+            };
+            common.getJson('/addShowTradeComment', { data: JSON.stringify(params) }, function(data) {
+                if (data.isOK) {
+                    $("#commentList").show();
+                    var commentList = $this.parents(".cont").find("#commentList");
+                    if (commentList.find(".sd_loadcomment").length > 0) {
+                        commentList.find('p:last').after(replyComment);
+                    } else {
+                        $(commentList).append(replyComment);
+                    }
+                    $this.parent().parent().siblings(".sd_bot").find(".comment").removeClass("clicked");
+                    $this.parent().parent().hide();
+                } else {
+                    box.showMsg(data.msg);
+                }
+            });
+        });
+
+
+        // 加载全部
+        $(document).on("click", "#contentText#", function() {
+
+        }).keyup(function(e) {
+            var obj = e.target;
+            var sid = obj.id;
+            var $liSid = $('#showTradeDiv ul.sd_ul').find("li[sid='" + sid + "']");
+            var outHtml = $liSid.find("div[id='" + sid + "']");
+            var replyinit = outHtml.attr('replyinit');
+            var replyinitLength = 0;
+            if (typeof(replyinit) != 'undefined') {
+                replyinitLength = replyinit.length;
+            }
+            var limitNum = 140;
+            var counter = obj.innerHTML.length - replyinitLength;
+            var pattern = '还可以输入' + '<b>' + limitNum + '</b>' + '字符';
+            if (counter > limitNum) {
+                pattern = "已超出" + '<b>' + (counter - limitNum) + '</b>' + "字";
+            } else {
+                var result = limitNum - counter;
+                pattern = '还可以输入' + '<b>' + result + '</b>' + '字符';
+            }
+            $liSid.find('.inptip').html(pattern);
+        });
+
+        /**
+         * 晒单墙评论事件
+         */
+        $(document).on("click", "#showTradeDiv .scrollbox ul li .comment,.com-replybtn", function() {
+            var $this = $(this);
+            var refUser = $this.parent().siblings('.sd_author:eq(0)').text();
+            var cid = $this.parent().parent().attr("cid");
+            var refId = $this.parents('li').attr("sid");
+            var tempHtml = '<div class="sd_comment" id="replyComment"><div class="add_comment"><div class="inpbox">';
+            var inputMoreHtml = '<span class="inptip">可以输入<b>140</b>字</span><a href="javascript:void(0);" class="addc_btn">发表</a></div></div></div>';
+
+            var txt = $this[0].title;
+            var commentListHtml = $this.parents('.cont').find("#commentList");
+            commentListHtml.show();
+            if (txt == "回复") {
+                tempHtml += '<div id="' + refId + '" contenteditable="true" replyInit="回复 ' + refUser + '：" data="' + refUser + '" cid="' + cid + '" class="ctextarea ui-autocomplete-input" autocomplete="off">回复 ' + refUser + '：</div></div>';
+                tempHtml += inputMoreHtml;
+                var replyCommentHtml = $this.parents('.cont').find("#replyComment");
+                replyCommentHtml.remove();
+                if (commentListHtml.length == 0) {
+                    commentListHtml.children().last().after(tempHtml);
+                } else {
+                    commentListHtml.append(tempHtml);
+                }
+                //评论框触发焦点事件 也就是变高
+                $("#contentText").focus();
+            } else {
+                tempHtml += '<div id="' + refId + '" contenteditable="true" class="ctextarea ui-autocomplete-input" autocomplete="off"></div></div>';
+                tempHtml += inputMoreHtml;
+                var replyCommentHtml = $this.parents('.cont').find("#replyComment");
+                replyCommentHtml.remove();
+                if (commentListHtml.length == 0) {
+                    commentListHtml.children().last().after(tempHtml);
+                } else {
+                    commentListHtml.append(tempHtml);
+                }
+
+            }
+        });
+
     },
+
     /**
      * 获取晒单数据
      * @param pageNo
@@ -137,6 +252,98 @@ var chatShowTrade = {
             }
         });
     },
+
+    appendComments: function(commentListData, commentList) {
+        var sidComments = "";
+        var temp = '<div class="sd_comment" id="tempCommentList" style="display: none"></div>';
+        for (var i = 0; i < commentListData.length; i++) {
+            var showTradeDate = common.formatterDateTime(commentListData[i].dateTime, '/').substr(5, 11);
+            sidComments += '<p cid="' + commentListData[i]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentListData[i].userName + '</a>：<span>' + commentListData[i].content + '</span>' +
+                '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复" ></a></span></p>';
+        }
+        commentList.append($(temp).append(sidComments));
+        return commentList;
+    },
+
+
+
+
+    /**
+     * 组装加载更多晒单评论
+     * @param commentListData
+     * @param commentList
+     * @param showComment
+     */
+    loadCommentData: function(commentListData, commentList, showComment) {
+        var tempList = chatShowTrade.appendComments(commentListData, commentList);
+        for (var j = 2; j < commentListData.length; j++) {
+            var showTradeDate = common.formatterDateTime(commentListData[j].dateTime, '/').substr(5, 11);
+            if (commentListData[j].refId != "") {
+                var object = $(tempList).find("p[cid='" + commentListData[j].refId + "']").children().eq(0);
+                var user = object.text();
+                if (user != commentListData[j].userName) {
+                    //commentList.append('<p cid="'+commentListData[j]._id+'" refId="'+commentListData[j].refId+'"><a href="javascript:void(0)" class="sd_author">'+commentListData[j].userName+'</a>  回复 <a href="javascript:void(0)" class="sd_author">'+user+'</a>：<span>'+commentListData[j].content+'</span><span class="time">'+showTradeDate+' <a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                    showComment += '<p cid="' + commentListData[j]._id + '" refId="' + commentListData[j].refId + '"><a href="javascript:void(0)" class="sd_author">' + commentListData[j].userName + '</a>  回复 <a href="javascript:void(0)" class="sd_author">' + user + '</a>：<span>' + commentListData[j].content + '</span><span class="time">' + showTradeDate + ' <a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                } else {
+                    //commentList.
+                    //    append('<p cid="'+commentListData[j]._id+'"><a href="javascript:void(0)" class="sd_author">'+commentListData[j].userName+'</a>：<span>'+commentListData[j].content+'</span>' +
+                    //    '<span class="time">'+showTradeDate+'<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                    showComment += '<p cid="' + commentListData[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentListData[j].userName + '</a>：<span>' + commentListData[j].content + '</span>' +
+                        '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                }
+            } else {
+                //commentList.
+                //    append('<p cid="'+commentListData[j]._id+'"><a href="javascript:void(0)" class="sd_author">'+commentListData[j].userName+'</a>：<span>'+commentListData[j].content+'</span>' +
+                //    '<span class="time">'+showTradeDate+'<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                showComment += '<p cid="' + commentListData[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentListData[j].userName + '</a>：<span>' + commentListData[j].content + '</span>' +
+                    '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+            }
+
+        }
+        return showComment;
+    },
+
+
+
+    /**
+     * 加载全部晒单评论
+     * @param data
+     */
+    loadAllCommment: function(sid) {
+
+        var $liSid = $('#showTradeDiv ul.sd_ul').find("li[sid='" + sid + "']");
+
+        var commentListData = $liSid.data("commentListData");
+
+        var initialComments = $liSid.data("initialComments"); //初始晒单评论
+
+        var showComment = ""; //最终显示所有评论
+
+        var commentList = $($liSid).find('#commentList');
+
+        var sd_loadcomment = commentList.find('.sd_loadcomment');
+
+        if (chatShowTrade.cur_status == "less") {
+            //组装数据
+            var showComment = chatShowTrade.loadCommentData(commentListData, commentList, showComment);
+
+            commentList.append(showComment);
+
+            sd_loadcomment.children().html("收起");
+
+            chatShowTrade.cur_status = "more";
+        } else {
+            commentList.children().remove();
+
+            commentList.append(initialComments);
+
+            sd_loadcomment.children().html("展开全部");
+
+            chatShowTrade.cur_status = "less";
+        }
+        commentList.find("p:last").after(sd_loadcomment);
+    },
+
     /**
      * 设置晒单墙数据显示
      * @returns {boolean}
@@ -148,6 +355,7 @@ var chatShowTrade = {
         var start = common.isBlank(chatShowTrade.tradeForUser) ? $("#showTradeDiv .scrollbox ul.sd_ul li").size() : $(".pop_mysd .sd_list .sd_ul li").size();
         var listData = chatShowTrade.tradeList;
         var row = null;
+        var commentTemp = null;
         var length = listData.length;
         var tradeHtml = '',
             tradeFormat = common.isBlank(chatShowTrade.tradeForUser) ? chatShowTrade.formatHtml('showTradeAll') : chatShowTrade.formatHtml('showTradeUser'),
@@ -169,25 +377,25 @@ var chatShowTrade = {
                     break;
             }
             var showTradeDate = common.formatterDateTime(row.showDate, '/').substr(5, 11);
-            /*if(common.isBlank(chatShowTrade.tradeForUser)){
-             tradeHtml += tradeFormat.formatStr(row.title, row.user.userName, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise)?0:row.praise, row._id, row.user.userNo, row.user.avatar);
-             }else{
-             tradeHtml += tradeFormat.formatStr(row.title, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise)?0:row.praise, row._id, cls);
-             }*/
-
+            commentTemp = row.comments; //晒单评论列表
             if (common.isBlank(chatShowTrade.tradeForUser)) {
+                var sid = row._id;
                 tradeHtml = tradeFormat.formatStr(row.title, row.user.userName, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise) ? 0 : row.praise, row._id, row.user.userNo, row.user.avatar);
-                if (i % 2 != 0) {
+                var tempTrade = $(tradeHtml);
+                if (i % 2 != 0) { //右边晒单
                     $('#showTradeDiv .scrollbox ul.sd_ul li').removeClass('r');
-                    $('#right_sdul').append(tradeHtml);
+                    //加载晒单评论
+                    chatShowTrade.setTradeComments(commentTemp, tempTrade, sid);
+                    $('#right_sdul').append(tempTrade);
                     $('#showTradeDiv .scrollbox ul.sd_ul li:odd').addClass('r');
-                } else {
+                } else { //左边晒单
                     $('#showTradeDiv .scrollbox ul.sd_ul li').removeClass('r');
-                    $('#left_sdul').append(tradeHtml);
+                    //加载晒单评论
+                    chatShowTrade.setTradeComments(commentTemp, tempTrade, sid);
+                    $('#left_sdul').append(tempTrade);
                     $('#showTradeDiv .scrollbox ul.sd_ul li:odd').addClass('r');
                 }
-
-            } else {
+            } else { //我的晒单
                 tradeHtml = tradeFormat.formatStr(row.title, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise) ? 0 : row.praise, row._id, cls);
                 if (i % 2 != 0) {
                     $('.pop_mysd .sd_list .sd_ul li').removeClass('r');
@@ -200,15 +408,6 @@ var chatShowTrade = {
                 }
             }
         }
-        /*if(common.isBlank(chatShowTrade.tradeForUser)) {
-         $('#showTradeDiv .scrollbox ul.sd_ul li').removeClass('r');
-         $('#showTradeDiv .scrollbox ul.sd_ul').append(tradeHtml);
-         $('#showTradeDiv .scrollbox ul.sd_ul li:odd').addClass('r');
-         }else{
-         $('.pop_mysd .sd_list .sd_ul li').removeClass('r');
-         $('.pop_mysd .sd_list .sd_ul').append(tradeHtml);
-         $('.pop_mysd .sd_list .sd_ul li:odd').addClass('r');
-         }*/
         if (i >= length - 1) {
             chatShowTrade.tradeLoadAll = true;
         }
@@ -221,6 +420,52 @@ var chatShowTrade = {
             indexJS.setListScroll('.pop_mysd .sd_list .scrollbox', null, { callbacks: { onTotalScroll: function() { chatShowTrade.setShowTrade(); } } }); /*设置滚动条*/
         }
     },
+
+    /**
+     * 用户晒单评论
+     */
+    setTradeComments: function(commentTemp, tempTrade, sid) {
+        $(tempTrade).find('.cont').append('<div class="sd_comment" id="commentList" ></div>');
+        var index = 0;
+        var initialComments = "";
+        if (commentTemp.length > 0) {
+            $(tempTrade).data("commentListData", commentTemp);
+            for (var j = 0; j < commentTemp.length; j++) {
+                index++;
+                if (index > 2) {
+                    var loadHtml = '<div class="sd_loadcomment"><a href="javascript:void(0)" onclick="chatShowTrade.loadAllCommment(\'' + sid + '\')">展开全部</a></div>';
+                    $(tempTrade).find('#commentList').append(loadHtml);
+                    break;
+                }
+                var showTradeDate = common.formatterDateTime(commentTemp[j].dateTime, '/').substr(5, 11);
+                var commentList = $(tempTrade).find('#commentList');
+                if (commentTemp[j].refId != "") {
+                    var object = commentList.find("p[cid='" + commentTemp[j].refId + "']").children().eq(0);
+                    var user = object.text();
+                    if (user != commentTemp[j].userName) {
+                        commentList.append('<p cid="' + commentTemp[j]._id + '" refId="' + commentTemp[j].refId + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>  回复 <a href="javascript:void(0)" class="sd_author">' + user + '</a>：<span>' + commentTemp[j].content + '</span><span class="time">' + showTradeDate + ' <a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                        initialComments += '<p cid="' + commentTemp[j]._id + '" refId="' + commentTemp[j].refId + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>  回复 <a href="javascript:void(0)" class="sd_author">' + user + '</a>：<span>' + commentTemp[j].content + '</span><span class="time">' + showTradeDate + ' <a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                    } else {
+                        commentList.
+                        append('<p cid="' + commentTemp[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>：<span>' + commentTemp[j].content + '</span>' +
+                            '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                        initialComments += '<p cid="' + commentTemp[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>：<span>' + commentTemp[j].content + '</span>' +
+                            '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                    }
+                } else {
+                    initialComments += '<p cid="' + commentTemp[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>：<span>' + commentTemp[j].content + '</span>' +
+                        '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>';
+                    commentList.
+                    append('<p cid="' + commentTemp[j]._id + '"><a href="javascript:void(0)" class="sd_author">' + commentTemp[j].userName + '</a>：<span>' + commentTemp[j].content + '</span>' +
+                        '<span class="time">' + showTradeDate + '<a href="javascript:void(0)" class="com-replybtn" title="回复"></a></span></p>');
+                }
+            }
+            $(tempTrade).data("initialComments", initialComments); //初始晒单评论
+        } else {
+            $(tempTrade).find('#commentList').hide();
+        }
+    },
+
     /**
      * 用户晒单数据
      */
@@ -298,6 +543,7 @@ var chatShowTrade = {
             }, true);
         });
     },
+
     /**
      * 获取积分
      */
@@ -365,15 +611,19 @@ var chatShowTrade = {
             row = data[i];
             if ($('#showTradeDiv .sd_ul li[sid="' + row.id + '"]').length == 0) {
                 var showTradeDate = common.formatterDateTime(row.showDate.time, '/').substr(5, 11);
+                var sdCommentListHtml = '<div class="sd_comment" id="commentList" style="display: none"></div>';
                 if (i % 2 != 0) {
                     $('#showTradeDiv .scrollbox ul #right_sdul li').removeClass('r');
                     rightTradeHtml = tradeFormat.formatStr(row.title, row.boUser.userName, showTradeDate, row.tradeImg, row.remark, (common.isBlank(row.praise) ? 0 : row.praise), row.id, row.boUser.userNo, row.boUser.avatar);
-                    $(rightTradeHtml).insertBefore($("#right_sdul li").eq(0));
+                    rightTradeHtml.find(".cont").append(sdCommentListHtml);
+                    rightTradeHtml.insertBefore($("#right_sdul li").eq(0));
                     $('#showTradeDiv .scrollbox ul #right_sdul li:odd').addClass('r');
                 } else {
                     $('#showTradeDiv .scrollbox ul #left_sdul li').removeClass('r');
                     leftTradeHtml = tradeFormat.formatStr(row.title, row.boUser.userName, showTradeDate, row.tradeImg, row.remark, (common.isBlank(row.praise) ? 0 : row.praise), row.id, row.boUser.userNo, row.boUser.avatar);
-                    $(leftTradeHtml).insertBefore($("#left_sdul li").eq(0));
+                    var $leftTradeHtml = $(leftTradeHtml);
+                    $leftTradeHtml.find(".cont").append(sdCommentListHtml);
+                    $leftTradeHtml.insertBefore($("#left_sdul li").eq(0));
                     $('#showTradeDiv .scrollbox ul #left_sdul li:odd').addClass('r');
                 }
                 indexJS.setListScroll('#showTradeDiv .scrollbox', null, { callbacks: { onTotalScroll: function() { chatShowTrade.setShowTrade(); } } }); /*设置滚动条*/
@@ -391,6 +641,7 @@ var chatShowTrade = {
         $('#chatMsgContentDiv .dialoglist .showtrade').click(function() {
             chatShowTrade.gotoLook($(this).attr('_id'));
         });
+        chatShowTrade.showTradePraise();
     },
     /**去看看-晒单*/
     gotoLook: function(showTradeId) {
@@ -424,6 +675,7 @@ var chatShowTrade = {
                 formatHtmlArr.push('        <div class="sd_bot">');
                 formatHtmlArr.push('            <span class="sdtime">晒单时间: {2}</span>');
                 formatHtmlArr.push('            <a href="javascript:void(0)" class="sd_cbtn" id="{6}"><i class="support"></i><span>{5}</span></a>');
+                formatHtmlArr.push('            <a href="javascript:void(0)" class="sd_cbtn" id="{6}"><i class="comment"></i></a>');
                 formatHtmlArr.push('        </div>');
                 formatHtmlArr.push('    </div>');
                 formatHtmlArr.push('</li>');
@@ -442,6 +694,7 @@ var chatShowTrade = {
                 formatHtmlArr.push('        </div>');
                 formatHtmlArr.push('    </div>');
                 formatHtmlArr.push('</li>');
+                break;
                 break;
             case 'getPoint':
                 formatHtmlArr.push('<tr>');

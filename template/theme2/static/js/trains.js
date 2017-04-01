@@ -11,10 +11,22 @@ var Trains = new Container({
          "tracey_jiang_1" : {"cls" : "popup_box tbox train_detail cctrain_detail dn", "lp" : "http://www.24k.hk/lp_v137_cls.html"}
     },*/
     onLoad : function(){
+        Trains.initTrainData();
         Trains.setTrainList();
         Trains.setEvent();
     }
 });
+
+/**
+ * 初始化数据
+ */
+Trains.initTrainData = function () {
+    Trains.trainConfig = {
+        "joe_chung_1": { "cls": "popup_box tbox train_detail zwytrain dn", "lp": "http://www.24k.hk/lp_v154_zwy.html" },
+        "tonylee_1": { "cls": "popup_box tbox train_detail dn", "lp": "http://www.24k.hk/lp_v142_lgg.html" },
+        "tracey_jiang_1": { "cls": "popup_box tbox train_detail cctrain_detail dn", "lp": "http://www.24k.hk/lp_v137_cls.html" }
+    };
+};
 
 /**
  * 设置培训班列表
@@ -27,7 +39,7 @@ Trains.setTrainList = function(){
                 var openDate = JSON.parse(row.openDate);
                 var feature = Trains.getTrainFeature(row, false);
                 var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
-                var statusArray = ['报名','进入','已结束'],bgcss = 0;
+                var statusArray = ['','报名','进入','已结束'],bgcss = 1;
                 if(openDate.weekTime && openDate.weekTime[0].beginTime && openDate.weekTime[0].endTime){
                     var timeStr = openDate.weekTime[0];
                     dateStr = dateStr + '&nbsp;&nbsp;' + timeStr.beginTime.substr(0,5) + '~' + timeStr.endTime.substr(0,5)
@@ -35,7 +47,7 @@ Trains.setTrainList = function(){
                 if(feature.isEnd){
                     dateStr = '已结束';
                 }
-                bgcss = $.inArray(feature.handleTxt,statusArray) || bgcss;
+                bgcss = $.inArray(feature.handleTxt,statusArray) == -1 ? bgcss : $.inArray(feature.handleTxt,statusArray);
                 var html = Trains.formatHtml('train',
                         row.name,
                         dateStr,//时间
@@ -146,15 +158,16 @@ Trains.trainSignUp = function(groupId, groupName, noApprove){
         Login.load();
     }else{
         Util.postJson('/addClientTrain',{groupId : groupId,noApprove : noApprove ? 1 : 0},function(data){
-            if(!data || data.errcode == "4016"){
+            if(!data || data.code == "4016"){
                 Trains.changeRoom(groupId, groupName);
             }else{
-                if(data.errcode == "4019"){//报名成功
+                if(data.code == "4019"){//报名成功
                     $("#trainsList .u-ch-class .u-ch-con .btn[rid='" + groupId + "']")
                     .attr("href", "javascript:Trains.changeRoom('" + groupId + "', '" + groupName + "')")
-                    .text("已报名");
+                    .attr('class','btn join-btn')
+                    .html("<b>已报名</b>");
                 }
-                Pop.msg(data.errmsg);
+                Pop.msg(data.message);
             }
         });
     }
@@ -175,16 +188,19 @@ Trains.getTrainFeature = function(roomInfo, noLP){
         clientSize : "已报名" + Math.abs(roomInfo.clientSize || 0) + "人",  //已报名人数
         isEnd : false    //是否已结束
     };
-    var openDate = roomInfo.openDate;
+    var openDate = JSON.parse(roomInfo.openDate);
     var currDate = Util.formatDate(Data.serverTime, "yyyy-MM-dd");
     var analystNo = roomInfo.defaultAnalyst && roomInfo.defaultAnalyst.userNo;
     var trainCfgKey = roomInfo.trainConfig || "";
     var trainCfg = Trains.getTrainConfig(trainCfgKey);
     if(roomInfo.status == 0 || (openDate && openDate.endDate < currDate)){
         if(trainCfg && trainCfg.lp && !noLP){
-            result.handleTxt = "已结束，精彩回顾";
+/*            result.handleTxt = "已结束，精彩回顾";
             result.handler = trainCfg.lp;
-            result.handleTarget = " target='_blank'";
+            result.handleTarget = " target='_blank'";*/
+            result.handleTxt = "已结束";
+            result.handler = "javascript:void(0)";
+            result.handleCls = " b2";
         }else{
             result.handleTxt = "已结束";
             result.handler = "javascript:void(0)";

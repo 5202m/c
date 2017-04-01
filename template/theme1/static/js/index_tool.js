@@ -217,45 +217,34 @@ var indexTool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000 * 6, //红包周期30分钟
+            cycleTime: 300000 * 2, //红包周期30分钟
             stayTime: 5000, //红包停留时间5秒
             startTime: 30720000, //8:32
             endTime: 84600000, //23:30
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
-                /*/!*08:30*!/ {start:30600000, userId:"tonylee", userName:"李呱呱", wechat:"lee_24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/1_liguagua.png"},
-                /!*09:31*!/ {start:34200001, userId:"tracey_jiang", userName:"陈丞",  wechat:"chan24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/2_chencheng.png"},
-                /!*11:31*!/ {start:41400001, userId:"joe_chung", userName:"钟文耀", wechat:"chung24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/3_zhongwenyao.png"},
-                /!*13:31*!/ {start:48600001, userId:"joe_zhuang", userName:"庄蓝玉", wechat:"zhuang24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/4_zhuanglanyu.png"},
-                /!*15:31*!/ {start:55800001, userId:"dan_yeh", userName:"叶航",  wechat:"yehang24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/5_yehang.png"},
-                /!*17:31*!/ {start:63000001, userId:"dusan_kao", userName:"高登",  wechat:"kao_24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/6_gaodeng.png"},
-                /!*19:31*!/ {start:70200001, userId:"eric_liu", userName:"刘策",  wechat:"liu_gw24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/7_liuce.png"},
-                /!*21:31*!/ {start:77400001, userId:"buck_chen", userName:"陈铎",  wechat:"chen_gw24k", wechatImg:"https://chatfiles.kgold852.com/upload/pic/wechat/8_chenduo.png"}*/
-
                 /*08:32*/
-                { start: 30720000, userId: "joe_zhuang", userName: "庄蓝玉", wechat: "zhuang24k", wechatImg: "https://chatfiles.kgold852.com/upload/pic/wechat/4_zhuanglanyu.png" },
-                /*13:31*/
-                { start: 48600001, userId: "joe_chung", userName: "钟文耀", wechat: "chung24k", wechatImg: "https://chatfiles.kgold852.com/upload/pic/wechat/3_zhongwenyao.png" },
-                /*18:31*/
-                { start: 66600001, userId: "tracey_jiang", userName: "陈丞", wechat: "chan24k", wechatImg: "https://chatfiles.kgold852.com/upload/pic/wechat/2_chencheng.png" }
-
+                { start: 30720000, userId: "joe_zhuang", userName: "庄蓝玉", wechat: "zhuang24k", wechatImg: "/theme1/img/joe_zhuang.png" },
+                /*11:31*/
+                { start: 41400001, userId: "dan_yeh", userName: "叶航", wechat: "yehang24k", wechatImg: "/theme1/img/dan_yeh.png" },
+                /*14:31*/
+                { start: 52200001, userId: "eric_liu", userName: "刘策", wechat: "liu_gw24k", wechatImg: "/theme1/img/eric_liu.png" },
+                /*17:31*/
+                { start: 63000001, userId: "buck_chen", userName: "陈铎", wechat: "chen_gw24k", wechatImg: "/theme1/img/buck_chen.png" },
+                /*20:31*/
+                { start: 73800001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme1/img/yx_lin.png" }
             ], //23:30*/
-
 
             redPacketPopFlag: true, //红包弹出标记
             miniClose: false, //mini窗关闭标识，手动关闭后，当次不再弹出
             opened: false, //是否已经点击抢红包标记
-
             times: 0, //次数
             minutes: 0, //分钟数
             seconds: 0, //秒数
             timesLabel: "--", //次数
             minutesLabel: "--", //分钟数
             secondsLabel: "--", //秒数
-            redPacketPeriods: 0, //红包期数，为0时表示非抢红包时间，其他为红包的期数
-            totalBonus: 0, //奖金池总金额
-            pageIndex: 1, //页索引
-            totalPage: 　0 //总页数
+            redPacketPeriods: 0 //红包期数，为0时表示非抢红包时间，其他为红包的期数
         },
 
         /**
@@ -296,14 +285,6 @@ var indexTool = {
                     var analyst = indexTool.RedPacket.getAnalyst();
                     indexTool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
                 }
-            });
-
-            // 获取奖金累计金额
-            $.getJSON('/activity/getTotalMoneyInfo', { "periods": '20170201' }, function(data) {
-                var data = JSON.parse(data);
-                var config = indexTool.RedPacket.config;
-                config.totalBonus = data.totalMoney;
-                $('.redbag-op').find("[rp=totalBonus]").text(data.totalMoney);
             });
 
             //红包视图-中奖页（{money:Number, wechatImg:String}）
@@ -393,156 +374,11 @@ var indexTool = {
             });
 
             //抢红包
-            $("#redPacket_miniRob, #redPacket_rob").bind("click", function() {
+            $(".ani").bind("click", function() {
                 if (!indexTool.RedPacket.config.opened) {
                     indexTool.RedPacket.config.opened = true;
                     indexTool.RedPacket.rob();
                 }
-            });
-
-            /* 打赏弹出框 */
-            $('.btn-tips-pop,.hit-tips-btn,#getHitList2').bind("click", function() {
-                if (!indexTool.RedPacket.config.redPacketPopFlag) {
-                    indexTool.RedPacket.config.redPacketPopFlag = true;
-                    $("#redPacket_popFlag").prop("checked", false);
-                    indexTool.store("redPacketPopFlag", true);
-                }
-                if (indexJS.userInfo.isLogin) {
-                    $('.pop_tip2').hide();
-                    $('.pop_tip').show();
-                } else {
-                    $('.pop_tip2').hide();
-                    indexTool.RedPacket.showPop("noLogin");
-                }
-            });
-
-            /* 弹出老师微信二维码 */
-            $('.tip-btn').bind("click", function() {
-                $(".collection-con img").attr("src", $(this).parent().find("img").eq(1).attr("src")); //赋值二维码
-                $(".collection-con .p2 [rp='wechat']").text($(this).parent().find("[rp='wechat']").text()); //赋值微信号
-                $('.pop_collection').show();
-            });
-
-            //抽奖弹出框
-            $(".btn-lottery-pop").bind("click", function() {
-                if (!indexTool.RedPacket.config.redPacketPopFlag) {
-                    indexTool.RedPacket.config.redPacketPopFlag = true;
-                    $("#redPacket_popFlag").prop("checked", false);
-                    indexTool.store("redPacketPopFlag", true);
-                }
-                if (indexJS.userInfo.isLogin) {
-                    indexTool.RedPacket.showPop("normal");
-                } else {
-                    indexTool.RedPacket.showPop("noLogin");
-                }
-            });
-
-            /* 弹出打赏列表 */
-            $("#getHitList").bind("click", function() {
-                var mobile = indexJS.userInfo.mobile;
-                indexTool.RedPacket.pageBindData(mobile, 1);
-            });
-
-            /* 上一页 */
-            $('.btn-prev').bind("click", function() {
-                $('.btn-prev,.btn-next').removeClass("disabled");
-                var config = indexTool.RedPacket.config;
-                var pageIndex = config.pageIndex;
-                var mobile = indexJS.userInfo.mobile;
-                if (pageIndex > 1) {
-                    pageIndex--;
-                    config.pageIndex = pageIndex;
-                    indexTool.RedPacket.pageBindData(mobile, pageIndex);
-                } else {
-                    $('.btn-prev').addClass("disabled");
-                }
-            });
-
-            /* 下一页 */
-            $('.btn-next').bind("click", function(event) {
-                $('.btn-prev,.btn-next').removeClass("disabled");
-                var config = indexTool.RedPacket.config;
-                var mobile = indexJS.userInfo.mobile;
-                //总页数
-                var pageCount = config.totalPage;
-                var pageIndex = config.pageIndex;
-                if (pageIndex < pageCount) {
-                    pageIndex++;
-                    config.pageIndex = pageIndex;
-                    indexTool.RedPacket.pageBindData(mobile, pageIndex);
-                } else {
-                    $('.btn-next').addClass("disabled");
-                }
-            });
-
-        },
-
-        pageBindData: function(mobile, pageIndex) {
-            indexTool.RedPacket.getHitData(mobile, pageIndex);
-        },
-
-        //字符截取
-        cutstr: function(str, len) {
-            var replacestr = "…";
-            if (str.length > len) {
-                str = str.substring(0, len) + replacestr;
-            }
-            return str;
-        },
-
-
-        //获取打赏列表
-        getHitData: function(mobile, pageIndex) {
-            $('#hitItem').html("");
-            $('#hitRight table').html("");
-            $('.hit-list').find(".nodata").remove();
-
-            $.getJSON('/activity/getRewardMoneyInfo', { "phoneNo": mobile, 'page': pageIndex }, function(data) {
-                try {
-                    var data = JSON.parse(data);
-                } catch (err) {
-                    return;
-                }
-                if (data.infoMsg == "OK") {
-                    if (data.data.length > 0) {
-                        var hitHtml = '<tr><th width="35%">打赏人</th><th>累积打赏<span>（元）</span></th><th width="25%">打赏排名</th></tr>';
-                        var hitHtml2 = '<tr><th width="35%">打赏人</th><th>累积打赏<span>（元）</span></th><th width="25%">打赏排名</th></tr>';
-                        var indexNo = 0;
-                        indexTool.RedPacket.config.totalPage = data.totalPage;
-                        for (var i = 0; i < data.data.length; i++) {
-                            indexNo++;
-                            if (indexNo > 5) {
-                                hitHtml2 += '<tr><td><img src="' + data.data[i].avatar + '"  class="hit-avatar" /><span>' + indexTool.RedPacket.cutstr(data.data[i].name, 4) + '</span></td>';
-                                hitHtml2 += '<td><span>' + data.data[i].money + '</span></td>';
-                                hitHtml2 += '<td><span>' + data.data[i].index + '</span></td>';
-                                hitHtml2 += '</tr>';
-                            } else {
-                                if (mobile == data.data[i].phoneNo) {
-                                    hitHtml += '<tr class="active">';
-                                    hitHtml += '<td><img src="' + data.data[i].avatar + '"  class="hit-avatar" /><span>我</span></td>';
-                                } else {
-                                    hitHtml += '<tr>';
-                                    hitHtml += '<td><img src="' + data.data[i].avatar + '"  class="hit-avatar" /><span class="">' + indexTool.RedPacket.cutstr(data.data[i].name, 4) + '</span></td>';
-                                }
-                                hitHtml += '<td><span>' + data.data[i].money + '</span></td>';
-                                hitHtml += '<td><span>' + data.data[i].index + '</span></td>';
-                                hitHtml += '</tr>';
-                                $("#hitRight").show();
-                            }
-
-                        }
-                        $('#hitItem').append(hitHtml);
-                        $('#hitRight table').append(hitHtml2);
-                    } else {
-                        $('.btn-prev').hide();
-                        $('.btn-next').hide();
-                        $('.hit-list').append('<span class="nodata">暂无数据</span>');
-                    }
-                    $('.pop_tip2').show();
-                } else {
-                    box.showMsg("获取打赏列表异常!");
-                }
-
             });
 
         },
@@ -724,17 +560,9 @@ var indexTool = {
                 common.getJson("/rob", { t: indexJS.serverTime }, function(data) {
                     if (data.result == 0) {
                         indexTool.RedPacket.config.redPacketPeriods = 0;
-
                         var analyst = indexTool.RedPacket.getAnalyst();
                         if (data.money > 0) {
                             indexTool.RedPacket.showPop("resYes", { money: data.money, wechatImg: analyst.wechatImg, wechat: analyst.wechat });
-                            // 获取奖金累计金额
-                            $.getJSON('/activity/getTotalMoneyInfo', { "periods": '20170201' }, function(data) {
-                                var data = JSON.parse(data);
-                                var config = indexTool.RedPacket.config;
-                                config.totalBonus = data.totalMoney;
-                                $('.redbag-op').find("[rp=totalBonus]").text(data.totalMoney);
-                            });
                         } else {
                             indexTool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
                         }

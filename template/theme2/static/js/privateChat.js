@@ -142,13 +142,14 @@ PrivateChat.setEvent = function(){
     /**
      * 发送图片--选择图片
      */
-    $("#privateChat_pic").click(function () {
+    $("#privateChat_pic").click(function (e) {
         Data.getRoom(function(room) {
             if (!FileReader) {
                 alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
                 return false;
             }
             if (!room.allowVisitor && Data.userInfo.clientGroup == 'visitor') {
+                e.preventDefault();
                 Login.load();
                 return false;
             }

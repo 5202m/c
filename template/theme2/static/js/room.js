@@ -123,6 +123,7 @@ Room.setEvent = function(){
     $('#room_pride').bind('click', function(){
         $('#chat_player,#roomLiveAnalyst,#roomAnalystTagCourse').hide();
         $('#prideTopTitle,#prideShowAnalyst').show();
+        $('#pride_teacher').after('<div style="float: right" class="i-close close-btn" id="pride_close"></div>')
     });
     /**
      * 点击直播精华关闭按钮
@@ -131,6 +132,13 @@ Room.setEvent = function(){
         $('#prideTopTitle,#prideShowAnalyst').hide();
         $('#chat_player,#roomLiveAnalyst,#roomAnalystTagCourse').show();
     });
+
+    $('#prideShowAnalyst').on('click','.i-close.close-btn',function () {
+        $('#prideTopTitle,#prideShowAnalyst').hide();
+        $('#chat_player,#roomLiveAnalyst,#roomAnalystTagCourse').show();
+        $('#pride_close').remove();
+    })
+
 };
 
 /**

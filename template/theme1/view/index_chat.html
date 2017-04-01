@@ -36,27 +36,25 @@
             <div class="main_tab on" t="livepride">
                 <div class="livebrief_list">
                     <div class="scrollbox">
-                        <!--<div class="header_redbag auto_redbag clearfix" id="redPacket_chat" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_zbjh_topbanner', 'content_middle', 1, true]);">-->
-                            <!--<div class="redbag_pic"></div>-->
-                            <!--<div class="rb_text">-->
-                                <!--<div class="te1">-->
-                                    <!--第<b rp="timesLabel"></b>波微信红包-->
-                                <!--</div>-->
-                                <!--<div class="timecount">-->
-                                    <!--<b rp="minutesLabel"></b>-->
-                                    <!--<span>分</span>-->
-                                    <!--<b rp="secondsLabel"></b>-->
-                                    <!--<span>秒</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="redbag-op">-->
-                                <!--<div class="redbag-t1">奖池现已累积 <span><b rp="totalBonus"></b>元</span></div>-->
-                                <!--<div class="redbag-btns">-->
-                                    <!--<a href="javascript:;" class="btn-default btn-tips-pop" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_topbanner_ds', 'content_middle', 1, true]);">打赏</a>-->
-                                    <!--<a href="javascript:;" class="btn-red btn-lottery-pop" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_topbanner_cj', 'content_middle', 1, true]);">抽奖</a>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <%if(isRedPacket) {%>
+                        <div class="tab_redbag clearfix" id="redPacket_chat" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_zbjh_topbanner', 'content_middle', 1, true]);">
+                            <div class="rb_cont">
+                                <div class="redbag_pic"></div>
+                                <div class="te1">第<b rp="timesLabel"></b>波微信红包</div>
+                                <div class="te2">
+                                    <b>阳春点花魁</b>
+                                    <span> 每10分钟一波！</span>
+                                </div>
+                                <div class="timecount">
+                                    <b rp="minutesLabel"></b><span>分</span>
+                                    <b rp="secondsLabel"></b><span>秒</span>
+                                </div>
+                                <div class="rb_topic">
+                                    <a href="javascript:void(0)">抢</a>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
                         <div id="textlivePanel">
                             <div class="livebrief" id="financeDataAndReview">
                                 <div class="calendabox financeData"></div>
@@ -352,6 +350,7 @@
                         <ul class="sd_ul" id="right_sdul">
                             <!-- 晒单墙内容 -->
                         </ul>
+                        <p id="commentsData" ></p>
                     </div>
                     <div class="sdbtn_bar">
                         <a href="javascript:void(0);" id="wantShowTrade" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'right_sdq_woyaoshaidan', 'content_right', 1, true]);">我要晒单</a>

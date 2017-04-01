@@ -281,9 +281,9 @@ ClassNote.setViewDataHtml = function(dom, data){
             }
             tradeStrategyHdDetailHtml.push(Util.format(tradeStrategyHdDetail,row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
         });
-        dom.parent().children().children('table').remove();
-        dom.parent().children('div.details-item-list.sildeup').after(tradeStrategyHdDetailHtml.join(''));
-        dom.parent().children('div.details-item-list.sildeup')[0].remove();
+        dom.parent().children('table').remove();
+        dom.parent().children('.instr-txt').remove();
+        dom.parent().children('.call-hd').after(tradeStrategyHdDetailHtml.join(''));
         dom.hide();
     }else if(articleInfo.tag == 'trading_strategy'){
         var tradeStrategySupport = ClassNote.formatViewDataHtml('tradeStrategySupport'); //交易支撑位信息
@@ -408,12 +408,12 @@ ClassNote.formatViewDataHtml = function(region){
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('    </tbody>');
             formatHtmlArr.push('</table>');
-            formatHtmlArr.push('<div class="details-item-list sildeup">');
+            //formatHtmlArr.push('<div class="details-item-list sildeup">');
             formatHtmlArr.push('<div class="instr-txt">');
             formatHtmlArr.push('<label>说明</label>');
             formatHtmlArr.push('<span class="{6}">{5}</span>');
             formatHtmlArr.push('</div>');
-            formatHtmlArr.push('</div>');
+            //formatHtmlArr.push('</div>');
             break;
         case 'tradeStrategyNoteDetail':
             formatHtmlArr.push('<div class="textcont">{0}</div>');
