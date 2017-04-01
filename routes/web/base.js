@@ -227,7 +227,8 @@ router.get('/', function(req, res) {
         function(groupId) {
             if (common.isBlank(groupId)) {
                 req.session.studioUserInfo = null;
-                res.render('error', { error: '默认房间设置有误，请检查！' });
+                logger.error(new Error("获取groupId失败导致默认房间设置有误，请检查！"));
+                res.render("error", errorMessage.code_12);
             } else {
                 var targetGroupId = chatUser.toGroup || chatUser.groupId || groupId;
                 chatService.getRoomOnlineTotalNum(targetGroupId,
@@ -260,7 +261,7 @@ router.get('/', function(req, res) {
                                     res.redirect(getGroupType(req, true) + redirctUrl);
                                 } else { //目标房间是默认房间(此时肯定未登录状态，否则会满足“目标房间是当前房间”)==>直接报错
                                     req.session.studioUserInfo = null;
-                                    res.render("error", { error: '非常抱歉，你进入的默认房间已限制访问！' });
+                                    res.render("error", errorMessage.code_12);
                                 }
                             });
                     });
@@ -984,8 +985,7 @@ router.get('/getArticleList', function(req, res) {
     params.orderByStr = req.query["orderByStr"];
     params.pageNo = common.isBlank(params.pageNo) ? 1 : params.pageNo;
     params.pageSize = common.isBlank(params.pageSize) ? 15 : params.pageSize;
-    params.orderByStr = common.isBlank(params.orderByStr) ? "" :
-        params.orderByStr;
+    params.orderByStr = common.isBlank(params.orderByStr) ? "" : params.orderByStr;
     var ids = req.query['ids'] || '';
     var callTradeIsNotAuth = 0,
         strategyIsNotAuth = 0;
@@ -1092,7 +1092,7 @@ router.post('/checkGroupAuth', function(req, res) {
         result = null,
         chatUser = req.session.studioUserInfo;
 
-    if ((common.isBlank(groupId) && common.isBlank(roomType)) || !chatUser) {
+    if (common.isBlank(groupId) || !chatUser) {
         result = errorMessage.code_1000;
     }
     if (!result) {
