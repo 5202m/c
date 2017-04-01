@@ -6,9 +6,11 @@ var Syllabus = new Container({
     panel : $("#page_syllabus"),
     url : "/theme2/template/syllabus.html",
     onLoad : function(){
+        Syllabus.setEvent();
+    },
+    onShow : function () {
         Data.getAnalyst('', function() {
             Syllabus.setSyllabusTitle();
-            Syllabus.setEvent();
         });
     }
 });
@@ -83,7 +85,7 @@ Syllabus.setSyllabusList = function(day){
                                 statusCls = clsObj.orange;
                                 btn = '订阅';
                                 btnCls = clsObj.blue;
-                                hideBtn = '';
+                                hideBtn = 'style="display:none;"';
                             }
                             courseDataHtml.push(Syllabus.formatHtml('syllabusData',
                                 courseObj.title,
@@ -110,6 +112,7 @@ Syllabus.setSyllabusList = function(day){
         });
         $('#syllabusList').empty().html(courseDataHtml.join(''));
         Subscribe.setSubscribeData('#syllabusList .item-cell .btn-op');
+        Subscribe.setSubscribeTypeAttr('#syllabusList .item-cell .btn-op');
     });
 };
 
@@ -186,23 +189,3 @@ Syllabus.setEvent = function(){
     });
 };
 
-/**
- * 设置订阅属性
- * @param obj
- */
-Syllabus.setSubscribeAttr = function(obj,analyst){
-    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
-        if(data!=null){
-            $.each(data,function(i, row){
-                if(analyst !== row.analyst) return;
-                if(row.type == 'live_reminder'){
-                    obj.attr('lrid', row._id);
-                }else if(row.type == 'shout_single_strategy'){
-                    obj.attr('ssid', row._id);
-                }else if(row.type == 'trading_strategy'){
-                    obj.attr('tsid', row._id);
-                }
-            });
-        }
-    });
-};

@@ -44,11 +44,63 @@ Subscribe.setAnalystList = function(){
                 });
             });
             $('#subscribeAnalyst').empty().html(analystHtml.join(''));
+            Subscribe.setSubscribeType();
             Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
         }
     });
 };
+/**
+ * 订阅类型
+ */
+Subscribe.setSubscribeType = function() {
+    Util.postJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
+        if (data != null) {
+            $.each(data, function(i, row) {
+                if(row.code === 'live_reminder' || row.code === 'shout_single_strategy' || row.code === 'trading_strategy'){
+                    var analysts = JSON.parse(row.analysts);
+                    $.each(analysts,function (k,v) {
+                        $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').show();
+                        var type = $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').attr('type');
+                        var types = type==='' ? [] : type.split(',');
+                        types.push(row.code);
+                        $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').attr('type',types.join(','));
+                    });
+                }
+            });
+        }
+    });
+};
+/**
+ * 设置订阅类型属性
+ */
+Subscribe.setSubscribeTypeAttr = function(obj) {
+    var nodes = $(obj);//需要设置订阅类型的节点
+    if(nodes.size() == 0)return;
+    Util.postJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
+        if (data != null) {
+            $.each(nodes,function (r,d) {
+                var analyst = d.childNodes[1].getAttribute('analystid');
+                $.each(data, function(i, row) {//订阅类型数据，当前只考虑三种
+                    if(row.code === 'live_reminder' || row.code === 'shout_single_strategy' || row.code === 'trading_strategy'){
+                        var analysts = JSON.parse(row.analysts);
+                        $.each(analysts,function (k,v) {//匹配订阅老师
+                            if(v.userId === analyst){
+                                if(d.childNodes[1].text.trim()  === '订阅'){
+                                    d.childNodes[1].removeAttribute('style')
+                                }
+                                var type = d.childNodes[1].getAttribute('type'),types = type==='' ? [] : type.split(',');
+                                types.push(row.code);
+                                d.childNodes[1].setAttribute('type',types.join(','));
+                                return false;
+                            }
+                        });
+                    }
+                });
 
+            });
+        }
+    });
+};
 /**
  * 获取订阅数据
  * @param obj
@@ -69,28 +121,31 @@ Subscribe.setSubscribeData = function(obj){
                             $(obj+' a[analystId="' + v + '"]').attr('tsid', row._id)
                         }
                     }
-
- /*                   $(obj+' a.btnSubscribe').each(function (k,vv) {
-                        if(v == vv.getAttribute('analystid')){
-                            if(row.type == 'live_reminder'){
-                                //$(obj+' a.btnSubscribe').attr('lrid', row._id);
-                                vv.setAttribute('lrid', row._id)
-                            }else if(row.type == 'shout_single_strategy'){
-                                // $(obj+' a.btnSubscribe').attr('ssid', row._id);
-                                vv.setAttribute('ssid', row._id)
-                            }else if(row.type == 'trading_strategy'){
-                                // $(obj+' a.btnSubscribe').attr('tsid', row._id);
-                                vv.setAttribute('tsid', row._id)
-                            }
-                        }
-                    });*/
-
                 });
             });
         }
     });
 };
-
+/**
+ * 设置订阅属性
+ * @param obj
+ */
+Subscribe.setSubscribeAttr = function(obj,analyst){
+    Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
+        if(data!=null){
+            $.each(data,function(i, row){
+                if(analyst !== row.analyst) return;
+                if(row.type == 'live_reminder'){
+                    obj.attr('lrid', row._id);
+                }else if(row.type == 'shout_single_strategy'){
+                    obj.attr('ssid', row._id);
+                }else if(row.type == 'trading_strategy'){
+                    obj.attr('tsid', row._id);
+                }
+            });
+        }
+    });
+};
 /**
  * 点击事件
  */
@@ -214,7 +269,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
                 }
                 //订阅（此处兼容延时处理，理论上用户不会订阅，取消订阅频繁点击）
                 setTimeout(function () {
-                    Syllabus.setSubscribeAttr(obj,params.analyst);
+                    Subscribe.setSubscribeAttr(obj,params.analyst);
                 },5000);
             }else if(obj.text() === '订阅'){
                 obj.attr('lrid','');

@@ -60,7 +60,8 @@ Analyst.setAnalystInfo = function(){
                 $("#analystShowTrade").empty();
             }
             Analyst.setTrain(trainList, trAndClNum);
-            Syllabus.setSubscribeAttr($('#analystSubscribe'),Analyst.userNo);
+            Subscribe.setSubscribeAttr($('#analystSubscribe'),Analyst.userNo);
+            Subscribe.setSubscribeTypeAttr($('#analystSubscribe').parent());
         });
     }
 };
