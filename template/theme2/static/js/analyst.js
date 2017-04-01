@@ -284,7 +284,7 @@ Analyst.setEvent = function(){
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
-        if ($this.attr('subscribed') == 'true') {
+        if ($this.attr('lrid') || $this.attr('ssid') || $this.attr('tsid')) {
             $this.children('label').html('订阅')
         } else {
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
@@ -301,6 +301,15 @@ Analyst.setEvent = function(){
             Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
         });
     });
+    /**
+     * 教学视频点击事件
+     */
+    $('#analystTeachVideoList').on('click','li',function () {
+        VideoPlay.videoUrl = $(this).find('a').attr('vurl');
+        VideoPlay.videoTitle = $(this).find('a').attr('title');
+        VideoPlay.load();
+    });
+
 };
 
 /**
