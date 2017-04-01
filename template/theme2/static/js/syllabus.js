@@ -85,7 +85,7 @@ Syllabus.setSyllabusList = function(day){
                                 statusCls = clsObj.orange;
                                 btn = '订阅';
                                 btnCls = clsObj.blue;
-                                hideBtn = 'style="display:none;"';
+                                hideBtn = '';
                             }
                             courseDataHtml.push(Syllabus.formatHtml('syllabusData',
                                 courseObj.title,

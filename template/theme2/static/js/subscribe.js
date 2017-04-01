@@ -85,7 +85,7 @@ Subscribe.setSubscribeTypeAttr = function(obj) {
                         var analysts = JSON.parse(row.analysts);
                         $.each(analysts,function (k,v) {//匹配订阅老师
                             if(v.userId === analyst){
-                                if(d.childNodes[1].text.trim()  === '订阅'){
+                                if(d.childNodes[1].text.trim().indexOf('订阅') > -1 && d.childNodes[1].getAttribute('fs') === 'btn-blue'){
                                     d.childNodes[1].removeAttribute('style')
                                 }
                                 var type = d.childNodes[1].getAttribute('type'),types = type==='' ? [] : type.split(',');
@@ -112,7 +112,7 @@ Subscribe.setSubscribeData = function(obj){
                 var analystsArr = row.analyst.split(',');
                 $.each(analystsArr, function(k, v){
                     if($(obj+' a[analystId="'+v+'"]').size()>0) {
-                        $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
+                        $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-grey').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
                         if(row.type == 'live_reminder'){
                             $(obj+' a[analystId="' + v + '"]').attr('lrid', row._id)
                         }else if(row.type == 'shout_single_strategy'){
@@ -252,7 +252,12 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
                 Pop.msg('修改订阅成功！');
                 $('#subscribeAnalyst .item-con .item-main .social-op a[analystId="' + obj.attr('analystId') + '"]').html('订阅').addClass('btn-blue').removeClass('btn-green').attr('subscribed', false);
             }else{
-                Pop.msg('订阅成功！');
+                var types = obj.attr('type').split(','),tips = [];
+                var remark = {'live_reminder':'直播提醒','shout_single_strategy':'喊单策略','trading_strategy':'交易策略'}
+                $.each(types,function (i,row) {
+                    tips.push(remark[row]);
+                });
+                Pop.msg(tips.join('、')+'订阅成功！');
             }
         }else{
             Pop.msg(data.msg);
