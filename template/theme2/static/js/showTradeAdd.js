@@ -12,28 +12,12 @@ var ShowTradeAdd = new Container({
 
 /**
  * 上传晒单图片
- * @param fileObj
+ * @param formData
  * @returns {boolean}
  */
-ShowTradeAdd.uploadShowTradeImg = function(fileObj){
-    var _this=fileObj;
-    var img = _this.files[0];
-    // 判断是否图片
-    if(!img){
-        return false;
-    }
-    // 判断图片格式
-    if(!(img.type.indexOf('image')==0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase())) ){
-        Pop.msg('目前暂支持jpg,gif,png格式的图片！');
-        return false;
-    }
-    var fileSize=img.size;
-    if(fileSize>=1024*512){
-        Pop.msg('上传的图片大小不要超过512KB.');
-        return false ;
-    }
+ShowTradeAdd.uploadShowTradeImg = function(formData,fileObj){
+   var _this=fileObj;
     try{
-        var formData = new FormData($("#showTradeAddForm")[0]);
         $.ajax({
             url: Data.apiUrl+'/upload/uploadFile',
             type: 'POST',
@@ -94,6 +78,8 @@ ShowTradeAdd.saveShowTrade = function(){
         Util.postJson('/addShowTrade',{data:JSON.stringify(params)},function(data){
             if(data.isOK){
                 Pop.msg({msg:'您的晒单已成功提交，等待系统审核！',onOK:ShowTradeAdd.resetForm()});
+/*                UserShowTrade.status = 0;
+                UserShowTrade.load();*/
             }else{
                 Pop.msg(data.msg);
             }
@@ -128,15 +114,77 @@ ShowTradeAdd.setEvent = function(){
     /**
      * 返回我的晒单
      */
-    $('#to_userShowTrade').bind('click', Container.back);
+    $('#to_userShowTrade').bind('click', function () {
+        UserShowTrade.status = 0;
+        Container.back();
+    });
+    /**
+     * 选择图片
+     */
+    $("#showTradeAddForm .sfile-input").click(function (e) {
+        if (!FileReader) {
+            alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
+            return false;
+        }
+        if (!Data.userInfo.isLogin) {
+            e.preventDefault();
+            Login.load();
+            return false;
+        }
+        if (Data.userInfo.isSetName === false) {
+            return false;
+        }
+    });
     /**
      * 上传图片
      */
     $('#showTradeAddForm .sfile-input').bind('change', function(){
         var _this = this;
-        if(Data.userInfo.isLogin) {
-            ShowTradeAdd.uploadShowTradeImg(_this);
+        var img = _this.files[0];
+        // 判断是否图片
+        if (!img) {
+            return false;
         }
+        // 判断图片格式
+        if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
+            alert('目前暂支持jpg,gif,png格式的图片！');
+            return false;
+        }
+        var fileSize = img.size;
+        //图片小于200kb直接上传
+        if(fileSize <= 200 * 1024){
+            var formData = new FormData($("#showTradeAddForm")[0]);
+            ShowTradeAdd.uploadShowTradeImg(formData,_this);
+            return false;
+        }
+        if (fileSize >= 1024 * 1024 * 3) {
+            alert('发送的图片大小不要超过3MB.');
+            return false;
+        }
+        //加载文件转成URL所需的文件流
+        var reader = new FileReader();
+        reader.readAsDataURL(img);
+
+        reader.onload = function (e) {
+            var result = this.result,fileImg = new Image();
+            fileImg.src = result;
+            //图片加载完毕之后进行压缩，然后上传
+            if (fileImg.complete) {
+                callback(img);
+            } else {
+                fileImg.onload = callback;
+            }
+            //回调处理
+            function callback() {
+                var base64Data = Util.compressImg(fileImg,1);
+                ShowTradeAdd.uploadAfterCompress(base64Data,img.type);
+                fileImg = null;
+            }
+
+        };
+        reader.onprogress = function (e) {};
+        reader.onloadend = function (e) {};
+        $(this).val("");
     });
     /**
      * 提交晒单
@@ -182,3 +230,13 @@ ShowTradeAdd.setEvent = function(){
     });
 
 };
+/**
+ * 图片压缩后上传
+ */
+ShowTradeAdd.uploadAfterCompress = function(compressData,type){
+    //base64数据转换成二进制对象blob并追加到相应formData
+    var blob = Util.base64ToBlob(compressData,type);
+    var formData = new FormData($("#showTradeAddForm")[0]);
+    formData.append('flTradeImg',blob);
+    ShowTradeAdd.uploadShowTradeImg(formData,$('#showTradeAddForm .sfile-input'));
+}
