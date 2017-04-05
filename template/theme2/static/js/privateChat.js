@@ -38,10 +38,14 @@ PrivateChat.setEvent = function(){
      */
     $('#contentText').bind('click',function () {
         $(this).parent().find('.placeholder').hide();
-        $('.chat-add-box').slideDown(300);
+        $('#privateChat_tools').slideUp(300);
+        $('#privateChat_tool2').slideUp(300);
+        $('#privateChat_tool3').slideUp(300);
+        $('#privateChat_tool3').hide();
+        PrivateChat.privateChatToolView = "none";
     }).bind('focus',function () {
         $("#privateChat_contHolder").hide();
-        if(PrivateChat.chatToolView == "none"){
+        if(PrivateChat.privateChatToolView == "none"){
             PrivateChat.showTool("analyst");
         }
     }).bind('blur',function () {
@@ -51,7 +55,7 @@ PrivateChat.setEvent = function(){
         }
         //如果是点击小加号的话，不执行
         window.setTimeout(function(){
-            if(PrivateChat.chatToolView == "analyst" || PrivateChat.chatToolView == "face"){
+            if(PrivateChat.privateChatToolView == "analyst" || PrivateChat.privateChatToolView == "face"){
                 PrivateChat.showTool("none");
             }
         }, 100);
@@ -67,8 +71,10 @@ PrivateChat.setEvent = function(){
     }).bind('input',function () {
         var isOk = ($.trim($(this).text()) != $(this).find(".txt_dia").text() || $(this).find("img").size() > 0);
         if(isOk){
+            $("#privateChat_contHolder").hide();
             $("#privateChat_send").fadeIn();
         }else{
+            $("#privateChat_contHolder").fadeIn();
             $("#privateChat_send").hide();
         }
     });
@@ -79,7 +85,7 @@ PrivateChat.setEvent = function(){
     $("#addbox-btn").bind("click", function(){
         $('#privateChat_tool2').toggle();
         $('#privateChat_tools').slideToggle(300);
-        if(PrivateChat.chatToolView == "btns"){
+        if(PrivateChat.privateChatToolView == "btns"){
             PrivateChat.showTool("none");
         }else{
             PrivateChat.showTool("btns");
@@ -101,10 +107,8 @@ PrivateChat.setEvent = function(){
                     $("#contentText"),
                     Data.filePath+'/face/',
                     !room || (!room.allowVisitor && "visitor"==Data.userInfo.clientGroup),2);
-                $("#contentText").focusEnd();
+                //$("#contentText").focusEnd();
             });
-        }else{
-            $("#contentText").focusEnd();
         }
     });
 
@@ -289,13 +293,13 @@ PrivateChat.showTool = function(type){
             break;
 
         case "analyst":
-            if(Chat.chatToolView != "btns" && Chat.cntAdmin + Chat.cntAnalyst > 0){
+            if(PrivateChat.privateChatToolView != "btns" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                 $("#privateChat_tool1").fadeIn(300);
             }
             break;
 
         case "btns":
-            if(Chat.chatToolView != "analyst" && Chat.cntAdmin + Chat.cntAnalyst > 0){
+            if(PrivateChat.privateChatToolView != "analyst" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                 $("#privateChat_tool1").fadeIn(300);
             }
             $("#privateChat_tool2").slideDown(300);
