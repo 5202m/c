@@ -7,7 +7,6 @@ var Teach = new Container({
     url : "/theme2/template/teach.html",
     currentRank : 'primary',
     currentCode : 'teach_video_initial_mb',
-    currentLevel : 1,  // 1:文章视频列表页  2:视频播放页
     onLoad : function(){
         Teach.setEvent();
     },
@@ -21,19 +20,7 @@ var Teach = new Container({
  */
 Teach.setEvent = function(){
     //返回上一级
-    $('#teach_back').bind('click', function () {
-        if(Teach.currentLevel === 2){
-            $('#teachVideo').hide();
-            $('#teachVideo').html('');
-            Player.player.videoData($('#teachVideo'),'currVideoTitle','');
-            Player.player.videoData($('#teachVideo'),'currVideoUrl','');
-            Teach.currentLevel = 1;
-            Teach.initPage();
-            return;
-        }
-        Container.back();
-    });
-
+    $('#teach_back').bind('click', Container.back);
     /**
      * 文章点击事件
      */
@@ -54,24 +41,17 @@ Teach.setEvent = function(){
         }
         NoviceGuide.load();
     });
-
     /**
      * 视频点击事件
      */
     $('section .listblock.bgfff').on('click','.list-item-desced.border-bt',function () {
         var utype = $(this).parent().attr("utype");
-        Teach.currentLevel = 2;
         if(utype === 'video'){
-            $('.listblock.bgfff').each(function () {
-                $(this).hide();
-            });
-            $('#teachVideo').css({ "height": "227.7px","display": "block"});//227.7
-            var uurl = $(this).parent().attr("uurl");
-            var title = $(this).children('.list-main').children('a').text();
-            $('#teach_title').text(title);
-            Player.play(uurl, title,$('#teachVideo'));
+            VideoPlay.videoUrl = $(this).parent().attr("uurl");
+            VideoPlay.videoTitle = $(this).children('.list-main').children('a').text();
+            VideoPlay.load();
         }
-    })
+    });
 
 };
 

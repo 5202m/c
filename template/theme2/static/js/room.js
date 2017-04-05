@@ -123,7 +123,7 @@ Room.setEvent = function(){
     $('#room_pride').bind('click', function(){
         $('#chat_player,#roomLiveAnalyst,#roomAnalystTagCourse').hide();
         $('#prideTopTitle,#prideShowAnalyst').show();
-        $('#pride_teacher').after('<div style="float: right" class="i-close close-btn" id="pride_close"></div>')
+        $('#pride_teacher').after('<div style="float: right;margin-right: 5px;" class="i-close close-btn" id="pride_close"></div>')
     });
     /**
      * 点击直播精华关闭按钮
