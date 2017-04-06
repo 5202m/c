@@ -3,6 +3,7 @@ const logger = require('../resources/logConf').getLogger("visitorService");
 const liveRoomAPIService = require('./liveRoomAPIService');
 const common = require("../util/common");
 const Deferred = common.Deferred;
+const config = require('../resources/config'); // 引入config
 const request = require('request');
 
 let visitorService = {
@@ -10,13 +11,14 @@ let visitorService = {
         let defer = new Deferred();
         let path = "/visitor/saveVisitorRecord";
         liveRoomAPIService.post(path, {
-            recordType: type,
+            type: type,
             dasData: JSON.stringify(dasData)
         }).then(data => {
             defer.resolve(data);
             visitorService.requestDas(type, dasData);
         }).catch(err => {
             logger.error("saveVisitorRecord! >>saveVisitorRecord:", path, err);
+            logger.debug("saveVisitorRecord!", type, dasData);
             defer.resolve(err);
         });
         return defer.promise;
@@ -53,7 +55,7 @@ let visitorService = {
             tradingAccount: data.accountNo,
             tradingPlatform: '',
             platformType: common.isMobile(data.userAgent) ? 1 : 0,
-            businessPlatform: visitorService.getGroupType(data.groupType),
+            businessPlatform: 2, //for pm, it's 2.
             operateEntrance: common.isBlank(data.platform) ? 'web' : data.platform,
             touristId: data.visitorId,
             roomId: data.roomId, //房间名称
@@ -95,6 +97,35 @@ let visitorService = {
                     }
                 });
         }
+    },
+    /**
+     * 根据客户在类别返回对应数字
+     * @param clientGroup
+     * @returns {number}
+     */
+    getClientGroup: function(clientGroup) {
+        var userType = 1;
+        switch (clientGroup) {
+            case 'visitor':
+                userType = 1;
+                break;
+            case 'register':
+                userType = 2;
+                break;
+            case 'simulate':
+                userType = 3;
+                break;
+            case 'active':
+                userType = 4;
+                break;
+            case 'notActive':
+                userType = 5;
+                break;
+            case 'vip':
+                userType = 6;
+                break;
+        }
+        return userType;
     }
 };
 

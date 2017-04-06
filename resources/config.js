@@ -61,7 +61,7 @@ var config = {
     pmOAPath: 'http://testweb1.24k.hk:81', //https://oa.24k.hk
     packetAcUrl: 'http://testweb1.24k.hk/activity20160105/getActivityUrl', //红包活动连接
     mobile24kPath: 'http://testweb1.24k.hk:8092', //24k信息地址 http://m.24k.hk
-    dasUrl: 'http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom', //das数据分析系统地址
+    dasUrl: 'http://192.168.35.222:8088/GwUserTrackingManager_NEW/put/insertRoom', //das数据分析系统地址
     appAutoLogin: {
         rgsUrl: 'http://ot1.24k.hk:8080/rgs/validate',
         clientId: 'pmlivebroadcast',
