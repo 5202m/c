@@ -577,7 +577,7 @@ var Util ={
         for (var i = 0; i < text.length; i++) {
             ubuffer[i] = text.charCodeAt(i);
         }
-        var Builder = new (window.BlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder);;
+        var Builder = window.WebKitBlobBuilder || window.MozBlobBuilder;
         var blob;
         if (Builder) {
             var builder = new Builder();

@@ -189,11 +189,19 @@ var Chat = {
         /**
          * 聊天框相关事件
          */
-        $("#chat_cont").bind("focus", function(e){
+        $("#chat_cont").bind('click',function () {
+            $(this).parent().find('.placeholder').hide();
+            $('#chat_tools').slideUp(300);
+            $('#chat_tool2').slideUp(300);
+            $('#chat_tool3').slideUp(300);
+            $('#chat_tool3').hide();
+            Chat.chatToolView = "none";
+        }).bind("focus", function(e){
             $("#chat_contHolder").hide();
             if(Chat.chatToolView == "none"){
                 Chat.showTool("analyst");
             }
+
         }).bind("blur", function(e){
             var msg = $.trim($(this).html());
             if(!msg){
@@ -225,8 +233,10 @@ var Chat = {
         }).bind("input", function(e){
             var isOk = ($.trim($(this).text()) != $(this).find(".txt_dia").text() || $(this).find("img").size() > 0);
             if(isOk){
+                $("#chat_contHolder").hide();
                 $("#chat_send").fadeIn();
             }else{
+                $("#chat_contHolder").fadeIn();
                 $("#chat_send").hide();
             }
         });
@@ -256,10 +266,8 @@ var Chat = {
                         $("#chat_cont"),
                         Data.filePath+'/face/',
                         !room || (!room.allowVisitor && "visitor"==Data.userInfo.clientGroup),1);
-                    $("#chat_cont").focusEnd();
+                        //$("#chat_cont").focusEnd();//去除聚焦fucus
                 });
-            }else{
-                $("#chat_cont").focusEnd();
             }
         });
 
@@ -1484,7 +1492,8 @@ var Chat = {
                 disabled : disabled
             }, function(e){
                 if(!e.data.disabled){
-                    e.data.assign.append($(this).clone()).trigger("input").focusEnd();
+                    e.data.assign.append($(this).clone()).trigger("input");
+                    //e.data.assign.append($(this).clone()).trigger("input").focusEnd();
                 }
             });
             this.initFace = true;
