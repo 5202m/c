@@ -10,13 +10,14 @@ let visitorService = {
         let defer = new Deferred();
         let path = "/visitor/saveVisitorRecord";
         liveRoomAPIService.post(path, {
-            recordType: type,
+            type: type,
             dasData: JSON.stringify(dasData)
         }).then(data => {
             defer.resolve(data);
             visitorService.requestDas(type, dasData);
         }).catch(err => {
             logger.error("saveVisitorRecord! >>saveVisitorRecord:", path, err);
+            logger.debug("saveVisitorRecord!", type, dasData);
             defer.resolve(err);
         });
         return defer.promise;
