@@ -149,6 +149,10 @@ Syllabus.setEvent = function(){
      * 订阅
      */
     $('#syllabusList').on('click', '.item-cell .btn-op a.btnSubscribe', function(){
+        if(!Data.userInfo.isLogin){
+            Login.load();
+            return false;
+        }
         var $this = $(this), id = '', types = $this.attr('type').split(',');
         if(!$this.hasClass('btn-grey')) {//已结束的则不能订阅，只能到老师列表中订阅
             $this.addClass('clicked');

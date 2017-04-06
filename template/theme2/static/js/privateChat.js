@@ -17,6 +17,7 @@ var PrivateChat = new Container({
             PrivateChat.setWhTab();
             PrivateChat.isChangeRoom = false;
         }
+        $('#contentText').text('').trigger('input');
     }
 });
 
@@ -32,7 +33,6 @@ PrivateChat.setEvent = function(){
         !_target.closest('.popcon').length && _target.closest('.popup').hide();
     });
 
-    //
     /**
      * 输入框相关事件
      */
@@ -45,9 +45,6 @@ PrivateChat.setEvent = function(){
         PrivateChat.privateChatToolView = "none";
     }).bind('focus',function () {
         $("#privateChat_contHolder").hide();
-        if(PrivateChat.privateChatToolView == "none"){
-            PrivateChat.showTool("analyst");
-        }
     }).bind('blur',function () {
         var msg = $.trim($(this).html());
         if(!msg){
@@ -84,7 +81,7 @@ PrivateChat.setEvent = function(){
      */
     $("#addbox-btn").bind("click", function(){
         $('#privateChat_tool2').toggle();
-        $('#privateChat_tools').slideToggle(300);
+        //$('#privateChat_tools').slideToggle(300);
         if(PrivateChat.privateChatToolView == "btns"){
             PrivateChat.showTool("none");
         }else{
@@ -269,42 +266,27 @@ PrivateChat.showTool = function(type){
         case "none":
             $("#privateChat_tools").show();
             break;
-
         case "analyst":
-            if(type != "btns"){
-                $("#privateChat_tool1").fadeOut(300);
-            }
             break;
-
         case "btns":
-            if(type != "analyst"){
-                $("#privateChat_tool1").fadeOut(300);
-            }
             $("#privateChat_tool2").slideUp(300);
             break;
-
         case "face":
             $("#privateChat_tool3").slideUp(300);
+            break;
+        default :
+            $("#privateChat_tools").show();
             break;
     }
     switch (type){
         case "none":
             $("#privateChat_tools").hide();
             break;
-
         case "analyst":
-            if(PrivateChat.privateChatToolView != "btns" && Chat.cntAdmin + Chat.cntAnalyst > 0){
-                $("#privateChat_tool1").fadeIn(300);
-            }
             break;
-
         case "btns":
-            if(PrivateChat.privateChatToolView != "analyst" && Chat.cntAdmin + Chat.cntAnalyst > 0){
-                $("#privateChat_tool1").fadeIn(300);
-            }
             $("#privateChat_tool2").slideDown(300);
             break;
-
         case "face":
             $("#privateChat_tool3").slideDown(300);
             break;

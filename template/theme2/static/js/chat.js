@@ -731,7 +731,7 @@ var Chat = {
             if(content.needMax){
                 url = Util.format("/getBigImg?publishTime={0}&userId={1}", fromUser.publishTime, fromUser.userId);
             }
-            result = Room.formatHtml("chat_dialogImg", url, content.value || "");
+            result = Room.formatHtml("chat_dialogImg", url, content.value || "").replace('/theme2/img/user_c.png',url);
             if(isMeSend){
                 result += Room.formatHtml("chat_dialogLoading");
             }
@@ -1419,20 +1419,17 @@ var Chat = {
             case "none":
                 $("#chat_tools").show();
                 break;
-
             case "analyst":
                 if(type != "btns"){
                     $("#chat_tool1").fadeOut(300);
                 }
                 break;
-
             case "btns":
                 if(type != "analyst"){
                     $("#chat_tool1").fadeOut(300);
                 }
                 $("#chat_tool2").slideUp(300);
                 break;
-
             case "face":
                 $("#chat_tool3").slideUp(300);
                 break;
@@ -1441,20 +1438,17 @@ var Chat = {
             case "none":
                 $("#chat_tools").hide();
                 break;
-
             case "analyst":
                 if(Chat.chatToolView != "btns" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                     $("#chat_tool1").fadeIn(300);
                 }
                 break;
-
             case "btns":
                 if(Chat.chatToolView != "analyst" && Chat.cntAdmin + Chat.cntAnalyst > 0){
                     $("#chat_tool1").fadeIn(300);
                 }
                 $("#chat_tool2").slideDown(300);
                 break;
-
             case "face":
                 $("#chat_tool3").slideDown(300);
                 break;
@@ -1597,7 +1591,7 @@ var Chat = {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // 将图像绘制到canvas上
             ctx.drawImage(image, 0, 0, w, h);
-            callback(sendObj,canvas.toDataURL("image/jpeg",quality/100));
+            callback(sendObj,canvas.toDataURL("image/jpeg",quality/10));
         };
         image.src = sendObj.content.value;
     },
