@@ -587,5 +587,67 @@ var Util ={
             blob = new window.Blob([buffer], {type: type});
         }
         return blob;
+    },
+    /**
+     * 根据url下载图片
+     * @param url
+     * @param target
+     */
+    downloadByUrl : function (url,target) {
+        var odownLoad = target;
+        var browserType = this.getBrowserType();
+        if (browserType==="IE"||browserType==="Edge"){
+            //IE
+            odownLoad.href="#";
+            var oImg=document.createElement("img");
+            oImg.src=url;
+            oImg.id="downImg";
+            var odown=document.getElementById("down");
+            odown.appendChild(oImg);
+            this.saveAs5ByUrl(document.getElementById('downImg').src)
+        }else{
+            //!IE
+            odownLoad.href=url;
+            odownLoad.download="";
+        }
+    },
+    /**
+     * 获取浏览器类型
+     * @returns {*}
+     */
+    getBrowserType : function(){
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera) {
+            return "Opera"
+        }; //判断是否Opera浏览器
+        if (userAgent.indexOf("Firefox") > -1) {
+            return "FF";
+        } //判断是否Firefox浏览器
+        if (userAgent.indexOf("Chrome") > -1){
+            return "Chrome";
+        }
+        if (userAgent.indexOf("Safari") > -1) {
+            return "Safari";
+        } //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+            return "IE";
+        }; //判断是否IE浏览器
+        if (userAgent.indexOf("Trident") > -1) {
+            return "Edge";
+        } //判断是否Edge浏览器
+    },
+
+    /**
+     *
+     * @param imgURL
+     */
+    saveAs5ByUrl : function(imgURL) {
+        var oPop = window.open(imgURL,"","width=1, height=1, top=5000, left=5000");
+        for(; oPop.document.readyState != "complete"; ) {
+            if (oPop.document.readyState == "complete")break;
+        }
+        oPop.document.execCommand("SaveAs");
+        oPop.close();
     }
 };

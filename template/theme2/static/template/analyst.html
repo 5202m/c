@@ -42,17 +42,11 @@
 					</a>
 				</li>
 				<li>
-					<a href="javascript:void(0);" userNo="{1}" class="add-wx">
+					<a href="javascript:void(0);" userNo="{1}" class="dollar">
 						<span class="top-icons i-dollar3"></span>
 						<label>打赏</label>
 					</a>
 				</li>
-<!--				<li>
-					<a href="javascript:void(0);" userNo="{1}" class="privateChat">
-						<span class="top-icons i-comments3"><i class="i-tips"></i></span>
-						<label>私聊</label>
-					</a>
-				</li>-->
 				<li>
 					<a href="javascript:void(0);" class="add-wx" userNo="{1}">
 						<span class="top-icons i-chat-wx"></span>
@@ -60,10 +54,10 @@
 					</a>
 				</li>
 				<li>
-					<a href="javascript:void(0);" fs="btn-blue" class="subscribe" analystId="{3}" lrid="" ssid="" tsid=""
+					<a href="javascript:void(0);" fs="btn-blue" class="subscribe" analystId="{1}" lrid="" ssid="" tsid=""
 					   type="" id="analystSubscribe" style="display: none;">
 						<span class="top-icons i-subscribe"></span>
-						<label>{2}</label>
+						<label>订阅</label>
 					</a>
 				</li>
 			</ul>
@@ -138,9 +132,9 @@
 		</div>
 	</div>
 </section>
-<!--popup-->
+
 <div class="popup add-weixin" id="analystWechat">
-	<div class="popcon" temp="analystWeChat">
+	<div class="popcon" temp="analystWechat">
 		<span class="i-close3"></span>
 		<div class="pop-main">
 			<img src="/theme2/img/qr-code.png" class="qr-code"/>
@@ -149,6 +143,24 @@
 				点击上方按钮，将保存图片到本地<br/>
 				然后用微信识别图中二维码<br/>
 				即可关注老师微信号:{0}
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="popup add-weixin" id="analystDollar">
+	<div class="popcon" temp="analystDollar">
+		<span class="i-close3"></span>
+		<div class="pop-main">
+			<img src="/theme2/img/qr-code.png" class="qr-code"/>
+			<a href="{0}" ><i class="i-download"></i></a>
+			<p class="pop-msg al-c">
+				点击上方按钮，将保存图片到本地<br/>
+				然后用微信识别图中二维码<br/>
+				即可关注老师微信号:{0}<br/>
+				您也可以复制老师微信号<br/>
+				加老师为好友<br/>
+				就可以给老师打赏发红包啦
 			</p>
 		</div>
 	</div>

@@ -27,36 +27,29 @@
 				<img src="" class="img-avatar" id="room_teacherAvatar"/>
 				<div class="a-top"><b id="room_teacherName"></b><i class="i-dot3"></i></div>
 			</div>
-			<div class="teacher-ops dn" style="display: none;">
-				<i class="tri3"></i>
-				<div class="share-btns infos-opbar list-col-4">
+			<div class="teacher-ops dn" style="display: none;" id="room_teacherOps">
+				<div class="share-btns infos-opbar list-col-4" temp="room_teacherTool">
 					<ul class="clearfix">
 						<li>
-							<a href="javascript:;">
+							<a href="javascript:void(0);" userNo="{1}" class="support">
 								<span class="top-icons i-dzan3"></span>
-								<label>5633</label>
+								<label>{0}</label>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:;" class="add-ds">
+							<a href="javascript:void(0);" class="add-ds" userNo="{1}">
 								<span class="top-icons i-dollar3"></span>
 								<label>打赏</label>
 							</a>
 						</li>
-<!--						<li>
-							<a href="javascript:;">
-								<span class="top-icons i-comments3"><i class="i-tips-txt">8</i></span>
-								<label>私聊</label>
-							</a>
-						</li>-->
 						<li>
-							<a href="javascript:;" class="add-wx">
+							<a href="javascript:void(0);" class="add-wx" userNo="{1}">
 								<span class="top-icons i-chat-wx"></span>
 								<label>加微信</label>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:;">
+							<a href="javascript:void(0);" class="subscribe" userNo="{1}" analystId="{1}" id="roomSubscribe" type="" lrid="" ssid="" tsid="">
 								<span class="top-icons i-subscribe"></span>
 								<label>订阅</label>
 							</a>
@@ -354,3 +347,37 @@
 		</div>
 	</div>
 </section>
+
+<!--popup-->
+<div class="popup add-weixin" id="teacherWechat">
+	<div class="popcon" temp="teacherWechat">
+		<span class="i-close3"></span>
+		<div class="pop-main">
+			<img src="/theme2/img/qr-code.png" class="qr-code"/>
+			<a href="{0}" ><i class="i-download"></i></a>
+			<p class="pop-msg al-c">
+				点击上方按钮，将保存图片到本地<br/>
+				然后用微信识别图中二维码<br/>
+				即可关注老师微信号:{0}
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="popup add-weixin" id="teacherDollar">
+	<div class="popcon" temp="teacherDollar">
+		<span class="i-close3"></span>
+		<div class="pop-main">
+			<img src="/theme2/img/qr-code.png" class="qr-code"/>
+			<a href="{0}" ><i class="i-download"></i></a>
+			<p class="pop-msg al-c">
+				点击上方按钮，将保存图片到本地<br/>
+				然后用微信识别图中二维码<br/>
+				即可关注老师微信号:{0}<br/>
+				您也可以复制老师微信号<br/>
+				加老师为好友<br/>
+				就可以给老师打赏发红包啦
+			</p>
+		</div>
+	</div>
+</div>

@@ -7,6 +7,7 @@ var Room = new Container({
     url : "/theme2/template/room.html",
     lastTimeStamp : 0,
     lastScrollTop : 0,
+    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     onLoad : function(){
         Player.init();
         Room.setEvent();
@@ -92,7 +93,7 @@ Room.setEvent = function(){
         $(this).next('.teacher-ops').toggle();
     });
     /** 老师简介 */
-    $('#pride_teacher,.more-ops').bind('click',function () {
+    $('#room_teacherOps').on('click','.more-ops',function () {
         Analyst.userNo = $('#room_teacher').attr('userNo');
         Analyst.load();
     })
@@ -167,8 +168,95 @@ Room.setEvent = function(){
             Room.lastTimeStamp = 0;
         }
     });
-};
 
+    /**
+     * 打开微信QRCode
+     */
+    $('#room_teacherOps').on('click', 'a.add-wx', function(){
+        $('#teacherWechat').show();
+    });
+    /**
+     * 关闭微信QRCode
+     */
+    $('#teacherWechat').on('click', '.popcon .i-close3', function(){
+        $('#teacherWechat').fadeOut();
+    });
+    /**
+     * 打开打赏
+     */
+    $('#room_teacherOps').on('click', 'a.add-ds', function(){
+        $('#teacherDollar').show();
+    });
+    /**
+     * 关闭打赏
+     */
+    $('#teacherDollar').on('click', '.popcon .i-close3', function(){
+        $('#teacherDollar').fadeOut();
+    });
+    /**
+     * 下载微信图片
+     */
+    $('#teacherWechat,#teacherDollar').on('click','i.i-download',function (e) {
+        //图片存在，则下载
+        if($(this).parent().prev().attr('src')){
+            Util.downloadByUrl($(this).parent().prev().attr('src'),$(this).parent()[0]);
+        }else{
+            e.preventDefault();
+        }
+    });
+
+    /**
+     * 点赞
+     */
+    $('#room_teacherOps').on('click', 'ul li a.support', function(){
+        Subscribe.setPraise($(this), $(this).children('label'));
+    });
+    /**
+     * 订阅
+     */
+    $('#room_teacherOps').on('click','a.subscribe',function (e) {
+        if(!Data.userInfo.isLogin){
+            Login.load();
+            return false;
+        }
+        var $this = $(this), id = '', types = $this.attr('type').split(',');
+        var typeLen = types.length;
+        var analystArr = [];
+        var currAnalyst = $this.attr('analystId');
+        if ($this.attr('lrid') || $this.attr('ssid') || $this.attr('tsid')) {
+            Room.subscribeOpType = 2;
+        } else {
+            analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
+            Room.subscribeOpType = 1;
+        }
+        $.each(types, function (k, v) {
+            if (v == 'live_reminder') {
+                id = $this.attr('lrid');
+            } else if (v == 'shout_single_strategy') {
+                id = $this.attr('ssid');
+            } else if (v == 'trading_strategy') {
+                id = $this.attr('tsid');
+            }
+            Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1),Room.followHander);
+        });
+    });
+};
+/**
+ * 订阅回调处理
+ * @param isOK
+ */
+Room.followHander = function(isOK){
+    var obj = $("#roomSubscribe");
+    //取消订阅
+    if(Room.subscribeOpType === 2 && isOK){
+        obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
+        obj.children('label').html('订阅');
+        return;
+    }else if(Room.subscribeOpType === 1 && isOK){
+        obj.children('label').html('已订阅');
+    }
+    Subscribe.setSubscribeAttr(obj,obj.attr('analystId'));
+};
 /**
  * 显示讲师信息
  */
@@ -185,6 +273,7 @@ Room.showLecturer = function(lecturerId){
         return;
     }
     Data.getAnalyst(lecturerId, function(lecturer){
+        Room.setLecturerTool(lecturerId);
         if(lecturer){
 /*            //设置私聊老师数据    （目前屏蔽私聊老师功能）
             var obj = {
@@ -215,6 +304,23 @@ Room.showLecturer = function(lecturerId){
     });
 };
 
+Room.setLecturerTool = function (lecturerId) {
+    if(!lecturerId) return;
+    Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:lecturerId})},function(data) {
+        var userInfo = data.userInfo;
+        if(userInfo){
+            var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
+            $('#room_teacherOps').html(toolHtml);
+            var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+            var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+            $('#teacherWechat').empty().html(wechatHtml);
+            $('#teacherDollar').empty().html(dollarHtml);
+            Subscribe.setSubscribeAttr($('#roomSubscribe'),lecturerId);
+            Subscribe.setSubscribeTypeAttr($('#roomSubscribe').parent());
+        }
+
+    });
+}
 /**
  * 显示当前课程及时间
  */

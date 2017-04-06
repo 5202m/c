@@ -137,10 +137,13 @@ Subscribe.setSubscribeAttr = function(obj,analyst){
                 if(analyst !== row.analyst) return;
                 if(row.type == 'live_reminder'){
                     obj.attr('lrid', row._id);
+                    obj.children('label').text('已订阅')
                 }else if(row.type == 'shout_single_strategy'){
                     obj.attr('ssid', row._id);
+                    obj.children('label').text('已订阅')
                 }else if(row.type == 'trading_strategy'){
                     obj.attr('tsid', row._id);
+                    obj.children('label').text('已订阅')
                 }
             });
         }
@@ -181,14 +184,7 @@ Subscribe.setEvent = function(){
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
-/*        $('#subscribeAnalyst .item-con .item-main .social-op a.btnSubscribe').each(function(){
-            if($(this).attr('subscribed')=='true'){
-                analystArr.push($(this).attr('analystId'));
-            }
-        });
-        var idx =  $.inArray(currAnalyst, analystArr);*/
         if($this.attr('subscribed')=='true' ){
-            //analystArr.splice(idx, 1);//如果点击已订阅，则删除当前订阅的老师
             $this.removeClass('btn-green');
             $this.addClass('btn-blue');
             $this.removeAttr('subscribed');
@@ -196,10 +192,6 @@ Subscribe.setEvent = function(){
         }else{
             analystArr = [];
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-            $this.removeClass('btn-blue');
-            $this.addClass('btn-green');
-            $this.attr('subscribed','true');
-            $this.html('<i class="i-selected"></i>已订阅');
         }
         $.each(types, function(k, v){
             if(v=='live_reminder'){
@@ -240,7 +232,7 @@ Subscribe.setPraise = function(obj, lb){
  * @param analysts
  * @param isLast
  */
-Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
+Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
     var remark = {'live_reminder':'订阅直播提醒','shout_single_strategy':'订阅喊单策略','trading_strategy':'订阅交易策略'};
     var params = {id:id, groupType:Data.userInfo.groupType, noticeType:'email', noticeCycle:'year', type:type, pointsRemark : remark[type], point:0};
     params.analyst = analysts.join(',');
@@ -264,22 +256,9 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast) {
         }
         obj.removeClass('clicked');
         if(isLast){
-            if(obj.parent().parent().parent().attr('id') === 'syllabusList'){
-                //取消订阅
-                if(Util.isBlank(params.analyst) || Util.isBlank(params.noticeType)){
-                    obj.attr('lrid','');
-                    obj.attr('ssid','');
-                    obj.attr('tsid','');
-                    return;
-                }
-                //订阅（此处兼容延时处理，理论上用户不会订阅，取消订阅频繁点击）
-                setTimeout(function () {
-                    Subscribe.setSubscribeAttr(obj,params.analyst);
-                },5000);
-            }else if(obj.text() === '订阅'){
-                obj.attr('lrid','');
-                obj.attr('ssid','');
-                obj.attr('tsid','');
+            //回调函数
+            if(typeof callback == "function"){
+                callback(data.isOK);
             }else{
                 Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
             }

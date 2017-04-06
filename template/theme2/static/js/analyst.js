@@ -6,7 +6,7 @@ var Analyst = new Container({
     panel : $("#page_analyst"),
     url : "/theme2/template/analyst.html",
     userNo : null,
-    subscribeStr : '订阅',
+    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     tradeList : [],
     loadAll : false,
     onLoad : function(){
@@ -23,7 +23,7 @@ var Analyst = new Container({
  */
 Analyst.setAnalystInfo = function(){
     if(Util.isNotBlank(Analyst.userNo)){
-        var analystInfoHtml = '', analystPraiseHtml = '', analystIntroductionHtml = '', analystWechatHtml= '';
+        var analystInfoHtml = '', analystPraiseHtml = '', analystIntroductionHtml = '', analystWechatHtml= '',analystDollarHtml ='';
         Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:Analyst.userNo})},function(data) {
             var userInfo = data.userInfo;//直播老师
             var teacherList = data.teacherList;//分析师列表
@@ -45,13 +45,15 @@ Analyst.setAnalystInfo = function(){
                     userInfo.earningsM ? userInfo.earningsM.replace(/%/, '') : 0,
                     0
                 );
-                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo,Analyst.subscribeStr,Analyst.userNo);
+                analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
-                analystWechatHtml = Analyst.formatHtml('analystWeChat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+                analystWechatHtml = Analyst.formatHtml('analystWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+                analystDollarHtml = Analyst.formatHtml('analystDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
                 $('#analystPraiseTool').empty().html(analystPraiseHtml);
                 $('#analystIntro').empty().html(analystIntroductionHtml);
                 $('#analystWechat').empty().html(analystWechatHtml);
+                $('#analystDollar').empty().html(analystDollarHtml);
             }
             if(Analyst.tradeList.length>0) {
                 Analyst.loadAll = false;
@@ -254,23 +256,28 @@ Analyst.setEvent = function(){
         $('#analystWechat').fadeOut();
     });
     /**
-     * 私聊
+     * 打开打赏
      */
-    $('#analystPraiseTool').on('click','a.privateChat',function () {
-        PrivateChat.load();
+    $('#analystPraiseTool').on('click', 'a.dollar', function(){
+        $('#analystDollar').show();
+    });
+    /**
+     * 关闭打赏
+     */
+    $('#analystDollar').on('click', '.popcon .i-close3', function(){
+        $('#analystDollar').fadeOut();
     });
 
     /**
      * 下载微信图片
      */
-    $('#analystWechat').on('click','i.i-download',function (e) {
+    $('#analystWechat,#analystDollar').on('click','i.i-download',function (e) {
         //图片存在，则下载
         if($(this).parent().prev().attr('src')){
-            Analyst.oDownLoad($(this).parent().prev().attr('src'),$(this).parent()[0]);
+            Util.downloadByUrl($(this).parent().prev().attr('src'),$(this).parent()[0]);
         }else{
             e.preventDefault();
         }
-
     });
 
     /**
@@ -286,10 +293,10 @@ Analyst.setEvent = function(){
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
         if ($this.attr('lrid') || $this.attr('ssid') || $this.attr('tsid')) {
-            $this.children('label').html('订阅')
+            Analyst.subscribeOpType = 2;
         } else {
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-            $this.children('label').html('已订阅');
+            Analyst.subscribeOpType = 1;
         }
         $.each(types, function (k, v) {
             if (v == 'live_reminder') {
@@ -299,7 +306,7 @@ Analyst.setEvent = function(){
             } else if (v == 'trading_strategy') {
                 id = $this.attr('tsid');
             }
-            Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
+            Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1),Analyst.followHander);
         });
     });
     /**
@@ -314,61 +321,17 @@ Analyst.setEvent = function(){
 };
 
 /**
- * 下载图片
- * @param url
+ * 订阅回调处理
  */
-Analyst.oDownLoad = function(url,target){
-    var odownLoad = target;
-    var browserType = Analyst.myBrowser();
-    if (browserType==="IE"||browserType==="Edge"){
-        //IE
-        odownLoad.href="#";
-        var oImg=document.createElement("img");
-        oImg.src=url;
-        oImg.id="downImg";
-        var odown=document.getElementById("down");
-        odown.appendChild(oImg);
-        Analyst.SaveAs5(document.getElementById('downImg').src)
-    }else{
-        //!IE
-        odownLoad.href=url;
-        odownLoad.download="";
+Analyst.followHander = function(isOK){
+    var obj = $("#analystSubscribe");
+    //取消订阅
+    if(Analyst.subscribeOpType === 2 && isOK){
+        obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
+        obj.children('label').html('订阅');
+        return;
+    }else if(Analyst.subscribeOpType === 1 && isOK){
+        obj.children('label').html('已订阅');
     }
+    Subscribe.setSubscribeAttr(obj,Analyst.userNo);
 };
-
-/**
- * 判断浏览器类型
- * @returns {*}
- */
-Analyst.myBrowser = function(){
-    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-    var isOpera = userAgent.indexOf("Opera") > -1;
-    if (isOpera) {
-        return "Opera"
-    }; //判断是否Opera浏览器
-    if (userAgent.indexOf("Firefox") > -1) {
-        return "FF";
-    } //判断是否Firefox浏览器
-    if (userAgent.indexOf("Chrome") > -1){
-        return "Chrome";
-    }
-    if (userAgent.indexOf("Safari") > -1) {
-        return "Safari";
-    } //判断是否Safari浏览器
-    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
-        return "IE";
-    }; //判断是否IE浏览器
-    if (userAgent.indexOf("Trident") > -1) {
-        return "Edge";
-    } //判断是否Edge浏览器
-};
-
-Analyst.SaveAs5 = function(imgURL) {
-    var oPop = window.open(imgURL,"","width=1, height=1, top=5000, left=5000");
-    for(; oPop.document.readyState != "complete"; )
-    {
-        if (oPop.document.readyState == "complete")break;
-    }
-    oPop.document.execCommand("SaveAs");
-    oPop.close();
-}

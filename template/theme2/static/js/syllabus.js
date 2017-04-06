@@ -5,6 +5,8 @@
 var Syllabus = new Container({
     panel : $("#page_syllabus"),
     url : "/theme2/template/syllabus.html",
+    subscribeTeachers : '',
+    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     onLoad : function(){
         Syllabus.setEvent();
     },
@@ -167,17 +169,12 @@ Syllabus.setEvent = function(){
             var idx = $.inArray(currAnalyst, analystArr);
             if ($this.attr('subscribed') == 'true' && idx > -1) {
                 analystArr.splice(idx, 1);//如果点击已订阅，则删除当前订阅的老师
-                $this.removeClass('btn-green');
-                $this.addClass('btn-blue');
-                $this.removeAttr('subscribed');
-                $this.html('订阅')
+                Syllabus.subscribeOpType = 2;
             } else {
+                Syllabus.subscribeOpType = 1;
                 analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-                $this.removeClass('btn-blue');
-                $this.addClass('btn-green');
-                $this.attr('subscribed','true');
-                $this.html('<i class="i-selected"></i>已订阅');
             }
+            Syllabus.subscribeTeachers = currAnalyst;
             $.each(types, function (k, v) {
                 if (v == 'live_reminder') {
                     id = $this.attr('lrid');
@@ -186,13 +183,34 @@ Syllabus.setEvent = function(){
                 } else if (v == 'trading_strategy') {
                     id = $this.attr('tsid');
                 }
-                Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1));
+                Subscribe.setSubscribe($this, id, v, analystArr, k == (typeLen - 1),Syllabus.followHander);
             });
         }
         return false;
     });
 };
-
+/**
+ * 订阅回调处理
+ */
+Syllabus.followHander = function(isOK){
+    var analyst = Syllabus.subscribeTeachers;
+    var obj = $("#syllabusList [analystid="+analyst+"]")
+    //取消订阅
+    if(Syllabus.subscribeOpType === 2 && isOK){
+        obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
+        obj.removeClass('btn-green');
+        obj.addClass('btn-blue');
+        obj.removeAttr('subscribed');
+        obj.html('订阅');
+        return;
+    }else if(Syllabus.subscribeOpType === 1 && isOK){
+        obj.removeClass('btn-blue');
+        obj.addClass('btn-green');
+        obj.attr('subscribed','true');
+        obj.html('<i class="i-selected"></i>已订阅');
+    }
+    Subscribe.setSubscribeAttr(obj,analyst);
+};
 /**
  * 设置课程表的订阅属性（此处由于个性化，不能共用代码）
  * @param obj
