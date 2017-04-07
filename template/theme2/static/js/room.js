@@ -95,6 +95,7 @@ Room.setEvent = function(){
     /** 老师简介 */
     $('#room_teacherOps').on('click','.more-ops',function () {
         Analyst.userNo = $('#room_teacher').attr('userNo');
+        $('#room_teacherOps').toggle();
         Analyst.load();
     })
     /**

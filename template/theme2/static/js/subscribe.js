@@ -184,13 +184,11 @@ Subscribe.setEvent = function(){
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
-        if($this.attr('subscribed')=='true' ){
-            $this.removeClass('btn-green');
-            $this.addClass('btn-blue');
-            $this.removeAttr('subscribed');
-            $this.html('订阅')
+        if($this.attr('subscribed') =='true' ){
+            $this.attr('lrid','').attr('ssid','').attr('tsid','');
+            $this.removeClass('btn-green').addClass('btn-blue').removeAttr('subscribed');
+            $this.html('订阅');
         }else{
-            analystArr = [];
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
         }
         $.each(types, function(k, v){
@@ -201,12 +199,33 @@ Subscribe.setEvent = function(){
             }else if(v=='trading_strategy'){
                 id = $this.attr('tsid');
             }
-            Subscribe.setSubscribe($this, id, v, analystArr, k==(typeLen-1));
+            Subscribe.setSubscribe($this, id, v, analystArr, k==(typeLen-1),Subscribe.followHander);
         });
         return false;
     });
 };
-
+/**
+ * 订阅回调处理
+ */
+Subscribe.followHander = function(isOK,analyst){
+    analyst = analyst || [];
+    $.each(analyst,function (i,row) {
+        var obj = $('#subscribeAnalyst a[analystId='+row+']');
+        if(obj.attr('subscribed') ==='true' && isOK){
+            obj.attr('lrid','').attr('ssid','').attr('tsid','');
+            obj.removeClass('btn-green').addClass('btn-blue').removeAttr('subscribed');
+            obj.html('订阅');
+        }else if(obj.attr('subscribed') !='true' && isOK){
+            obj.removeClass('btn-blue').addClass('btn-green').attr('subscribed','true');
+            obj.html('<i class="i-selected"></i>已订阅');
+        }
+        Syllabus.subscribeTeachers = row;
+        Syllabus.followHander(isOK);
+    });
+    setTimeout(function () {
+        Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
+    },5000);
+};
 /**
  * 设置点赞
  */
@@ -255,13 +274,8 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
             Pop.msg(data.msg);
         }
         obj.removeClass('clicked');
-        if(isLast){
-            //回调函数
-            if(typeof callback == "function"){
-                callback(data.isOK);
-            }else{
-                Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
-            }
+        if(isLast){//回调函数
+            callback(data.isOK,analysts);
         }
     });
 };

@@ -329,9 +329,12 @@ Analyst.followHander = function(isOK){
     if(Analyst.subscribeOpType === 2 && isOK){
         obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
         obj.children('label').html('订阅');
+        $("#roomSubscribe").attr('lrid',''),$("#roomSubscribe").attr('ssid',''),$("#roomSubscribe").attr('tsid','');
+        $("#roomSubscribe").children('label').html('订阅');
         return;
     }else if(Analyst.subscribeOpType === 1 && isOK){
         obj.children('label').html('已订阅');
+        $("#roomSubscribe").children('label').html('已订阅');
     }
     Subscribe.setSubscribeAttr(obj,Analyst.userNo);
 };

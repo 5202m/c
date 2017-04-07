@@ -6,7 +6,6 @@ var Syllabus = new Container({
     panel : $("#page_syllabus"),
     url : "/theme2/template/syllabus.html",
     subscribeTeachers : '',
-    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     onLoad : function(){
         Syllabus.setEvent();
     },
@@ -136,6 +135,7 @@ Syllabus.setEvent = function(){
      * 老师订阅
      */
     $('#chat_subscribe').bind('click', function(){
+        Subscribe.status = 0;
         Subscribe.load();
     });
     /**
@@ -169,9 +169,7 @@ Syllabus.setEvent = function(){
             var idx = $.inArray(currAnalyst, analystArr);
             if ($this.attr('subscribed') == 'true' && idx > -1) {
                 analystArr.splice(idx, 1);//如果点击已订阅，则删除当前订阅的老师
-                Syllabus.subscribeOpType = 2;
             } else {
-                Syllabus.subscribeOpType = 1;
                 analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
             }
             Syllabus.subscribeTeachers = currAnalyst;
@@ -194,16 +192,16 @@ Syllabus.setEvent = function(){
  */
 Syllabus.followHander = function(isOK){
     var analyst = Syllabus.subscribeTeachers;
-    var obj = $("#syllabusList [analystid="+analyst+"]")
+    var obj = $("#syllabusList [analystid="+analyst+"]");
     //取消订阅
-    if(Syllabus.subscribeOpType === 2 && isOK){
-        obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
+    if(obj.attr('subscribed') ==='true' && isOK){
+        obj.attr('lrid','').attr('ssid','').attr('tsid','');
         obj.removeClass('btn-green');
         obj.addClass('btn-blue');
         obj.removeAttr('subscribed');
         obj.html('订阅');
         return;
-    }else if(Syllabus.subscribeOpType === 1 && isOK){
+    }else if(obj.attr('subscribed') !='true' && isOK){
         obj.removeClass('btn-blue');
         obj.addClass('btn-green');
         obj.attr('subscribed','true');
