@@ -716,6 +716,16 @@ var common = {
             return url;
         }
     },
+    /**
+     * 返回n～m之间的随机数
+     * @param n
+     * @param m
+     * @returns {number}
+     */
+    randomN2M: function(n, m){
+        var c = m - n + 1;
+        return Math.random() * c + n;
+    },
     Deferred: function() {
         var _resolve;
         var _reject;

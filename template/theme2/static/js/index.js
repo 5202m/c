@@ -37,6 +37,9 @@ var Index = {
     setEvent:function(){
         //显示登录用户昵称
         if(Data.userInfo.isLogin){
+            if(Util.isBlank(Data.userInfo.nickname)){
+                Data.userInfo.nickname = '匿名_'+Data.userInfo.userId.substring(0,4);
+            }
             $('#header_ui').text(Data.userInfo.nickname);
         }
         //登录、显示用户信息
