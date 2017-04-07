@@ -7,7 +7,6 @@ var Room = new Container({
     url : "/theme2/template/room.html",
     lastTimeStamp : 0,
     lastScrollTop : 0,
-    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     onLoad : function(){
         Player.init();
         Room.setEvent();
@@ -249,11 +248,8 @@ Room.setEvent = function(){
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
-        if ($this.attr('lrid') || $this.attr('ssid') || $this.attr('tsid')) {
-            Room.subscribeOpType = 2;
-        } else {
+        if ($this.attr('subscribed') != 'true') {
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-            Room.subscribeOpType = 1;
         }
         $.each(types, function (k, v) {
             if (v == 'live_reminder') {
@@ -274,11 +270,11 @@ Room.setEvent = function(){
 Room.followHander = function(isOK){
     var obj = $("#roomSubscribe");
     //取消订阅
-    if(Room.subscribeOpType === 2 && isOK){
+    if(obj.attr('subscribed') ==='true' && isOK){
         obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
         obj.children('label').html('订阅');
         return;
-    }else if(Room.subscribeOpType === 1 && isOK){
+    }else if(obj.attr('subscribed') !='true' && isOK){
         obj.children('label').html('已订阅');
     }
     Subscribe.setSubscribeAttr(obj,obj.attr('analystId'));
@@ -343,7 +339,6 @@ Room.setLecturerTool = function (lecturerId) {
             $('#teacherDollar').empty().html(dollarHtml);
             Subscribe.setSubscribeAttr($('#roomSubscribe'),lecturerId);
             Subscribe.setSubscribeType(function (subscribeType) {
-                console.log(subscribeType);
                 if(lecturerId === subscribeType.userId){
                     var type = $('#roomSubscribe').attr('type');
                     var types = type==='' ? [] : type.split(',');

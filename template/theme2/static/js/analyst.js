@@ -6,7 +6,6 @@ var Analyst = new Container({
     panel : $("#page_analyst"),
     url : "/theme2/template/analyst.html",
     userNo : null,
-    subscribeOpType : 1 , //订阅操作类型  1：订阅 2：取消订阅
     tradeList : [],
     loadAll : false,
     onLoad : function(){
@@ -301,11 +300,8 @@ Analyst.setEvent = function(){
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
-        if ($this.attr('lrid') || $this.attr('ssid') || $this.attr('tsid')) {
-            Analyst.subscribeOpType = 2;
-        } else {
+        if ($this.attr('subscribed') != 'true') {
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
-            Analyst.subscribeOpType = 1;
         }
         $.each(types, function (k, v) {
             if (v == 'live_reminder') {
@@ -335,13 +331,13 @@ Analyst.setEvent = function(){
 Analyst.followHander = function(isOK){
     var obj = $("#analystSubscribe");
     //取消订阅
-    if(Analyst.subscribeOpType === 2 && isOK){
+    if(obj.attr('subscribed') ==='true' && isOK){
         obj.attr('lrid',''),obj.attr('ssid',''),obj.attr('tsid','');
         obj.children('label').html('订阅');
         $("#roomSubscribe").attr('lrid',''),$("#roomSubscribe").attr('ssid',''),$("#roomSubscribe").attr('tsid','');
         $("#roomSubscribe").children('label').html('订阅');
         return;
-    }else if(Analyst.subscribeOpType === 1 && isOK){
+    }else if(obj.attr('subscribed') !='true' && isOK){
         obj.children('label').html('已订阅');
         $("#roomSubscribe").children('label').html('已订阅');
     }

@@ -154,12 +154,11 @@ a:hover {
 /* === center === */
 .content_w {
   margin: 0 auto;
-  max-width: 640px;
+  max-width: 1024px;
 }
 html,
 body {
   height: 100%;
-  overflow: hidden;
 }
 article.content_w {
   height: 100%;
@@ -1150,7 +1149,7 @@ article.content_w.bgeee {
   left: 0;
   right: 0;
   z-index: 9;
-  max-width: 640px;
+  max-width: 1024px;
   margin: 0 auto;
   margin-top: -1px;
 }
@@ -1638,7 +1637,7 @@ article.content_w.bgeee {
   left: 0;
   right: 0;
   top: 84px;
-  max-width: 640px;
+  max-width: 1024px;
   margin: 0 auto;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1721,6 +1720,7 @@ article.content_w.bgeee {
 }
 .txt-block .details-item-list .instr-txt span {
   color: #696dc7;
+  position: relative;
 }
 .txt-block .details-item-list.sildeup {
   display: none;
@@ -2794,7 +2794,7 @@ article.content_w.bgeee {
   right: 0;
   top: 40px;
   z-index: 99;
-  max-width: 640px;
+  max-width: 1024px;
   margin: 0 auto;
 }
 .chat-tips-bar {
@@ -3558,15 +3558,15 @@ article.content_w.bgeee {
 }
 .program-con [class*="ch-pic-new"].ch-pic-new1 {
   background-image: url(../img/ch-pic-new1.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="ch-pic-new"].ch-pic-new2 {
   background-image: url(../img/ch-pic-new2.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="ch-pic-new"].ch-pic-new3 {
   background-image: url(../img/ch-pic-new3.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="pro-bg-new"] {
   background-repeat: no-repeat;
@@ -3574,19 +3574,19 @@ article.content_w.bgeee {
 }
 .program-con [class*="pro-bg-new"].pro-bg-new1 {
   background-image: url(../img/pro-bg1.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="pro-bg-new"].pro-bg-new2 {
   background-image: url(../img/pro-bg2.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="pro-bg-new"].pro-bg-new3 {
   background-image: url(../img/pro-bg3.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con [class*="pro-bg-new"].pro-bg-new4 {
   background-image: url(../img/pro-bg4.jpg);
-  background-size: 640px auto;
+  background-size: 1024px auto;
 }
 .program-con .u-ch-class {
   position: relative;
@@ -3594,7 +3594,10 @@ article.content_w.bgeee {
   padding: 8px 0;
 }
 .program-con .u-ch-class .ab-img {
-  width: 100%;
+  width: auto;
+  max-width: initial;
+  height: 107px;
+  float: right;
   -webkit-border-top-left-radius: 5px;
   -moz-border-radius-topleft: 5px;
   border-top-left-radius: 5px;
@@ -3604,7 +3607,13 @@ article.content_w.bgeee {
 }
 .program-con .u-ch-class .u-ch-hd {
   position: relative;
-  max-height: 72px;
+  max-height: 107px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-right-radius: 5px;
   overflow: hidden;
 }
 .program-con .u-ch-class .u-ch-hd .u-ch-tit {
@@ -3687,8 +3696,10 @@ article.content_w.bgeee {
 .program-con .program-list .item-con .img-pro {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  right: 0;
+  width: auto;
+  max-width: initial;
+  height: 88px;
 }
 .program-con .program-list .item-con .item-main {
   padding: 13px 16px;
@@ -4953,9 +4964,6 @@ article.content_w.bgeee {
   }
   .program-con .u-ch-class a {
     font-size: 11px;
-  }
-  .program-con .u-ch-class .u-ch-hd {
-    max-height: 92px;
   }
   .program-con .program-list .item-con .item-main .item-infos .user-infos {
     font-size: 12px;

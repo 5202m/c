@@ -47,8 +47,8 @@ ClassNote.setEvent = function () {
     $('#classNodeContainer').on('click', '.txt-block .toggle-op-btn', function(){
         $(this).find('i').toggleClass('i-arrow-up i-arrow-down');
         $(this).closest('.txt-block').children('.txt-details').toggleClass('sildeup');
-        $(this).closest('.txt-block').children('.txt-details').children('.details-item-list').toggleClass('sildeup');
-        $(this).closest('.txt-block').children('.txt-details').children('.call-infos').toggleClass('dn');
+        //$(this).closest('.txt-block').children('.txt-details').children('.details-item-list').toggleClass('sildeup');
+        //$(this).closest('.txt-block').children('.txt-details').children('.call-infos').toggleClass('dn');
     });
     /**
      * 滚动到末尾加载数据
@@ -76,9 +76,9 @@ ClassNote.setEvent = function () {
  * @param [isMore] 加载更多
  */
 ClassNote.loadData = function (isMore, isRoom) {
-    var noteId = isMore ? $("#classNote_data>[dataid]:last") : $("#classNote_data>[dataid]:first");
+    var noteId = isMore ? $("#classNodeContainer>[aid]:last") : $("#classNodeContainer>[aid]:first");
     if (noteId.size() > 0) {
-        noteId = noteId.attr("dataid") || "";
+        noteId = noteId.attr("aid") || "";
     } else {
         noteId = "";
     }
@@ -86,7 +86,7 @@ ClassNote.loadData = function (isMore, isRoom) {
         code: "class_note",
         platform: Data.userInfo.groupId,
         hasContent: 1,
-        pageSize: isMore ? 5 : 10,
+        pageSize: 30,
         pageKey: noteId || "",
         pageLess: isMore ? 1 : 0,
         isAll: 1,
@@ -646,28 +646,3 @@ ClassNote.formatViewDataHtml = function (region) {
     return formatHtmlArr.join("");
 };
 
-/**
- * 获取tag对应说明
- * @param type
- * @returns {*}
- */
-ClassNote.getClassNoteTagName = function (type) {
-
-    switch (type){
-        case 'trading_strategy' :
-            return '交易策略';
-            break;
-        case 'shout_single' :
-            return '喊单';
-            break;
-        case 'resting_order' :
-            return '挂单';
-            break;
-        case '' :
-            return '文字交流';
-            break;
-        default :
-            return '即时新闻';
-            break;
-    }
-};

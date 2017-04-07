@@ -5,6 +5,7 @@
 var Subscribe = new Container({
     panel : $("#page_subscribe"),
     url : "/theme2/template/subscribe.html",
+    subscribeOpTeacher : '',
     onLoad : function(){
         Data.getAnalyst('', function(){
             Subscribe.setAnalystList();
@@ -161,9 +162,7 @@ Subscribe.setEvent = function(){
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
         if($this.attr('subscribed') =='true' ){
-            $this.attr('lrid','').attr('ssid','').attr('tsid','');
-            $this.removeClass('btn-green').addClass('btn-blue').removeAttr('subscribed');
-            $this.html('订阅');
+            Subscribe.subscribeOpTeacher = currAnalyst;
         }else{
             analystArr.push(currAnalyst);//未订阅的，则加入到订阅列表
         }
@@ -184,7 +183,7 @@ Subscribe.setEvent = function(){
  * 订阅回调处理
  */
 Subscribe.followHander = function(isOK,analyst){
-    analyst = analyst || [];
+    analyst = analyst.length > 0 ? analyst : [Subscribe.subscribeOpTeacher];
     $.each(analyst,function (i,row) {
         var obj = $('#subscribeAnalyst a[analystId='+row+']');
         if(obj.attr('subscribed') ==='true' && isOK){
