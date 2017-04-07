@@ -52,7 +52,8 @@ Room.loadRoomClassNote = function(){
     //初始化数据
     $("#classNote_panel").empty();
     ClassNote.getAuthConfig(function(){
-        ClassNote.loadData(null, true);
+        //ClassNote.loadData(null, true);
+        Room.loadRoomClassNoteData();
     })
 };
 
@@ -343,6 +344,34 @@ Room.toRefreshView = function(groupId){
     Room.load();
 };
 
+/**
+ * 加载房间的直播精华数据
+ */
+Room.loadRoomClassNoteData = function (isMore) {
+    var noteId = isMore ? $("#classNote_panel>[dataid]:last") : $("#classNote_panel>[dataid]:first");
+    if (noteId.size() > 0) {
+        noteId = noteId.attr("dataid") || "";
+    } else {
+        noteId = "";
+    }
+    Index.getArticleList({
+        code: "class_note",
+        platform: Data.userInfo.groupId,
+        hasContent: 1,
+        pageSize: 5,
+        pageKey: noteId || "",
+        pageLess: isMore ? 1 : 0,
+        isAll: 1,
+        ids: "",
+        callTradeIsNotAuth: 0,
+        strategyIsNotAuth: 0
+    }, function (dataList) {
+        if (dataList && dataList.result == 0) {
+            var dataArr = dataList.data || [];
+            Room.appendClassNoteData(dataArr, isMore ? isMore : false);
+        }
+    });
+};
 /**
  * 数据追加
  * @param dataArr

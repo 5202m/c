@@ -9,7 +9,7 @@ var ClassNote = new Container({
     lastTimeStamp: 0, //上次滚动时间戳
     strategyIsNotAuth : -1,//查看交易策略是否授权
     callTradeIsNotAuth : -1,//查看喊单/挂单是否授权
-    classNoteInfo: [], //直播精华非交易策略数据
+    classNoteInfo: null, //直播精华非交易策略数据
     onLoad: function () {
         ClassNote.lastScrollTop = 0;
         ClassNote.lastTimeStamp = 0;
@@ -61,7 +61,7 @@ ClassNote.setEvent = function () {
             scrollTop = $(this).scrollTop();//滚动高度
         if (scrollTop / (contentH - viewH) >= 0.95 && scrollTop > ClassNote.lastScrollTop) {
             ClassNote.lastScrollTop = scrollTop;
-            ClassNote.loadData(true);
+            ClassNote.loadData(true, false);
         } else {
             ClassNote.lastTimeStamp = 0;
         }
@@ -241,64 +241,84 @@ ClassNote.getClassNoteHtml = function(data){
     var dataDetail = data.detailList && data.detailList[0] || {};
     var timeStr = Util.formatDate(data.createDate, "HH:mm:ss");
     var upOrDown = { 'up': '看涨', 'down': '看跌' };
+    var publishTime = new Date(data.publishStartDate).getTime();
     var html = [], classNoteHtml = [];
-    //交易策略
-    if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag == "trading_strategy") {
-        var publishTime = new Date(data.publishStartDate).getTime();
-        var publishTimeStr = Util.formatDate(publishTime, 'yyyy.MM.dd HH:mm') +
-            "~" + Util.formatDate(data.publishEndDate, 'HH:mm');
-        var author = '',
-            avatar = '',
-            style = '',
-            tag = [],
-            tagHtml = [],
-            tUserId = '';
-        if (dataDetail.authorInfo) {
-            author = dataDetail.authorInfo.name || "";
-            avatar = dataDetail.authorInfo.avatar || "";
-            tUserId = dataDetail.authorInfo.userId || "";
-            tag = Util.isNotBlank(dataDetail.authorInfo.tag) ? dataDetail.authorInfo.tag.replace(/\s*，\s*/g, ',').split(',') : [];
-            $.each(tag, function(key, val) {
-                if (Util.isNotBlank(val)) {
-                    tagHtml.push(ClassNote.formatHtml("teacherTag", val));
-                }
-            });
-        }
-        var isHideData = ClassNote.isHideData(data._id, dataDetail.tag, storeClassNote);
-        var dataDataArr = Util.parseJSON(dataDetail.remark || ""), dataDataTemp, dataHtml = [];
-        for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0; i < lenI; i++) {
-            dataDataTemp = dataDataArr[i];
-            dataHtml.push(ClassNote.formatHtml("dataTable",
-                dataDataTemp.name || "",
-                upOrDown[dataDataTemp.upordown],
-                isHideData ? '****<i class="txt-mban repeatx"></i>' : dataDataTemp.open || "",
-                isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.profit || "",
-                isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.loss || ""
-            ));
-            if (dataDataTemp.description) {
-                dataHtml.push(ClassNote.formatHtml("dataTableRemark", isHideData ? '****<i class="txt-mban repeat3x"></i>' : dataDataTemp.description));
+    if($("#classNodeContainer  div[pt="+publishTime+"]").size()==0) {
+        //交易策略
+        if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag
+            == "trading_strategy") {
+            var publishTimeStr = Util.formatDate(publishTime,
+                    'yyyy.MM.dd HH:mm') +
+                "~" + Util.formatDate(data.publishEndDate, 'HH:mm');
+            var author = '',
+                avatar = '',
+                style = '',
+                tag = [],
+                tagHtml = [],
+                tUserId = '';
+            if (dataDetail.authorInfo) {
+                author = dataDetail.authorInfo.name || "";
+                avatar = dataDetail.authorInfo.avatar || "";
+                tUserId = dataDetail.authorInfo.userId || "";
+                tag = Util.isNotBlank(dataDetail.authorInfo.tag)
+                    ? dataDetail.authorInfo.tag.replace(/\s*，\s*/g, ',').split(
+                    ',') : [];
+                $.each(tag, function (key, val) {
+                    if (Util.isNotBlank(val)) {
+                        tagHtml.push(ClassNote.formatHtml("teacherTag", val));
+                    }
+                });
             }
+            var isHideData = ClassNote.isHideData(data._id, dataDetail.tag,
+                storeClassNote);
+            var dataDataArr = Util.parseJSON(
+                dataDetail.remark || ""), dataDataTemp, dataHtml = [];
+            for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0;
+                i < lenI; i++) {
+                dataDataTemp = dataDataArr[i];
+                dataHtml.push(ClassNote.formatHtml("dataTable",
+                    dataDataTemp.name || "",
+                    upOrDown[dataDataTemp.upordown],
+                    isHideData ? '****<i class="txt-mban repeatx"></i>'
+                        : dataDataTemp.open || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : dataDataTemp.profit || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : dataDataTemp.loss || ""
+                ));
+                if (dataDataTemp.description) {
+                    dataHtml.push(ClassNote.formatHtml("dataTableRemark",
+                        isHideData ? '****<i class="txt-mban repeat3x"></i>'
+                            : dataDataTemp.description));
+                }
+            }
+            var teacherAvatarName = '<img src="' + avatar
+                + '" class="img-avatar"/><div class="a-top" userNo="' + tUserId
+                + '"><b>' + author + '</b><i class="i-dot3"></i></div>';
+            var viewDataCls = 'btn-data', viewDataTxt = '查看数据';
+            if (!isHideData) {
+                viewDataCls = 'btn-data-grey';
+                viewDataTxt = '数据已显示';
+            }
+            var viewDataHtml = ClassNote.formatHtml('viewData', data._id, '',
+                viewDataCls, viewDataTxt);
+            html.push(ClassNote.formatHtml('classNodePanel',
+                publishTime,
+                teacherAvatarName,
+                tagHtml.join(''),
+                dataDetail.title,
+                publishTimeStr,
+                dataDetail.content || '',
+                dataHtml.join(''),
+                viewDataHtml,
+                data._id
+            ));
+        } else {
+            if (!ClassNote.classNoteInfo) {
+                ClassNote.classNoteInfo = [];
+            }
+            ClassNote.classNoteInfo.push(data);
         }
-        var teacherAvatarName = '<img src="'+avatar+'" class="img-avatar"/><div class="a-top" userNo="'+tUserId+'"><b>'+author+'</b><i class="i-dot3"></i></div>';
-        var viewDataCls = 'btn-data', viewDataTxt = '查看数据';
-        if(!isHideData){
-            viewDataCls = 'btn-data-grey';
-            viewDataTxt = '数据已显示';
-        }
-        var viewDataHtml = ClassNote.formatHtml('viewData', data._id, '', viewDataCls, viewDataTxt);
-        html.push(ClassNote.formatHtml('classNodePanel',
-            publishTime,
-            teacherAvatarName,
-            tagHtml.join(''),
-            data.title,
-            publishTimeStr,
-            dataDetail.content||'',
-            dataHtml.join(''),
-            viewDataHtml,
-            data._id
-        ));
-    }else{
-        ClassNote.classNoteInfo.push(data);
     }
     return html.join('');
 };
@@ -321,6 +341,9 @@ ClassNote.setOtherClassNoteHtml = function(data){
         publishTime = new Date(data.publishStartDate).getTime();
     //课程信息
     var aid = data._id || data.id;
+    if($('#classNodeContainer div[pt='+publishTime+'] .classNote div[aid="'+aid+'"]').size()>0){
+        return;
+    }
     var author = '';
     if (dataDetail.authorInfo) {
         author = dataDetail.authorInfo.name.substring(0, 1) || "";
@@ -369,6 +392,7 @@ ClassNote.setOtherClassNoteHtml = function(data){
             dataDetail.content || ''
         ));
     }
+    html.push(ClassNote.formatHtml('blk7'));
     $('#classNodeContainer div[pt='+publishTime+'] .classNote').append(html.join(''));
 };
 
