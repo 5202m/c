@@ -30,8 +30,11 @@ ClassNote.setEvent = function () {
     /**
      * 查看数据
      */
-    $("#classNote_data").on("click", ".btn-group", function () {
+    $("#classNodeContainer").on("click", ".btn-group", function () {
         //(判断用户是否登录)
+        if($(this).children('a.btn').hasClass('btn-data-grey')){
+            return;
+        }
         if (Data.userInfo.isLogin) {
             ClassNote.viewData($(this));
         } else {
@@ -41,7 +44,7 @@ ClassNote.setEvent = function () {
     /**
      * 展开交易策略
      */
-    $('#classNote_data').on('click', '.txt-block .toggle-op-btn', function(){
+    $('#classNodeContainer').on('click', '.txt-block .toggle-op-btn', function(){
         $(this).find('i').toggleClass('i-arrow-up i-arrow-down');
         $(this).closest('.txt-block').children('.txt-details').toggleClass('sildeup');
         $(this).closest('.txt-block').children('.txt-details').children('.details-item-list').toggleClass('sildeup');
@@ -295,9 +298,9 @@ ClassNote.getClassNoteHtml = function(data){
             var teacherAvatarName = '<img src="' + avatar
                 + '" class="img-avatar"/><div class="a-top" userNo="' + tUserId
                 + '"><b>' + author + '</b><i class="i-dot3"></i></div>';
-            var viewDataCls = 'btn-data', viewDataTxt = '查看数据';
+            var viewDataCls = '', viewDataTxt = '查看数据';
             if (!isHideData) {
-                viewDataCls = 'btn-data-grey';
+                viewDataCls = ' btn-data-grey';
                 viewDataTxt = '数据已显示';
             }
             var viewDataHtml = ClassNote.formatHtml('viewData', data._id, '',
@@ -364,9 +367,9 @@ ClassNote.setOtherClassNoteHtml = function(data){
                 isHideData ? '****<i class="txt-mban repeat3x"></i>' : dataDataTemp.description));
         }
     }
-    var viewDataCls = 'btn-data', viewDataTxt = '查看数据';
+    var viewDataCls = '', viewDataTxt = '查看数据';
     if (!isHideData) {
-        viewDataCls = 'btn-data-grey';
+        viewDataCls = ' btn-data-grey';
         viewDataTxt = '数据已显示';
     }
     var viewDataHtml = ClassNote.formatHtml('viewData', aid, 'prerogative_callTrade', viewDataCls, viewDataTxt);

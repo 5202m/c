@@ -3140,10 +3140,10 @@ router.post('/rob', function(req, res) {
  */
 router.get('/getAnalystSubscribeNum', function(req, res){
     let userNo = req.query['userNo'];
-    let num = Math.floor(200*common.randomN2M(0.8, 1));
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
         if(err){
+            let num = Math.floor(200*common.randomN2M(0.8, 1));
             cacheClient.set(key, num);
             res.json({num : num});
         }else{
@@ -3157,16 +3157,16 @@ router.get('/getAnalystSubscribeNum', function(req, res){
  */
 router.post('/setAnalystSubscribeNum', function(req, res){
     let userNo = req.query['userNo'];
-    let num = Math.floor(200*common.randomN2M(0.8, 1));
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
         if(err){
+            let num = Math.floor(200*common.randomN2M(0.8, 1));
             num = num + 1;
             cacheClient.set(key, num);
             res.json({num : num});
         }else{
-            num = result + 1;
-            cacheClient.set(key, num);
+            result = result + 1;
+            cacheClient.set(key, result);
             res.json({num : result});
         }
     });
