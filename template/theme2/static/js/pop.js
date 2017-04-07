@@ -46,10 +46,11 @@ var Pop = {
          */
         init : function(){
             Pop.signIn.setEvent();
-            var timeOutId = setTimeout(function(){
+            //签到弹框，暂时取消
+            /*var timeOutId = setTimeout(function(){
                 Pop.signIn.showSignIn();
                 clearTimeout(timeOutId);
-            }, 30000);
+            }, 30000);*/
         },
         /**
          * 设置事件

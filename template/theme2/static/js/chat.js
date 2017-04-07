@@ -90,7 +90,7 @@ var Chat = {
                             case "class_note"://直播精华
                                 if(articleInfo.platform && articleInfo.platform.indexOf(indexJS.userInfo.groupId) != -1){
                                     var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
-                                    ClassNote.appendClassNote(articleInfo, true);
+                                    ClassNote.appendRoomClassNote(articleInfo, true);
                                     /*if(Util.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
                                         chatPride.appendTradeStrategyNote(articleInfo, true, true, true);
                                     }else{

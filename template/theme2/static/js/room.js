@@ -76,6 +76,7 @@ Room.loadRoomClassNote = function(){
     //初始化数据
     $("#classNote_panel").empty();
     ClassNote.getAuthConfig(function(){
+        //ClassNote.loadData(null, true);
         Room.loadRoomClassNoteData();
     })
 };
@@ -412,7 +413,7 @@ Room.loadRoomClassNoteData = function (isMore) {
 Room.appendClassNoteData = function (dataArr, isMore) {
     var html = [];
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
-        html.push(ClassNote.getClassNoteHtml(dataArr[i]));
+        html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
     if (isMore) {
         $("#classNote_panel").append(html.join(""));

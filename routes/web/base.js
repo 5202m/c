@@ -174,9 +174,8 @@ router.get('/', function(req, res) {
                                                         userId: result.userId
                                                     };
                                                 }
-                                                res.redirect(
-                                                    getGroupType(req, true) + getRredirctUrl(
-                                                        req));
+                                                res.redirect('/');
+                                                return;
                                             });
                                     });
                             });
@@ -2663,25 +2662,29 @@ router.post('/getRoomList', function(req, res) {
                     var syResult = data.syllabusResult;
                     viewDataObj.syllabusData = JSON.stringify({
                         courseType: syResult.courseType,
-                        studioLink: (common.isBlank(syResult.studioLink) ? "" :
+                        studioLink: (common.isBlank(syResult.studioLink)
+                            ? "" :
                             JSON.parse(syResult.studioLink)),
                         courses: (common.isBlank(syResult.courses) ? "" :
-                            syllabusService.removeContext(JSON.parse(syResult.courses)))
+                            syllabusService.removeContext(
+                                JSON.parse(syResult.courses)))
                     });
                 }
             } else {
                 viewDataObj.lgBoxTipInfo = "";
                 viewDataObj.onlineNumValSet = '';
-                data.studioList.forEach(function(row) {
+                data.studioList.forEach(function (row) {
                     rowTmp = {};
                     rowTmp.id = row._id;
                     rowTmp.name = row.name;
                     rowTmp.level = row.level;
                     rowTmp.isCurr = (row._id == null);
                     //聊天室规则
-                    rowTmp.allowWhisper = common.containSplitStr(row.talkStyle, 1);
+                    rowTmp.allowWhisper = common.containSplitStr(
+                        row.talkStyle, 1);
                     rowTmp.whisperRoles = row.whisperRoles;
-                    rowTmp.disable = (!common.containSplitStr(row.clientGroup,
+                    rowTmp.disable = (!common.containSplitStr(
+                        row.clientGroup,
                         clientGroup));
                     rowTmp.allowVisitor = isVisitor ? (!rowTmp.disable) :
                         common.containSplitStr(row.clientGroup,
@@ -2689,14 +2692,16 @@ router.post('/getRoomList', function(req, res) {
                     rowTmp.roomType = row.roomType;
                     rowTmp.status = row.status;
                     rowTmp.trainAuth = -1;
-                    rowTmp.openDate = common.isValid(row.openDate) ? JSON.parse(
+                    rowTmp.openDate = common.isValid(row.openDate)
+                        ? JSON.parse(
                         row.openDate) : {};
                     //rowTmp.traninClient = row.traninClient;
                     if (rowTmp.status == 2) {
                         if (row.traninClient) {
                             var length = row.traninClient.length;
                             for (var i = 0; i < length; i++) {
-                                if (row.traninClient[i].clientId == chatUser.userId) {
+                                if (row.traninClient[i].clientId
+                                    == chatUser.userId) {
                                     rowTmp.trainAuth = row.traninClient[i].isAuth;
                                     break;
                                 }
@@ -2708,19 +2713,22 @@ router.post('/getRoomList', function(req, res) {
                         ruleRow = null;
                     for (var i in ruleArr) {
                         ruleRow = ruleArr[i];
-                        isPass = common.dateTimeWeekCheck(ruleRow.periodDate, true);
+                        isPass = common.dateTimeWeekCheck(
+                            ruleRow.periodDate, true);
                         if (ruleRow.type == 'whisper_allowed') {
                             if (rowTmp.allowWhisper && !isPass) {
                                 rowTmp.allowWhisper = false;
                                 rowTmp.whisperRoles = null;
                             }
                         } else if (ruleRow.type == 'visitor_filter') {
-                            if (rowTmp.isCurr && rowTmp.allowVisitor && isPass) {
+                            if (rowTmp.isCurr && rowTmp.allowVisitor
+                                && isPass) {
                                 viewDataObj.visitorSpeak = true;
                             }
                         } else if (ruleRow.type == 'login_time_set') {
                             if (rowTmp.isCurr) {
-                                var periodDate = common.isBlank(ruleRow.periodDate) ? "" :
+                                var periodDate = common.isBlank(
+                                    ruleRow.periodDate) ? "" :
                                     JSON.parse(ruleRow.periodDate);
                                 viewDataObj.lgBoxTipInfo = JSON.stringify({
                                     type: ruleRow.type,
@@ -2733,25 +2741,30 @@ router.post('/getRoomList', function(req, res) {
                                 rowTmp.loginBoxTime = ruleRow.beforeRuleVal;
                                 rowTmp.loginBoxTip = ruleRow.afterRuleTips;
                             }
-                        } else if (ruleRow.type == 'speak_num_set' && isPass) {
+                        } else if (ruleRow.type == 'speak_num_set'
+                            && isPass) {
                             rowTmp.speakNum = ruleRow.beforeRuleVal;
                             rowTmp.speakNumTip = ruleRow.afterRuleTips;
-                        } else if (ruleRow.type == 'online_mem_set' && isPass) {
+                        } else if (ruleRow.type == 'online_mem_set'
+                            && isPass) {
                             rowTmp.onlineNumValSet = ruleRow.beforeRuleVal;
                         }
                     }
                     rowTmp.remark = common.trim(row.remark);
                     rowTmp.clientGroup = common.trim(row.clientGroup);
-                    rowTmp.isOpen = common.dateTimeWeekCheck(row.openDate, true);
+                    rowTmp.isOpen = common.dateTimeWeekCheck(row.openDate,
+                        true);
                     if (rowTmp.isCurr) {
                         viewDataObj.currStudioAuth = !rowTmp.disable;
                         if (data.syllabusResult) {
                             var syResult = data.syllabusResult;
                             viewDataObj.syllabusData = JSON.stringify({
                                 courseType: syResult.courseType,
-                                studioLink: (common.isBlank(syResult.studioLink) ? "" :
+                                studioLink: (common.isBlank(
+                                    syResult.studioLink) ? "" :
                                     JSON.parse(syResult.studioLink)),
-                                courses: (common.isBlank(syResult.courses) ? "" :
+                                courses: (common.isBlank(syResult.courses)
+                                    ? "" :
                                     syllabusService.removeContext(
                                         JSON.parse(syResult.courses)))
                             });
@@ -3118,6 +3131,43 @@ router.post('/rob', function(req, res) {
             });
         } else {
             res.json({ result: 0, money: 0, msg: "" });
+        }
+    });
+});
+
+/**
+ * 获取老师订阅数
+ */
+router.get('/getAnalystSubscribeNum', function(req, res){
+    let userNo = req.query['userNo'];
+    let key = "analyst_subscribe_" + userNo;
+    cacheClient.get(key, function(err, result) {
+        if(err){
+            let num = Math.floor(200*common.randomN2M(0.8, 1));
+            cacheClient.set(key, num);
+            res.json({num : num});
+        }else{
+            res.json({num : result});
+        }
+    });
+});
+
+/**
+ * 设置老师订阅数
+ */
+router.post('/setAnalystSubscribeNum', function(req, res){
+    let userNo = req.query['userNo'];
+    let key = "analyst_subscribe_" + userNo;
+    cacheClient.get(key, function(err, result) {
+        if(err){
+            let num = Math.floor(200*common.randomN2M(0.8, 1));
+            num = num + 1;
+            cacheClient.set(key, num);
+            res.json({num : num});
+        }else{
+            result = result + 1;
+            cacheClient.set(key, result);
+            res.json({num : result});
         }
     });
 });

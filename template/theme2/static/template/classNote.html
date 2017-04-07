@@ -1,29 +1,87 @@
 <div class="head-top head-fixed mt40 al-c">
 	<span class="btn-l"><b class="head-tit">直播精华</b></span>
-	<a href="javascript:void(0)" class="txt-btn btn-r" id="classNote_close"><i class="i-close close-btn"></i></a>
+	<a href="javascript:void(0);" class="txt-btn btn-r" id="classNote_close"><i class="i-close close-btn"></i></a>
 </div>
-<section class="video-con mt84 mb50">
-	<div class="video-infos pt0 z2">
-		<!--<div class="infos-block plrall clearfix live-essence" id="classNote_teacher">
+<section class="video-con mt84 mb50" id="classNodeContainer">
+	<div class="video-infos pt0" temp="classNodePanel" pt="{0}" aid="{8}">
+		<div class="infos-block plrall clearfix live-essence">
 			<div class="avatar-info fl">
-				<img src="/theme2/img/avatar.png" class="img-avatar"/>
-				<div class="a-top"><b>李呱呱</b><i class="i-dot3"></i></div>
+				{1}<!-- 老师头像及昵称 -->
 			</div>
 			<div class="program-con infos-program fl">
 				<div class="program-list">
 					<div class="badge-group">
-						<label class="u-badge">趋势专家<i class="i-badge-arrowr"></i></label>
-						<label class="u-badge">技术派<i class="i-badge-arrowr"></i></label>
+						{2}<!-- 老师标签 -->
 					</div>
 				</div>
 				<div class="program-resource al-r">
-					<div class="s1">文字交流</div>
-					<div class="s2">2017.01.19 17:30~19:00</div>
+					<div class="s1">{3}<!--即市行情--></div>
+					<div class="s2">{4}<!--2017.01.19 17:30~19:00--></div>
 				</div>
 			</div>
-		</div>-->
-		<div id="classNote_data">
-
+		</div>
+		<div class="txt-block block-blue">
+			<div class="txt-tit"><span class="square-dot c-purple"><i class="dot"></i></span>当前交易策略</div>
+			<div class="txt-details">
+				{5}<!-- 交易策略 -->
+				<div class="details-item-list">
+					{6}<!-- 交易策略数据 -->
+				</div>
+				<div class="call-infos block-purple">
+					{7} <!-- 查看数据按钮 -->
+				</div>
+				<div class="scbox-shadow"></div>
+			</div>
+			<div class="toggle-op-btn">
+				<i class="i-arrow-down"></i>
+			</div>
+		</div>
+		<div class="blk7 blke3e3ea"></div>
+		<div class="classNote">
+		<!-- 交易策略后的笔记内容 -->
 		</div>
 	</div>
+
+	<!-- temp begin -->
+	<label class="u-badge" temp="teacherTag">{0}<i class="i-badge-arrowr"></i></label>
+
+	<table class="tb-default" temp="dataTable">
+		<tr><th>品种</th><th>方向</th><th>入场点位</th><th>止盈</th><th>止损</th></tr>
+		<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>
+	</table>
+	<div class="instr-txt" temp="dataTableRemark">
+		<label>说明</label><span>{0}</span>
+	</div>
+
+	<div class="btn-group al-r" temp="viewData" dataid="{0}" item="{1}">
+		<a href="javascript:void(0);" class="btn btn-data{2}">{3}</a>
+		<!--a href="javascript:void(0);" class="btn btn-data btn-data-grey">数据已显示   data-visible</a-->
+	</div>
+
+	<div class="call-infos block-yellow{0}" temp="shoutSingle" aid="{7}">
+		<div class="call-hd">
+			<span class="call-time">{1}</span>
+			<span>{2}</span>
+			<p>{3}老师{2}了，快来围观！</p>
+			<div class="txt-details">
+				{4}
+			</div>
+		</div>
+		{5}<!-- 喊单、挂单数据、说明及笔记内容 -->
+		<div class="btn-group al-r">
+			{6}<!-- 查看数据按钮 -->
+		</div>
+	</div>
+
+	<div class="call-infos" temp="descTxt" aid="{0}">
+		<div class="call-hd">
+			<span class="call-time">{1}</span>
+		</div>
+		<div class="call-desc-txt">
+			{2}
+		</div>
+	</div>
+
+	<div class="blk7 blke3e3ea" temp="blk7"><!-- 分隔区 --></div>
+	<!-- temp end -->
 </section>

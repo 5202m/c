@@ -9,6 +9,7 @@ var ClassNote = new Container({
     lastTimeStamp: 0, //上次滚动时间戳
     strategyIsNotAuth : -1,//查看交易策略是否授权
     callTradeIsNotAuth : -1,//查看喊单/挂单是否授权
+    classNoteInfo: null, //直播精华非交易策略数据
     onLoad: function () {
         ClassNote.lastScrollTop = 0;
         ClassNote.lastTimeStamp = 0;
@@ -29,8 +30,11 @@ ClassNote.setEvent = function () {
     /**
      * 查看数据
      */
-    $("#classNote_data").on("click", ".btn-group", function () {
+    $("#classNodeContainer").on("click", ".btn-group", function () {
         //(判断用户是否登录)
+        if($(this).children('a.btn').hasClass('btn-data-grey')){
+            return;
+        }
         if (Data.userInfo.isLogin) {
             ClassNote.viewData($(this));
         } else {
@@ -40,7 +44,7 @@ ClassNote.setEvent = function () {
     /**
      * 展开交易策略
      */
-    $('#classNote_data').on('click', '.txt-block .toggle-op-btn', function(){
+    $('#classNodeContainer').on('click', '.txt-block .toggle-op-btn', function(){
         $(this).find('i').toggleClass('i-arrow-up i-arrow-down');
         $(this).closest('.txt-block').children('.txt-details').toggleClass('sildeup');
         $(this).closest('.txt-block').children('.txt-details').children('.details-item-list').toggleClass('sildeup');
@@ -60,7 +64,7 @@ ClassNote.setEvent = function () {
             scrollTop = $(this).scrollTop();//滚动高度
         if (scrollTop / (contentH - viewH) >= 0.95 && scrollTop > ClassNote.lastScrollTop) {
             ClassNote.lastScrollTop = scrollTop;
-            ClassNote.loadData(true);
+            ClassNote.loadData(true, false);
         } else {
             ClassNote.lastTimeStamp = 0;
         }
@@ -71,7 +75,7 @@ ClassNote.setEvent = function () {
  * 加载直播精华
  * @param [isMore] 加载更多
  */
-ClassNote.loadData = function (isMore) {
+ClassNote.loadData = function (isMore, isRoom) {
     var noteId = isMore ? $("#classNote_data>[dataid]:last") : $("#classNote_data>[dataid]:first");
     if (noteId.size() > 0) {
         noteId = noteId.attr("dataid") || "";
@@ -92,7 +96,12 @@ ClassNote.loadData = function (isMore) {
     }, function (dataList) {
         if (dataList && dataList.result == 0) {
             var dataArr = dataList.data || [];
-            ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
+            if(isRoom) {//房间内数据加载
+                ClassNote.appendRoomClassNote(dataArr, isMore ? isMore : false);
+            }else{
+                //TODO 加载直播精华页面数据
+                ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
+            }
         }
     });
 };
@@ -129,14 +138,14 @@ ClassNote.getAuthConfig = function (callback) {
 };
 
 /**
- * 追加直播精华
+ * 追加直播精华（房间页面）
  * @param dataArr
  * @param isPrepend
  */
-ClassNote.appendClassNote = function (dataArr, isMore) {
+ClassNote.appendRoomClassNote = function (dataArr, isMore) {
     var html = [];
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
-        html.push(ClassNote.getClassNoteHtml(dataArr[i]));
+        html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
     if (isMore) {
         $("#classNote_data").append(html.join(""));
@@ -146,10 +155,29 @@ ClassNote.appendClassNote = function (dataArr, isMore) {
 };
 
 /**
- * 获取直播精华HTML
+ * 追加直播精华，直播精华页面（当前页）
+ * @param dataArr
+ * @param isMore
+ */
+ClassNote.appendClassNote = function(dataArr, isMore){
+    var html = [];
+    for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
+        html.push(ClassNote.getClassNoteHtml(dataArr[i]));
+    }
+    for (var i = 0, lenI = !ClassNote.classNoteInfo ? 0 : ClassNote.classNoteInfo.length; i < lenI; i++) {
+        ClassNote.setOtherClassNoteHtml(ClassNote.classNoteInfo[i]);
+    }
+    if (isMore) {
+        $("#classNodeContainer").append(html.join(""));
+    } else {
+        $("#classNodeContainer").prepend(html.join(""));
+    }
+};
+/**
+ * 获取房间直播精华HTML
  * @param data
  */
-ClassNote.getClassNoteHtml = function (data) {
+ClassNote.getRoomClassNoteHtml = function (data) {
     if (!data) {
         return;
     }
@@ -202,6 +230,173 @@ ClassNote.getClassNoteHtml = function (data) {
         result = Room.formatHtml("classNote_article", data._id, timeStr, dataDetail.content);
     }
     return result + Room.formatHtml("classNote_split");
+};
+
+/**
+ * 获取直播精华(交易策略)HTML（当前页）
+ * @param data
+ */
+ClassNote.getClassNoteHtml = function(data){
+    if (!data) {
+        return;
+    }
+    var storeClassNote = Store.get('point_' + Data.userInfo.userId);
+    var dataDetail = data.detailList && data.detailList[0] || {};
+    var timeStr = Util.formatDate(data.createDate, "HH:mm:ss");
+    var upOrDown = { 'up': '看涨', 'down': '看跌' };
+    var publishTime = new Date(data.publishStartDate).getTime();
+    var html = [], classNoteHtml = [];
+    if($("#classNodeContainer  div[pt="+publishTime+"]").size()==0) {
+        //交易策略
+        if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag
+            == "trading_strategy") {
+            var publishTimeStr = Util.formatDate(publishTime,
+                    'yyyy.MM.dd HH:mm') +
+                "~" + Util.formatDate(data.publishEndDate, 'HH:mm');
+            var author = '',
+                avatar = '',
+                style = '',
+                tag = [],
+                tagHtml = [],
+                tUserId = '';
+            if (dataDetail.authorInfo) {
+                author = dataDetail.authorInfo.name || "";
+                avatar = dataDetail.authorInfo.avatar || "";
+                tUserId = dataDetail.authorInfo.userId || "";
+                tag = Util.isNotBlank(dataDetail.authorInfo.tag)
+                    ? dataDetail.authorInfo.tag.replace(/\s*，\s*/g, ',').split(
+                    ',') : [];
+                $.each(tag, function (key, val) {
+                    if (Util.isNotBlank(val)) {
+                        tagHtml.push(ClassNote.formatHtml("teacherTag", val));
+                    }
+                });
+            }
+            var isHideData = ClassNote.isHideData(data._id, dataDetail.tag,
+                storeClassNote);
+            var dataDataArr = Util.parseJSON(
+                dataDetail.remark || ""), dataDataTemp, dataHtml = [];
+            for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0;
+                i < lenI; i++) {
+                dataDataTemp = dataDataArr[i];
+                dataHtml.push(ClassNote.formatHtml("dataTable",
+                    dataDataTemp.name || "",
+                    upOrDown[dataDataTemp.upordown],
+                    isHideData ? '****<i class="txt-mban repeatx"></i>'
+                        : dataDataTemp.open || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : dataDataTemp.profit || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : dataDataTemp.loss || ""
+                ));
+                if (dataDataTemp.description) {
+                    dataHtml.push(ClassNote.formatHtml("dataTableRemark",
+                        isHideData ? '****<i class="txt-mban repeat3x"></i>'
+                            : dataDataTemp.description));
+                }
+            }
+            var teacherAvatarName = '<img src="' + avatar
+                + '" class="img-avatar"/><div class="a-top" userNo="' + tUserId
+                + '"><b>' + author + '</b><i class="i-dot3"></i></div>';
+            var viewDataCls = '', viewDataTxt = '查看数据';
+            if (!isHideData) {
+                viewDataCls = ' btn-data-grey';
+                viewDataTxt = '数据已显示';
+            }
+            var viewDataHtml = ClassNote.formatHtml('viewData', data._id, '',
+                viewDataCls, viewDataTxt);
+            html.push(ClassNote.formatHtml('classNodePanel',
+                publishTime,
+                teacherAvatarName,
+                tagHtml.join(''),
+                dataDetail.title,
+                publishTimeStr,
+                dataDetail.content || '',
+                dataHtml.join(''),
+                viewDataHtml,
+                data._id
+            ));
+        } else {
+            if (!ClassNote.classNoteInfo) {
+                ClassNote.classNoteInfo = [];
+            }
+            ClassNote.classNoteInfo.push(data);
+        }
+    }
+    return html.join('');
+};
+
+/**
+ * 获取直播精华（喊单/挂单）HTML(当前页面)
+ * @param data
+ */
+ClassNote.setOtherClassNoteHtml = function(data){
+    if(!data){
+        return;
+    }
+    var storeClassNote = Store.get('point_' + Data.userInfo.userId);
+    var dataDetail = data.detailList && data.detailList[0] || {};
+    var timeStr = Util.formatDate(data.createDate, "HH:mm:ss");
+    var upOrDown = { 'up': '看涨', 'down': '看跌' };
+    var html = [], classNoteHtml = [];
+    //喊单 挂单
+    var dataDetail = data.detailList && data.detailList[0] || {},
+        publishTime = new Date(data.publishStartDate).getTime();
+    //课程信息
+    var aid = data._id || data.id;
+    if($('#classNodeContainer div[pt='+publishTime+'] .classNote div[aid="'+aid+'"]').size()>0){
+        return;
+    }
+    var author = '';
+    if (dataDetail.authorInfo) {
+        author = dataDetail.authorInfo.name.substring(0, 1) || "";
+    }
+    var isHideData = ClassNote.isHideData(aid, dataDetail.tag, storeClassNote);
+    var dataDataArr = Util.parseJSON(dataDetail.remark || ""), dataDataTemp, dataHtml = [];
+    for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0; i < lenI; i++) {
+        dataDataTemp = dataDataArr[i];
+        dataHtml.push(ClassNote.formatHtml("dataTable",
+            dataDataTemp.name || "",
+            upOrDown[dataDataTemp.upordown],
+            isHideData ? '****<i class="txt-mban repeatx"></i>' : dataDataTemp.open || "",
+            isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.profit || "",
+            isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.loss || ""
+        ));
+        if (dataDataTemp.description) {
+            dataHtml.push(ClassNote.formatHtml("dataTableRemark",
+                isHideData ? '****<i class="txt-mban repeat3x"></i>' : dataDataTemp.description));
+        }
+    }
+    var viewDataCls = '', viewDataTxt = '查看数据';
+    if (!isHideData) {
+        viewDataCls = ' btn-data-grey';
+        viewDataTxt = '数据已显示';
+    }
+    var viewDataHtml = ClassNote.formatHtml('viewData', aid, 'prerogative_callTrade', viewDataCls, viewDataTxt);
+    if(Util.isNotBlank(dataDetail.tag) && Util.isNotBlank(dataDetail.remark) && (dataDetail.tag == 'shout_single' || dataDetail.tag == 'resting_order')){
+        var label = "喊单";
+        if (dataDetail.tag == 'resting_order') {
+            label = "挂单";
+        }
+        html.push(ClassNote.formatHtml('shoutSingle',
+            !isHideData ? ' data-visible' : '',
+            timeStr,
+            label,
+            author,
+            dataDetail.content || '',
+            dataHtml.join(''),
+            viewDataHtml,
+            aid
+        ));
+    }else{
+        html.push(ClassNote.formatHtml('descTxt',
+            aid,
+            timeStr,
+            dataDetail.content || ''
+        ));
+    }
+    html.push(ClassNote.formatHtml('blk7'));
+    $('#classNodeContainer div[pt='+publishTime+'] .classNote').append(html.join(''));
 };
 
 /**
@@ -449,7 +644,7 @@ ClassNote.formatViewDataHtml = function (region) {
             break;
     }
     return formatHtmlArr.join("");
-}
+};
 
 /**
  * 获取tag对应说明
@@ -475,4 +670,4 @@ ClassNote.getClassNoteTagName = function (type) {
             return '即时新闻';
             break;
     }
-}
+};
