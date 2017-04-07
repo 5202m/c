@@ -1121,7 +1121,7 @@ var studioChatMb = {
                     return;
                 }
                 var netConnectionUrl = null;
-                if (url.indexOf("sz6") != -1) {
+                if (url.indexOf("sz") != -1) {
                     netConnectionUrl = "rtmps://5748416443938.streamlock.net/live";
                 } else {
                     netConnectionUrl = "rtmps://57721dbe47de5.streamlock.net/live";
