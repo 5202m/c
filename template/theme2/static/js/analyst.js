@@ -63,7 +63,16 @@ Analyst.setAnalystInfo = function(){
             }
             Analyst.setTrain(trainList, trAndClNum);
             Subscribe.setSubscribeAttr($('#analystSubscribe'),Analyst.userNo);
-            Subscribe.setSubscribeTypeAttr($('#analystSubscribe').parent());
+            Subscribe.setSubscribeType(function (subscribeType) {
+                if(Analyst.userNo === subscribeType.userId){
+                    var type = $('#analystSubscribe').attr('type');
+                    var types = type==='' ? [] : type.split(',');
+                    types.push(subscribeType.code);
+                    $('#analystSubscribe').attr('type',types.join(','));
+                    $('#analystSubscribe').show();
+                    return false;
+                }
+            });
         });
     }
 };

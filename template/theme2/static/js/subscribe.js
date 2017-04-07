@@ -44,7 +44,14 @@ Subscribe.setAnalystList = function(){
                 });
             });
             $('#subscribeAnalyst').empty().html(analystHtml.join(''));
-            Subscribe.setSubscribeType();
+
+            Subscribe.setSubscribeType(function (analyst) {//回调处理
+                $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').show();
+                var type = $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type');
+                var types = type==='' ? [] : type.split(',');
+                types.push(analyst.code);
+                $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type',types.join(','));
+            });
             Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
         }
     });
@@ -52,51 +59,19 @@ Subscribe.setAnalystList = function(){
 /**
  * 订阅类型
  */
-Subscribe.setSubscribeType = function() {
+Subscribe.setSubscribeType = function(callback) {
     Util.postJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
         if (data != null) {
             $.each(data, function(i, row) {
                 if(row.code === 'live_reminder' || row.code === 'shout_single_strategy' || row.code === 'trading_strategy'){
                     var analysts = JSON.parse(row.analysts);
                     $.each(analysts,function (k,v) {
-                        $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').show();
-                        var type = $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').attr('type');
-                        var types = type==='' ? [] : type.split(',');
-                        types.push(row.code);
-                        $('#subscribeAnalyst div[userno='+v.userId+']').find('a.btn').attr('type',types.join(','));
+                        if(typeof callback === 'function'){
+                            v.code = row.code;
+                            callback(v);
+                        };
                     });
                 }
-            });
-        }
-    });
-};
-/**
- * 设置订阅类型属性
- */
-Subscribe.setSubscribeTypeAttr = function(obj) {
-    var nodes = $(obj);//需要设置订阅类型的节点
-    if(nodes.size() == 0)return;
-    Util.postJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
-        if (data != null) {
-            $.each(nodes,function (r,d) {
-                var analyst = d.childNodes[1].getAttribute('analystid');
-                $.each(data, function(i, row) {//订阅类型数据，当前只考虑三种
-                    if(row.code === 'live_reminder' || row.code === 'shout_single_strategy' || row.code === 'trading_strategy'){
-                        var analysts = JSON.parse(row.analysts);
-                        $.each(analysts,function (k,v) {//匹配订阅老师
-                            if(v.userId === analyst){
-                                if(d.childNodes[1].text.trim().indexOf('订阅') > -1 && d.childNodes[1].getAttribute('fs') === 'btn-blue'){
-                                    d.childNodes[1].removeAttribute('style')
-                                }
-                                var type = d.childNodes[1].getAttribute('type'),types = type==='' ? [] : type.split(',');
-                                types.push(row.code);
-                                d.childNodes[1].setAttribute('type',types.join(','));
-                                return false;
-                            }
-                        });
-                    }
-                });
-
             });
         }
     });
@@ -145,6 +120,7 @@ Subscribe.setSubscribeAttr = function(obj,analyst){
                     obj.attr('tsid', row._id);
                     obj.children('label').text('已订阅')
                 }
+                obj.attr('subscribed', true);
             });
         }
     });

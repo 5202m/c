@@ -112,8 +112,16 @@ Syllabus.setSyllabusList = function(day){
             return false;
         });
         $('#syllabusList').empty().html(courseDataHtml.join(''));
+        Subscribe.setSubscribeType(function (analyst) {//回调处理
+            var analystid = $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('analystid');
+            if(analystid){
+                var type = $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('type');
+                var types = type==='' ? [] : type.split(',');
+                types.push(analyst.code);
+                $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('type',types.join(','));
+            }
+        });
         Subscribe.setSubscribeData('#syllabusList .item-cell .btn-op');
-        Syllabus.setSubscribeTypeAttr('#syllabusList .item-cell .btn-op');
     });
 };
 
@@ -208,40 +216,4 @@ Syllabus.followHander = function(isOK){
         obj.html('<i class="i-selected"></i>已订阅');
     }
     Subscribe.setSubscribeAttr(obj,analyst);
-};
-/**
- * 设置课程表的订阅属性（此处由于个性化，不能共用代码）
- * @param obj
- */
-Syllabus.setSubscribeTypeAttr = function(obj) {
-    var nodes = $(obj);//需要设置订阅类型的节点
-    if(nodes.size() == 0)return;
-    Util.postJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
-        if (data != null) {
-            $.each(nodes,function (r,d) {
-                var analyst = d.childNodes[1].getAttribute('analystid');
-                var flag = false;//标识此老师是否在后台配置了可订阅
-                $.each(data, function(i, row) {//订阅类型数据，当前只考虑三种
-                    if(row.code === 'live_reminder' || row.code === 'shout_single_strategy' || row.code === 'trading_strategy'){
-                        var analysts = JSON.parse(row.analysts);
-                        $.each(analysts,function (k,v) {//匹配订阅老师
-                            if(v.userId === analyst){
-                                flag = true;
-                                if(d.childNodes[1].text.trim().indexOf('订阅') > -1 && d.childNodes[1].getAttribute('fs') === 'btn-blue'){
-                                    d.childNodes[1].removeAttribute('style')
-                                }
-                                var type = d.childNodes[1].getAttribute('type'),types = type==='' ? [] : type.split(',');
-                                types.push(row.code);
-                                d.childNodes[1].setAttribute('type',types.join(','));
-                                return false;
-                            }
-                        });
-                    }
-                });
-                if(!flag){//不可订阅则隐藏
-                    d.childNodes[1].setAttribute('style','display:none');
-                }
-            });
-        }
-    });
 };

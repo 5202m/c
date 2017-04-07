@@ -17,11 +17,35 @@ var Room = new Container({
     onShow : function(){
         Room.initPage();
         Room.loadRoomClassNote();
+        Room.handleNoviceRoom();
     },
     onHide : function(){
         Player.player.clear($("#roomVideo"));
     }
 });
+
+/**
+ * 新手专区房间临时处理
+ * 后续需要重新规划
+ */
+Room.handleNoviceRoom = function () {
+    var currentRoomId = Data.userInfo.groupId;
+    var rooms = Data.roomList || [{id:'studio_42',roomType:'simple'}];
+    var noviceRoom = false;
+    $.each(rooms,function (i,row) {
+       if(row.roomType === 'simple' && row.id === currentRoomId){
+           $("#room_chat").trigger('click');
+           noviceRoom = true;
+           $('#chat_close').hide();
+           return false;
+       }
+    });
+    if(!noviceRoom){
+        $('#chat_close').show();
+        $('#chat_close').trigger('click');
+    }
+}
+
 
 /**当前显示的房间编号*/
 Room.currGroupId = null;
@@ -317,7 +341,16 @@ Room.setLecturerTool = function (lecturerId) {
             $('#teacherWechat').empty().html(wechatHtml);
             $('#teacherDollar').empty().html(dollarHtml);
             Subscribe.setSubscribeAttr($('#roomSubscribe'),lecturerId);
-            Subscribe.setSubscribeTypeAttr($('#roomSubscribe').parent());
+            Subscribe.setSubscribeType(function (subscribeType) {
+                console.log(subscribeType);
+                if(lecturerId === subscribeType.userId){
+                    var type = $('#roomSubscribe').attr('type');
+                    var types = type==='' ? [] : type.split(',');
+                    types.push(subscribeType.code);
+                    $('#roomSubscribe').attr('type',types.join(','));
+                    return false;
+                }
+            });
         }
 
     });
