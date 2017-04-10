@@ -21,8 +21,8 @@ Subscribe.setAnalystList = function(){
     $.getJSON('/getAuthUsersByGroupId', {groupId : Data.userInfo.groupId}, function(result){
         if(result) {
             var analystHtml = [];
-            $.each(result, function(key, val){
-                Data.getAnalyst(val, function(row){
+            $.each(result, function(key, r){
+                Data.getAnalyst(r.userNo, function(row){
                     if(row) {
                         var tagHtml = [];
                         if (Util.isNotBlank(row.tag)) {
@@ -36,7 +36,7 @@ Subscribe.setAnalystList = function(){
                             tagHtml.join(''),
                             row.winRate ? row.winRate.replace(/%/, '') : 0,
                             row.earningsM ? row.earningsM.replace(/%/, '') : 0,
-                            0,
+                            r.subscribe,
                             row.introduction,
                             row.praiseNum,
                             row.userNo

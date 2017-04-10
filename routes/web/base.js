@@ -2234,9 +2234,13 @@ router.post('/getSubscribe', function(req, res) {
         res.json({ isOK: false, msg: '参数错误' });
     } else {
         params.userId = userInfo.mobilePhone;
-        chatSubscribeService.getSubscribeList(params, function(result) {
-            res.json(result);
-        });
+        if(common.isBlank(params.userId)){
+            res.json({isOK: false, msg: '参数错误'});
+        }else {
+            chatSubscribeService.getSubscribeList(params, function (result) {
+                res.json(result);
+            });
+        }
     }
 });
 
@@ -2811,13 +2815,29 @@ router.get('/getAnalystList', function(req, res) {
 });
 
 /**
- * 根据groupId获取授权分析师和点赞数
+ * 根据groupId获取授权分析师和订阅数
  */
 router.get('/getAuthUsersByGroupId', function(req, res) {
-    let groupId = req.query['groupId'];
+    let groupId = req.query['groupId'],result = [];
     if (common.isValid(groupId)) {
-        userService.getAuthUsersByGroupId(groupId, function(result) {
-            res.json(result);
+        userService.getAuthUsersByGroupId(groupId, function(data) {
+            let dataLen = data.length;
+            for (var i = 0; i < dataLen; i++) {
+                let userNo = data[i];
+                let key = "analyst_subscribe_" + userNo;
+                cacheClient.get(key, function (err, cacheData) {
+                    if (err || !cacheData) {
+                        let num = Math.floor(200 * common.randomN2M(0.8, 1));
+                        cacheClient.set(key, num);
+                        result.push({userNo: userNo, subscribe: num});
+                    } else {
+                        result.push({userNo: userNo, subscribe: cacheData});
+                    }
+                    if(dataLen == result.length){
+                        res.json(result);
+                    }
+                });
+            }
         });
     } else {
         res.json(null);
@@ -3142,7 +3162,7 @@ router.get('/getAnalystSubscribeNum', function(req, res){
     let userNo = req.query['userNo'];
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
-        if(err){
+        if(err || !result){
             let num = Math.floor(200*common.randomN2M(0.8, 1));
             cacheClient.set(key, num);
             res.json({num : num});
@@ -3159,7 +3179,7 @@ router.post('/setAnalystSubscribeNum', function(req, res){
     let userNo = req.query['userNo'];
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
-        if(err){
+        if(err || !result){
             let num = Math.floor(200*common.randomN2M(0.8, 1));
             num = num + 1;
             cacheClient.set(key, num);
