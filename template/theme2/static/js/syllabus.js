@@ -121,7 +121,10 @@ Syllabus.setSyllabusList = function(day){
                 $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('type',types.join(','));
             }
         });
-        Subscribe.setSubscribeData('#syllabusList .item-cell .btn-op');
+        if(Data.userInfo.isLogin){
+            Subscribe.setSubscribeData('#syllabusList .item-cell .btn-op');
+        }
+
     });
 };
 

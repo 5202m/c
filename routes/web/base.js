@@ -3176,7 +3176,20 @@ router.get('/getAnalystSubscribeNum', function(req, res){
  * 设置老师订阅数
  */
 router.post('/setAnalystSubscribeNum', function(req, res){
-    let userNo = req.query['userNo'];
+    let params = req.body['data'];
+    if (common.isBlank(params)) {
+        res.json({ isOK: false, msg: '参数错误' });
+        return;
+    }
+    if (typeof params == 'string') {
+        try {
+            params = JSON.parse(params);
+        } catch (e) {
+            res.json(null);
+            return;
+        }
+    }
+    let userNo = params.userNo;
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
         if(err || !result){
@@ -3185,7 +3198,7 @@ router.post('/setAnalystSubscribeNum', function(req, res){
             cacheClient.set(key, num);
             res.json({num : num});
         }else{
-            result = result + 1;
+            result = parseInt(result) + 1;
             cacheClient.set(key, result);
             res.json({num : result});
         }

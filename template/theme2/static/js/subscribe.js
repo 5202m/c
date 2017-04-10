@@ -7,9 +7,11 @@ var Subscribe = new Container({
     url : "/theme2/template/subscribe.html",
     subscribeOpTeacher : '',
     onLoad : function(){
+        Subscribe.setEvent();
+    },
+    onShow : function () {
         Data.getAnalyst('', function(){
             Subscribe.setAnalystList();
-            Subscribe.setEvent();
         });
     }
 });
@@ -53,7 +55,9 @@ Subscribe.setAnalystList = function(){
                 types.push(analyst.code);
                 $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type',types.join(','));
             });
-            Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
+            if(Data.userInfo.isLogin){
+                Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
+            }
         }
     });
 };
@@ -196,6 +200,11 @@ Subscribe.followHander = function(isOK,analyst){
         }
         Syllabus.subscribeTeachers = row;
         Syllabus.followHander(isOK);
+        if(obj.attr('subscribed') ==='true'){
+            Subscribe.setAnalystSubscribeNum(row,function (data) {
+                $('#subscribeAnalyst div[userno="'+row+'"] .item-infos ul li:eq(2) span').text(data.num || 0);
+            });
+        }
     });
     setTimeout(function () {
         Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
@@ -254,4 +263,17 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
             callback(data.isOK,analysts);
         }
     });
+};
+
+/**
+ * 设置老师订阅数
+ */
+Subscribe.setAnalystSubscribeNum = function (analyst,callback) {
+    if(Util.isNotBlank(analyst)){
+        Util.postJson('/setAnalystSubscribeNum',{data:JSON.stringify({userNo:analyst})},function(data) {
+            if(data){
+                callback(data);
+            }
+        });
+    }
 };
