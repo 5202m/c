@@ -5,17 +5,14 @@
 var ClassNote = new Container({
     panel: $("#page_classNote"),
     url: "/theme2/template/classNote.html",
-    lastScrollTop: 0, //上次滚动位置
-    lastTimeStamp: 0, //上次滚动时间戳
     strategyIsNotAuth : -1,//查看交易策略是否授权
     callTradeIsNotAuth : -1,//查看喊单/挂单是否授权
     classNoteInfo: null, //直播精华非交易策略数据
     onLoad: function () {
-        ClassNote.lastScrollTop = 0;
-        ClassNote.lastTimeStamp = 0;
         ClassNote.setEvent();
     },
     onShow: function () {
+        $(window).scrollTop(0);
         ClassNote.loadData();
     }
 
@@ -53,7 +50,7 @@ ClassNote.setEvent = function () {
     /**
      * 滚动到末尾加载数据
      */
-    $('#page_classNote').scroll(function (e) {
+/*    $('#page_classNote').scroll(function (e) {
         if ((e.timeStamp - ClassNote.lastTimeStamp) < 150) {
             return;
         } else {
@@ -68,25 +65,23 @@ ClassNote.setEvent = function () {
         } else {
             ClassNote.lastTimeStamp = 0;
         }
-    });
+    });*/
 };
 
 /**
  * 加载直播精华
  * @param [isMore] 加载更多
+ * @param [isRoom] 是否是房间
+ * @param [noteId] 最后一条直播精华ID
  */
-ClassNote.loadData = function (isMore, isRoom) {
-    var noteId = isMore ? $("#classNodeContainer>[aid]:last") : $("#classNodeContainer>[aid]:first");
-    if (noteId.size() > 0) {
-        noteId = noteId.attr("aid") || "";
-    } else {
-        noteId = "";
-    }
+ClassNote.loadData = function (isMore, isRoom,classNoteId) {
+    var noteId = classNoteId;
+    var pagesize = isRoom ? 5 : 30;
     Index.getArticleList({
         code: "class_note",
         platform: Data.userInfo.groupId,
         hasContent: 1,
-        pageSize: 30,
+        pageSize: pagesize,
         pageKey: noteId || "",
         pageLess: isMore ? 1 : 0,
         isAll: 1,
@@ -96,10 +91,10 @@ ClassNote.loadData = function (isMore, isRoom) {
     }, function (dataList) {
         if (dataList && dataList.result == 0) {
             var dataArr = dataList.data || [];
-            if(isRoom) {//房间内数据加载
+            //根据当前所在页面将数据追加到相应div（房间内数据加载/加载直播精华页面数据）
+            if(isRoom) {
                 ClassNote.appendRoomClassNote(dataArr, isMore ? isMore : false);
             }else{
-                //TODO 加载直播精华页面数据
                 ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
             }
         }
@@ -148,9 +143,9 @@ ClassNote.appendRoomClassNote = function (dataArr, isMore) {
         html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
     if (isMore) {
-        $("#classNote_data").append(html.join(""));
+        $("#classNote_panel").append(html.join(""));
     } else {
-        $("#classNote_data").prepend(html.join(""));
+        $("#classNote_panel").prepend(html.join(""));
     }
 };
 

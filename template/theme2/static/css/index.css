@@ -156,13 +156,8 @@ a:hover {
   margin: 0 auto;
   max-width: 1024px;
 }
-html,
-body {
-  height: 100%;
-}
 article.content_w {
-  height: 100%;
-  overflow-y: auto;
+  /*height: 100%;overflow-y: auto;*/
   background: #f2f2f2;
 }
 article.content_w.bgfff {

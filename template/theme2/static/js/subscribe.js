@@ -246,6 +246,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
                 Pop.msg(tips.join('、')+'订阅成功！');
             }
         }else{
+            if(data.msg === '请先绑定邮箱') data.msg = '不好意思，由于您未绑定邮箱，请先到电脑端绑定邮箱';
             Pop.msg(data.msg);
         }
         obj.removeClass('clicked');
