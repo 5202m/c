@@ -3159,7 +3159,20 @@ router.post('/rob', function(req, res) {
  * 获取老师订阅数
  */
 router.get('/getAnalystSubscribeNum', function(req, res){
-    let userNo = req.query['userNo'];
+    let params = req.query['data'];
+    if (common.isBlank(params)) {
+        res.json({ isOK: false, msg: '参数错误' });
+        return;
+    }
+    if (typeof params == 'string') {
+        try {
+            params = JSON.parse(params);
+        } catch (e) {
+            res.json(null);
+            return;
+        }
+    }
+    let userNo = params.userNo;
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
         if(err || !result){

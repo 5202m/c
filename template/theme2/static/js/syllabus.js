@@ -86,7 +86,7 @@ Syllabus.setSyllabusList = function(day){
                                 statusCls = clsObj.orange;
                                 btn = '订阅';
                                 btnCls = clsObj.blue;
-                                hideBtn = '';
+                                hideBtn = 'style="display:none;" ';
                             }
                             courseDataHtml.push(Syllabus.formatHtml('syllabusData',
                                 courseObj.title,
@@ -115,6 +115,9 @@ Syllabus.setSyllabusList = function(day){
         Subscribe.setSubscribeType(function (analyst) {//回调处理
             var analystid = $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('analystid');
             if(analystid){
+                if($('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('fs') === 'btn-blue'){
+                    $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').show();
+                }
                 var type = $('#syllabusList .item-cell .btn-op a[analystid="'+analyst.userId+'"]').attr('type');
                 var types = type==='' ? [] : type.split(',');
                 types.push(analyst.code);

@@ -11,9 +11,9 @@ var Analyst = new Container({
     loadAll : false,
     onLoad : function(){
         Analyst.setEvent();
-        Analyst.getSubscribeNum();
     },
     onShow : function(){
+        Analyst.getSubscribeNum();
         Analyst.setAnalystInfo();
         Analyst.setVideoList();
     }

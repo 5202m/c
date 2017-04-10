@@ -12,7 +12,7 @@ var ClassNote = new Container({
         ClassNote.setEvent();
     },
     onShow: function () {
-        $(window).scrollTop(0);
+        //$(window).scrollTop(0);
         ClassNote.loadData();
     }
 
