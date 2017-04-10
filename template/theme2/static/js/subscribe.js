@@ -88,20 +88,24 @@ Subscribe.setSubscribeType = function(callback) {
 Subscribe.setSubscribeData = function(obj){
     Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
         if(data!=null){
-            $.each(data,function(i, row){
-                var analystsArr = row.analyst.split(',');
-                $.each(analystsArr, function(k, v){
-                    if($(obj+' a[analystId="'+v+'"]').size()>0) {
-                        $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-grey').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
-                        if(row.type == 'live_reminder'){
-                            $(obj+' a[analystId="' + v + '"]').attr('lrid', row._id)
-                        }else if(row.type == 'shout_single_strategy'){
-                            $(obj+' a[analystId="' + v + '"]').attr('ssid', row._id)
-                        }else if(row.type == 'trading_strategy'){
-                            $(obj+' a[analystId="' + v + '"]').attr('tsid', row._id)
+            $.each(data,function(i, row) {
+                if (Util.isNotBlank(row.analyst)) {
+                    var analystsArr = row.analyst.split(',');
+                    $.each(analystsArr, function (k, v) {
+                        if ($(obj + ' a[analystId="' + v + '"]').size() > 0) {
+                            $(obj + ' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅')
+                            .removeClass('btn-grey').removeClass('btn-blue')
+                            .addClass('btn-green').attr('subscribed', true);
+                            if (row.type == 'live_reminder') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('lrid', row._id)
+                            } else if (row.type == 'shout_single_strategy') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('ssid', row._id)
+                            } else if (row.type == 'trading_strategy') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('tsid', row._id)
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
         }
     });
