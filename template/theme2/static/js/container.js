@@ -116,6 +116,7 @@ Container.prototype.show = function(){
     this.status = 3;
     this.panel.show();
     $(window).scrollTop(0);//统一处理滚动条到顶部
+    Util.setPageMinHeight();//统一设置页面高度
     this.onShow();
 };
 

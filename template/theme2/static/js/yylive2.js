@@ -1,15 +1,8 @@
-$(function(){
-	var _mtbobj = $('body > .content_w > section');
-	var _wheight = $(window).height();
-	var _objheight = _mtbobj.outerHeight(true)-_mtbobj.height();
-	$('body > .content_w').css("min-height",_wheight-_objheight+'px'); //高度控制
-});
-
 //滚动监听
 $(window).scroll(function() {
 	var _top = $(this).scrollTop();
 	var _fixedH = $('article.content_w').offset().top;
-	
+
 	var _obj = $('article .video-infos');
 	_obj.each(function(){
 		var _objfix = $(this).find('.infos-block');
@@ -17,8 +10,9 @@ $(window).scroll(function() {
 		if(_top>_difh) _objfix.addClass('fixed-bar')
 		else _objfix.removeClass('fixed-bar')
 	});
-	
+
 });
+
 /**
  * 滚动到末尾加载数据
  */

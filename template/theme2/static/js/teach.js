@@ -118,8 +118,7 @@ Teach.loadVideoData = function(isMore){
 Teach.appendVideos = function(dataArr){
     var html = [];
     $.each(dataArr,function (key, row) {
-        var num = Util.randomIndex(16) + 11;
-        var picUrl = '/theme2/img/thumb/'.concat(num).concat('.jpg');
+        var picUrl = '/theme2/img/thumb/'.concat(Teach.calculateNum(key)).concat('.jpg');
         html.push(Teach.formatHtml('primaryVideo',
             row.detailList[0].title,
             row.detailList[0].remark,
@@ -134,4 +133,24 @@ Teach.appendVideos = function(dataArr){
     $(_select).remove();
     _select = '#' + Teach.currentRank + ' ul';
     $(_select).append(html.join());
+};
+
+/**
+ * 此处由于设计师建议视频插图去他提供的26张图片，故此处做点处理
+ * @param index
+ * @returns {number}
+ */
+Teach.calculateNum = function (index) {
+    var num = 0;
+    if(Teach.currentRank === 'primary'){
+        num = 10 + parseInt(index) + 1;
+    }else if(Teach.currentRank === 'middle'){
+        num = 14 + parseInt(index) + 1;
+    }else{
+        num = 16 + parseInt(index) + 1;
+    }
+    if(num > 26){
+        num = num - 10;
+    }
+    return num ;
 };

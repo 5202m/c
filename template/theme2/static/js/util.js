@@ -649,5 +649,18 @@ var Util ={
         }
         oPop.document.execCommand("SaveAs");
         oPop.close();
+    },
+
+    /**
+     * 设置页面的min-height
+     */
+    setPageMinHeight : function () {
+        var _mtbobj;
+        $('body > .content_w').each(function(){
+            if($(this).is(":visible")) _mtbobj = $(this).find('section');
+        });
+        var _wheight = $(window).height();
+        var _objheight = _mtbobj.outerHeight(true)-_mtbobj.height();
+        $('body > .content_w').css("min-height",_wheight-_objheight+'px'); //高度控制
     }
 };
