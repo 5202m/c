@@ -118,13 +118,14 @@ Teach.loadVideoData = function(isMore){
 Teach.appendVideos = function(dataArr){
     var html = [];
     $.each(dataArr,function (key, row) {
+        var num = Util.randomIndex(16) + 11;
+        var picUrl = '/theme2/img/thumb/'.concat(num).concat('.jpg');
         html.push(Teach.formatHtml('primaryVideo',
             row.detailList[0].title,
             row.detailList[0].remark,
             row._id,
             row.mediaUrl
-        ).replace('/theme2/img/pic-11.jpg',row.mediaImgUrl));
-
+        ).replace('/theme2/img/pic-11.jpg',picUrl));
     });
     //由于高级教程异于初。中，此处特殊处理
     var _select = Teach.currentRank === 'advanced' ?

@@ -119,26 +119,14 @@ ShowTradeAdd.setEvent = function(){
         Container.back();
     });
     /**
-     * 选择图片
+     * 上传图片
      */
-    $("#showTradeAddForm .sfile-input").click(function (e) {
-        if (!FileReader) {
-            alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
-            return false;
-        }
+    $('#showTradeAddForm .sfile-input').bind('change', function(e){
         if (!Data.userInfo.isLogin) {
             e.preventDefault();
             Login.load();
             return false;
         }
-        if (Data.userInfo.isSetName === false) {
-            return false;
-        }
-    });
-    /**
-     * 上传图片
-     */
-    $('#showTradeAddForm .sfile-input').bind('change', function(){
         var _this = this;
         var img = _this.files[0];
         // 判断是否图片

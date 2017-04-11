@@ -51,7 +51,7 @@ Subscribe.setAnalystList = function(){
             Subscribe.setSubscribeType(function (analyst) {//回调处理
                 $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').show();
                 var type = $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type');
-                var types = type==='' ? [] : type.split(',');
+                var types = type && type.length > 0 ?  type.split(',') : [] ;
                 types.push(analyst.code);
                 $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type',types.join(','));
             });
@@ -259,7 +259,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
                 Pop.msg(tips.join('、')+'订阅成功！');
             }
         }else{
-            if(data.msg === '请先绑定邮箱') data.msg = '不好意思，由于您未绑定邮箱，请先到电脑端绑定邮箱';
+            if(data.msg === '请先绑定邮箱') data.msg = '请到电脑端绑定邮箱';
             Pop.msg(data.msg);
         }
         obj.removeClass('clicked');

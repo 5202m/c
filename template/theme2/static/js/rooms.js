@@ -78,7 +78,7 @@ Rooms.setStudioRoomList = function(){
             } else {
                 var loc_index = Util.randomIndex(3), uurl = '';
                 while($.inArray(loc_index,alreadyArray) > -1){
-                    loc_index = Util.randomIndex(3)
+                    loc_index = Util.randomIndex(3);
                 }
                 alreadyArray.push(loc_index);
                 uurl = Util.format('/theme2/img/block-bg{0}.jpg',loc_index + 1);
