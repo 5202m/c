@@ -7,11 +7,13 @@ var Analyst = new Container({
     url : "/theme2/template/analyst.html",
     userNo : null,
     tradeList : [],
+    subscribeNum : 0,
     loadAll : false,
     onLoad : function(){
         Analyst.setEvent();
     },
     onShow : function(){
+        Analyst.getSubscribeNum();
         Analyst.setAnalystInfo();
         Analyst.setVideoList();
     }
@@ -42,7 +44,7 @@ Analyst.setAnalystInfo = function(){
                     tagHtml.join(''),
                     userInfo.winRate ? userInfo.winRate.replace(/%/, '') : 0,
                     userInfo.earningsM ? userInfo.earningsM.replace(/%/, '') : 0,
-                    0
+                    Analyst.subscribeNum
                 );
                 analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
@@ -342,4 +344,20 @@ Analyst.followHander = function(isOK){
         $("#roomSubscribe").children('label').html('已订阅');
     }
     Subscribe.setSubscribeAttr(obj,Analyst.userNo);
+    Subscribe.setAnalystSubscribeNum(Analyst.userNo,function (data) {
+        $('#analystInfo .item-main .item-infos ul li:eq(2) span').text(data.num || 0);
+    });
+};
+
+/**
+ * 查询老师订阅数
+ */
+Analyst.getSubscribeNum = function () {
+    if(Util.isNotBlank(Analyst.userNo)){
+        $.getJSON('/getAnalystSubscribeNum',{data:JSON.stringify({userNo:Analyst.userNo})},function(data) {
+            if(data){
+                Analyst.subscribeNum = data.num;
+            }
+        });
+    }
 };

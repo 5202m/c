@@ -115,6 +115,7 @@ Container.prototype.show = function(){
     this.flagHistory = true;
     this.status = 3;
     this.panel.show();
+    $(window).scrollTop(0);//统一处理滚动条到顶部
     this.onShow();
 };
 

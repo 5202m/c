@@ -83,15 +83,6 @@
     </article>
     <% include pop.html %>
         <script type="text/javascript">
-            /**
-             * 控制滚动条
-             */
-            $(function(){
-                var _mtbobj = $('body > .content_w > section');
-                var _wheight = $(window).height();
-                var _objheight = _mtbobj.outerHeight(true)-_mtbobj.height();
-                $('body > .content_w').css("min-height",_wheight-_objheight+'px'); //高度控制
-            });
             function pageFunc() {
                 //自动登录中...
                 LoginAuto.sessionUser = Util.parseJSON('<%- userInfo %>');
@@ -151,6 +142,7 @@
             <script type="text/javascript" src="/theme2/js/noviceGuide.js"></script>
             <script type="text/javascript" src="/theme2/js/privateChat.js"></script>
             <script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
+            <script type="text/javascript" src="/theme2/js/yylive2.js"></script>
             <script type="text/javascript">
                 $(pageFunc);
             </script>

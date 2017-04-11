@@ -7,9 +7,11 @@ var Subscribe = new Container({
     url : "/theme2/template/subscribe.html",
     subscribeOpTeacher : '',
     onLoad : function(){
+        Subscribe.setEvent();
+    },
+    onShow : function () {
         Data.getAnalyst('', function(){
             Subscribe.setAnalystList();
-            Subscribe.setEvent();
         });
     }
 });
@@ -21,8 +23,8 @@ Subscribe.setAnalystList = function(){
     $.getJSON('/getAuthUsersByGroupId', {groupId : Data.userInfo.groupId}, function(result){
         if(result) {
             var analystHtml = [];
-            $.each(result, function(key, val){
-                Data.getAnalyst(val, function(row){
+            $.each(result, function(key, r){
+                Data.getAnalyst(r.userNo, function(row){
                     if(row) {
                         var tagHtml = [];
                         if (Util.isNotBlank(row.tag)) {
@@ -36,7 +38,7 @@ Subscribe.setAnalystList = function(){
                             tagHtml.join(''),
                             row.winRate ? row.winRate.replace(/%/, '') : 0,
                             row.earningsM ? row.earningsM.replace(/%/, '') : 0,
-                            0,
+                            r.subscribe,
                             row.introduction,
                             row.praiseNum,
                             row.userNo
@@ -53,7 +55,9 @@ Subscribe.setAnalystList = function(){
                 types.push(analyst.code);
                 $('#subscribeAnalyst div[userno='+analyst.userId+']').find('a.btn').attr('type',types.join(','));
             });
-            Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
+            if(Data.userInfo.isLogin){
+                Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
+            }
         }
     });
 };
@@ -84,20 +88,24 @@ Subscribe.setSubscribeType = function(callback) {
 Subscribe.setSubscribeData = function(obj){
     Util.postJson('/getSubscribe',{params:JSON.stringify({groupType:Data.userInfo.groupType})},function(data){
         if(data!=null){
-            $.each(data,function(i, row){
-                var analystsArr = row.analyst.split(',');
-                $.each(analystsArr, function(k, v){
-                    if($(obj+' a[analystId="'+v+'"]').size()>0) {
-                        $(obj+' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅').removeClass('btn-grey').removeClass('btn-blue').addClass('btn-green').attr('subscribed', true);
-                        if(row.type == 'live_reminder'){
-                            $(obj+' a[analystId="' + v + '"]').attr('lrid', row._id)
-                        }else if(row.type == 'shout_single_strategy'){
-                            $(obj+' a[analystId="' + v + '"]').attr('ssid', row._id)
-                        }else if(row.type == 'trading_strategy'){
-                            $(obj+' a[analystId="' + v + '"]').attr('tsid', row._id)
+            $.each(data,function(i, row) {
+                if (Util.isNotBlank(row.analyst)) {
+                    var analystsArr = row.analyst.split(',');
+                    $.each(analystsArr, function (k, v) {
+                        if ($(obj + ' a[analystId="' + v + '"]').size() > 0) {
+                            $(obj + ' a[analystId="' + v + '"]').html('<i class="i-selected"></i>已订阅')
+                            .removeClass('btn-grey').removeClass('btn-blue')
+                            .addClass('btn-green').attr('subscribed', true);
+                            if (row.type == 'live_reminder') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('lrid', row._id)
+                            } else if (row.type == 'shout_single_strategy') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('ssid', row._id)
+                            } else if (row.type == 'trading_strategy') {
+                                $(obj + ' a[analystId="' + v + '"]').attr('tsid', row._id)
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
         }
     });
@@ -196,6 +204,11 @@ Subscribe.followHander = function(isOK,analyst){
         }
         Syllabus.subscribeTeachers = row;
         Syllabus.followHander(isOK);
+        if(obj.attr('subscribed') ==='true'){
+            Subscribe.setAnalystSubscribeNum(row,function (data) {
+                $('#subscribeAnalyst div[userno="'+row+'"] .item-infos ul li:eq(2) span').text(data.num || 0);
+            });
+        }
     });
     setTimeout(function () {
         Subscribe.setSubscribeData('#subscribeAnalyst .item-con .item-main .social-op');
@@ -246,6 +259,7 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
                 Pop.msg(tips.join('、')+'订阅成功！');
             }
         }else{
+            if(data.msg === '请先绑定邮箱') data.msg = '不好意思，由于您未绑定邮箱，请先到电脑端绑定邮箱';
             Pop.msg(data.msg);
         }
         obj.removeClass('clicked');
@@ -253,4 +267,17 @@ Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
             callback(data.isOK,analysts);
         }
     });
+};
+
+/**
+ * 设置老师订阅数
+ */
+Subscribe.setAnalystSubscribeNum = function (analyst,callback) {
+    if(Util.isNotBlank(analyst)){
+        Util.postJson('/setAnalystSubscribeNum',{data:JSON.stringify({userNo:analyst})},function(data) {
+            if(data){
+                callback(data);
+            }
+        });
+    }
 };
