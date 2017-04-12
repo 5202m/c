@@ -13,7 +13,6 @@ var Room = new Container({
     },
     onShow : function(){
         Room.initPage();
-        $(window).scrollTop(0);
         Room.loadRoomClassNote();
         Room.handleNoviceRoom();
     },
@@ -42,7 +41,7 @@ Room.handleNoviceRoom = function () {
         $('#chat_close').show();
         $('#chat_close').trigger('click');
     }
-}
+};
 
 
 /**当前显示的房间编号*/
@@ -54,8 +53,7 @@ Room.currGroupId = null;
 Room.initPage = function(){
     Data.getRoom(function(room){
         var isChangeRoom = room.id != Room.currGroupId;
-        Chat.WhTalk.enable = room.allowWhisper;
-        Chat.WhTalk.whisperRoles = room.whisperRoles;
+        Chat.WhTalk.enable = room.allowWhisper,Chat.WhTalk.whisperRoles = room.whisperRoles;
         if(isChangeRoom){ //房间已经切换，
             Room.currGroupId = room.id;
             $("#room_roomName").html(room.name);
@@ -75,7 +73,7 @@ Room.initPage = function(){
 Room.watchRemind = function (room) {
     //未登录用户进入非新手房间：曾经已看3分钟，直接弹出。否则3分钟之后弹出提示框。
     if (!Data.userInfo.isLogin && room.rootType != "simple") {
-        var lgt = room.loginBoxTime,lgtTips = room.loginBoxTip || "您已经观看了1分钟，赶紧登录再继续观看吧"; //后台控制登录弹框时间以及提示语
+        var lgt = room.loginBoxTime,lgtTips = room.loginBoxTip || "您已经观看了".concat(lgt).concat("分钟，赶紧登录再继续观看吧"); //后台控制登录弹框时间以及提示语
         if (/\d+(\.\d+)?/.test(lgt)) {
             lgt = parseFloat(lgt);
             if (Store.store("simpleTip")) {
@@ -309,7 +307,10 @@ Room.showLecturer = function(lecturerId){
         return;
     }
     Data.getAnalyst(lecturerId, function(lecturer){
-        Room.setLecturerTool(lecturerId);
+        //此处为隐藏数据延时加载
+        setTimeout(function () {
+            Room.setLecturerTool(lecturerId);
+        },500);
         if(lecturer){
 /*            //设置私聊老师数据    （目前屏蔽私聊老师功能）
             var obj = {
@@ -340,6 +341,10 @@ Room.showLecturer = function(lecturerId){
     });
 };
 
+/**
+ * 显示讲师工具栏
+ * @param lecturerId
+ */
 Room.setLecturerTool = function (lecturerId) {
     if(!lecturerId) return;
     Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:lecturerId})},function(data) {

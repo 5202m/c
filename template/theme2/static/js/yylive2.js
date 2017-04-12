@@ -30,10 +30,12 @@ $(window).scroll(function () {
 					dom = $("#classNote_panel>[dataid]:last");
 					noteId = dom.size() > 0 ? dom.attr("dataid") || "" : "";
 					ClassNote.loadData(true, true,noteId);
+					return false;
 				}else if(_id === 'page_classNote'){
 					dom = $("#classNodeContainer>[aid]:last");
 					noteId = dom.size() > 0 ? dom.attr("aid") || "" : "";
 					ClassNote.loadData(true, false,noteId);
+					return false;
 				}
 			}
 		});

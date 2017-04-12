@@ -113,7 +113,7 @@ ShowTradeAdd.setEvent = function(){
      */
     $('#to_userShowTrade').bind('click', function () {
         UserShowTrade.status = 0;
-        Container.back();
+        UserShowTrade.load();
     });
     /**
      * 上传图片

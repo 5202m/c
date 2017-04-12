@@ -75,7 +75,7 @@ ClassNote.setEvent = function () {
  */
 ClassNote.loadData = function (isMore, isRoom,classNoteId) {
     var noteId = classNoteId;
-    var pagesize = isRoom ? 5 : 30;
+    var pagesize = isRoom ? 10 : 30;
     Index.getArticleList({
         code: "class_note",
         platform: Data.userInfo.groupId,

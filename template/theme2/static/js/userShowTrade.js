@@ -77,16 +77,17 @@ UserShowTrade.setUserShowTradeList = function(){
             showTradeDate,
             showTradeTime,
             row.title,
-            //row.tradeImg,
             row.remark,
             row.praise||0,
-            row._id
-        ).replace('/theme2/img/pic-1.png',row.tradeImg));
+            row._id,
+            row.tradeImg
+        ));
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');
         }
     }
     $('#userShowTradeList').append(tradeHtml.join(''));
+    $('#userShowTradeList img.lazy').lazyload();
     if(i >= length - 1){
         UserShowTrade.tradeLoadAll = true;
     }
