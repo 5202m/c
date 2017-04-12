@@ -281,7 +281,7 @@ var Chat = {
         $(".file-img").click(function (e) {
             Data.getRoom(function(room) {
                 if (!FileReader) {
-                    alert("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
+                    Pop.msg("发送图片功能目前只支持Chrome、Firefox、IE10或以上版本的浏览器！");
                     return false;
                 }
                 if (!Chat.WhTalk.tabCheck && !room.allowVisitor && Data.userInfo.clientGroup == 'visitor') {
@@ -307,12 +307,12 @@ var Chat = {
             }
             // 判断图片格式
             if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
-                alert('目前暂支持jpg,gif,png格式的图片！');
+                Pop.msg('目前暂支持jpg,gif,png格式的图片！');
                 return false;
             }
             var fileSize = img.size;
             if (fileSize >= 1024 * 1024 * 3) {
-                alert('发送的图片大小不要超过3MB.');
+                Pop.msg('发送的图片大小不要超过3MB.');
                 return false;
             }
             //加载文件转成URL所需的文件流
@@ -1538,7 +1538,7 @@ var Chat = {
         sendObj.content.value=base64Data;
         this.zipImg(sendObj,100,60,function(result,value){//压缩缩略图
             if(result.error){
-                alert(result.error);
+                Pop.msg(result.error);
                 $('#'+uiId).remove();
                 return false;
             }
