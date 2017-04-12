@@ -149,7 +149,7 @@ router.get('/', function(req, res) {
                             common.getTempPlatformKey(targetGType),
                             function(clientGroup, accountNo) {
                                 var userInfo = {
-                                    mobilePhone: accountNo.replace("86-", ""),
+                                    mobilePhone: accountNo,
                                     ip: params.remoteIp,
                                     groupType: 'studio',
                                     accountNo: account,
