@@ -88,6 +88,9 @@ router.get('/', function(req, res) {
     common.setCrossDomain(req, res);
     var options = null;
     var isKeepOptions = req.query["ko"] == 1;
+    //TODO 以留后续用途。
+    // var toTrainRoom = req.query["toTrainRoom"] || null;
+    // req.session.studioUserInfo.toGroup = toTrainRoom || req.session.studioUserInfo.toGroup;
     if (isKeepOptions) {
         options = req.session.studioOptions || {};
     } else {
@@ -2234,10 +2237,10 @@ router.post('/getSubscribe', function(req, res) {
         res.json({ isOK: false, msg: '参数错误' });
     } else {
         params.userId = userInfo.mobilePhone;
-        if(common.isBlank(params.userId)){
-            res.json({isOK: false, msg: '参数错误'});
-        }else {
-            chatSubscribeService.getSubscribeList(params, function (result) {
+        if (common.isBlank(params.userId)) {
+            res.json({ isOK: false, msg: '参数错误' });
+        } else {
+            chatSubscribeService.getSubscribeList(params, function(result) {
                 res.json(result);
             });
         }
@@ -2666,8 +2669,8 @@ router.post('/getRoomList', function(req, res) {
                     var syResult = data.syllabusResult;
                     viewDataObj.syllabusData = JSON.stringify({
                         courseType: syResult.courseType,
-                        studioLink: (common.isBlank(syResult.studioLink)
-                            ? "" :
+                        studioLink: (common.isBlank(syResult.studioLink) ?
+                            "" :
                             JSON.parse(syResult.studioLink)),
                         courses: (common.isBlank(syResult.courses) ? "" :
                             syllabusService.removeContext(
@@ -2677,7 +2680,7 @@ router.post('/getRoomList', function(req, res) {
             } else {
                 viewDataObj.lgBoxTipInfo = "";
                 viewDataObj.onlineNumValSet = '';
-                data.studioList.forEach(function (row) {
+                data.studioList.forEach(function(row) {
                     rowTmp = {};
                     rowTmp.id = row._id;
                     rowTmp.name = row.name;
@@ -2696,16 +2699,16 @@ router.post('/getRoomList', function(req, res) {
                     rowTmp.roomType = row.roomType;
                     rowTmp.status = row.status;
                     rowTmp.trainAuth = -1;
-                    rowTmp.openDate = common.isValid(row.openDate)
-                        ? JSON.parse(
-                        row.openDate) : {};
+                    rowTmp.openDate = common.isValid(row.openDate) ?
+                        JSON.parse(
+                            row.openDate) : {};
                     //rowTmp.traninClient = row.traninClient;
                     if (rowTmp.status == 2) {
                         if (row.traninClient) {
                             var length = row.traninClient.length;
                             for (var i = 0; i < length; i++) {
-                                if (row.traninClient[i].clientId
-                                    == chatUser.userId) {
+                                if (row.traninClient[i].clientId ==
+                                    chatUser.userId) {
                                     rowTmp.trainAuth = row.traninClient[i].isAuth;
                                     break;
                                 }
@@ -2725,14 +2728,14 @@ router.post('/getRoomList', function(req, res) {
                                 rowTmp.whisperRoles = null;
                             }
                         } else if (ruleRow.type == 'visitor_filter') {
-                            if (rowTmp.isCurr && rowTmp.allowVisitor
-                                && isPass) {
+                            if (rowTmp.isCurr && rowTmp.allowVisitor &&
+                                isPass) {
                                 viewDataObj.visitorSpeak = true;
                             }
                         } else if (ruleRow.type == 'login_time_set') {
                             if (rowTmp.isCurr) {
                                 var periodDate = common.isBlank(
-                                    ruleRow.periodDate) ? "" :
+                                        ruleRow.periodDate) ? "" :
                                     JSON.parse(ruleRow.periodDate);
                                 viewDataObj.lgBoxTipInfo = JSON.stringify({
                                     type: ruleRow.type,
@@ -2745,12 +2748,12 @@ router.post('/getRoomList', function(req, res) {
                                 rowTmp.loginBoxTime = ruleRow.beforeRuleVal;
                                 rowTmp.loginBoxTip = ruleRow.afterRuleTips;
                             }
-                        } else if (ruleRow.type == 'speak_num_set'
-                            && isPass) {
+                        } else if (ruleRow.type == 'speak_num_set' &&
+                            isPass) {
                             rowTmp.speakNum = ruleRow.beforeRuleVal;
                             rowTmp.speakNumTip = ruleRow.afterRuleTips;
-                        } else if (ruleRow.type == 'online_mem_set'
-                            && isPass) {
+                        } else if (ruleRow.type == 'online_mem_set' &&
+                            isPass) {
                             rowTmp.onlineNumValSet = ruleRow.beforeRuleVal;
                         }
                     }
@@ -2765,10 +2768,10 @@ router.post('/getRoomList', function(req, res) {
                             viewDataObj.syllabusData = JSON.stringify({
                                 courseType: syResult.courseType,
                                 studioLink: (common.isBlank(
-                                    syResult.studioLink) ? "" :
+                                        syResult.studioLink) ? "" :
                                     JSON.parse(syResult.studioLink)),
-                                courses: (common.isBlank(syResult.courses)
-                                    ? "" :
+                                courses: (common.isBlank(syResult.courses) ?
+                                    "" :
                                     syllabusService.removeContext(
                                         JSON.parse(syResult.courses)))
                             });
@@ -2818,22 +2821,23 @@ router.get('/getAnalystList', function(req, res) {
  * 根据groupId获取授权分析师和订阅数
  */
 router.get('/getAuthUsersByGroupId', function(req, res) {
-    let groupId = req.query['groupId'],result = [];
+    let groupId = req.query['groupId'],
+        result = [];
     if (common.isValid(groupId)) {
         userService.getAuthUsersByGroupId(groupId, function(data) {
             let dataLen = data.length;
             for (var i = 0; i < dataLen; i++) {
                 let userNo = data[i];
                 let key = "analyst_subscribe_" + userNo;
-                cacheClient.get(key, function (err, cacheData) {
+                cacheClient.get(key, function(err, cacheData) {
                     if (err || !cacheData) {
                         let num = Math.floor(200 * common.randomN2M(0.8, 1));
                         cacheClient.set(key, num);
-                        result.push({userNo: userNo, subscribe: num});
+                        result.push({ userNo: userNo, subscribe: num });
                     } else {
-                        result.push({userNo: userNo, subscribe: cacheData});
+                        result.push({ userNo: userNo, subscribe: cacheData });
                     }
-                    if(dataLen == result.length){
+                    if (dataLen == result.length) {
                         res.json(result);
                     }
                 });
@@ -3158,7 +3162,7 @@ router.post('/rob', function(req, res) {
 /**
  * 获取老师订阅数
  */
-router.get('/getAnalystSubscribeNum', function(req, res){
+router.get('/getAnalystSubscribeNum', function(req, res) {
     let params = req.query['data'];
     if (common.isBlank(params)) {
         res.json({ isOK: false, msg: '参数错误' });
@@ -3175,12 +3179,12 @@ router.get('/getAnalystSubscribeNum', function(req, res){
     let userNo = params.userNo;
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
-        if(err || !result){
-            let num = Math.floor(200*common.randomN2M(0.8, 1));
+        if (err || !result) {
+            let num = Math.floor(200 * common.randomN2M(0.8, 1));
             cacheClient.set(key, num);
-            res.json({num : num});
-        }else{
-            res.json({num : result});
+            res.json({ num: num });
+        } else {
+            res.json({ num: result });
         }
     });
 });
@@ -3188,7 +3192,7 @@ router.get('/getAnalystSubscribeNum', function(req, res){
 /**
  * 设置老师订阅数
  */
-router.post('/setAnalystSubscribeNum', function(req, res){
+router.post('/setAnalystSubscribeNum', function(req, res) {
     let params = req.body['data'];
     if (common.isBlank(params)) {
         res.json({ isOK: false, msg: '参数错误' });
@@ -3205,15 +3209,15 @@ router.post('/setAnalystSubscribeNum', function(req, res){
     let userNo = params.userNo;
     let key = "analyst_subscribe_" + userNo;
     cacheClient.get(key, function(err, result) {
-        if(err || !result){
-            let num = Math.floor(200*common.randomN2M(0.8, 1));
+        if (err || !result) {
+            let num = Math.floor(200 * common.randomN2M(0.8, 1));
             num = num + 1;
             cacheClient.set(key, num);
-            res.json({num : num});
-        }else{
+            res.json({ num: num });
+        } else {
             result = parseInt(result) + 1;
             cacheClient.set(key, result);
-            res.json({num : result});
+            res.json({ num: result });
         }
     });
 });

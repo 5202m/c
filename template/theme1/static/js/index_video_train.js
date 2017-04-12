@@ -21,7 +21,7 @@ var videosTrain = {
     },
 
     /**
-     * 切换房间，如果失败并且是不含
+     * 登录成功后切换房间，如果失败并且是不含
      * @param groupId
      */
     changeRoomOrSignup: function(groupId) {
@@ -59,15 +59,20 @@ var videosTrain = {
     },
 
     /**
-     * 切换房间
+     * 点击培训班按钮切换房间
      * @param groupId
      * @param groupName
      */
     changeRoom: function(groupId, groupName) {
         common.getJson("/checkGroupAuth", { groupId: groupId }, function(result) {
+            var url = window.location.href.replace(/[\?]?[\&]?toTrainRoom\=[a-z0-9A-Z_]*$/g, "");
             if (!result || !result.checkState) {
-                indexJS.toRefreshView();
+                if (common.getUrlParam("toTrainRoom"))
+                    indexJS.gotoURL(url);
+                else
+                    indexJS.toRefreshView();
                 return;
+                indexJS.toRefreshView();
             } else if (result.roomType == "train") {
                 var roomInfo = result;
                 roomInfo.defaultAnalyst = roomInfo.defaultAnalyst || {};
@@ -90,6 +95,15 @@ var videosTrain = {
             box.showMsg({
                 title: groupName || "",
                 msg: (result.checkState.message || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
+                btns: [{
+                    txt: "确定",
+                    fn: function() {
+                        if (common.getUrlParam("toTrainRoom"))
+                            indexJS.gotoURL(url);
+                        else
+                            box.hideMsg();
+                    }
+                }]
             });
         });
     },

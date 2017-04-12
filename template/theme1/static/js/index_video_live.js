@@ -28,6 +28,9 @@ var videosLive = {
             }
             videosTrain.changeRoom(groupId, thiz.find("b").text());
         });
+        $(document.body).bind("toTrainRoom_concerned", function(e, groupId) {
+            videosLive.gotoTrainRoom(groupId);
+        });
 
         indexJS.setListScroll($(".tabcont .main_tab .infocont .rbox .scrollbox")); //行情持仓比例未平仓品种比率滚动条
 
@@ -70,6 +73,13 @@ var videosLive = {
             $(".calenda_select").hide();
             videosLive.setFinanceData(releaseTime, 2, "stars_" + country);
         });
+    },
+    /**
+     * 触发进入培训班页面，用于培训班地址的跳转
+     */
+    gotoTrainRoom: function(groupId) {
+        var $roomList_panel = $("#roomList_panel");
+        $roomList_panel.find("a[rid=" + groupId + "]").trigger("click");
     },
     /**
      * 返回服务器当天日期

@@ -16,6 +16,7 @@ var indexJS = {
     syllabusData: null, //课程数据
     infoNewCount: 0, //快讯新条数
     onlineCsStatus: 0, //在线客服链接状态：0-未连接 1-正在连接 2-已连接
+    concernedParameters: ['toTrainRoom'],
     pointLevel: [{ points: 0, name: 'L1' },
         { points: 10000, name: 'L2' },
         { points: 30000, name: 'L3' },
@@ -49,6 +50,7 @@ var indexJS = {
         indexTool.RedPacket.init();
         indexJS.initGeetest();
         indexJS.initGeetest();
+        indexJS.handleURLParameters();
     },
     /**
      * 事件控制
@@ -216,6 +218,14 @@ var indexJS = {
         });
         common.placeholderSupport(".formcont .in_line input[placeholder]"); //ie下输入框显示文字提示
     },
+    handleURLParameters: function() {
+        var eventName = "{0}_concerned";
+        var $trigger = $(document.body);
+        $.each(this.concernedParameters, function(i, name) {
+            var value = common.getUrlParam(name);
+            $trigger.trigger(eventName.formatStr(name), value);
+        });
+    },
     isNeedOnlineCS: function() {
         var roomType = $('#roomInfoId').attr('rt');
         if (roomType == 'vip' || roomType == "train") {
@@ -297,6 +307,12 @@ var indexJS = {
      */
     toRefreshView: function() {
         window.location.reload();
+    },
+    /**
+     * 通过默认房间刷新对应页面
+     */
+    gotoURL: function(url) {
+        window.location.href = url;
     },
     /**
      * 检查客户组别
