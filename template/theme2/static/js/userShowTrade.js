@@ -87,7 +87,7 @@ UserShowTrade.setUserShowTradeList = function(){
         }
     }
     $('#userShowTradeList').append(tradeHtml.join(''));
-    $('#userShowTradeList img.lazy').lazyload();
+    $('#userShowTradeList img.lazy').lazyload({effect : "fadeIn"});
     if(i >= length - 1){
         UserShowTrade.tradeLoadAll = true;
     }
