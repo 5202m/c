@@ -137,8 +137,13 @@ ClassNote.getAuthConfig = function (callback) {
  * @param isPrepend
  */
 ClassNote.appendRoomClassNote = function (dataArr, isMore) {
-    var html = [];
+    var html = [],flag = true;
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
+        if(!isMore && flag && dataArr[i].detailList[0].tag === "trading_strategy"){
+            html.unshift(ClassNote.getRoomClassNoteHtml(dataArr[i]));
+            flag = false;
+            continue;
+        }
         html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
     if (isMore) {
@@ -287,6 +292,8 @@ ClassNote.getClassNoteHtml = function(data){
                     dataHtml.push(ClassNote.formatHtml("dataTableRemark",
                         isHideData ? '****<i class="txt-mban repeat3x"></i>'
                             : dataDataTemp.description));
+                }else if(lenI > (i + 1)){//非最后一个table且没有说明换行
+                    dataHtml.push('<br/>')
                 }
             }
             var teacherAvatarName = '<img src="' + avatar
@@ -485,7 +492,11 @@ ClassNote.setViewDataHtml = function (dom, data) {
         dom.parent().children('table').remove();
         dom.parent().children('.instr-txt').remove();
         dom.parent().children('.call-hd').after(tradeStrategyHdDetailHtml.join(''));
-        dom.hide();
+        if(dom.parents('article').attr('id') === 'page_classNote'){
+            dom.children().text('数据已显示');
+        }else {
+            dom.hide();
+        }
     } else if (articleInfo.tag == 'trading_strategy') {
         var tradeStrategySupport = ClassNote.formatViewDataHtml('tradeStrategySupport'); //交易支撑位信息
         var tradeStrategySupportDiv = ClassNote.formatViewDataHtml('tradeStrategySupportDiv');//交易支撑位支撑值
