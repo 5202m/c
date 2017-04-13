@@ -74,20 +74,20 @@ Trains.setTrainList = function(){
  * @param groupId
  */
 Trains.changeRoomOrSignup = function(groupId){
-    Util.postJson("/checkGroupAuth",{groupId:groupId},function(result1){
-        if(!result1 || !result1.errcode){
+    Util.postJson("/checkGroupAuth",{groupId:groupId},function(authResult){
+        if(!authResult || !authResult.checkState){
             Room.toRefreshView(groupId);
         }else{
-            var msg = result1.errmsg + "已为你自动跳转到默认房间。";
-            var trainCfg = Trains.getTrainConfig(result1.data && result1.data.trainConfig);
-            if(result1.data && result1.data.roomType == "train" && !trainCfg && result1.errcode == "4007"){
+            var msg = (authResult.checkState.message || "") + "已为你自动跳转到默认房间。";
+            var trainCfg = Trains.getTrainConfig(authResult && authResult.trainConfig);
+            if(authResult.roomType == "train" && !trainCfg && authResult.checkState.code == "4007"){
                 Util.postJson('/addClientTrain',{
                     groupId : groupId,
                     noApprove : 1
                 },function(result2){
                     if(!result2 || result2.code == "4016"){
                         Util.postJson("/checkGroupAuth",{groupId:groupId},function(result3){
-                            if(!result3 || !result3.code){
+                            if(!result3 || !result3.checkState){
                                 Room.toRefreshView(groupId);
                             }else{
                                 Pop.msg(msg);
@@ -95,7 +95,7 @@ Trains.changeRoomOrSignup = function(groupId){
                             }
                         });
                     }else{
-                        Pop.msg(result2.msg + "已为你自动跳转到默认房间。");
+                        Pop.msg(result2.message + "已为你自动跳转到默认房间。");
                         Room.toRefreshView(groupId);
                     }
                 });
@@ -114,29 +114,29 @@ Trains.changeRoomOrSignup = function(groupId){
  */
 Trains.changeRoom = function(groupId){
     Util.postJson("/checkGroupAuth",{groupId:groupId},function(result){
-        if(!result || !result.errcode){
+        if(!result || !result.checkState){
             Room.toRefreshView(groupId);
             return;
         }else if(result.data && result.data.roomType == "train"){
-            var roomInfo = result.data;
+            var roomInfo = result;
             roomInfo.defaultAnalyst = roomInfo.defaultAnalyst || {};
             var trainCfg = Trains.getTrainConfig(roomInfo.trainConfig);
-            if(trainCfg && trainCfg.cls && result.errcode == "4007"){
+            if(trainCfg && trainCfg.cls && result.checkState.code == "4007"){
                 Trains.trainDetail(roomInfo.trainConfig, roomInfo.defaultAnalyst.userNo, roomInfo._id, roomInfo.name);
                 return;
-            }else if(!trainCfg && result.errcode == "4007"){
+            }else if(!trainCfg && result.checkState.code == "4007"){
                 Trains.trainSignUp(roomInfo._id, roomInfo.name, true);
                 return;
-            }else if(result.errcode == "4007" && $(".pop_train").is(":hidden")){
+            }else if(result.checkState.code == "4007" && $(".pop_train").is(":hidden")){
                 //$("#trains").trigger("click"); //显示培训班列表页
                 return;
-            }else if((result.errcode == "4009" || result.errcode == "4007") && $(".pop_train").is(":visible")){
+            }else if((result.checkState.code == "4009" || result.checkState.code == "4007") && $(".pop_train").is(":visible")){
                 if(Trains.trainEntryByPoints(roomInfo)){//使用积分进入房间
                     return;
                 }
             }
         }
-        Pop.msg(result.errmsg);
+        Pop.msg(result.checkState.message);
     });
 };
 

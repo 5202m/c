@@ -85,6 +85,8 @@ Room.watchRemind = function (room) {
                 }, lgt * 60 * 1000);
             }
         }
+    }else {
+        $('.login-guide').hide();
     }
 };
 
@@ -94,9 +96,11 @@ Room.watchRemind = function (room) {
  * @param time
  */
 Room.showUnLoginWatchTip = function(isSetEvent, time,tips) {
-    Pop.msg({msg:tips,onOK:function () {
+/*    Pop.msg({msg:tips,onOK:function () {
         Login.load();
-    }});
+    }});*/
+    $('#loginTips').text(tips);
+    $('.login-guide').show();
 };
 
 
@@ -274,6 +278,15 @@ Room.setEvent = function(){
         });
     });
 
+    $('#login_ul').on('click','li',function () {
+        var _this = $(this);
+        var _class = _this.children('div').attr('class');
+        if(_class === 'bg-blue'){//登录
+            Login.load();
+        }else if(_class === 'bg-green'){//新手专栏
+            Novice.load();
+        }
+    });
 };
 /**
  * 订阅回调处理
