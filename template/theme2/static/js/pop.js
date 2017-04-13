@@ -19,7 +19,7 @@ var Pop = {
             //msg : "",
             closeable : true,
             autoClose : -1,
-            onOK : $.noop
+            onOK : ops.onOK || $.noop
         });
         if(ops.closeable){
             $("#pop_msgClose").hide();

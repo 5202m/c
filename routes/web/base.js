@@ -152,7 +152,7 @@ router.get('/', function(req, res) {
                             common.getTempPlatformKey(targetGType),
                             function(clientGroup, accountNo) {
                                 var userInfo = {
-                                    mobilePhone: accountNo.replace("86-", ""),
+                                    mobilePhone: accountNo,
                                     ip: params.remoteIp,
                                     groupType: 'studio',
                                     accountNo: account,
@@ -2915,10 +2915,10 @@ router.post('/pmLogin', function(req, res) {
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
     }
-    // else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-    //         userSession.verMalCode)) {
-    //     result.error = errorMessage.code_1002;
-    // }
+    else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+            userSession.verMalCode)) {
+        result.error = errorMessage.code_1002;
+    }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
      result.error=errorMessage.code_1014;
      }*/

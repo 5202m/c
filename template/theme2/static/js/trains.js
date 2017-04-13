@@ -85,22 +85,22 @@ Trains.changeRoomOrSignup = function(groupId){
                     groupId : groupId,
                     noApprove : 1
                 },function(result2){
-                    if(!result2 || result2.errcode == "4016"){
+                    if(!result2 || result2.code == "4016"){
                         Util.postJson("/checkGroupAuth",{groupId:groupId},function(result3){
-                            if(!result3 || !result3.errcode){
+                            if(!result3 || !result3.code){
                                 Room.toRefreshView(groupId);
                             }else{
-                                alert(msg);
+                                Pop.msg(msg);
                                 Room.toRefreshView(groupId);
                             }
                         });
                     }else{
-                        alert(result2.errmsg + "已为你自动跳转到默认房间。");
+                        Pop.msg(result2.msg + "已为你自动跳转到默认房间。");
                         Room.toRefreshView(groupId);
                     }
                 });
             }else{
-                alert(msg);
+                Pop.msg(msg);
                 Room.toRefreshView(groupId);
             }
         }

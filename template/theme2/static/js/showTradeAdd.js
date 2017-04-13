@@ -77,23 +77,20 @@ ShowTradeAdd.saveShowTrade = function(){
         };
         Util.postJson('/addShowTrade',{data:JSON.stringify(params)},function(data){
             if(data.isOK){
-                Pop.msg({msg:'您的晒单已成功提交，等待系统审核！',onOK:ShowTradeAdd.resetForm()});
-/*                UserShowTrade.status = 0;
-                UserShowTrade.load();*/
+                Pop.msg({msg:'您的晒单已成功提交，等待系统审核！',onOK:function () {
+                    //上传确认后回调处理
+                    $('#ttitle').text('').trigger('blur');
+                    $('#tremark').text('').trigger('blur');
+                    $('#tradeImg').val('');
+                    $('#flTradeImg').parent().find('.obj-upload').attr('src','').addClass('dn');
+                    UserShowTrade.status = 0;
+                    UserShowTrade.load();
+                }});
             }else{
                 Pop.msg(data.msg);
             }
         });
     }
-};
-
-ShowTradeAdd.resetForm = function () {
-    if(!Data.userInfo.isSetName){
-    }
-    $('#ttitle').text('').trigger('blur');
-    $('#tremark').text('').trigger('blur');
-    $('#tradeImg').val('');
-    $('#flTradeImg').parent().find('.obj-upload').attr('src','').addClass('dn')
 };
 
 /**
@@ -116,7 +113,7 @@ ShowTradeAdd.setEvent = function(){
      */
     $('#to_userShowTrade').bind('click', function () {
         UserShowTrade.status = 0;
-        Container.back();
+        UserShowTrade.load();
     });
     /**
      * 上传图片
@@ -135,7 +132,7 @@ ShowTradeAdd.setEvent = function(){
         }
         // 判断图片格式
         if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
-            alert('目前暂支持jpg,gif,png格式的图片！');
+            Pop.msg('目前暂支持jpg,gif,png格式的图片！');
             return false;
         }
         var fileSize = img.size;
@@ -146,7 +143,7 @@ ShowTradeAdd.setEvent = function(){
             return false;
         }
         if (fileSize >= 1024 * 1024 * 3) {
-            alert('发送的图片大小不要超过3MB.');
+            Pop.msg('发送的图片大小不要超过3MB.');
             return false;
         }
         //加载文件转成URL所需的文件流
@@ -168,6 +165,7 @@ ShowTradeAdd.setEvent = function(){
                 ShowTradeAdd.uploadAfterCompress(base64Data,img.type);
                 fileImg = null;
             }
+            $('.obj-upload').attr('src',e.target.result);
 
         };
         reader.onprogress = function (e) {};

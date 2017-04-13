@@ -13,7 +13,6 @@ var Room = new Container({
     },
     onShow : function(){
         Room.initPage();
-        $(window).scrollTop(0);
         Room.loadRoomClassNote();
         Room.handleNoviceRoom();
     },
@@ -42,7 +41,7 @@ Room.handleNoviceRoom = function () {
         $('#chat_close').show();
         $('#chat_close').trigger('click');
     }
-}
+};
 
 
 /**当前显示的房间编号*/
@@ -54,8 +53,7 @@ Room.currGroupId = null;
 Room.initPage = function(){
     Data.getRoom(function(room){
         var isChangeRoom = room.id != Room.currGroupId;
-        Chat.WhTalk.enable = room.allowWhisper;
-        Chat.WhTalk.whisperRoles = room.whisperRoles;
+        Chat.WhTalk.enable = room.allowWhisper,Chat.WhTalk.whisperRoles = room.whisperRoles;
         if(isChangeRoom){ //房间已经切换，
             Room.currGroupId = room.id;
             $("#room_roomName").html(room.name);
@@ -63,23 +61,27 @@ Room.initPage = function(){
             Chat.init();
             Room.showCourse();
             PrivateChat.isChangeRoom = true;
-            Room.watchRemind(room);
         }
+        Room.watchRemind(room);
     });
 };
 
+/**
+ * 游客累计观看提醒
+ * @param room
+ */
 Room.watchRemind = function (room) {
     //未登录用户进入非新手房间：曾经已看3分钟，直接弹出。否则3分钟之后弹出提示框。
     if (!Data.userInfo.isLogin && room.rootType != "simple") {
-        var lgt = room.loginBoxTime || 3; //后台控制登录弹框时间,没有默认3分钟
+        var lgt = room.loginBoxTime,lgtTips = room.loginBoxTip || "您已经观看了".concat(lgt).concat("分钟，赶紧登录再继续观看吧"); //后台控制登录弹框时间以及提示语
         if (/\d+(\.\d+)?/.test(lgt)) {
             lgt = parseFloat(lgt);
             if (Store.store("simpleTip")) {
-                Room.showSimpleTip(true, lgt);
+                Room.showUnLoginWatchTip(true, lgt,lgtTips);
             } else {
                 window.setTimeout(function() {
                     Store.store("simpleTip", true);
-                    Room.showSimpleTip(true, lgt);
+                    Room.showUnLoginWatchTip(true, lgt,lgtTips);
                 }, lgt * 60 * 1000);
             }
         }
@@ -91,25 +93,10 @@ Room.watchRemind = function (room) {
  * @param isSetEvent
  * @param time
  */
-Room.showSimpleTip = function(isSetEvent, time) {
-    if (isSetEvent) {
-        $("#pop_stTime").html(time || 3);
-
-        $("#pop_simpleTip .enteritem:first a").bind("click", function() {
-            $("#login_a").trigger("click", { closeable: false });
-        });
-
-        $("#pop_simpleTip .enteritem.newbie a").bind("click", function() {
-            $("#roomList_panel>a[rt='simple']:first").trigger("click");
-        });
-    }
-    //倒计时提示，切换宣传片，倒计时
-    $("#pop_stCountdown").hide();
-    //videos.player.play("type=blws&vid=28c30edf38841e1603a2f98ae61545fb_2", "在线金道贵金属实盘直播室");
-    //this.simpleTipCountdown();
-    $(".popup_box").hide();
-    $('.blackbg,#pop_simpleTip').show();
-    alert('你已经观看了三分钟，赶紧登录继续观看！');
+Room.showUnLoginWatchTip = function(isSetEvent, time,tips) {
+    Pop.msg({msg:tips,onOK:function () {
+        Login.load();
+    }});
 };
 
 
@@ -120,7 +107,6 @@ Room.loadRoomClassNote = function(){
     $("#classNote_panel").empty();
     ClassNote.getAuthConfig(function(){
         ClassNote.loadData(null, true,'');
-        //Room.loadRoomClassNoteData();
     })
 };
 
@@ -173,23 +159,6 @@ Room.setEvent = function(){
         ShowTrade.load();
         ShowTrade.showShowTradeNumTip(true);
     });
-    /**
-     * 滚动监听
-     */
-/*    $('article.content_w').scroll(function(){
-        var _top = $(this).scrollTop();
-        var _fixh = 0;
-        var _obj = $(this).find('.video-infos');
-        _obj.each(function(){
-            var _objfix = $(this).find('.infos-block');
-            var _prevobj = $(this).prevAll();
-            _prevobj.each(function(){
-                _fixh += !$(this).is(':visible')? 0 : $(this).outerHeight(true);
-            });
-            if(_top>_fixh) _objfix.addClass('fixed-bar')
-            else _objfix.removeClass('fixed-bar')
-        })
-    });*/
     /**
      * 展开交易策略
      */
@@ -338,7 +307,10 @@ Room.showLecturer = function(lecturerId){
         return;
     }
     Data.getAnalyst(lecturerId, function(lecturer){
-        Room.setLecturerTool(lecturerId);
+        //此处为隐藏数据延时加载
+        setTimeout(function () {
+            Room.setLecturerTool(lecturerId);
+        },500);
         if(lecturer){
 /*            //设置私聊老师数据    （目前屏蔽私聊老师功能）
             var obj = {
@@ -369,6 +341,10 @@ Room.showLecturer = function(lecturerId){
     });
 };
 
+/**
+ * 显示讲师工具栏
+ * @param lecturerId
+ */
 Room.setLecturerTool = function (lecturerId) {
     if(!lecturerId) return;
     Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:lecturerId})},function(data) {

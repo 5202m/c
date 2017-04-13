@@ -47,21 +47,21 @@ ShowTrade.setShowTradeList = function(){
         }
         var showTradeDate = Util.formatDate(row.showDate,'MM-dd HH:mm');
         tradeHtml.push(ShowTrade.formatHtml('showTrade',
-            //row.user.avatar,
             row.user.userName,
             showTradeDate,
             row.title,
-            //row.tradeImg,
             row.remark,
             row.praise||0,
-            row._id
-        ).replace('/theme2/img/user.png',row.user.avatar)
-            .replace('/theme2/img/user_c.png',row.tradeImg));
+            row._id,
+            row.user.avatar,
+            row.tradeImg
+        ));
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');
         }
     }
     $('#showTradeList').append(tradeHtml.join(''));
+    $('#showTradeList img.lazy').lazyload({effect : "fadeIn"});
     if(i >= length - 1){
         ShowTrade.tradeLoadAll = true;
     }
