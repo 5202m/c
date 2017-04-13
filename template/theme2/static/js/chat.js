@@ -18,7 +18,6 @@ var Chat = {
      */
     init : function(){
         this.setSocket();
-        this.setOnlineNum(0, false, true);
         if(Chat.WhTalk.enable){
             Chat.WhTalk.getCSList(); //加载客服列表
         }
@@ -540,7 +539,8 @@ var Chat = {
         for(var i in users){
             Chat.setOnlineUser(users[i], true, false);
         }
-        Chat.setOnlineNum(length, true, false);
+        //此处直播大厅的在线人数需要加虚拟人数处理
+        Chat.setOnlineNum(length, users[0].groupId === 'studio_teach' ? true : false, true);
     },
     /**
      * 在线用户
@@ -567,7 +567,6 @@ var Chat = {
         //初始化
         if(isReset){
             Chat.cntOnline = 0;
-            return;
         }
         Chat.cntOnline += (num || 1);
         if(isAddVirtual){
@@ -575,6 +574,7 @@ var Chat = {
                 Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
             }
+            Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
         }
         Chat.cntOnline = Math.abs(Chat.cntOnline); //避免出现负数
         $("#chatOnlineNum").text(Chat.cntOnline);
