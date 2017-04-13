@@ -1,5 +1,6 @@
 ﻿"use strict";
 const express = require('express');
+const compression = require('compression');
 const bodyParser = require('body-parser');
 const config = require('./resources/config');
 const index = require('./routes/index');
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({
     extended: true,
     parameterLimit: 50000
 }));
+
+app.use(compression());
 
 // 设置session
 chatSession.startSession(app);
