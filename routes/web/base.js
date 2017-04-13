@@ -89,8 +89,8 @@ router.get('/', function(req, res) {
     var options = null;
     var isKeepOptions = req.query["ko"] == 1;
     //TODO 以留后续用途。
-    // var toTrainRoom = req.query["toTrainRoom"] || null;
-    // req.session.studioUserInfo.toGroup = toTrainRoom || req.session.studioUserInfo.toGroup;
+    var toTrainRoomId = req.query["roomId"] || null;
+    req.session.studioUserInfo.toGroup = toTrainRoomId || req.session.studioUserInfo.toGroup;
     if (isKeepOptions) {
         options = req.session.studioOptions || {};
     } else {
@@ -2914,8 +2914,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }
-    else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }

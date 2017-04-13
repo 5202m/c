@@ -65,14 +65,13 @@ var videosTrain = {
      */
     changeRoom: function(groupId, groupName) {
         common.getJson("/checkGroupAuth", { groupId: groupId }, function(result) {
-            var url = window.location.href.replace(/[\?]?[\&]?toTrainRoom\=[a-z0-9A-Z_]*$/g, "");
+            var roomIdReg = /roomId\=[a-z0-9A-Z_]*$/g;
             if (!result || !result.checkState) {
-                if (common.getUrlParam("toTrainRoom"))
-                    indexJS.gotoURL(url);
+                if (common.getUrlParam("roomId"))
+                    indexJS.gotoURL(window.location.href.replace(roomIdReg, "roomId=" + groupId));
                 else
                     indexJS.toRefreshView();
                 return;
-                indexJS.toRefreshView();
             } else if (result.roomType == "train") {
                 var roomInfo = result;
                 roomInfo.defaultAnalyst = roomInfo.defaultAnalyst || {};
@@ -98,8 +97,8 @@ var videosTrain = {
                 btns: [{
                     txt: "确定",
                     fn: function() {
-                        if (common.getUrlParam("toTrainRoom"))
-                            indexJS.gotoURL(url);
+                        if (common.getUrlParam("roomId"))
+                            indexJS.gotoURL(window.location.href.replace(roomIdReg, ""));
                         else
                             box.hideMsg();
                     }

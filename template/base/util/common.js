@@ -1100,11 +1100,33 @@ $.fn.focusEnd = function() {
     return this;
 };
 
-/*替换字符串中占位符 扩展方法 begin*/
+/**
+ * 替换字符串中占位符 扩展方法
+ * @param plain Object or values
+ * @returns String
+ * var s = "Hello {0}!"; s.formatStr("world");
+ * "Hello world!"
+ * var s = "Hello {world}!"; s.formatStr({world: "world"});
+ * "Hello world!"
+ */
 String.prototype.formatStr = function() {
-    if (arguments.length == 0) return this;
-    for (var s = this, i = 0; i < arguments.length; i++)
-        s = s.replace(new RegExp("\\{" + i + "\\}", "g"), (arguments[i] == null || arguments[i] == undefined) ? "" : arguments[i]);
+    if (arguments.length === 0) return this;
+    var s = this;
+    var doReplace = function(key, value) {
+        value = (value ==
+            null || value == undefined) ? "" : value;
+        s = s.replace(new RegExp("\\{" + key + "\\}", "g"), value);
+    };
+    if (arguments.length === 1 && arguments[0].constructor === Object) {
+        var params = arguments[0];
+        for (var key in params) {
+            doReplace(key, params[key]);
+        }
+    } else {
+        for (var i = 0; i < arguments.length; i++) {
+            doReplace(i, arguments[i]);
+        }
+    }
     return s;
 };
 /*替换字符串中占位符 扩展方法 end*/

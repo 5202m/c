@@ -16,7 +16,8 @@ var indexJS = {
     syllabusData: null, //课程数据
     infoNewCount: 0, //快讯新条数
     onlineCsStatus: 0, //在线客服链接状态：0-未连接 1-正在连接 2-已连接
-    concernedParameters: ['toTrainRoom'],
+    // concernedParameters: ['toTrainRoom'],
+    concernedParameters: [],
     pointLevel: [{ points: 0, name: 'L1' },
         { points: 10000, name: 'L2' },
         { points: 30000, name: 'L3' },
