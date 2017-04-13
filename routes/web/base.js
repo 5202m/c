@@ -81,6 +81,20 @@ function getRredirctUrl(req) {
     }
     return paramArr.length > 0 ? ("?" + paramArr.join("&")) : "";
 }
+
+function handleRoomIdinUrl(roomId, chatUser, res) {
+    roomId = roomId || null;
+    if (!chatUser) {
+        return
+    }
+    if (common.isBlank(roomId)) {
+        return;
+    }
+    chatUser.intentionalRoomId = roomId;
+    if (chatUser.isLogin) {
+        chatUser.toGroup = roomId || chatUser.toGroup;
+    }
+}
 /**
  * 直播间页面入口
  */
@@ -88,9 +102,6 @@ router.get('/', function(req, res) {
     common.setCrossDomain(req, res);
     var options = null;
     var isKeepOptions = req.query["ko"] == 1;
-    //TODO 以留后续用途。
-    var toTrainRoomId = req.query["roomId"] || null;
-    req.session.studioUserInfo.toGroup = toTrainRoomId || req.session.studioUserInfo.toGroup;
     if (isKeepOptions) {
         options = req.session.studioOptions || {};
     } else {
@@ -206,6 +217,7 @@ router.get('/', function(req, res) {
         chatUser.toGroup = req.session.logoutToGroup;
         req.session.logoutToGroup = null;
     }
+    handleRoomIdinUrl(req.query["roomId"], chatUser);
     chatUser.groupType = targetGType;
     chatUser.userType = chatUser.userType || constant.roleUserType.member; //没有userType则默认为会员
     logger.info(
@@ -308,8 +320,10 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 userId: chatUser.userId,
                 clientGroup: chatUser.clientGroup,
                 nickname: chatUser.nickname,
-                userType: chatUser.userType
+                userType: chatUser.userType,
+                intentionalRoomId: chatUser.intentionalRoomId
             });
+            chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
             viewDataObj.serverTime = new Date().getTime();
             viewDataObj.syllabusData = '';

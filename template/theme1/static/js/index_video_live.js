@@ -11,6 +11,7 @@ var videosLive = {
         this.initCalendar(function() {});
         this.setFinanceData("", 2);
         this.setInformation();
+        this.verifyTrainRoom();
     },
     setEvent: function() {
         /**
@@ -28,9 +29,7 @@ var videosLive = {
             }
             videosTrain.changeRoom(groupId, thiz.find("b").text());
         });
-        $(document.body).bind("toTrainRoom_concerned", function(e, groupId) {
-            videosLive.gotoTrainRoom(groupId);
-        });
+
 
         indexJS.setListScroll($(".tabcont .main_tab .infocont .rbox .scrollbox")); //行情持仓比例未平仓品种比率滚动条
 
@@ -78,8 +77,25 @@ var videosLive = {
      * 触发进入培训班页面，用于培训班地址的跳转
      */
     gotoTrainRoom: function(groupId) {
+        if (common.isBlank(groupId)) {
+            return;
+        }
         var $roomList_panel = $("#roomList_panel");
         $roomList_panel.find("a[rid=" + groupId + "]").trigger("click");
+    },
+    verifyTrainRoom: function() {
+        // var roomIdReg = /roomId\=[a-z0-9A-Z_]*$/g;
+        // if (!groupId) {
+        //     return;
+        // }
+        // if (groupId !== indexJS.userInfo.groupId)
+        //     indexJS.gotoURL(window.location.href.replace(roomIdReg, ""));
+        // else if (indexJS.userInfo.groupId !== indexJS.userInfo.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
+        //     videosLive.gotoTrainRoom(indexJS.userInfo.intentionalRoomId);
+        // }
+        if (indexJS.userInfo.groupId !== indexJS.userInfo.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
+            videosLive.gotoTrainRoom(indexJS.userInfo.intentionalRoomId);
+        }
     },
     /**
      * 返回服务器当天日期

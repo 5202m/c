@@ -67,10 +67,11 @@ var videosTrain = {
         common.getJson("/checkGroupAuth", { groupId: groupId }, function(result) {
             var roomIdReg = /roomId\=[a-z0-9A-Z_]*$/g;
             if (!result || !result.checkState) {
-                if (common.getUrlParam("roomId"))
-                    indexJS.gotoURL(window.location.href.replace(roomIdReg, "roomId=" + groupId));
-                else
-                    indexJS.toRefreshView();
+                // if (common.getUrlParam("roomId"))
+                //     indexJS.gotoURL(window.location.href.replace(roomIdReg, "roomId=" + groupId));
+                // else
+                //     indexJS.toRefreshView();
+                indexJS.toRefreshView();
                 return;
             } else if (result.roomType == "train") {
                 var roomInfo = result;
@@ -93,16 +94,7 @@ var videosTrain = {
             }
             box.showMsg({
                 title: groupName || "",
-                msg: (result.checkState.message || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
-                btns: [{
-                    txt: "确定",
-                    fn: function() {
-                        if (common.getUrlParam("roomId"))
-                            indexJS.gotoURL(window.location.href.replace(roomIdReg, ""));
-                        else
-                            box.hideMsg();
-                    }
-                }]
+                msg: (result.checkState.message || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。'
             });
         });
     },
