@@ -85,6 +85,8 @@ Room.watchRemind = function (room) {
                 }, lgt * 60 * 1000);
             }
         }
+    }else {
+        $('.login-guide').hide();
     }
 };
 
