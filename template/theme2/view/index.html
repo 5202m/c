@@ -9,12 +9,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <script type="text/javascript" src="/base/lib/store.min.js"></script>
-    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
-    <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
-    <link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css"/>
-    <link rel="stylesheet" media="screen" href="/theme2/css/index<%=isDevTest? '.css' : ('.min.css?v=' + version)%>" />
-    <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
+    <% if(isDevTest) { %>
+        <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
+        <link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />
+        <link rel="stylesheet" media="screen" href="/theme2/css/index.css" />
+        <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
+        <% }else{ %>
+            <link rel="stylesheet" media="screen" href="/theme2/css/lib.min.css?v=<%=version%>" />
+            <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
+            <% } %>
 </head>
 
 <body class="home">
@@ -82,6 +85,9 @@
 
     </article>
     <% include pop.html %>
+
+        <script type="text/javascript" src="/base/lib/store.min.js"></script>
+        <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
         <script type="text/javascript">
             function pageFunc() {
                 //自动登录中...
@@ -100,9 +106,9 @@
                 lightbox.option({
                     'resizeDuration': 200,
                     'wrapAround': true,
-                    'disableScrolling':true,
-                    'positionFromTop':200,
-                    'showImageNumberLabel' : false
+                    'disableScrolling': true,
+                    'positionFromTop': 200,
+                    'showImageNumberLabel': false
                 });
             }
         </script>
@@ -152,11 +158,7 @@
                 <script type="text/javascript">
                     basket.version = '<%=version%>';
                     basket.require({
-                        url: "/base/lib/jquery-1.7.min.js"
-                    }, {
-                        url: "/base/lib/swipe/swiper.min.js"
-                    }, {
-                        url: "/base/lib/lightbox/lightbox.min.js"
+                        url: "/theme2/js/lib.min.js?v=<%=version%>"
                     }, {
                         url: "/theme2/js/index.min.js?v=<%=version%>"
                     }, null).then(pageFunc);
