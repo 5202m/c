@@ -330,6 +330,7 @@ Room.followHander = function(isOK) {
  * 显示讲师信息
  */
 Room.showLecturer = function(lecturerId) {
+    $('#roomAnalystTagCourse').show();
     if (!lecturerId) {
         Data.getRoom(function(room) {
             lecturerId = room && room.defaultAnalyst && room.defaultAnalyst.userNo;
@@ -339,6 +340,7 @@ Room.showLecturer = function(lecturerId) {
                 $("#room_teacher").hide();
             }
         });
+        $('#roomAnalystTagCourse').hide();
         return;
     }
     Data.getAnalyst(lecturerId, function(lecturer) {

@@ -124,14 +124,14 @@ var Data = {
             var result = Util.search(rooms, roomId, function(roomTmp, roomIdTmp) {
                 return roomTmp.id == roomIdTmp;
             });
-            if (!result) { //如果找不到房间，就从rooms里找个有效的默认房间。
+            /*if (!result) { //如果找不到房间，就从rooms里找个有效的默认房间。
                 $.each(rooms, function(i, room) {
                     if (room.allowVisitor && !room.disable && room.status == 1) {
                         result = room;
                         LoginAuto.sessionUser.groupId = room.id;
                     }
                 });
-            }
+            }*/
             callback(result);
         });
     },
