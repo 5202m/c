@@ -571,7 +571,7 @@ var Chat = {
         Chat.cntOnline += (num || 1);
         if(isAddVirtual){
             if(Chat.cntOnline <= 200){
-                Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10 + num;
+                Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
             }
             Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
