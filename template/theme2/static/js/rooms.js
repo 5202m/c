@@ -65,7 +65,6 @@ Rooms.setStudioRoomList = function(){
                 if(trainNum == 0) {
                     html.push(Rooms.formatHtml("roomInfo",
                         '',
-                        //4,
                         'brown',
                         '精品培训班',
                         row.roomType
@@ -76,11 +75,18 @@ Rooms.setStudioRoomList = function(){
                     trainObj = row;
                 }
             } else {
-                var loc_index = Util.randomIndex(3), uurl = '';
-                while($.inArray(loc_index,alreadyArray) > -1){
+               var loc_index = Util.randomIndex(3), uurl = '';
+/*                 while($.inArray(loc_index,alreadyArray) > -1){
                     loc_index = Util.randomIndex(3);
                 }
-                alreadyArray.push(loc_index);
+                alreadyArray.push(loc_index);*/
+                if(row.roomType == 'simple'){
+                    loc_index = 2;
+                }else if(row.roomType == 'normal'){
+                    loc_index = 0;
+                }else{
+                    loc_index = 1;
+                }
                 uurl = Util.format('/theme2/img/block-bg{0}.jpg',loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
