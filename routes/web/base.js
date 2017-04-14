@@ -2679,8 +2679,12 @@ router.post('/getRoomList', function(req, res) {
     let viewDataObj = {},
         newStudioList = [],
         rowTmp = null;
+    if(!chatUser){
+        res.json(viewDataObj);
+        return;
+    }
     studioService.getIndexLoadData(chatUser, null, true,
-        (!isMobile || (isMobile && common.isValid(null))), chatUser.isLogin,
+        (!isMobile || (isMobile && common.isValid(null))),chatUser.isLogin,
         function(data) {
             if (!data.studioList) {
                 if (data.syllabusResult) {
