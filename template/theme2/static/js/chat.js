@@ -540,7 +540,7 @@ var Chat = {
             Chat.setOnlineUser(users[i], true, false);
         }
         //此处直播大厅的在线人数需要加虚拟人数处理
-        Chat.setOnlineNum(length, users[0].groupId === 'studio_teach' ? true : false, true);
+        Chat.setOnlineNum(length, true, true);
     },
     /**
      * 在线用户
@@ -571,7 +571,7 @@ var Chat = {
         Chat.cntOnline += (num || 1);
         if(isAddVirtual){
             if(Chat.cntOnline <= 200){
-                Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
+                Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10 + num;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
             }
             Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
@@ -793,7 +793,7 @@ var Chat = {
             });
         }else if(flag=="otherLogin"){
             Pop.msg({
-                msg : "注意：房间已停用，正自动退出房间...",
+                msg : "注意：您已经在其他地方登陆，正自动退出房间...",
                 closeable : false,
                 autoClose : 2000,
                 onOK : function(){
