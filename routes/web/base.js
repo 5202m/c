@@ -321,8 +321,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 clientGroup: chatUser.clientGroup,
                 nickname: chatUser.nickname,
                 userType: chatUser.userType,
-                platform:options&&options.platform,
-				intentionalRoomId: chatUser.intentionalRoomId
+                platform: options && options.platform,
+                intentionalRoomId: chatUser.intentionalRoomId
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -2679,12 +2679,12 @@ router.post('/getRoomList', function(req, res) {
     let viewDataObj = {},
         newStudioList = [],
         rowTmp = null;
-    if(!chatUser){
+    if (!chatUser) {
         res.json(viewDataObj);
         return;
     }
     studioService.getIndexLoadData(chatUser, null, true,
-        (!isMobile || (isMobile && common.isValid(null))),chatUser.isLogin,
+        (!isMobile || (isMobile && common.isValid(null))), chatUser.isLogin,
         function(data) {
             if (!data.studioList) {
                 if (data.syllabusResult) {
@@ -3112,53 +3112,57 @@ router.post('/rob', function(req, res) {
         res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
         return;
     }
-    var start = 30600000; //8:30
-    var cycle = 300000 * 2; //周期10分钟
     var now = new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var time = now.getTime() - today;
-    //确定期数
-    var periods = parseInt((time - start) / cycle);
-    var isDepart = 0;
-    //获取整点时间
-    var temp = (time - ((time - start) % cycle));
-    var curTime = temp % 3600000;
-    if (0 == curTime) {
-        isDepart = 1;
+    var curHours = now.getHours();
+    var curMinutes = now.getMinutes();
+    if (curHours < 10) {
+        curHours = '0' + curHours;
     }
+    if (curMinutes < 10) {
+        curMinutes = '0' + curMinutes;
+    }
+    var curHMDate = curHours + ":" + curMinutes;
+    var pariods = constant.periods;
+    var currentPariod = 1; //默认从第一期开始
+    for (var i = 0; i < pariods.length; i++) {
+        if (curHMDate < pariods[i]) {
+            currentPariod = i + 1;
+            break;
+        }
+    }
+
     var robParams = {
-        ac_periods: "20170302",
+        ac_periods: "20170401",
         phone: userInfo.mobilePhone.replace("86-", ""),
-        nper: periods,
-        is_depart: isDepart
+        nper: currentPariod
     };
 
-    if (periods < 0) {
+    /*如果期数小于0,直接返回*/
+    if (currentPariod < 0) {
+        res.json({ result: 0, money: 0, msg: "" });
         return;
     }
 
-    /*如果整点且非未激活或者模拟用户,直接返回*/
-    if (1 == isDepart) {
-        logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
-        if (userInfo.clientGroup != "notActive" && userInfo.clientGroup != "simulate") {
-            res.json({ result: 0, money: 0, msg: "" });
-            return;
-        }
+    /*如果真实客户,直接返回*/
+    if (userInfo.clientGroup == "active") {
+        res.json({ result: 0, money: 0, msg: "" });
+        return;
     }
 
     cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
         if (err) {
             logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && 0 == periods) {
+        } else if (result != true && 0 == currentPariod) {
             res.json({ result: 0, money: 0, msg: "" });
-        } else if (result != true && result != periods) {
+        } else if (common.isBlank(result) || result != currentPariod) {
             var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
-            cacheClient.set("redPacket_" + robParams.phone, periods);
+            cacheClient.set("redPacket_" + robParams.phone, currentPariod);
             cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/activity20170302/draw'), form: robParams }, function(error, response, data) {
+            request.post({ url: (config.pmOAPath + '/lottery/activity20170401/draw'), form: robParams }, function(error, response, data) {
                 var result = { result: 0, money: 0, msg: "" };
                 if (data) {
-                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
+                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
                     try {
                         data = JSON.parse(data);
                         if (data.infoNo == 1) {
