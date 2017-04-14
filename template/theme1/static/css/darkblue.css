@@ -188,12 +188,15 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .newbie_guide .h_menu1,.newbie_guide .myaidbox,.newbie_guide .contactbar,.newbie_guide .sub-tabnav{ background: #21507f;}
 .newbie_guide .input_box .input_area .ctextarea{ color: #b4c6da; }
 
+/*培训班广告*/
+.train_ad a{ background-image: url(../img/darkblue/train_ad0330.png); }
+
 /*redbag201703*/
-.header_redbag{ background-image: url(../img/darkblue/pinkbg1.jpg); }
+/*.header_redbag{ background-image: url(../img/darkblue/pinkbg1.jpg); }
 .tab_redbag{ background-image: url(../img/darkblue/pinkbg2.png); margin: 0 20px; width: auto;}
 .tab_redbag .rb_cont{ padding-left: 0; }
 
 @media(max-width: 1350px){
-    .header_redbag{margin-left: -25px; background-size: 323px 60px;padding-left: 45px;margin-right: 0;background-position: right 2px;}
-    .header_redbag .rb_text .te1{ height: 40px; margin-top: 2px;}
-}
+	.header_redbag{margin-left: -25px; background-size: 323px 60px;padding-left: 45px;margin-right: 0;background-position: right 2px;}
+	.header_redbag .rb_text .te1{ height: 40px; margin-top: 2px;}
+}*/

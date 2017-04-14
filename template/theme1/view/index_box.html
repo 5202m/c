@@ -1450,76 +1450,49 @@
 </div>
 
 <%if(isRedPacket) {%>
-<!--抢红包-未登录状态 -->
-<div class="redbag_pop nologin dn" id="redPacket_noLogin">
-    <div class="cont">
-        <div class="rb_top">
-            <span>马上登录金道直播间</span>
-            <h4>点阳春之花魁 赢大量现金红包</h4>
-        </div>
-        <a href="javascript:void(0)" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_bigmfzc', 'content_middle', 1, true]);" class="rb_btn"><i class="reg">免费注册</i><b class="bg"><b></b></b></a>
-        <div class="rb_tip">
-            <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_madl', 'content_middle', 1, true]);">马上登录</a></span>
-            <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
-        </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
-    </div>
-</div>
-
 <!--抢红包-已登录状态 -->
 <div class="redbag_pop dn" id="redPacket_normal">
     <div class="cont">
         <div class="rb_top2">
-            <span>阳春点花魁！试试红包花落谁家</span>
+            <span>开抢倒计时</span>
             <div class="timecount">
-                <span class="tc">开抢倒计时</span>
-                <div class="tc-figure">
-                    <span><b rp="minutesLabel"></b>分</span>
-                    <span><b rp="secondsLabel"></b>秒</span>
-                </div>
+                <span><b rp="minutesLabel"></b>分</span>
+                <span><b rp="secondsLabel"></b>秒</span>
             </div>
         </div>
-        <!-- 抢 -->
-        <div class="rb_flowers" id="redPacket_rob">
-            <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
-            <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
-            <a href="javascri？pt:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b></a>
-        </div>
-        <div class="rb_flowers wait" id="redPacket_wait">
-            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
-            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
-            <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b></a>
-        </div>
-
+        <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob"><i class="">抢</i><b class="bg"><b></b></b></a>
+        <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait"><i class="wait">等待开抢</i><b class="bg"><b></b></b></a>
         <div class="rb_tip">
-            <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
-            <p class="tspan">直播时段内每10分钟就有一大波红包来袭，即刻开抢啦！</p>
-        </div>
-        <div class="dashang_rule">
-            <a href="javascript:void(0)">活动规则<i></i></a>
-            <div class="ds_rulecont">
-                <div class="arr"><i></i><i class="i2"></i></div>
-                <div class="scrollbox">
-                    <span><b>•</b>活动规则</span>
-                    <ul>
-                        <li>1.活动期间，金道直播间直播时段内，每隔10分钟将发放一波奖金红包，所有直播间注册客户皆可参与“点花魁抢红包”活动，客户所中奖金将通过微信发放；</li>
-                        <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系直播间助理登记验证，以发放双倍红包奖金；</li>
-                        <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                        <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户3月30日中奖，则奖金红包于3月31日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放；</li>
-                        <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权；</li>
-                    </ul>
+            <div class="rbnum">第<span id="timesLabel2"></span>波微信红包</div>
+            <div class="tspan">培训班直播时段内每5分钟将有一大波10元微信现金红包来袭！<br>人人有份，即刻开抢啦！
+                <div class="dashang_rule">
+                    <a href="javascript:void(0)">活动规则<i></i></a>
+                    <div class="ds_rulecont">
+                        <div class="arr"><i></i><i class="i2"></i></div>
+                        <div class="scrollbox">
+                            <span><b>•</b>活动规则</span>
+                            <ul>
+                                <li>1.培训班开课期间，培训班内每隔5分钟将发放一波奖金红包，所有参加培训班的客户皆可参与“抢红包”；</li>
+                                <li>2.中奖客户需要同步关注培训班分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                                <li>3.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系直播间助理登记验证，以发放双倍红包奖金；</li>
+                                <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户4月11日中奖，则奖金红包于4月12日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
+                                <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
     </div>
 </div>
+
 <!-- 抢红包-结果页-无奖 -->
 <div class="redbag_pop rb_result dn" id="redPacket_resNo">
     <div class="cont">
         <div class="rb_top2">
             <span>很遗憾，此次未中奖！</span>
-            <span class="sp2"><b>10分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
+            <span class="sp2"><b>5分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
         </div>
         <div class="qrcode-con">
             <div class="rb_tip2">
@@ -1527,10 +1500,12 @@
             </div>
             <img src="" alt="" rp="wechatImg">
             <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
+
         </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
     </div>
 </div>
+
 <!-- 抢红包-结果页-中奖！ -->
 <div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
     <div class="cont">
@@ -1542,40 +1517,29 @@
             <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
             <p class="p2"><b>兑奖办法：</b>请扫码关注上方分析师微信，并提供您的<span>中奖手机号码给分析师验证并领取现金红包！</span> </p>
         </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
     </div>
 </div>
 
 <!--抢红包-5秒倒计时 -->
 <div class="redbag_pop_box dn" id="redPacket_mini">
-    <div class="redbag_pop pop2" id="redPacket_mini2">
-        <div class="cont">
-            <div class="rb_top2">
-                <span>开抢倒计时</span>
-            </div>
-
-            <!-- 倒计时 -->
-            <div class="rb_flowers countdown" id="redPacket_miniWait">
-                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
-                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
-                <a href="javascript:void(0)" class="" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_ddks', 'content_middle', 1, true]);"><span></span><b></b><i class="t4" rp="seconds"></i></a>
-            </div>
-
-            <!--抢 -->
-            <div class="rb_flowers" id="redPacket_miniRob">
-                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
-                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
-                <a href="javascript:void(0)" class="ani" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_qiang', 'content_middle', 1, true]);"><span></span><b></b><i class="t4"></i></a>
-            </div>
-
-            <div class="rb_tip">
-                <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
-                <div class="rb_check">
-                    <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
-                    <span class="ctext">勾选后不再弹出提醒</span>
+    <div class="inner">
+        <div class="redbag_pop pop2" id="redPacket_mini2">
+            <div class="cont">
+                <div class="rb_top2">
+                    <span>开抢倒计时</span>
                 </div>
+                <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_miniRob"><i class="">抢</i><b class="bg"><b></b></b></a>
+                <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_miniWait"><i class="t5" rp="seconds"></i><b class="bg"><b></b></b></a>
+                <div class="rb_tip">
+                    <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
+                    <div class="rb_check">
+                        <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
+                        <span class="ctext">勾选后不再弹出提醒</span>
+                    </div>
+                </div>
+                <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
             </div>
-            <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
         </div>
     </div>
 </div>

@@ -21,7 +21,7 @@
     <!--[if lt IE 9]>
     <link href="/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
     <!--<%if(isRedPacket) {%>-->
-    <link href="/theme1/css/redbag201703.css" rel="stylesheet" type="text/css">
+    <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
     <!--<%}%>-->
     <![endif]-->
     <!--[if lt IE 7]>
@@ -54,12 +54,10 @@
         <div class="box-header-in clearfix">
             <h1 class="fl hide-t" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_logo', 'content_top', 1, true]);">视频直播间</h1>
             <%if(isRedPacket) {%>
-                <div class="header_redbag fl" id="redPacket_header" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'dhk_banner', 'content_middle', 1, true]);">
+                <div class="header_redbag fl" id="redPacket_header">
                     <div class="redbag_pic"></div>
                     <div class="rb_text">
-                        <div class="te1"><strong>阳春点花魁</strong> 第
-                            <b rp="timesLabel"></b>波微信红包
-                        </div>
+                        <div class="te1">第<b rp="timesLabel"></b>波微信红包</div>
                         <div class="timecount">
                             <b rp="minutesLabel"></b>
                             <span>分</span>
@@ -69,9 +67,7 @@
                     </div>
                 </div>
                 <%} else{ %>
-                    <div class="header_ad fl">
-                        <a href="http://www.24k.hk/special/analyst.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
-                    </div>
+                    <a href="http://www.24k.hk/lp_v182_201704pxb.html" target="_blank"></a>
                     <%}%>
 
                         <!--div class="header-btn fl">
@@ -167,6 +163,7 @@
                     indexJS.syllabusData = common.formatToJson('<%- syllabusData%>');
                     indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
                     indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
+                    indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式

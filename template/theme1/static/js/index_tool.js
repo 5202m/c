@@ -217,27 +217,24 @@ var indexTool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000 * 2, //红包周期30分钟
+            cycleTime: 300000, //红包周期5分钟
             stayTime: 5000, //红包停留时间5秒
-            startTime: 30720000, //8:32
-            endTime: 84600000, //23:30
+            startTime: 57540001, //16:00
+            endTime: 64740001, //18:00
+            nextStartTime: 71940001, //20:00
+            nextEndTime: 79140001, //22:00
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
-                /*08:32*/
-                { start: 30720000, userId: "joe_zhuang", userName: "庄蓝玉", wechat: "zhuang24k", wechatImg: "/theme1/img/joe_zhuang.png" },
-                /*11:31*/
-                { start: 41400001, userId: "dan_yeh", userName: "叶航", wechat: "yehang24k", wechatImg: "/theme1/img/dan_yeh.png" },
-                /*14:31*/
-                { start: 52200001, userId: "eric_liu", userName: "刘策", wechat: "liu_gw24k", wechatImg: "/theme1/img/eric_liu.png" },
-                /*17:31*/
-                { start: 63000001, userId: "buck_chen", userName: "陈铎", wechat: "chen_gw24k", wechatImg: "/theme1/img/buck_chen.png" },
-                /*20:31*/
-                { start: 73800001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme1/img/yx_lin.png" }
-            ], //23:30*/
+                /* 16:00——18:00*/
+                { start: 57540001, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme1/img/joe_zhuangToCJ.png" },
+                /* 20:00——22:00*/
+                { start: 71940001, userId: "buck_chenToCJ", userName: "陈铎", wechat: "xuechaojin2", wechatImg: "/theme1/img/buck_chenToCJ.png" }
+            ],
 
             redPacketPopFlag: true, //红包弹出标记
             miniClose: false, //mini窗关闭标识，手动关闭后，当次不再弹出
             opened: false, //是否已经点击抢红包标记
+
             times: 0, //次数
             minutes: 0, //分钟数
             seconds: 0, //秒数
@@ -257,13 +254,42 @@ var indexTool = {
         },
 
         /**
+         * 获取最新红包期数
+         * @returns {number}
+         */
+        getcurrentPariod: function() {
+            var now = new Date();
+            var curHours = now.getHours();
+            var curMinutes = now.getMinutes();
+            if (curHours < 10) {
+                curHours = '0' + curHours;
+            }
+            if (curMinutes < 10) {
+                curMinutes = '0' + curMinutes;
+            }
+            var curHMDate = curHours + ":" + curMinutes;
+            var redPacketPeriods = indexJS.redPacketLastPeriods.split(',');
+            var currentPariod = 1;
+            for (var i = 0; i < redPacketPeriods.length; i++) {
+                if (curHMDate < redPacketPeriods[i]) {
+                    currentPariod = i + 1;
+                    break;
+                }
+            }
+            return currentPariod;
+        },
+
+        /**
          * 绑定事件
          */
         setEvent: function() {
 
             //红包视图-顶部
-            $("#redPacket_header,#redPacket_chat").bind("view", function() {
+            $("#redPacket_header").bind("view", function() {
                 var config = indexTool.RedPacket.config;
+                //获取红包期数
+                var currentPariod = indexTool.RedPacket.getcurrentPariod();
+                $("#timesLabel").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
                 });
@@ -272,7 +298,8 @@ var indexTool = {
             //红包视图-右侧小窗
             $("#redPacket_mini").bind("view", function() {
                 var config = indexTool.RedPacket.config;
-                $("#redPacket_mini [rp='timesLabel']").text(config.timesLabel);
+                var currentPariod = indexTool.RedPacket.getcurrentPariod();
+                $("#redPacket_mini [rp='timesLabel']").text(currentPariod);
                 if (indexTool.RedPacket.isStayTime()) {
                     $("#redPacket_miniWait").hide();
                     $("#redPacket_miniRob").show();
@@ -304,10 +331,11 @@ var indexTool = {
             //红包视图-主界面
             $("#redPacket_normal").bind("view", function() {
                 var config = indexTool.RedPacket.config;
+                var currentPariod = indexTool.RedPacket.getcurrentPariod();
+                $("#timesLabel2").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
                 });
-                $(this).find("[t=totalBonus]").text(config.totalBonus);
                 if (indexTool.RedPacket.isStayTime()) {
                     $("#redPacket_wait").hide();
                     $("#redPacket_rob").show();
@@ -374,7 +402,7 @@ var indexTool = {
             });
 
             //抢红包
-            $(".ani").bind("click", function() {
+            $("#redPacket_miniRob,#redPacket_rob").bind("click", function() {
                 if (!indexTool.RedPacket.config.opened) {
                     indexTool.RedPacket.config.opened = true;
                     indexTool.RedPacket.rob();
@@ -382,6 +410,7 @@ var indexTool = {
             });
 
         },
+
 
         /**显示视图*/
         view: function() {
@@ -461,6 +490,10 @@ var indexTool = {
             var today = new Date(time);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             time -= today.getTime();
+            if (time > config.endTime) {
+                indexTool.RedPacket.tick2();
+                return;
+            }
             if (indexTool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
                 if (time - config.redPacketPeriods >= config.stayTime) {
                     config.miniClose = false;
@@ -469,9 +502,55 @@ var indexTool = {
             }
             this.isRedPacketTime(function(isOK) {
                 if (isOK) {
-                    config.times = Math.ceil((time - config.startTime) / config.cycleTime);
-                    config.timesLabel = config.times;
+                    var currentPariod = indexTool.RedPacket.getcurrentPariod();
+                    config.timesLabel = currentPariod;
                     var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
+                    config.minutes = Math.floor(countDown / 60000);
+                    config.seconds = Math.floor(countDown % 60000 / 1000);
+                    if (config.minutes == 0 && config.seconds == 0) {
+                        //抢红包开始，记录红包期数
+                        config.redPacketPeriods = time;
+                        config.minutes = Math.floor(config.cycleTime / 60000);
+                        config.seconds = Math.floor(config.cycleTime % 60000 / 1000);
+                    }
+                    config.minutesLabel = (config.minutes < 10 ? "0" : "") + config.minutes;
+                    config.secondsLabel = (config.seconds < 10 ? "0" : "") + config.seconds;
+                } else {
+                    config.times = 0;
+                    config.timesLabel = "--";
+                    config.minutes = -1;
+                    config.minutesLabel = "--";
+                    config.seconds = -1;
+                    config.secondsLabel = "--";
+                    config.redPacketPeriods = 0;
+                }
+                indexTool.RedPacket.view();
+            });
+        },
+
+        /**
+         * 定时器
+         */
+        tick2: function() {
+            if (!this.config.init) {
+                return;
+            }
+            var config = this.config;
+            var time = indexJS.serverTime;
+            var today = new Date(time);
+            today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            time -= today.getTime();
+            if (indexTool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
+                if (time - config.redPacketPeriods >= config.stayTime) {
+                    config.miniClose = false;
+                    config.redPacketPeriods = 0;
+                }
+            }
+            this.isRedPacketTimeToNight(function(isOK) {
+                if (isOK) {
+                    var currentPariod = indexTool.RedPacket.getcurrentPariod();
+                    config.timesLabel = currentPariod;
+                    var countDown = config.cycleTime - ((time - config.nextStartTime) % config.cycleTime);
                     config.minutes = Math.floor(countDown / 60000);
                     config.seconds = Math.floor(countDown % 60000 / 1000);
                     if (config.minutes == 0 && config.seconds == 0) {
@@ -505,7 +584,7 @@ var indexTool = {
                 return;
             }
             config.courseTime = -3;
-            $.getJSON(indexJS.apiUrl + '/common/getCourse', { platform: "web24k", 'flag': 'S' }, function(data) {
+            $.getJSON(indexJS.apiUrl + '/common/getCourse', { platform: "web24k", 'flag': 'D' }, function(data) {
                 if (data.result == 0) {
                     if (!data.data || data.data.length == 0) {
                         indexTool.RedPacket.config.courseTime = -2;
@@ -539,6 +618,22 @@ var indexTool = {
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
             var time = indexJS.serverTime - today;
             if (time <= this.config.startTime || time > this.config.endTime) {
+                callback(false);
+                return;
+            }
+            this.initCourseTime(function(courseTime) {
+                callback(today + 86400000 - 1 == courseTime);
+            });
+        },
+
+        /**
+         * 是否红包时间(晚上时间)
+         */
+        isRedPacketTimeToNight: function(callback) {
+            var today = new Date(indexJS.serverTime);
+            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+            var time = indexJS.serverTime - today;
+            if (time <= this.config.nextStartTime || time > this.config.nextEndTime) {
                 callback(false);
                 return;
             }

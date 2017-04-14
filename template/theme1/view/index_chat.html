@@ -36,25 +36,6 @@
             <div class="main_tab on" t="livepride">
                 <div class="livebrief_list">
                     <div class="scrollbox">
-                        <%if(isRedPacket) {%>
-                        <div class="tab_redbag clearfix" id="redPacket_chat" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_zbjh_topbanner', 'content_middle', 1, true]);">
-                            <div class="rb_cont">
-                                <div class="redbag_pic"></div>
-                                <div class="te1">第<b rp="timesLabel"></b>波微信红包</div>
-                                <div class="te2">
-                                    <b>阳春点花魁</b>
-                                    <span> 每10分钟一波！</span>
-                                </div>
-                                <div class="timecount">
-                                    <b rp="minutesLabel"></b><span>分</span>
-                                    <b rp="secondsLabel"></b><span>秒</span>
-                                </div>
-                                <div class="rb_topic">
-                                    <a href="javascript:void(0)">抢</a>
-                                </div>
-                            </div>
-                        </div>
-                        <%}%>
                         <div id="textlivePanel">
                             <div class="livebrief" id="financeDataAndReview">
                                 <div class="calendabox financeData"></div>
@@ -311,7 +292,9 @@
                                 <div class="view_select teacher_select">
                                     <div class="se_cont">
                                         <div class="selected">查看其他老师</div>
-                                        <div class="selectlist"></div>
+                                        <div class="selectlist">
+                                            <div class="inner-scrollbox"></div>
+                                        </div>
                                     </div>
                                     <i></i>
                                 </div>
