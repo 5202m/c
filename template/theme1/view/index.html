@@ -216,9 +216,9 @@
                     <script type="text/javascript">
                         basket.version = '<%=version%>';
                         basket.require({
-                            url: "/theme1/js/lib.min.js"
+                            url: "/theme1/js/lib.min.js?v=<%=version%>"
                         }, {
-                            url: "/theme1/js/index.min.js"
+                            url: "/theme1/js/index.min.js?v=<%=version%>"
                         }, pageFunc).then(pageFunc);
                     </script>
                     <%}%>
