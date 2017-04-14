@@ -5,6 +5,7 @@
 var Room = new Container({
     panel : $("#page_room"),
     url : "/theme2/template/room.html",
+    wechatCode : null,
     onLoad : function(){
         Player.init();
         Room.setEvent();
@@ -73,7 +74,7 @@ Room.initPage = function(){
  */
 Room.watchRemind = function (room) {
     //未登录用户进入非新手房间：曾经已看3分钟，直接弹出。否则3分钟之后弹出提示框。
-    if (!Data.userInfo.isLogin && room.rootType != "simple") {
+    if (!Data.userInfo.isLogin && room.roomType != "simple") {
         var lgt = room.loginBoxTime,lgtTips = room.loginBoxTip || "您已经观看了".concat(lgt).concat("分钟，赶紧登录再继续观看吧"); //后台控制登录弹框时间以及提示语
         if (/\d+(\.\d+)?/.test(lgt)) {
             lgt = parseFloat(lgt);
@@ -214,6 +215,11 @@ Room.setEvent = function(){
      * 打开微信QRCode
      */
     $('#room_teacherOps').on('click', 'a.add-wx', function(){
+        if(Util.isAppEnv()){
+            $('#teacherWechat i').remove();
+            var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Room.wechatCode).concat('<br/>就可以加老师为微信好友');
+            $('#teacherWechat .pop-msg').html(tipText);
+        }
         $('#teacherWechat').show();
     });
     /**
@@ -226,6 +232,11 @@ Room.setEvent = function(){
      * 打开打赏
      */
     $('#room_teacherOps').on('click', 'a.add-ds', function(){
+        if(Util.isAppEnv()){
+            $('#teacherDollar i').remove();
+            var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Room.wechatCode).concat('<br/>加老师为微信好友<br/>就可以给老师打赏发红包啦');
+            $('#teacherDollar .pop-msg').html(tipText);
+        }
         $('#teacherDollar').show();
     });
     /**
@@ -285,6 +296,13 @@ Room.setEvent = function(){
         if(_class === 'bg-blue'){//登录
             Login.load();
         }else if(_class === 'bg-green'){//新手专栏
+            var rooms = Data.roomList || [];
+            $.each(rooms,function (index,row) {
+               if(row.roomType === 'simple'){
+                   Novice.currentRoomId = row.id;
+                   return false;
+               }
+            });
             Novice.load();
         }
     });
@@ -366,6 +384,7 @@ Room.setLecturerTool = function (lecturerId) {
         if(userInfo){
             var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
             $('#room_teacherOps').html(toolHtml);
+            Room.wechatCode = userInfo.wechatCode;
             var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
             var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
             $('#teacherWechat').empty().html(wechatHtml);
