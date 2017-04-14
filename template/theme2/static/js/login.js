@@ -336,6 +336,10 @@ Login.doLogin = function(){
                     LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
                     Container.back();
                 }
+                var key = 'storeInfos_' + Data.userInfo.groupType,
+                    keyVal = Store.store(key);
+                keyVal.loginId = Data.userInfo.userId;
+                Store.store(key, keyVal);
             }
         },true,function(){
             Login.resetFormInput();

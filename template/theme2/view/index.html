@@ -38,7 +38,11 @@
             </div>
             <div class="rightbar">
                 <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
-                <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
+                <%if(userSession.isLogin){%>
+                  <a href="javascript:void(0);" class="loginbtn"><%= userSession.nickname || "匿名_xxx" %></a>
+                <%} else {%>
+                   <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
+                <%}%>
             </div>
         </section>
     </header>
