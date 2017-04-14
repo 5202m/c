@@ -11,7 +11,7 @@ var Index = {
         this.setEvent();
         this.verifyTrainRoom();
 
-        if (Data.userInfo.groupId) {
+        if (Util.isNotBlank(Data.userInfo.groupId)) {
             Room.load();
         } else {
             Rooms.load();
