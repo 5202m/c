@@ -19,8 +19,8 @@ var Index = {
         Pop.signIn.init();
     },
     verifyTrainRoom: function() {
-        if (LoginAuto.sessionUser.groupId !== LoginAuto.sessionUser.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
-            Trains.changeRoom(LoginAuto.sessionUser.intentionalRoomId)
+        if (Util.isNotEmpty(Data.userInfo.intentionalRoomId) && Data.userInfo.groupId !== Data.userInfo.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
+            Trains.changeRoom(Data.userInfo.intentionalRoomId);
         }
     },
     /**
