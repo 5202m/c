@@ -49,6 +49,9 @@ ShowTrade.setShowTradeList = function(){
             continue;
         }
         var showTradeDate = Util.formatDate(row.showDate,'MM-dd HH:mm');
+        if(row.user.avatar.indexOf('/pm/theme1/img/user.png') > -1){
+            row.user.avatar = '/theme2/img/user.png';
+        }
         tradeHtml.push(ShowTrade.formatHtml('showTrade',
             row.user.userName,
             showTradeDate,

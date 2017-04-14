@@ -103,8 +103,8 @@ Analyst.setShowTradeList = function(){
         }
         html.push(Analyst.formatHtml('analystShowTrade',
             proFit,
-            //tradeImg,
-            Util.formatDate(trade.showDate, 'MM-dd HH:mm')
+            Util.formatDate(trade.showDate, 'MM-dd HH:mm'),
+            tradeImg
         ).replace('/theme2/img/pic-4.png',tradeImg));
     }
     if(i >= lenI - 1){
@@ -335,7 +335,7 @@ Analyst.setEvent = function(){
     /**
      * 教学视频点击事件
      */
-    $('#analystTeachVideoList').on('click','li',function () {
+    $('#analystTeachVideoList,#analystVideoList').on('click','li',function () {
         VideoPlay.videoUrl = $(this).find('a').attr('vurl');
         VideoPlay.videoTitle = $(this).find('a').attr('title');
         VideoPlay.load();
