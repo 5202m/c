@@ -52,7 +52,7 @@
                     <a href="javascript:void(0);" class="btn btn-blue sign-btn">签到</a>
                 </div>
                 <div class="feedback_bar al-c">
-	                <span class="checkbox-cm">
+                    <span class="checkbox-cm">
 	                    <input type="checkbox" id="notipme" class="auto-login"><label for="notipme">不再提示我</label>
 	                </span>
                 </div>
@@ -66,3 +66,99 @@
         </div>
     </div>
 </div>
+<%if(isRedPacket) {%>
+    <!-- 抢红包-已登录状态 -->
+    <div class="redbag_pop dn" id="redPacket_normal">
+        <div class="cont">
+            <div class="rb_top2">
+                <span>开抢倒计时</span>
+                <div class="timecount">
+                    <span><b rp="minutesLabel"></b>分</span>
+                    <span><b rp="secondsLabel"></b>秒</span>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob"><i class="">抢</i><b class="bg"><b></b></b></a>
+            <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait"><i class="wait">等待开抢</i><b class="bg"><b></b></b></a>
+            <div class="rb_tip">
+                <div class="rbnum">第<span id="timesLabel"></span>波微信红包</div>
+                <div class="tspan">
+                    培训班直播时段内每5分钟将有<br>一大波10元微信现金红包来袭！<br>人人有份，即刻开抢啦！
+                    <div class="dashang_rule">
+                        <a href="javascript:void(0)">活动规则<i></i></a>
+                        <div class="ds_rulecont">
+                            <div class="arr"><i></i><i class="i2"></i></div>
+                            <div class="scrollbox">
+                                <span><b>•</b>活动规则</span>
+                                <ul>
+                                    <li>1.培训班开课期间，培训班内每隔5分钟将发放一波奖金红包，所有参加培训班的客户皆可参与“抢红包”；</li>
+                                    <li>2.中奖客户需要同步关注培训班分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                                    <li>3.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系直播间助理登记验证，以发放双倍红包奖金；</li>
+                                    <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户4月11日中奖，则奖金红包于4月12日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
+                                    <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
+        </div>
+    </div>
+
+    <!-- 抢红包-结果页-无奖 -->
+    <div class="redbag_pop rb_result dn" id="redPacket_resNo">
+        <div class="cont">
+            <div class="rb_top2">
+                <span><i></i>很遗憾，此次未中奖！<i></i></span>
+                <span class="sp2"><b>5分钟</b>后又将有 <br>一大波红包来袭，再接再厉哦！</span>
+            </div>
+            <div class="rb_tip2">
+                <div class="tspan"><b>欢迎扫码关注下方分析师微信 <br>实时获取老师交易/喊单策略 </b></div>
+                <div class="tspan">当期老师微信二维码</div>
+            </div>
+            <div class="qrcode-con">
+                <img src="" alt="" <b rp="wechatImg"></b>>
+                <p class="p1"> <span>微信号：<b rp="wechatCode"></b></span></p>
+            </div>
+            <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
+        </div>
+    </div>
+
+    <!-- 抢红包-结果页-中奖！ -->
+    <div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
+        <div class="cont">
+            <div class="congratulation">恭喜获得<br /><b rp="money"></b>元微信红包
+                <p>若当天注资激活可获得<b rp="doubleMoney"></b>元！</p>
+            </div>
+            <div class="rb_tip2">
+                <div class="tspan">当期老师微信二维码</div>
+            </div>
+            <div class="qrcode-con">
+                <img src="" alt="" rp="wechatImg">
+                <p class="p1"> <span>微信号：<b rp="wechat"></b></span></p>
+                <p class="p2"><b>兑奖办法：</b>请扫码关注上方分析师微信，并提供您的中奖手机号码给分析师验证并领取现金红包！</p>
+            </div>
+            <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
+        </div>
+    </div>
+
+
+    <!-- 抢红包-5秒倒计时 -->
+    <div class="redbag_pop pop2 dn" id="redPacket_mini">
+        <div class="cont">
+            <div class="rb_top2">
+                <span>开抢倒计时</span>
+            </div>
+            <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_miniRob"><i class="">抢</i><b class="bg"><b></b></b></a>
+            <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_miniWait"><i class="t5" rp="seconds"></i><b class="bg"><b></b></b></a>
+            <div class="rb_tip">
+                <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
+                <div class="rb_check">
+                    <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
+                    <span class="ctext">勾选后不再弹出提醒</span>
+                </div>
+            </div>
+            <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
+        </div>
+    </div>
+    <%}%>

@@ -437,8 +437,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             }
             viewDataObj.studioList = newStudioList;
             viewDataObj.isDevTest = config.isDevTest;
-            viewDataObj.isRedPacket = config.isRedPacket;
-
+            viewDataObj.redPacketLastPeriods = constant.periods.toString();
             //记录访客信息
             var fromPlatform = options.platform;
             var snUser = req.session.studioUserInfo;
@@ -471,6 +470,11 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                     accountNo: snUser.accountNo
                 };
                 visitorService.saveVisitorRecord("login", vrRow);
+            }
+            if (snUser.groupId == config.cjTrainRoom) {
+                viewDataObj.isRedPacket = config.isRedPacket;
+            } else {
+                viewDataObj.isRedPacket = false;
             }
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
