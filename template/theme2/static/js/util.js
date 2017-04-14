@@ -662,5 +662,12 @@ var Util ={
         var _wheight = $(window).height();
         var _objheight = _mtbobj.outerHeight(true)-_mtbobj.height();
         $('body > .content_w').css("min-height",_wheight-_objheight+'px'); //高度控制
+    },
+
+    /**
+     * 判断当前是否为app环境
+     */
+    isAppEnv : function () {
+        return Data.userInfo.platform === 'app' ? true : false;
     }
 };

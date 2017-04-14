@@ -1372,7 +1372,7 @@ var Chat = {
             if(panel.scrollTop() == 0 || panel.scrollTop() + panel.height() + 30 >= panel[0].scrollHeight){
                 this.whScrolling = true;
                 window.setTimeout(function(){
-                    $("#"+domId).height($('#page_privateChat').height()
+                    $("#"+domId).height($(window).height()
                         -$('#page_privateChat .head-top').height()
                         -$('#page_privateChat .chat-con .fixed-con .chat-op').height()
                         -40

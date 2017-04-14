@@ -15,6 +15,7 @@ var Room = new Container({
         Room.initPage();
         Room.loadRoomClassNote();
         Room.handleNoviceRoom();
+        if(Util.isAppEnv())$('.upload-pic').parent().remove();
     },
     onHide: function() {
         Player.player.clear($("#roomVideo"));
@@ -361,28 +362,29 @@ Room.showLecturer = function(lecturerId) {
  * 显示讲师工具栏
  * @param lecturerId
  */
-Room.setLecturerTool = function(lecturerId) {
-        if (!lecturerId) return;
-        Util.postJson('/getShowTeacher', { data: JSON.stringify({ groupId: Data.userInfo.groupId, authorId: lecturerId }) }, function(data) {
-            var userInfo = data.userInfo;
-            if (userInfo) {
-                var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
-                $('#room_teacherOps').html(toolHtml);
-                var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode, userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png', userInfo.wechatCodeImg);
-                var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode, userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png', userInfo.wechatCodeImg);
-                $('#teacherWechat').empty().html(wechatHtml);
-                $('#teacherDollar').empty().html(dollarHtml);
-                Subscribe.setSubscribeAttr($('#roomSubscribe'), lecturerId);
-                Subscribe.setSubscribeType(function(subscribeType) {
-                    if (lecturerId === subscribeType.userId) {
-                        var type = $('#roomSubscribe').attr('type');
-                        var types = type === '' ? [] : type.split(',');
-                        types.push(subscribeType.code);
-                        $('#roomSubscribe').attr('type', types.join(','));
-                        return false;
-                    }
-                });
-            }
+Room.setLecturerTool = function (lecturerId) {
+    if(!lecturerId) return;
+    Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:lecturerId})},function(data) {
+        var userInfo = data.userInfo;
+        if(userInfo){
+            var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
+            $('#room_teacherOps').html(toolHtml);
+            var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+            var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
+            $('#teacherWechat').empty().html(wechatHtml);
+            $('#teacherDollar').empty().html(dollarHtml);
+            Subscribe.setSubscribeAttr($('#roomSubscribe'),lecturerId);
+            Subscribe.setSubscribeType(function (subscribeType) {
+                if(lecturerId === subscribeType.userId){
+                    var type = $('#roomSubscribe').attr('type');
+                    var types = type==='' ? [] : type.split(',');
+                    types.push(subscribeType.code);
+                    $('#roomSubscribe').attr('type',types.join(','));
+                    $('#roomSubscribe').show();
+                    return false;
+                }
+            });
+        }
 
         });
     }

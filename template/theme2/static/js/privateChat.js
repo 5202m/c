@@ -18,6 +18,7 @@ var PrivateChat = new Container({
             PrivateChat.isChangeRoom = false;
         }
         $('#contentText').text('').trigger('input');
+        if(Util.isAppEnv())$('#privateChat_pic').parent().remove();
     }
 });
 

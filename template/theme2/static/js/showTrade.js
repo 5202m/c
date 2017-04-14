@@ -10,6 +10,9 @@ var ShowTrade = new Container({
     onLoad : function(){
         ShowTrade.getShowTrade();
         ShowTrade.setEvent();
+    },
+    onShow : function () {
+        if(Util.isAppEnv())$('.addShowTrade .i-addbtn3').hide();
     }
 });
 
