@@ -54,17 +54,19 @@ Room.currGroupId = null;
  */
 Room.initPage = function() {
     Data.getRoom(function(room) {
-        var isChangeRoom = room ? (room.id != Room.currGroupId) : false;
-        Chat.WhTalk.enable = room.allowWhisper, Chat.WhTalk.whisperRoles = room.whisperRoles;
-        if (isChangeRoom) { //房间已经切换，
-            Room.currGroupId = room.id;
-            $("#room_roomName").html(room.name);
-            Player.startPlay();
-            Chat.init();
-            Room.showCourse();
-            PrivateChat.isChangeRoom = true;
+        if (room) {
+            var isChangeRoom = room ? (room.id != Room.currGroupId) : false;
+            Chat.WhTalk.enable = room.allowWhisper, Chat.WhTalk.whisperRoles = room.whisperRoles;
+            if (isChangeRoom) { //房间已经切换，
+                Room.currGroupId = room.id;
+                $("#room_roomName").html(room.name);
+                Player.startPlay();
+                Chat.init();
+                Room.showCourse();
+                PrivateChat.isChangeRoom = true;
+            }
+            Room.watchRemind(room);
         }
-        Room.watchRemind(room);
     });
 };
 
