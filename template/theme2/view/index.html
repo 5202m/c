@@ -18,7 +18,16 @@
         <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
         <% }else{ %>
             <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-            <% } %>
+        <% } %>
+    <script type="text/javascript" src="/base/lib/store.min.js"></script>
+    <script type="text/javascript" src="/theme2/js/store.js"></script>
+    <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+    <script>
+        //自动登录中...
+        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+        LoginAuto.init();
+        //自动登录完成
+    </script>
 </head>
 
 <body class="home">
@@ -153,19 +162,16 @@
                 $(pageFunc);
             </script>
             <% }else{ %>
-                <!--script type="text/javascript" src="/base/lib/basket.min.js"></script>
+                <script type="text/javascript" src="/base/lib/basket.min.js"></script>
                 <script type="text/javascript">
                     basket.version = '<%=version%>';
-                    basket.require({
-                        url: "/theme2/js/lib.min.js?v=<%=version%>"
-                    }, {
-                        url: "/theme2/js/index.min.js?v=<%=version%>"
-                    }, null).then(pageFunc);
-                </script -->
-                <script type="text/javascript" src="/theme2/js/lib.min.js?v=<%=version%>"></script>
-                <script type="text/javascript" src="/theme2/js/index.min.js?v=<%=version%>"></script>
-                <script type="text/javascript">
-                    $(pageFunc);
+                    basket.require(
+                            {
+                                url: "/theme2/js/lib.min.js?v=<%=version%>"
+                            },
+                            {
+                                url: "/theme2/js/index.min.js?v=<%=version%>"
+                            }, null).then(pageFunc);
                 </script>
                 <% } %>
 </body>

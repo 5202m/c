@@ -143,61 +143,62 @@ var fileList = [
 
     // PM-theme2
     {
-        "out": "\\template\\theme2\\static\\css\\index.min.css",
+        "out": "template\\theme2\\static\\css\\index.min.css",
         "in": [
             "\\template\\theme2\\static\\css\\index.css",
             "\\template\\theme2\\static\\css\\guide.css"
         ]
     },
     {
-        "out": "\\template\\theme2\\static\\js\\lib.min.js",
+        "out": "template\\theme2\\static\\js\\lg.min.js",
         "marge": false,
-        "in": [
-            "\\template\\base\\lib\\jquery-1.7.min.js",
-            "\\template\\base\\lib\\socket.io.js",
-            "\\template\\base\\lib\\websocket.min.js",
-            "\\template\\base\\lib\\swipe\\swiper.min.js",
-            "\\template\\base\\lib\\lightbox\\lightbox.min.js",
-            "\\template\\base\\lib\\lazyload\\img.lazyload.js",
-            "\\template\\base\\lib\\toucher.js",
-            "\\template\\base\\lib\\iphone-inline-video.browser.js"
+        "in": ["template\\theme2\\static\\js\\loginAuto.js"]
+    },
+    {
+        "out": "template\\theme2\\static\\js\\lib.min.js",
+        "marge": true,
+        "in": ["template\\base\\lib\\jquery-1.7.min.js",
+            "template\\base\\lib\\socket.io.js",
+            "template\\base\\lib\\swipe\\swiper.min.js",
+            "template\\base\\lib\\lightbox\\lightbox.min.js",
+            "template\\base\\lib\\lazyload\\img.lazyload.js",
+            "template\\base\\lib\\toucher.js",
+            "template\\base\\lib\\websocket.min.js",
+            "template\\base\\lib\\iphone-inline-video.browser.js"
         ]
     },
     {
-        "out": "\\template\\theme2\\static\\js\\index.min.js",
+        "out": "template\\theme2\\static\\js\\index.min.js",
         "marge": false,
         "in": [
-            "\\template\\theme2\\static\\js\\chatAnalyze.js",
-            "\\template\\theme2\\static\\js\\container.js",
-            "\\template\\theme2\\static\\js\\pop.js",
-            "\\template\\theme2\\static\\js\\login.js",
-            "\\template\\theme2\\static\\js\\chat.js",
-            "\\template\\theme2\\static\\js\\classNote.js",
-            "\\template\\theme2\\static\\js\\data.js",
-            "\\template\\theme2\\static\\js\\index.js",
-            "\\template\\theme2\\static\\js\\loginAuto.js",
-            "\\template\\theme2\\static\\js\\player.js",
-            "\\template\\theme2\\static\\js\\room.js",
-            "\\template\\theme2\\static\\js\\rooms.js",
-            "\\template\\theme2\\static\\js\\store.js",
-            "\\template\\theme2\\static\\js\\subscribe.js",
-            "\\template\\theme2\\static\\js\\syllabus.js",
-            "\\template\\theme2\\static\\js\\analyst.js",
-            "\\template\\theme2\\static\\js\\showTrade.js",
-            "\\template\\theme2\\static\\js\\userShowTrade.js",
-            "\\template\\theme2\\static\\js\\showTradeAdd.js",
-            "\\template\\theme2\\static\\js\\trains.js",
-            "\\template\\theme2\\static\\js\\tool.js",
-            "\\template\\theme2\\static\\js\\util.js",
-            "\\template\\theme2\\static\\js\\novice.js",
-            "\\template\\theme2\\static\\js\\teach.js",
-            "\\template\\theme2\\static\\js\\noviceGuide.js",
-            "\\template\\theme2\\static\\js\\privateChat.js",
-            "\\template\\theme2\\static\\js\\videoPlayer.js",
-            "\\template\\theme2\\static\\js\\yylive2.js"
-        ]
+            "template\\theme2\\static\\js\\chatAnalyze.js",
+            "template\\theme2\\static\\js\\container.js",
+            "template\\theme2\\static\\js\\pop.js",
+            "template\\theme2\\static\\js\\login.js",
+            "template\\theme2\\static\\js\\chat.js",
+            "template\\theme2\\static\\js\\classNote.js",
+            "template\\theme2\\static\\js\\data.js",
+            "template\\theme2\\static\\js\\index.js",
+            "template\\theme2\\static\\js\\player.js",
+            "template\\theme2\\static\\js\\room.js",
+            "template\\theme2\\static\\js\\rooms.js",
+            "template\\theme2\\static\\js\\subscribe.js",
+            "template\\theme2\\static\\js\\syllabus.js",
+            "template\\theme2\\static\\js\\analyst.js",
+            "template\\theme2\\static\\js\\showTrade.js",
+            "template\\theme2\\static\\js\\userShowTrade.js",
+            "template\\theme2\\static\\js\\showTradeAdd.js",
+            "template\\theme2\\static\\js\\trains.js",
+            "template\\theme2\\static\\js\\tool.js",
+            "template\\theme2\\static\\js\\util.js",
+            "template\\theme2\\static\\js\\novice.js",
+            "template\\theme2\\static\\js\\teach.js",
+            "template\\theme2\\static\\js\\noviceGuide.js",
+            "template\\theme2\\static\\js\\privateChat.js",
+            "template\\theme2\\static\\js\\videoPlayer.js",
+            "template\\theme2\\static\\js\\yylive2.js"
+            ]
     },
-
     // PM-theme3
     {
         "out": "\\template\\theme3\\static\\css\\index.min.css",

@@ -212,7 +212,7 @@
                     $(pageFunc);
                 </script>
                 <%} else{ %>
-                    <!--script type="text/javascript" src="/base/lib/basket.min.js"></script>
+                    <script type="text/javascript" src="/base/lib/basket.min.js"></script>
                     <script type="text/javascript">
                         basket.version = '<%=version%>';
                         basket.require({
@@ -220,12 +220,6 @@
                         }, {
                             url: "/theme1/js/index.min.js"
                         }, pageFunc).then(pageFunc);
-                    </script -->
-                    <script type="text/javascript" src="/theme1/js/lib.min.js?v=<%=version%>"></script>
-                    <script type="text/javascript" src="/theme1/js/index.min.js?v=<%=version%>"></script>
-
-                    <script type="text/javascript">
-                        $(pageFunc);
                     </script>
                     <%}%>
 </body>
