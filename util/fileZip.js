@@ -143,17 +143,10 @@ var fileList = [
 
     // PM-theme2
     {
-        "out": "\\template\\theme2\\static\\css\\lib.min.css",
-        "in": [
-            "\\template\\base\\lib\\swipe\\swiper.min.css",
-            "\\template\\base\\lib\\lightbox\\lightbox.css"
-        ]
-    },
-    {
         "out": "\\template\\theme2\\static\\css\\index.min.css",
         "in": [
-            "\\template\\theme2\\css\\index.css",
-            "\\template\\theme2\\css\\guide.css"
+            "\\template\\theme2\\static\\css\\index.css",
+            "\\template\\theme2\\static\\css\\guide.css"
         ]
     },
     {
