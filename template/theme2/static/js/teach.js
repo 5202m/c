@@ -94,7 +94,7 @@ Teach.initPage = function () {
 Teach.loadVideoData = function(isMore){
     Index.getArticleList({
         code : Teach.currentCode,
-        platform : 'studio_teach', //当前后台配置为此，此处需要改
+        platform : Data.userInfo.groupId, 
         hasContent : 1,
         pageSize : 30,
         pageKey: "",
