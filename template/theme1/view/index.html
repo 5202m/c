@@ -170,6 +170,12 @@
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
+
+                    $(".dashang_rule .scrollbox").mCustomScrollbar({
+                        theme: "light-thick",
+                        scrollbarPosition: "outside",
+                        scrollButtons: false
+                    });
                 }
             </script>
             <%if(isDevTest) {%>
@@ -203,10 +209,10 @@
                 <script type="text/javascript" src="/theme1/js/index_tool.js"></script>
 
                 <script type="text/javascript">
-                    pageFunc();
+                    $(pageFunc);
                 </script>
                 <%} else{ %>
-                    <script type="text/javascript" src="/base/lib/basket.min.js"></script>
+                    <!--script type="text/javascript" src="/base/lib/basket.min.js"></script>
                     <script type="text/javascript">
                         basket.version = '<%=version%>';
                         basket.require({
@@ -214,15 +220,14 @@
                         }, {
                             url: "/theme1/js/index.min.js"
                         }, pageFunc).then(pageFunc);
+                    </script -->
+                    <script type="text/javascript" src="/theme1/js/lib.min.js?v=<%=version%>"></script>
+                    <script type="text/javascript" src="/theme1/js/index.min.js?v=<%=version%>"></script>
+
+                    <script type="text/javascript">
+                        $(pageFunc);
                     </script>
                     <%}%>
-                        <script type="text/javascript">
-                            $(".dashang_rule .scrollbox").mCustomScrollbar({
-                                theme: "light-thick",
-                                scrollbarPosition: "outside",
-                                scrollButtons: false
-                            });
-                        </script>
 </body>
 
 </html>
