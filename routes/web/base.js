@@ -305,7 +305,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 userId: chatUser.userId,
                 clientGroup: chatUser.clientGroup,
                 nickname: chatUser.nickname,
-                userType: chatUser.userType
+                userType: chatUser.userType,
+                platform:options&&options.platform
             });
             viewDataObj.userSession = chatUser;
             viewDataObj.serverTime = new Date().getTime();

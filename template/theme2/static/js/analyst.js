@@ -120,6 +120,9 @@ Analyst.setTrain = function(trainList, trAndClNum){
     if(trainList){
         var  trainHtml = [], trainTitleHtml = '';
         trainList.forEach(function(row,index){
+            var dateStr = Util.formatDate(row.openDate.beginDate, 'yyyy.MM.dd')+'~'+Util.formatDate(row.openDate.endDate, 'yyyy.MM.dd');
+            row.openDate = JSON.stringify(row.openDate);
+            var feature = Trains.getTrainFeature(row, false);
             var txt = '报名',cls='trainbtn',numTxt='('+row.clientSize+'人)',clk=' onclick="chatTeacher.trainRegis(this);_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_ls_Signup\', \''+row.name+'\', 1, true]);"';
             if(row.allowInto){
                 txt = '进入';
@@ -132,14 +135,15 @@ Analyst.setTrain = function(trainList, trAndClNum){
             }
             trainHtml.push(Analyst.formatHtml('analystTrainInfo',
                 row.name,
-                row.isEnd?'已结束':'',
+                row.isEnd?'已结束':dateStr,
                 row.remark,
                 txt,
                 row.defaultAnalyst.userNo,
                 row.allowInto,
                 row.clientGroup,
                 row._id,
-                row.isEnd
+                row.isEnd,
+                feature.handler
             ));
         });
         if(trAndClNum){

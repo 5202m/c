@@ -15,6 +15,7 @@ var Room = new Container({
         Room.initPage();
         Room.loadRoomClassNote();
         Room.handleNoviceRoom();
+        if(Util.isAppEnv())$('.upload-pic').parent().remove();
     },
     onHide : function(){
         Player.player.clear($("#roomVideo"));
@@ -376,6 +377,7 @@ Room.setLecturerTool = function (lecturerId) {
                     var types = type==='' ? [] : type.split(',');
                     types.push(subscribeType.code);
                     $('#roomSubscribe').attr('type',types.join(','));
+                    $('#roomSubscribe').show();
                     return false;
                 }
             });
