@@ -6,6 +6,7 @@ var Analyst = new Container({
     panel : $("#page_analyst"),
     url : "/theme2/template/analyst.html",
     userNo : null,
+    wechatCode : null,
     tradeList : [],
     subscribeNum : 0,
     loadAll : false,
@@ -48,6 +49,7 @@ Analyst.setAnalystInfo = function(){
                 );
                 analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
+                Analyst.wechatCode = userInfo.wechatCode;
                 analystWechatHtml = Analyst.formatHtml('analystWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 analystDollarHtml = Analyst.formatHtml('analystDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
                 $('#analystInfo').empty().html(analystInfoHtml);
@@ -261,6 +263,11 @@ Analyst.setEvent = function(){
      * 打开微信QRCode
      */
     $('#analystPraiseTool').on('click', 'a.add-wx', function(){
+        if(Util.isAppEnv()){
+            $('#analystWechat i').remove();
+            var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Analyst.wechatCode).concat('<br/>就可以加老师为微信好友');
+            $('#analystWechat .pop-msg').html(tipText);
+        }
         $('#analystWechat').show();
     });
     /**
@@ -273,6 +280,11 @@ Analyst.setEvent = function(){
      * 打开打赏
      */
     $('#analystPraiseTool').on('click', 'a.dollar', function(){
+        if(Util.isAppEnv()){
+            $('#analystDollar i').remove();
+            var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Analyst.wechatCode).concat('<br/>加老师为微信好友<br/>就可以给老师打赏发红包啦');
+            $('#analystDollar .pop-msg').html(tipText);
+        }
         $('#analystDollar').show();
     });
     /**

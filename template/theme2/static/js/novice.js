@@ -64,7 +64,7 @@ Novice.setAdvertisement = function(){
     var html = [];
     Index.getArticleList({
         code : "advertisement",
-        platform : "studio_42",
+        platform : Novice.currentRoomId,
         pageSize : 5,
         orderByStr : '{"sequence":"desc","publishStartDate":"desc"}'
     },function(dataList){
