@@ -301,11 +301,9 @@ var Tool = {
     RedPacket: {
         /**配置信息*/
         config: {
-            userInfo: null,
-            apiUrl: null,
             init: false, //初始化
             cycleTime: 300000, //红包周期5分钟
-            stayTime: 5000, //红包停留时间5分钟
+            stayTime: 5000, //红包停留时间5秒
             startTime: 57540001, //16:00
             endTime: 64740001, //18:00
             nextStartTime: 71940001, //20:00
@@ -313,9 +311,9 @@ var Tool = {
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
                 /* 16:00——18:00*/
-                { start: 57540001, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme2/img/joe_zhuangToCJ.png" },
+                { start: 57540001, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme1/img/joe_zhuangToCJ.png" },
                 /* 20:00——22:00*/
-                { start: 71940001, userId: "buck_chenToCJ", userName: "陈铎", wechat: "xuechaojin2", wechatImg: "/theme2/img/buck_chenToCJ.png" }
+                { start: 71940001, userId: "buck_chenToCJ", userName: "陈铎", wechat: "xuechaojin2", wechatImg: "/theme1/img/buck_chenToCJ.png" }
             ],
 
             redPacketPopFlag: true, //红包弹出标记
@@ -328,9 +326,7 @@ var Tool = {
             timesLabel: "--", //次数
             minutesLabel: "--", //分钟数
             secondsLabel: "--", //秒数
-            redPacketPeriods: 0, //红包期数，为0时表示非抢红包时间，其他为红包的期数
-            totalBonus: 0, //奖金池总金额
-            pageIndex: 1 // 当前页数
+            redPacketPeriods: 0 //红包期数，为0时表示非抢红包时间，其他为红包的期数
         },
 
         /**
@@ -339,7 +335,7 @@ var Tool = {
         init: function(userInfo, apiUrl) {
             this.config.userInfo = userInfo;
             this.config.apiUrl = apiUrl;
-            this.config.redPacketPopFlag = Tool.store("redPacketPopFlag") !== false;
+            this.config.redPacketPopFlag = Store.store("redPacketPopFlag") !== false;
             this.setEvent();
             this.config.init = true;
         },
@@ -350,7 +346,7 @@ var Tool = {
         setEvent: function() {
 
             //红包视图-顶部
-            $("#redPacket_header,#redPacket_chat").bind("view", function() {
+            $("#redPacket_header").bind("view", function() {
                 var config = Tool.RedPacket.config;
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
@@ -413,13 +409,13 @@ var Tool = {
                 var loc_popFlag = !$(this).prop("checked");
                 if (config.redPacketPopFlag != loc_popFlag) {
                     config.redPacketPopFlag = loc_popFlag;
-                    Tool.store("redPacketPopFlag", loc_popFlag);
+                    Store.store("redPacketPopFlag", loc_popFlag);
                 }
             });
 
             //关闭
             $('.redbag_pop .pop_close a').click(function() {
-                studioMbPop.onHideTrigger();
+                // studioMbPop.onHideTrigger();
                 if ($(this).parent().parent().parent().hasClass('pop2')) {
                     $(this).parent().parent().parent().animate({ opacity: 0, bottom: 0 }, 300, function() {
                         $(this).hide()
@@ -443,35 +439,13 @@ var Tool = {
                 }
             });
 
-            //免费注册
-            $("#redPacket_regBtn, #redPacket_regBtn2").bind("click", function() {
-                $("#redPacket_noLogin").hide();
-                studioMbPop.popBox("reg", {
-                    groupId: Tool.RedPacket.config.userInfo.groupId,
-                    clientStoreId: Tool.RedPacket.config.userInfo.clientStoreId,
-                    platform: ""
-                });
-                // $('#loginForm_reg').trigger('click');
-            });
-
-            //登录
-            $("#redPacket_loginBtn").bind("click", function() {
-                $("#redPacket_noLogin").hide();
-                studioMbPop.popBox("login", {
-                    groupId: Tool.RedPacket.config.userInfo.groupId,
-                    clientGroup: Tool.RedPacket.config.userInfo.clientGroup,
-                    clientStoreId: Tool.RedPacket.config.userInfo.clientStoreId,
-                    platform: ""
-                });
-            });
-
             //抢红包打开
             $('#redPacket_header').bind("click", function() {
                 var config = Tool.RedPacket.config;
                 if (!config.redPacketPopFlag) {
                     config.redPacketPopFlag = true;
                     $("#redPacket_popFlag").prop("checked", false);
-                    Tool.store("redPacketPopFlag", true);
+                    Store.store("redPacketPopFlag", true);
                 }
                 if (config.userInfo.isLogin) {
                     Tool.RedPacket.showPop("normal");
@@ -485,21 +459,6 @@ var Tool = {
                 if (!Tool.RedPacket.config.opened) {
                     Tool.RedPacket.config.opened = true;
                     Tool.RedPacket.rob();
-                }
-            });
-
-            //抽奖弹出框
-            $(".btn-lottery-pop").bind("click", function() {
-                var config = Tool.RedPacket.config;
-                if (!config.redPacketPopFlag) {
-                    config.redPacketPopFlag = true;
-                    $("#redPacket_popFlag").prop("checked", false);
-                    Tool.store("redPacketPopFlag", true);
-                }
-                if (config.userInfo.isLogin) {
-                    Tool.RedPacket.showPop("normal");
-                } else {
-                    Tool.RedPacket.showPop("noLogin");
                 }
             });
 
@@ -522,7 +481,7 @@ var Tool = {
             var curHMDate = curHours + ":" + curMinutes;
             var redPacketPeriods = 0;
             try {
-                redPacketPeriods = studioChatMb.redPacketLastPeriods.split(',');
+                redPacketPeriods = Data.redPacketLastPeriods.split(',');
             } catch (e) {
 
             }
@@ -539,7 +498,7 @@ var Tool = {
         /**显示视图*/
         view: function() {
             var config = Tool.RedPacket.config;
-            $("#redPacket_header,#redPacket_chat").trigger("view");
+            $("#redPacket_header").trigger("view");
             if ($("#redPacket_normal").is(":visible")) {
                 $("#redPacket_normal").trigger("view");
             } else if ($("#redPacket_mini").is(":visible")) {
@@ -553,18 +512,13 @@ var Tool = {
 
         /**显示弹窗*/
         showPop: function(type, arg) {
-            if ($('.popupbox').is(":visible")) {
-                return; //有弹窗
-            }
             var $item = null;
-            var redPacket = Tool.RedPacket;
             switch (type) {
                 case "noLogin":
-                    studioMbPop.onShowTrigger();
                     $item = $("#redPacket_noLogin");
                     if (!$item.is(":visible")) {
-                        redPacket.hideAllPop();
-                        $item.css({ 'opacity': 0, 'top': '30%' }).show().animate({ opacity: 1, top: '50%' }, 300);
+                        $('.redbag_pop_box,.redbag_pop').hide();
+                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
                     }
                     break;
 
@@ -572,46 +526,36 @@ var Tool = {
                     $item = $('#redPacket_mini');
                     if (!$item.is(":visible")) {
                         $item.trigger("view");
-                        redPacket.hideAllPop();
-                        $item.css({ 'opacity': 0, 'bottom': 0 }).show().animate({ opacity: 1, bottom: 120 }, 300);
+                        $('.redbag_pop_box,.redbag_pop').hide();
+                        $item.show();
+                        $('#redPacket_mini2').css({ 'opacity': 0, 'top': '-10%' }).show().animate({ opacity: 1, top: 0 }, 300);
                     }
                     break;
 
                 case "normal":
-                    studioMbPop.onShowTrigger();
                     $item = $('#redPacket_normal');
                     if (!$item.is(":visible")) {
                         $item.trigger("view");
-                        redPacket.hideAllPop();
-                        $item.css({ 'opacity': 0, 'top': '30%' }).show().animate({ opacity: 1, top: '50%' }, 300);
+                        $('.redbag_pop_box,.redbag_pop').hide();
+                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
                     }
                     break;
 
                 case "resNo":
-                    studioMbPop.onShowTrigger();
                     $item = $('#redPacket_resNo');
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
-                        redPacket.hideAllPop();
-                        $item.css({ 'opacity': 0, 'top': '30%' }).show().animate({ opacity: 1, top: '50%' }, 300);
+                        $('.redbag_pop_box,.redbag_pop').hide();
+                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
                     }
                     break;
 
                 case "resYes":
-                    studioMbPop.onShowTrigger();
                     $item = $('#redPacket_resYes');
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
-                        redPacket.hideAllPop();
-                        $item.css('opacity', 0).css({ 'opacity': 0, 'top': '30%' }).show().animate({ opacity: 1, top: '50%' }, 300);
-                    }
-                    break;
-                case "hit":
-                    studioMbPop.onShowTrigger();
-                    $item = $("#hitBox");
-                    if (!$item.is(":visible")) {
-                        redPacket.hideAllPop();
-                        $item.show();
+                        $('.redbag_pop_box,.redbag_pop').hide();
+                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
                     }
                     break;
             }
@@ -632,7 +576,7 @@ var Tool = {
                 return;
             }
             var config = this.config;
-            var time = Data.serverTime.time;
+            var time = Data.serverTime;
             var today = new Date(time);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             time -= today.getTime();
@@ -648,7 +592,7 @@ var Tool = {
             }
             this.isRedPacketTime(function(isOK) {
                 if (isOK) {
-                    var currentPariod = ChatMbTool.RedPacket.getcurrentPariod();
+                    var currentPariod = Tool.RedPacket.getcurrentPariod();
                     config.timesLabel = currentPariod;
                     var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
                     config.minutes = Math.floor(countDown / 60000);
@@ -682,7 +626,7 @@ var Tool = {
                 return;
             }
             var config = this.config;
-            var time = Data.serverTime.time;
+            var time = Data.serverTime;
             var today = new Date(time);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             time -= today.getTime();
@@ -724,12 +668,16 @@ var Tool = {
          */
         initCourseTime: function(callback) {
             var config = this.config;
-            if (config.courseTime == -3 || config.courseTime == -2 || (config.courseTime != -1 && config.courseTime > Data.serverTime.time)) {
+            if (config.courseTime == -3 || config.courseTime == -2 || (config.courseTime != -1 && config.courseTime > Data.serverTime)) {
                 callback(config.courseTime);
                 return;
             }
             config.courseTime = -3;
-            $.getJSON(config.apiUrl + '/common/getCourse', { platform: "web24k", 'flag': 'D' }, function(data) {
+
+            var groupId = config.userInfo.groupId;
+            var groupType = config.userInfo.groupType;
+
+            $.getJSON(config.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
                 if (data.result == 0) {
                     if (!data.data || data.data.length == 0) {
                         Tool.RedPacket.config.courseTime = -2;
@@ -759,9 +707,9 @@ var Tool = {
          * 是否红包时间
          */
         isRedPacketTime: function(callback) {
-            var today = new Date(Data.serverTime.time);
+            var today = new Date(Data.serverTime);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Data.serverTime.time - today;
+            var time = Data.serverTime - today;
             if (time <= this.config.startTime || time > this.config.endTime) {
                 callback(false);
                 return;
@@ -775,9 +723,9 @@ var Tool = {
          * 是否红包时间(晚上时间)
          */
         isRedPacketTimeToNight: function(callback) {
-            var today = new Date(Tool.serverTime.time);
+            var today = new Date(Tool.serverTime);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Data.serverTime.time - today;
+            var time = Data.serverTime - today;
             if (time <= this.config.nextStartTime || time > this.config.nextEndTime) {
                 callback(false);
                 return;
@@ -797,7 +745,7 @@ var Tool = {
             } else if (config.redPacketPeriods == 0) {
                 box.showMsg("红包已过期!");
             } else {
-                common.getJson("/rob", { t: Data.serverTime.time }, function(data) {
+                Util.postJson("/rob", { t: Data.serverTime }, function(data) {
                     if (data.result == 0) {
                         Tool.RedPacket.config.redPacketPeriods = 0;
                         var analyst = Tool.RedPacket.getAnalyst();
@@ -820,9 +768,9 @@ var Tool = {
          * 获取分析是信息
          */
         getAnalyst: function() {
-            var today = new Date(Tool.serverTime.time);
+            var today = new Date(Tool.serverTime);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Tool.serverTime.time - today;
+            var time = Tool.serverTime - today;
             var analysts = Tool.RedPacket.config.analysts;
             var analystTmp = null;
             for (var i = analysts.length - 1; i >= 0; i--) {

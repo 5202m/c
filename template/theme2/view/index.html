@@ -18,15 +18,15 @@
         <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
         <% }else{ %>
             <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-        <% } %>
-    <script type="text/javascript" src="/theme2/js/store.js"></script>
-    <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-    <script>
-        //自动登录中...
-        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-        LoginAuto.init();
-        //自动登录完成
-    </script>
+            <% } %>
+                <script type="text/javascript" src="/theme2/js/store.js"></script>
+                <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+                <script>
+                    //自动登录中...
+                    LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+                    LoginAuto.init();
+                    //自动登录完成
+                </script>
 </head>
 
 <body class="home">
@@ -47,15 +47,17 @@
                         </div>
                     </div>
                 </div>
-            <%}%>
-            <div class="rightbar">
-                <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
-                <%if(userSession.isLogin){%>
-                  <a href="javascript:void(0);" class="loginbtn"><%= userSession.nickname || "匿名_xxx" %></a>
-                <%} else {%>
-                   <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
                 <%}%>
-            </div>
+                    <div class="rightbar">
+                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
+                        <%if(userSession.isLogin){%>
+                            <a href="javascript:void(0);" class="loginbtn">
+                                <%= userSession.nickname || "匿名_xxx" %>
+                            </a>
+                            <%} else {%>
+                                <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
+                                <%}%>
+                    </div>
         </section>
     </header>
     <article class="content_w bgf2f2f2 dn" id="page_rooms">
@@ -122,6 +124,7 @@
                 Data.syllabusData = Util.parseJSON('<%- syllabusData%>');
                 Data.serverTime = Number('<%= serverTime %>');
                 Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
+                Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
                 Index.init();
                 lightbox.option({
                     'resizeDuration': 200,
@@ -175,13 +178,11 @@
                 <script type="text/javascript" src="/base/lib/basket.min.js"></script>
                 <script type="text/javascript">
                     basket.version = '<%=version%>';
-                    basket.require(
-                            {
-                                url: "/theme2/js/lib.min.js?v=<%=version%>"
-                            },
-                            {
-                                url: "/theme2/js/index.min.js?v=<%=version%>"
-                            }, null).then(pageFunc);
+                    basket.require({
+                        url: "/theme2/js/lib.min.js?v=<%=version%>"
+                    }, {
+                        url: "/theme2/js/index.min.js?v=<%=version%>"
+                    }, null).then(pageFunc);
                 </script>
                 <% } %>
 </body>

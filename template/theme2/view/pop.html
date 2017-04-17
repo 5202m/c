@@ -1,3 +1,5 @@
+<link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
+
 <div class="popup look-data" id="pop_msg">
     <div class="popcon">
         <span class="close-pop" id="pop_msgClose"></span>
@@ -117,7 +119,7 @@
                 <div class="tspan">当期老师微信二维码</div>
             </div>
             <div class="qrcode-con">
-                <img src="" alt="" <b rp="wechatImg"></b>>
+                <img src="" alt="" <b rp="wechatImg"></b>
                 <p class="p1"> <span>微信号：<b rp="wechatCode"></b></span></p>
             </div>
             <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
@@ -162,3 +164,13 @@
         </div>
     </div>
     <%}%>
+        <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+        <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(".scrollbox").mCustomScrollbar({
+                theme: "light-thick",
+                scrollbarPosition: "outside",
+                scrollButtons: false
+            });
+        </script>
