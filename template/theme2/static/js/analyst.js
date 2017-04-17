@@ -46,7 +46,7 @@ Analyst.setAnalystInfo = function(){
                     userInfo.winRate ? userInfo.winRate.replace(/%/, '') : 0,
                     userInfo.earningsM ? userInfo.earningsM.replace(/%/, '') : 0,
                     Analyst.subscribeNum
-                );
+                ).replace('/theme2/img/pro-bg1.jpg',Subscribe.getAnalystBg(Analyst.userNo));
                 analystPraiseHtml = Analyst.formatHtml('analystPraise', userInfo.praiseNum, userInfo.userNo);
                 analystIntroductionHtml = Analyst.formatHtml('analystIntroduction', userInfo.introduction);
                 Analyst.wechatCode = userInfo.wechatCode;
@@ -146,7 +146,7 @@ Analyst.setTrain = function(trainList, trAndClNum){
                 row._id,
                 row.isEnd,
                 feature.handler
-            ));
+            ).replace('/theme2/img/ch-pic-new1.jpg',Analyst.getTrainBg(Analyst.userNo)));
         });
         if(trAndClNum){
             trainTitleHtml = Analyst.formatHtml('analystTrainTitle', trAndClNum.trainNum, trAndClNum.clientNum);
@@ -188,7 +188,7 @@ Analyst.setVideoList = function(){
                             //article.mediaUrl,
                             articleDetail.title,
                             articleDetail.tag
-                        ).replace('/theme2/img/cm.png',article.mediaImgUrl));
+                        ).replace('/theme2/img/cm.png',article.mediaUrl));
                         studentLiveCount++;
                     }
                 }else{//教学视频
@@ -377,3 +377,16 @@ Analyst.getSubscribeNum = function () {
         });
     }
 };
+
+/**
+ * 根据老师用户名得到培训班的背景图
+ * @param userNo
+ */
+Analyst.getTrainBg = function (userNo) {
+    var picArray = ['joe_chung','joe_zhuang','tonylee','tracey_jiang'];
+    var picUrl = '/theme2/img/train/public.jpg';
+    if($.inArray(userNo,picArray) > -1){
+        picUrl = '/theme2/img/train/'.concat(userNo).concat('.jpg');
+    }
+    return picUrl;
+}

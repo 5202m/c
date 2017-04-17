@@ -42,7 +42,7 @@ Subscribe.setAnalystList = function(){
                             row.introduction,
                             row.praiseNum,
                             row.userNo
-                        ));
+                        ).replace('/theme2/img/pro-bg1.jpg',Subscribe.getAnalystBg(row.userNo)));
                     }
                 });
             });
@@ -280,4 +280,18 @@ Subscribe.setAnalystSubscribeNum = function (analyst,callback) {
             }
         });
     }
+};
+
+/**
+ * 根据用户名得到订阅页面老师的背景图
+ * @param userNo
+ */
+Subscribe.getAnalystBg = function (userNo) {
+    var picArray = ['alex_fang','buck_chen','dan_yeh','eric_liu','gelaoshi','gw_analyst_3','Ivan_lin',
+                    'joe_chung','joe_zhuang','liumin','tonylee','tracey_jiang','zhouyou','public'];
+    var picUrl = '/theme2/img/analyst/public.jpg';
+    if($.inArray(userNo,picArray) > -1){
+        picUrl = '/theme2/img/analyst/'.concat(userNo).concat('.jpg');
+    }
+    return picUrl;
 };
