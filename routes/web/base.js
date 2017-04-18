@@ -2437,7 +2437,11 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            res.json(result);
+            if(result) {
+                res.json(result);
+            }else{
+                res.json(errorMessage.code_4020);
+            }
         });
     }
 });
