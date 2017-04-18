@@ -226,7 +226,7 @@ var indexTool = {
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
                 /* 16:00——18:00*/
-                { start: 57540001, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme1/img/joe_zhuangToCJ.png" },
+                { start: 32400000, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme1/img/joe_zhuangToCJ.png" },
                 /* 20:00——22:00*/
                 { start: 71940001, userId: "buck_chenToCJ", userName: "陈铎", wechat: "xuechaojin2", wechatImg: "/theme1/img/buck_chenToCJ.png" }
             ],
@@ -584,7 +584,10 @@ var indexTool = {
                 return;
             }
             config.courseTime = -3;
-            $.getJSON(indexJS.apiUrl + '/common/getCourse', { platform: "web24k", 'flag': 'D' }, function(data) {
+            var groupId = indexJS.userInfo.groupId;
+            var groupType = indexJS.userInfo.groupType;
+
+            $.getJSON(indexJS.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
                 if (data.result == 0) {
                     if (!data.data || data.data.length == 0) {
                         indexTool.RedPacket.config.courseTime = -2;

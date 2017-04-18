@@ -732,7 +732,7 @@ router.post('/login', function(req, res) {
                                         };
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
-                                                if (result.isOK) {
+                                                if (result && result.isOK) {
                                                     req.session.studioUserInfo = {
                                                         cookieId: cookieId,
                                                         visitorId: visitorId,
@@ -751,11 +751,12 @@ router.post('/login', function(req, res) {
                                                     delete result.groupId;
                                                     delete result.userId;
                                                 }
+                                                var snUser = req.session.studioUserInfo;
                                                 var dasData = {
                                                     mobile: mobilePhone,
                                                     cookieId: cookieId,
                                                     clientGroup: 'register',
-                                                    roomName: snUser.roomName,
+                                                    roomName: (common.isBlank(snUser.roomName) ? '' : snUser.roomName),
                                                     roomId: snUser.groupId,
                                                     platform: '',
                                                     userAgent: req.headers['user-agent'],

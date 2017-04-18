@@ -113,9 +113,9 @@ var chatAnalyze = {
     },
     //初始化GA
     initGA: function() {
-        _gaq.push(['_setAccount', 'UA-49389835-1']);
-        _gaq.push(['_setDomainName', 'gwfx.com']);
-        _gaq.push(['_addIgnoredRef', 'gwfx.com']);
+        _gaq.push(['_setAccount', 'UA-31478987-1']);
+        _gaq.push(['_setDomainName', '24k.hk']);
+        _gaq.push(['_addIgnoredRef', '24k.hk']);
         _gaq.push(['_setAllowLinker', true]);
         _gaq.push(['_addOrganic', 'soso', 'w']);
         _gaq.push(['_addOrganic', 'sogou', 'query']);
@@ -182,8 +182,8 @@ var chatAnalyze = {
                 return arr[1];
             }
         }
-        var dm = '.gwfx.com';
-        var cval = UUID.prototype.createUUID(dm.indexOf("gwfx") != -1 ? '' : 'G');
+        var dm = '.24k.hk';
+        var cval = UUID.prototype.createUUID(dm.indexOf("24k") != -1 ? 'G' : '');
         document.cookie = this.utmStore.storeKey + '=' + escape(cval) + '; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/;domain=' + dm;
         return cval;
     },
@@ -357,7 +357,7 @@ var chatAnalyze = {
         spli = encodeURIComponent(spli);
         chatAnalyze.setHC(reqid, spli);
     },
-    //设置HTTP COOKIE;domain=.gwfx.com
+    //设置HTTP COOKIE;domain=.24k.hk
     setHC: function(cname, cval) {
         if (typeof(cval) != "undefined" && cval != "" && cval != null) {
             //s20是代表20秒
@@ -365,10 +365,10 @@ var chatAnalyze = {
             //d是天数，30天则：d30
             var strsec = chatAnalyze.setExpiryTime("1h");
             var exp = new Date();
-            //.gwfx.com
+            //.24k.hk
             exp.setTime(exp.getTime() + strsec * 1);
-            document.cookie = cname + '=; expires=' + exp.toGMTString() + '; path=/;domain=.gwfx.com';
-            document.cookie = cname + '=' + escape(cval) + '; expires=' + exp.toGMTString() + '; path=/;domain=.gwfx.com';
+            document.cookie = cname + '=; expires=' + exp.toGMTString() + '; path=/;domain=.24k.hk';
+            document.cookie = cname + '=' + escape(cval) + '; expires=' + exp.toGMTString() + '; path=/;domain=.24k.hk';
         }
     },
     //cookie失效时间
