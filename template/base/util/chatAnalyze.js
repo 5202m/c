@@ -98,7 +98,16 @@ var chatAnalyze = {
         return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(chatAnalyze.localHref);
     },
     getDasURL: function() {
-        return this.dasUrl;
+        var protocol = document.location.protocol;
+        var dasUrl =  "http://das.gwfx.com/insertRoom";
+        if (this.isLocalHref()) {
+            dasUrl = "http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom";
+        }
+        if (protocol.indexOf("https") != -1 && null!=dasUrl){
+            dasUrl = dasUrl.replace('http://', 'https://').replace('8088', '7088');
+        }
+
+        return dasUrl;
     },
     /**
      * 初始化
@@ -191,6 +200,7 @@ var chatAnalyze = {
      * 设置utm系统所需行为
      */
     setUTM: function(init, data) {
+
         try {
             //this.getIp();
             /*if(init){
@@ -224,7 +234,8 @@ var chatAnalyze = {
             chatAnalyze.utmStore.courseName = data.courseName;
             chatAnalyze.utmStore.teacherId = data.lecturerId || '';
             chatAnalyze.utmStore.teacherName = data.lecturer || '';
-            chatAnalyze.utmStore.requestParams = data.requestParams || '';
+          //  chatAnalyze.utmStore.requestParams = data.requestParams || '';
+            chatAnalyze.utmStore.requestParams = '';
             if (isLocal) {
                 chatAnalyze.utmStore.userIp = data.ip;
             }
@@ -286,7 +297,8 @@ var chatAnalyze = {
             }
             var bPlatform = tmpData.groupType.indexOf('fx') != -1 ? 1 : 2;
             var userId = this.getUTMCookie();
-            var hrefSplit = this.hrefSplit();
+           // var hrefSplit = this.hrefSplit();
+            var hrefSplit = "";
             var sendData = {
                 userId: userId,
                 customerType: tmpData.clientGroup,

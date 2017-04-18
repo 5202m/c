@@ -126,6 +126,12 @@
                 Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
                 Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
                 Index.init();
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 1,
+                    userTel: '<%= userSession.mobilePhone %>',
+                    requestParams: ""
+                }, Data.userInfo));
+
                 lightbox.option({
                     'resizeDuration': 200,
                     'wrapAround': true,
@@ -144,7 +150,7 @@
             <script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
             <script type="text/javascript" src="/base/lib/toucher.js"></script>
             <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
-
+            <script type="text/javascript" src="/base/util/common.js"></script>
             <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
             <script type="text/javascript" src="/theme2/js/container.js"></script>
             <script type="text/javascript" src="/theme2/js/pop.js"></script>
