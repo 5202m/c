@@ -35,29 +35,29 @@
             <div class="logobar">
                 <h1 class="hide-t">视频直播间</h1>
             </div>
-            <%if(isRedPacket) {%>
-                <div class="header_redbag fl" id="redPacket_header">
-                    <div class="redbag_pic"></div>
-                    <div class="rb_text">
-                        <div class="timecount">
-                            <b rp="minutesLabel"></b>
-                            <span>分</span>
-                            <b rp="secondsLabel"></b>
-                            <span>秒</span>
-                        </div>
+            <!--<%if(isRedPacket) {%>-->
+            <div class="header_redbag fl" id="redPacket_header">
+                <div class="redbag_pic"></div>
+                <div class="rb_text">
+                    <div class="timecount">
+                        <b rp="minutesLabel"></b>
+                        <span>分</span>
+                        <b rp="secondsLabel"></b>
+                        <span>秒</span>
                     </div>
                 </div>
-                <%}%>
-                    <div class="rightbar">
-                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
-                        <%if(userSession.isLogin){%>
-                            <a href="javascript:void(0);" class="loginbtn">
-                                <%= userSession.nickname || "匿名_xxx" %>
-                            </a>
-                            <%} else {%>
-                                <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
-                                <%}%>
-                    </div>
+            </div>
+            <!--<%}%>-->
+            <div class="rightbar">
+                <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
+                <%if(userSession.isLogin){%>
+                    <a href="javascript:void(0);" class="loginbtn">
+                        <%= userSession.nickname || "匿名_xxx" %>
+                    </a>
+                    <%} else {%>
+                        <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
+                        <%}%>
+            </div>
         </section>
     </header>
     <article class="content_w bgf2f2f2 dn" id="page_rooms">

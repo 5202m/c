@@ -471,6 +471,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 };
                 visitorService.saveVisitorRecord("login", vrRow);
             }
+            //是否炒金培训班
             if (snUser.groupId == config.cjTrainRoom) {
                 viewDataObj.isRedPacket = config.isRedPacket;
             } else {
@@ -527,6 +528,21 @@ router.get('/gotoVideo', function(req, res) {
     };
     res.render(common.renderPath(req, constant.tempPlatform.webui, "video"),
         params);
+});
+
+/**
+ * 是否红包房间
+ */
+router.get('/isRedPacketRoom', function(req, res) {
+    var roomId = req.query["roomId"];
+    var result = { isOK: false };
+    //是否炒金培训班
+    if (roomId == config.cjTrainRoom) {
+        result.isOK = config.isRedPacket;
+    } else {
+        result.isOK = false;
+    }
+    res.json(result);
 });
 
 /**

@@ -743,7 +743,7 @@ var Tool = {
             if (!config.userInfo.isLogin) {
                 this.showPop("noLogin");
             } else if (config.redPacketPeriods == 0) {
-                box.showMsg("红包已过期!");
+                Pop.msg("红包已过期!");
             } else {
                 Util.postJson("/rob", { t: Data.serverTime }, function(data) {
                     if (data.result == 0) {
