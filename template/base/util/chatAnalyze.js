@@ -99,7 +99,7 @@ var chatAnalyze = {
     },
     getDasURL: function() {
         var protocol = document.location.protocol;
-        var dasUrl =  "http://das.gwfx.com/insertRoom";
+        var dasUrl =  "http://das.gwfx.com/put/insertRoom";
         if (this.isLocalHref()) {
             dasUrl = "http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom";
         }
