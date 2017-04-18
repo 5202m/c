@@ -322,7 +322,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 nickname: chatUser.nickname,
                 userType: chatUser.userType,
                 platform: options && options.platform,
-                intentionalRoomId: chatUser.intentionalRoomId
+                intentionalRoomId: chatUser.intentionalRoomId,
+                sid: req.sessionID
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
