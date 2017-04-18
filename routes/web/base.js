@@ -322,7 +322,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 nickname: chatUser.nickname,
                 userType: chatUser.userType,
                 platform: options && options.platform,
-                intentionalRoomId: chatUser.intentionalRoomId
+                intentionalRoomId: chatUser.intentionalRoomId,
+                sid: req.sessionID
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -2453,7 +2454,11 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            res.json(result);
+            if(result) {
+                res.json(result);
+            }else{
+                res.json(errorMessage.code_4020);
+            }
         });
     }
 });

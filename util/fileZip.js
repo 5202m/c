@@ -171,6 +171,7 @@ var fileList = [
         "out": "template\\theme2\\static\\js\\index.min.js",
         "marge": false,
         "in": [
+            "template\\base\\util\\common.js",
             "template\\base\\util\\chatAnalyze.js",
             "template\\theme2\\static\\js\\container.js",
             "template\\theme2\\static\\js\\pop.js",

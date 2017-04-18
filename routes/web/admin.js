@@ -151,7 +151,7 @@ router.post('/addArticle', function(req, res) {
                     var eDateTime = new Date(dataObj.publishEndDate).getTime();
                     var currTime = new Date().getTime();
                     if (isNotice || (currTime >= bDateTime && currTime <= eDateTime)) {
-                        chatService.sendMsgToRoom(dataObj.platform, dataObj);
+						chatService.sendNoticeArticle(dataObj.platform, dataObj);
                     }
                     res.json(result);
                 } else {

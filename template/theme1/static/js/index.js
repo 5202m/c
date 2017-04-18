@@ -532,12 +532,13 @@ var indexJS = {
      * 链接客服系统
      * */
     connectOnlineCs: function() {
+        var protocol = document.location.protocol;
         switch (indexJS.onlineCsStatus) {
             case 0:
                 indexJS.onlineCsStatus = 1;
-                var url = "http://jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
+                var url = protocol+"//jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
                 if (common.isLocalHref()) {
-                    url = "http://csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
+                    url = protocol+"//csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
                 }
                 var csScriptUrl = url +
                     '&tln=' + indexJS.userInfo.userId +

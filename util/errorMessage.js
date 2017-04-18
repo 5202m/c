@@ -63,6 +63,7 @@ var errorMessage = {
     "code_4017": { 'errcode': "4017", 'errmsg': "报名已结束，请关注下期培训班！" },
     "code_4018": { 'errcode': "4018", 'errmsg': "报名出错，请稍后再试！" },
     "code_4019": { 'errcode': "4019", 'errmsg': "报名成功，请关注开课时间{time}！" },
+    "code_4020": { 'code': "4020", 'message': "报名出错，请检查昵称是否未设置！" },
 };
 //导出类
 module.exports = errorMessage;
