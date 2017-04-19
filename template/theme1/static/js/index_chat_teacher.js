@@ -240,13 +240,20 @@ var chatTeacher = {
                 }
             }
             if (null != teacherList) { //分析师列表
-                var html = [],
-                    analyst = null;
-                for (var i = 0; i < teacherList.length; i++) {
+                //var html = [],
+                //    analyst = null;
+                //for (var i = 0; i < teacherList.length; i++) {
+                //    analyst = teacherList[i];
+                //    html.push('<a href="javascript:void(0)" onclick="chatTeacher.selectAnalyst(this);_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_ls_OthenTeacher\', \'' + analyst.userName + '\', 1, true]);" uid="' + analyst.userNo + '">' + analyst.userName + '</a>');
+                //}
+                //$('.main_tab .teacherlist .teacherbox  .clearfix .teacher_select .selectlist').html(html.join(""));
+                var html = [],analyst = null;
+                for(var i = 0;i<teacherList.length;i++){
                     analyst = teacherList[i];
-                    html.push('<a href="javascript:void(0)" onclick="chatTeacher.selectAnalyst(this);_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_ls_OthenTeacher\', \'' + analyst.userName + '\', 1, true]);" uid="' + analyst.userNo + '">' + analyst.userName + '</a>');
+                    html.push('<li><a href="javascript:void(0)" onclick="chatTeacher.selectAnalyst(this);_gaq.push([\'_trackEvent\', \'fx_studio\', \'直播老师-'+analyst.userName+'\', \'content_middle\', 1, true]);" uid="'+analyst.userNo+'">'+analyst.userName+'</a></li>');
                 }
-                $('.main_tab .teacherlist .teacherbox  .clearfix .teacher_select .selectlist').html(html.join(""));
+                $('#teacherScrollList').html('<ul class="inner-scrollbox">'+html.join("")+'</ul>');
+                indexJS.setListScroll('#teacherScrollList ul');//直播老师
             }
             if (null != tradeList) { //直播老师晒单显示
                 var data = { type: "prerogative", item: "prerogative_position" };

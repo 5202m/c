@@ -4636,7 +4636,7 @@ body {
 }
 
 
-/*.teacher_select .inner-scrollbox .mCSB_outside + .mCSB_scrollTools{ right: -4px; }*/
+.teacher_select .inner-scrollbox .mCSB_outside + .mCSB_scrollTools{ right: -4px; }
 
 .tebox_tit {
     font-size: 15px;
