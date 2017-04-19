@@ -6,16 +6,16 @@ var Room = new Container({
     panel: $("#page_room"),
     url: "/theme2/template/room.html",
     wechatCode: null,
+    isNoviceRoom : false,
     onLoad: function() {
         Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();
         Chat.setEvent();
+        Room.loadRoomClassNote();
     },
     onShow: function() {
         Room.initPage();
-        Room.loadRoomClassNote();
-        Room.handleNoviceRoom();
         if (Util.isAppEnv()) $('.upload-pic').parent().remove();
     },
     onHide: function() {
@@ -28,18 +28,11 @@ var Room = new Container({
  * 后续需要重新规划
  */
 Room.handleNoviceRoom = function() {
-    var currentRoomId = Data.userInfo.groupId;
-    var rooms = Data.roomList || [{ id: 'studio_42', roomType: 'simple' }];
-    var noviceRoom = false;
-    $.each(rooms, function(i, row) {
-        if (row.roomType === 'simple' && row.id === currentRoomId) {
-            $("#room_chat").trigger('click');
-            noviceRoom = true;
-            $('#chat_close').hide();
-            return false;
-        }
-    });
-    if (!noviceRoom) {
+    if (Room.isNoviceRoom) {
+        $('#room_chat').trigger('click');
+        $('#chat_close').hide();
+        $('#chat_fullscreen').hide();
+    }else{
         $('#chat_close').show();
         $('#chat_close').trigger('click');
     }
@@ -55,11 +48,14 @@ Room.currGroupId = null;
 Room.initPage = function() {
     Data.getRoom(function(room) {
         if (room) {
+            Room.isNoviceRoom = room.roomType === 'simple' ? true : false;
+            Room.handleNoviceRoom();
             var isChangeRoom = room ? (room.id != Room.currGroupId) : false;
             Chat.WhTalk.enable = room.allowWhisper, Chat.WhTalk.whisperRoles = room.whisperRoles;
             if (isChangeRoom) { //房间已经切换，
                 Room.currGroupId = room.id;
                 $("#room_roomName").html(room.name);
+                Room.loadRoomClassNote();
                 Player.startPlay();
                 Chat.init();
                 Room.showCourse();
@@ -117,9 +113,6 @@ Room.watchRemind = function(room) {
  * @param time
  */
 Room.showUnLoginWatchTip = function(isSetEvent, time, tips) {
-    /*    Pop.msg({msg:tips,onOK:function () {
-            Login.load();
-        }});*/
     $('#loginTips').text(tips);
     $('.login-guide').show();
 };
@@ -161,6 +154,13 @@ Room.setEvent = function() {
         $("#room_classnote").hide();
         $("#room_foot").hide();
         $("#room_talk").show();
+        //判断当前视频/音频是否在播放
+        if($('#chat_player').height() === 0 && !Room.isNoviceRoom){
+            $('#room_header').hide();
+            $('#page_room section').removeClass('mt84').addClass('mt40');
+            $('#chat_fullscreen').hide();
+        }
+        Chat.scrolling = false;
         Chat.setHeight();
         Chat.setTalkScroll(true);
         Chat.showChatMsgNumTip(true);

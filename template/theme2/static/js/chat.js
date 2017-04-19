@@ -13,6 +13,7 @@ var Chat = {
     cntAnalyst : 0, //在线分析师数量
     cntOnline : 0,  //在线用户
     fastContactValue : '',
+    chatMsgHeight : 0,
     /**
      * 初始化
      */
@@ -129,6 +130,8 @@ var Chat = {
                 if(Player.type != "text"){
                     $("#chat_player").slideUp(300);
                     setTimeout(function(){
+                        $('#room_header').hide();
+                        $('#page_room section').removeClass('mt84').addClass('mt40');
                         $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-down4');
                         Chat.setHeight();
                         Chat.setTalkScroll();
@@ -142,6 +145,8 @@ var Chat = {
                 if(Player.type != "text"){
                     $("#chat_player").slideDown(300);
                     setTimeout(function(){
+                        $('#room_header').show();
+                        $('#page_room section').removeClass('mt40').addClass('mt84');
                         $("#chat_fullscreen").attr('class', 'i-arrow i-arrow-up4');
                         Chat.setHeight();
                         Chat.setTalkScroll();
@@ -160,6 +165,11 @@ var Chat = {
         $("#chat_close").bind("click", function(){
             if(Chat.fullscreen){
                 $("#chat_fullscreen").trigger("click");
+            }
+            if($('#chat_player').height() === 0){
+                $('#room_header').show();
+                $('#page_room section').removeClass('mt40').addClass('mt84');
+                $('#chat_fullscreen').show();
             }
             $("#room_classnote").show();
             $("#room_foot").show();
@@ -188,12 +198,16 @@ var Chat = {
         });
 
         /**
-         * 滚屏开关
+         * 滚屏开关(通过判断用户滚动聊天记录是否超过最后一条记录)
          */
-        $('#chat_scroll').bind('click',function () {
-            Chat.scrolling = !Chat.scrolling;
-            var text = Chat.scrolling ? 'open' : 'close';
-            $('#chat_scroll a').text(text);
+        $('#chat_msg').scroll(function (e) {
+            var lheight = $('#chat_msg .dialog:last').height();//聊天室最后一条记录的高度
+            if(Chat.chatMsgHeight - $(this).scrollTop() > lheight){
+                Chat.scrolling = true;//关闭滚屏
+            }else{
+                Chat.scrolling = false;//打开
+            }
+
         });
 
         /**
@@ -211,7 +225,9 @@ var Chat = {
             if(Chat.chatToolView == "none"){
                 Chat.showTool("analyst");
             }
-
+            //聊天框聚焦打开滚动且滚动至末尾
+            Chat.scrolling = false;
+            Chat.setTalkScroll();
         }).bind("blur", function(e){
             var msg = $.trim($(this).html());
             if(!msg){
@@ -370,6 +386,9 @@ var Chat = {
             Chat.fastContactValue = _value;
         });
 
+        $('#chat_filter').bind('change',function (e) {
+            $(this).trigger("click");
+        });
     },
 
     /**
@@ -546,13 +565,15 @@ var Chat = {
      * 设置聊天框高度
      */
     setHeight : function(){
+        var topH = Chat.fullscreen || Room.isNoviceRoom ? 0 : 44 ;//是否全屏
         var height = Data.windowHeight
             - 40 //$("#header").height()
             - 50 //$("#chat_editor").height()
-            - 44; //$("#chat_ctrl").height()
+            - parseInt(topH); //$("#chat_ctrl").height()
         if(!Chat.fullscreen){
+            var playerHeight = (Player.type == "text" || Room.isNoviceRoom ? 0 : $("#chat_player").height())
             height = height - 44 //$("#room_header").height()
-            - (Player.type == "text" ? 0 : $("#chat_player").height());
+            - parseInt(playerHeight);
         }else{
             height = height - 44;
         }
@@ -564,6 +585,12 @@ var Chat = {
      * @param length
      */
     setOnlineUsers : function(users, length){
+        //情况下拉框的老师和助理选项
+        var optionSize = $("#chat_filter option").size();
+        while(optionSize > 3){
+            $("#chat_filter option:first").remove();
+            optionSize --;
+        }
         for(var i in users){
             Chat.setOnlineUser(users[i], true, false);
         }
@@ -1031,11 +1058,13 @@ var Chat = {
                 Chat.scrolling = true;
                 window.setTimeout(function(){
                     $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight);
+                    Chat.chatMsgHeight = $("#chat_msg").scrollTop();
                     Chat.scrolling = false;
                 }, 300);
 
             }else {
-                $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight)
+                $("#chat_msg").scrollTop($("#chat_msg")[0].scrollHeight);
+                Chat.chatMsgHeight = $("#chat_msg").scrollTop();
             }
         }
     },

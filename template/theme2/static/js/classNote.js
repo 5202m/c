@@ -182,7 +182,13 @@ ClassNote.appendPushRoomClassNote = function (data) {
             });
         }
     }else if(parseInt(dataid) > firstId){//不存在当前页面则判断是否最新加的数据
-        $('#classNote_panel div[dataid="'+firstId+'"]').next(html);
+        var articleDetail=data.detailList && data.detailList[0];
+        if(Util.isNotBlank(articleDetail.tag) && articleDetail.tag == 'trading_strategy'){
+            $('#classNote_panel div[dataid="'+firstId+'"]').before(html);
+        }else{
+            $('#classNote_panel div[dataid="'+firstId+'"]').next().after(html);
+        }
+
     }
 };
 

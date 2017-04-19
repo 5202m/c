@@ -56,8 +56,7 @@ Rooms.setAdvertisement = function() {
 Rooms.setStudioRoomList = function() {
     var html = [],
         trainObj = null,
-        currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd'),
-        alreadyArray = [];
+        currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
     Data.getRoomList(function(rooms) {
         var cls = ['blue', 'red', 'green', 'brown'],
             trainNum = 0;
@@ -76,12 +75,7 @@ Rooms.setStudioRoomList = function() {
                     trainObj = row;
                 }
             } else {
-                var loc_index = Util.randomIndex(3),
-                    uurl = '';
-                /*                 while($.inArray(loc_index,alreadyArray) > -1){
-                                    loc_index = Util.randomIndex(3);
-                                }
-                                alreadyArray.push(loc_index);*/
+                var loc_index = Util.randomIndex(3), uurl = '';
                 if (row.roomType == 'simple') {
                     loc_index = 2;
                 } else if (row.roomType == 'normal') {
@@ -92,7 +86,6 @@ Rooms.setStudioRoomList = function() {
                 uurl = Util.format('/theme2/img/block-bg{0}.jpg', loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
-                    //(loc_index == 0 ? loc_index + 1 : loc_index),
                     cls[loc_index],
                     row.name,
                     row.roomType).replace('/theme2/img/block-bg4.jpg', uurl));
