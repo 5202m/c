@@ -129,9 +129,15 @@ var videosTrain = {
                         $(".pop_train").css("z-index", 99);
                         $(".pop_train_suc").show();
                     } else {
+                        var msg = "";
+                        if (data.errmsg) {
+                            msg = data.errmsg;
+                        } else {
+                            msg = data.message;
+                        }
                         box.showMsg({
                             title: groupName || "",
-                            msg: data.errmsg + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
+                            msg: msg + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
                         });
                     }
                 }
