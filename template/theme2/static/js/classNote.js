@@ -10,11 +10,8 @@ var ClassNote = new Container({
     classNoteInfo: null, //直播精华非交易策略数据
     onLoad: function () {
         ClassNote.setEvent();
-    },
-    onShow: function () {
         ClassNote.loadData();
     }
-
 });
 
 /**
@@ -139,6 +136,10 @@ ClassNote.getAuthConfig = function (callback) {
 ClassNote.appendRoomClassNote = function (dataArr, isMore) {
     var html = [],flag = true;
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
+
+        if($('#classNote_panel div[dataid="'+dataArr[i]._id+'"]').size() > 0){
+            return;
+        }
         if(!isMore && flag && dataArr[i].detailList[0].tag === "trading_strategy"){
             html.unshift(ClassNote.getRoomClassNoteHtml(dataArr[i]));
             flag = false;
@@ -154,6 +155,38 @@ ClassNote.appendRoomClassNote = function (dataArr, isMore) {
 };
 
 /**
+ * 处理推送过来的直播精华（房间页面）
+ * @param data
+ */
+ClassNote.appendPushRoomClassNote = function (data) {
+    data._id = data.id;
+    var html = ClassNote.getRoomClassNoteHtml(data),dataid = data.id;
+    var firstId = $("#classNote_panel>[dataid]:first").attr('dataid');
+    //存在则替换
+    if($('#classNote_panel div[dataid="'+dataid+'"]').size() > 0){
+        var tempId = $('#classNote_panel div[dataid="'+dataid+'"]').next().next().attr('dataid');
+        if(!tempId){
+            tempId = $('#classNote_panel div[dataid="'+dataid+'"]').prev().prev().attr('dataid');
+            $('#classNote_panel div[dataid="'+dataid+'"]').next().remove();
+            $('#classNote_panel div[dataid="'+dataid+'"]').remove();
+            $('#classNote_panel div[dataid="'+tempId+'"]').each(function () {
+                $(this).next().after(html);
+                return false;
+            });
+        }else{
+            $('#classNote_panel div[dataid="'+dataid+'"]').next().remove();
+            $('#classNote_panel div[dataid="'+dataid+'"]').remove();
+            $('#classNote_panel div[dataid="'+tempId+'"]').each(function () {
+                $(this).before(html);
+                return false;
+            });
+        }
+    }else if(parseInt(dataid) > firstId){//不存在当前页面则判断是否最新加的数据
+        $('#classNote_panel div[dataid="'+firstId+'"]').next(html);
+    }
+};
+
+/**
  * 追加直播精华，直播精华页面（当前页）
  * @param dataArr
  * @param isMore
@@ -163,13 +196,13 @@ ClassNote.appendClassNote = function(dataArr, isMore){
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
         html.push(ClassNote.getClassNoteHtml(dataArr[i]));
     }
-    for (var i = 0, lenI = !ClassNote.classNoteInfo ? 0 : ClassNote.classNoteInfo.length; i < lenI; i++) {
-        ClassNote.setOtherClassNoteHtml(ClassNote.classNoteInfo[i]);
-    }
     if (isMore) {
         $("#classNodeContainer").append(html.join(""));
     } else {
         $("#classNodeContainer").prepend(html.join(""));
+    }
+    for (var i = 0, lenI = !ClassNote.classNoteInfo ? 0 : ClassNote.classNoteInfo.length; i < lenI; i++) {
+        ClassNote.setOtherClassNoteHtml(ClassNote.classNoteInfo[i]);
     }
 };
 /**
@@ -235,7 +268,7 @@ ClassNote.getRoomClassNoteHtml = function (data) {
  * 获取直播精华(交易策略)HTML（当前页）
  * @param data
  */
-ClassNote.getClassNoteHtml = function(data){
+ClassNote.getClassNoteHtml = function(data,isPush){
     if (!data) {
         return;
     }
@@ -247,8 +280,7 @@ ClassNote.getClassNoteHtml = function(data){
     var html = [], classNoteHtml = [];
     if($("#classNodeContainer  div[pt="+publishTime+"]").size()==0) {
         //交易策略
-        if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag
-            == "trading_strategy") {
+        if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag == "trading_strategy") {
             var publishTimeStr = Util.formatDate(publishTime,
                     'yyyy.MM.dd HH:mm') +
                 "~" + Util.formatDate(data.publishEndDate, 'HH:mm');
@@ -271,12 +303,9 @@ ClassNote.getClassNoteHtml = function(data){
                     }
                 });
             }
-            var isHideData = ClassNote.isHideData(data._id, dataDetail.tag,
-                storeClassNote);
-            var dataDataArr = Util.parseJSON(
-                dataDetail.remark || ""), dataDataTemp, dataHtml = [];
-            for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0;
-                i < lenI; i++) {
+            var isHideData = ClassNote.isHideData(data._id, dataDetail.tag, storeClassNote);
+            var dataDataArr = Util.parseJSON(dataDetail.remark || ""), dataDataTemp, dataHtml = [];
+            for (var i = 0, lenI = dataDataArr ? dataDataArr.length : 0; i < lenI; i++) {
                 dataDataTemp = dataDataArr[i];
                 dataHtml.push(ClassNote.formatHtml("dataTable",
                     dataDataTemp.name || "",
@@ -323,6 +352,45 @@ ClassNote.getClassNoteHtml = function(data){
             }
             ClassNote.classNoteInfo.push(data);
         }
+    }else if($("#classNodeContainer  div[pt="+publishTime+"]").size()>0 && isPush){
+        var isHideData = ClassNote.isHideData(data.id, dataDetail.tag, storeClassNote);
+        var dataHtml = [];
+        var remarkArr = Util.isNotBlank(dataDetail.remark) ? JSON.parse(dataDetail.remark) : [];
+        if (Util.isNotBlank(dataDetail.tag) && dataDetail.tag == 'trading_strategy') {
+            $.each(remarkArr, function(i, row) {
+                dataHtml.push(ClassNote.formatHtml("dataTable",
+                    row.name || "",
+                    upOrDown[row.upordown],
+                    isHideData ? '****<i class="txt-mban repeatx"></i>'
+                        : row.open || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : row.profit || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : row.loss || ""
+                ));
+                if (row.description) {
+                    dataHtml.push(ClassNote.formatHtml("dataTableRemark",
+                        isHideData ? '****<i class="txt-mban repeat3x"></i>'
+                            : row.description));
+                }else if(lenI > (i + 1)){//非最后一个table且没有说明换行
+                    dataHtml.push('<br/>')
+                }
+            });
+            var viewDataCls = '', viewDataTxt = '查看数据';
+            if (!isHideData) {
+                viewDataCls = ' btn-data-grey';
+                viewDataTxt = '数据已显示';
+            }
+            var viewDataHtml = ClassNote.formatHtml('viewData', data.id, '', viewDataCls, viewDataTxt);
+            html.push(ClassNote.formatHtml('strategyPush',
+                dataDetail.content || '',
+                dataHtml.join(''),
+                viewDataHtml
+            ));
+        }
+        $("#classNodeContainer  div[pt="+publishTime+"]").find('.txt-block').remove();
+        $("#classNodeContainer  div[pt="+publishTime+"] .infos-block").after(html.join(''));
+        return;
     }
     return html.join('');
 };
@@ -331,7 +399,7 @@ ClassNote.getClassNoteHtml = function(data){
  * 获取直播精华（喊单/挂单）HTML(当前页面)
  * @param data
  */
-ClassNote.setOtherClassNoteHtml = function(data){
+ClassNote.setOtherClassNoteHtml = function(data,isPush){
     if(!data){
         return;
     }
@@ -345,7 +413,7 @@ ClassNote.setOtherClassNoteHtml = function(data){
         publishTime = new Date(data.publishStartDate).getTime();
     //课程信息
     var aid = data._id || data.id;
-    if($('#classNodeContainer div[pt='+publishTime+'] .classNote div[aid="'+aid+'"]').size()>0){
+    if($('#classNodeContainer div[pt='+publishTime+'] .classNote div[aid="'+aid+'"]').size()>0 && !isPush){
         return;
     }
     var author = '';
@@ -397,7 +465,13 @@ ClassNote.setOtherClassNoteHtml = function(data){
         ));
     }
     html.push(ClassNote.formatHtml('blk7'));
-    $('#classNodeContainer div[pt='+publishTime+'] .classNote').append(html.join(''));
+    if (isPush) {
+        $('#classNodeContainer div[pt='+publishTime+'] .classNote').find("div[aid='" + aid + "']").next().remove();
+        $('#classNodeContainer div[pt='+publishTime+'] .classNote').find("div[aid='" + aid + "']").remove();
+        $('#classNodeContainer div[pt='+publishTime+'] .classNote').prepend(html.join(''));
+    }else{
+        $('#classNodeContainer div[pt='+publishTime+'] .classNote').append(html.join(''));
+    }
 };
 
 /**

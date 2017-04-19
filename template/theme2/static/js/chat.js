@@ -12,7 +12,7 @@ var Chat = {
     cntAdmin : 0, //在线管理员数量
     cntAnalyst : 0, //在线分析师数量
     cntOnline : 0,  //在线用户
-
+    fastContactValue : '',
     /**
      * 初始化
      */
@@ -86,15 +86,17 @@ var Chat = {
                     var articleInfo = result.data;
                     if (articleInfo) {
                         switch (articleInfo.categoryId){
+                            case "trade_strategy_article"://交易策略
+                                break;
                             case "class_note"://直播精华
-                                if(articleInfo.platform && articleInfo.platform.indexOf(indexJS.userInfo.groupId) != -1){
+                                if(articleInfo.platform && articleInfo.platform.indexOf(Data.userInfo.groupId) != -1){
                                     var articleDetail=articleInfo.detailList && articleInfo.detailList[0];
-                                    ClassNote.appendRoomClassNote(articleInfo, true);
-                                    /*if(Util.isValid(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
-                                        chatPride.appendTradeStrategyNote(articleInfo, true, true, true);
+                                    ClassNote.appendPushRoomClassNote(articleInfo);
+                                    if(Util.isNotBlank(articleDetail.tag) && articleDetail.tag == 'trading_strategy') {
+                                        ClassNote.getClassNoteHtml(articleInfo,true);
                                     }else{
-                                        chatPride.appendClassNoteInfo(articleInfo, true, true, true);
-                                    }*/
+                                        ClassNote.setOtherClassNoteHtml(articleInfo,true);
+                                    }
                                     ClassNote.pushShoutSingleInfo(articleInfo);
                                 }
                                 break;
@@ -186,6 +188,15 @@ var Chat = {
         });
 
         /**
+         * 滚屏开关
+         */
+        $('#chat_scroll').bind('click',function () {
+            Chat.scrolling = !Chat.scrolling;
+            var text = Chat.scrolling ? 'open' : 'close';
+            $('#chat_scroll a').text(text);
+        });
+
+        /**
          * 聊天框相关事件
          */
         $("#chat_cont").bind('click',function () {
@@ -225,7 +236,7 @@ var Chat = {
             if(e.keyCode == 8){
                 var text = $(this).text();
                 var arrayText = text.split(/\s/);//空格
-                if(arrayText.length == 2 && arrayText[1].indexOf("@") > -1){
+                if(arrayText.length > 1 && arrayText[1].indexOf("@") > -1){
                     $(this).text("");
                 }
             }
@@ -340,6 +351,23 @@ var Chat = {
         //同上
         $('#chat_msg').on('click','.infobar',function(){
             $(this).prev().trigger("click");
+        });
+
+        /**
+         * 下拉框点击@事件
+         */
+        $('#chat_filter').bind('click',function (e) {
+            var _value = $('#chat_filter').val(),options = ['all','analyst','me'];
+            if($.inArray(_value,options) == -1){
+                e.preventDefault();
+                var nickname = $("#chat_filter").find("option:selected").text();
+                var usertype = $("#chat_filter").find("option:selected").attr('ut');
+                var avatar = $("#chat_filter").find("option:selected").attr('ua') || '';
+                nickname = nickname.substring(1);
+                Chat.setDialog(_value, nickname, 1, usertype, avatar);
+                $('#chat_filter').val(Chat.fastContactValue);
+            }
+            Chat.fastContactValue = _value;
         });
 
     },
@@ -553,11 +581,35 @@ var Chat = {
             Chat.WhTalk.setCSOnline(user.userId, isOnline);
         }
         //快捷@
-        if(user.userType==1 || user.userType==2 || user.userType==3){
-            //Chat.setUsersMap(user, isOnline);
+        if(user.userType==2 || user.userType==3){
+            Chat.setFastContact(user,isOnline);
         }
         if(setOnlineNum){
             Chat.setOnlineNum(isOnline ? 1 : -1, false, false);
+        }
+    },
+
+    /**
+     * 快速@功能
+     * @param userInfo
+     * @param isOnline
+     */
+    setFastContact:function(userInfo, isOnline){
+        var $panel = $("#chat_filter");
+        if(isOnline){
+            if($panel.find("option[value='" + userInfo.userId + "']").size() == 0) {
+                if (userInfo.userType === 3) {//3 客服助理  2：分析师
+                    userInfo.nickname = userInfo.nickname + "&nbsp;（助理）"
+                }
+                var userOption = '<option ut="'+ userInfo.userType+'" ua="'+userInfo.avatar+'" un="'+userInfo.nickname+'"  value="' + userInfo.userId + '">@' + userInfo.nickname + '</option>';
+                if(userInfo.userType == 3){//3-客服 2-分析师
+                    $panel.find("option[value='all']").before(userOption);
+                }else{
+                    $panel.prepend(userOption);
+                }
+            }
+        }else {
+            $panel.find("option[value='" + userInfo.userId + "']").remove();
         }
     },
     /**

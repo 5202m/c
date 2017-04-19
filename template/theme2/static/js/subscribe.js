@@ -223,6 +223,7 @@ Subscribe.setPraise = function(obj, lb){
             //$this.find('i').fadeIn().delay(400).fadeOut();
             //var lb= obj.next("label") || obj.find('label');
             lb.text(Util.isNotBlank(lb.text())?(parseInt(lb.text())+1):0);
+            Pop.msg('亲，点赞成功！');
         }else{
             Pop.msg('亲，已点赞，当天只能点赞一次！');
         }
