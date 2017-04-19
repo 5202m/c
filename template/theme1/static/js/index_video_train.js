@@ -81,7 +81,7 @@ var videosTrain = {
                     videosTrain.trainDetail(roomInfo.trainConfig, roomInfo.defaultAnalyst.userNo, roomInfo._id, roomInfo.name);
                     return;
                 } else if (!trainCfg && result.checkState.code == "4007") {
-                    videosTrain.trainSignUp(roomInfo._id, roomInfo.name, true);
+                    videosTrain.trainSignUp('', '', roomInfo._id, roomInfo.name, true);
                     return;
                 } else if (result.checkState.code == "4007" && $(".pop_train").is(":hidden")) {
                     $("#trains").trigger("click"); //显示培训班列表页
@@ -111,7 +111,7 @@ var videosTrain = {
      * @param groupName String
      * @param [noApprove] boolean
      */
-    trainSignUp: function(groupId, groupName, noApprove) {
+    trainSignUp: function(beginDate, endDate, groupId, groupName, noApprove) {
         if (indexJS.checkClientGroup('visitor')) {
             $("#login_a").trigger("click", { groupId: groupId });
         } else {
@@ -122,15 +122,18 @@ var videosTrain = {
                 if (!data || data.code == "4016") {
                     videosTrain.changeRoom(groupId, groupName);
                 } else {
-                    if (data.code == "4019") { //报名成功
-                        $(".traindetails.trainbtn[rid='" + groupId + "']")
-                            .attr("href", "javascript:videosTrain.changeRoom('" + groupId + "', '" + groupName + "')")
-                            .text("已报名");
+                    if (data.errcode == "4019" && groupId == "studio_57") {
+                        var startTime = common.formatterDate(beginDate, '/').substring(5);
+                        var endTime = common.formatterDate(endDate, '/').substring(5);
+                        $(".pop_train_suc [rp='studyTime']").text(startTime + "—" + endTime);
+                        $(".pop_train").css("z-index", 99);
+                        $(".pop_train_suc").show();
+                    } else {
+                        box.showMsg({
+                            title: groupName || "",
+                            msg: data.errmsg + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
+                        });
                     }
-                    box.showMsg({
-                        title: groupName || "",
-                        msg: data.message + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。',
-                    });
                 }
             });
         }
@@ -149,7 +152,8 @@ var videosTrain = {
                 common.openPopup('.blackbg,.train_detail');
             });
         } else {
-            videosTrain.trainSignUp(groupId, groupName, true);
+            videosTrain.trainSignUp('', '',
+                groupId, groupName, true);
         }
     },
     /**
@@ -288,7 +292,7 @@ var videosTrain = {
                 result.handler = "javascript:videosTrain.trainDetail('" + trainCfgKey + "', '" + analystNo + "', '" + roomInfo._id + "', '" + roomInfo.name + "')";
             } else if (roomInfo.trainAuth == -1) {
                 result.handleTxt = "报名";
-                result.handler = "javascript:videosTrain.trainSignUp('" + roomInfo._id + "', '" + roomInfo.name + "', true)";
+                result.handler = "javascript:videosTrain.trainSignUp('" + openDate.beginDate + "','" + openDate.endDate + "','" + roomInfo._id + "', '" + roomInfo.name + "', true)";
             } else if (roomInfo.trainAuth == 0) {
                 result.handleTxt = "待审核";
                 result.handler = "javascript:void(0)";
@@ -299,7 +303,7 @@ var videosTrain = {
         } else {
             if ((!trainCfg || !trainCfg.cls) && roomInfo.trainAuth == -1) {
                 result.handleTxt = "报名";
-                result.handler = "javascript:videosTrain.trainSignUp('" + roomInfo._id + "', '" + roomInfo.name + "', true)";
+                result.handler = "javascript:videosTrain.trainSignUp('" + openDate.beginDate + "','" + openDate.endDate + "','" + roomInfo._id + "', '" + roomInfo.name + "', true)";
             } else {
                 result.handleTxt = "进入";
                 result.handler = "javascript:videosTrain.changeRoom('" + roomInfo._id + "', '" + roomInfo.name + "')";

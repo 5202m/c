@@ -1449,6 +1449,9 @@ var chat = {
                 console.log("ok");
             });
             $(".img-loading[pf=chatMessage]").show();
+            chatAnalyze.setUTM(false, $.extend({
+                operationType: 1
+            }, indexJS.userInfo, indexJS.courseTick.course));
         });
         //进入聊天室加载的在线用户
         this.socket.on('onlineUserList', function(data, dataLength) {

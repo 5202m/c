@@ -322,7 +322,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 nickname: chatUser.nickname,
                 userType: chatUser.userType,
                 platform: options && options.platform,
-                intentionalRoomId: chatUser.intentionalRoomId
+                intentionalRoomId: chatUser.intentionalRoomId,
+                sid: req.sessionID
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -471,6 +472,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 };
                 visitorService.saveVisitorRecord("login", vrRow);
             }
+            //是否炒金培训班
             if (snUser.groupId == config.cjTrainRoom) {
                 viewDataObj.isRedPacket = config.isRedPacket;
             } else {
@@ -527,6 +529,21 @@ router.get('/gotoVideo', function(req, res) {
     };
     res.render(common.renderPath(req, constant.tempPlatform.webui, "video"),
         params);
+});
+
+/**
+ * 是否红包房间
+ */
+router.get('/isRedPacketRoom', function(req, res) {
+    var roomId = req.query["roomId"];
+    var result = { isOK: false };
+    //是否炒金培训班
+    if (roomId == config.cjTrainRoom) {
+        result.isOK = config.isRedPacket;
+    } else {
+        result.isOK = false;
+    }
+    res.json(result);
 });
 
 /**
@@ -732,7 +749,7 @@ router.post('/login', function(req, res) {
                                         };
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
-                                                if (result.isOK) {
+                                                if (result && result.isOK) {
                                                     req.session.studioUserInfo = {
                                                         cookieId: cookieId,
                                                         visitorId: visitorId,
@@ -751,11 +768,12 @@ router.post('/login', function(req, res) {
                                                     delete result.groupId;
                                                     delete result.userId;
                                                 }
+                                                var snUser = req.session.studioUserInfo;
                                                 var dasData = {
                                                     mobile: mobilePhone,
                                                     cookieId: cookieId,
                                                     clientGroup: 'register',
-                                                    roomName: snUser.roomName,
+                                                    roomName: (common.isBlank(snUser.roomName) ? '' : snUser.roomName),
                                                     roomId: snUser.groupId,
                                                     platform: '',
                                                     userAgent: req.headers['user-agent'],
@@ -2436,7 +2454,11 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            res.json(result);
+            if(result) {
+                res.json(result);
+            }else{
+                res.json(errorMessage.code_4020);
+            }
         });
     }
 });

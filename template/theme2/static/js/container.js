@@ -12,7 +12,7 @@
  *      [onHide]:function
  *  }}
  */
-var Container = function(options){
+var Container = function(options) {
     options = options || {};
 
     /** 状态 0未加载 1加载中 2未显示 3显示 */
@@ -46,15 +46,16 @@ var Container = function(options){
  * @type {{list: Array, index: number}}
  */
 Container.history = {
-    list : [],
-    index : -1,
-    last : null
+    list: [],
+    index: -1,
+    last: null
 };
 
 /**
  * 返回
  */
-Container.back = function(){
+Container.back = function() {
+    $("#redPacket_header").hide();
     Container.go(-1);
 };
 
@@ -62,22 +63,22 @@ Container.back = function(){
  * 跳转到指定页面
  * @param [param] {Number | Container}
  */
-Container.go = function(param){
+Container.go = function(param) {
     param = param || 0;
     var history = Container.history;
     var result;
-    if(param instanceof Container){
+    if (param instanceof Container) {
         history.index++;
-        if(history.list.length > history.index){
+        if (history.list.length > history.index) {
             history.list = history.list.slice(0, history.index);
         }
         history.list[history.index] = param;
         result = param;
-    }else{
+    } else {
         history.index += param;
         result = history.list[history.index];
-        if(param != 0){
-            if(!result){
+        if (param != 0) {
+            if (!result) {
                 history.list = [Rooms];
                 history.index = 0;
                 result = history.list[history.index];
@@ -92,39 +93,39 @@ Container.go = function(param){
 /**
  * 页面是否显示
  */
-Container.prototype.isVisible = function(){
+Container.prototype.isVisible = function() {
     return this.status == 3;
 };
 
 /**
  * 显示页面
  */
-Container.prototype.show = function(){
-    if(this.isVisible()){
+Container.prototype.show = function() {
+    if (this.isVisible()) {
         return;
     }
     var currContainer = Container.history.last;
-    if(currContainer){
+    if (currContainer) {
         currContainer.hide();
         currContainer.onHide();
     }
-    if(this.flagHistory){
+    if (this.flagHistory) {
         Container.go(this);
     }
     Container.history.last = this;
     this.flagHistory = true;
     this.status = 3;
     this.panel.show();
-    $(window).scrollTop(0);//统一处理滚动条到顶部
-    Util.setPageMinHeight();//统一设置页面高度
+    $(window).scrollTop(0); //统一处理滚动条到顶部
+    Util.setPageMinHeight(); //统一设置页面高度
     this.onShow();
 };
 
 /**
  * 隐藏页面
  */
-Container.prototype.hide = function(){
-    if(this.status == 3){
+Container.prototype.hide = function() {
+    if (this.status == 3) {
         this.status = 2;
         this.panel.hide();
         return;
@@ -134,18 +135,18 @@ Container.prototype.hide = function(){
 /**
  * 加载页面
  */
-Container.prototype.load = function(){
-    if(this.status == 1 || this.status == 3){
+Container.prototype.load = function() {
+    if (this.status == 1 || this.status == 3) {
         return false;
-    }else if(this.status == 2){
+    } else if (this.status == 2) {
         this.show();
         return false;
     }
-    if(this.url){
+    if (this.url) {
         this.status = 1;
         this.onBeforeLoad();
         var thiz = this;
-        this.panel.empty().load(this.url, function(){
+        this.panel.empty().load(this.url, function() {
             thiz.init();
             thiz.onLoad();
             thiz.show();
@@ -157,10 +158,10 @@ Container.prototype.load = function(){
 /**
  * load之后公共初始化
  */
-Container.prototype.init = function(){
+Container.prototype.init = function() {
     var templates = this.templates;
     var templateAttr = this.templateAttr;
-    this.panel.find("[" + templateAttr + "]").each(function(){
+    this.panel.find("[" + templateAttr + "]").each(function() {
         var tempId = $(this).attr(templateAttr);
         $(this).removeAttr(templateAttr);
         templates[tempId] = this.outerHTML;
@@ -171,7 +172,7 @@ Container.prototype.init = function(){
 /**
  * 卸载页面
  */
-Container.prototype.unload = function(){
+Container.prototype.unload = function() {
     this.onUnload();
     this.panel.empty();
 };
@@ -181,8 +182,8 @@ Container.prototype.unload = function(){
  * @param tempId
  * @returns {*}
  */
-Container.prototype.formatHtml = function(tempId){
-    if(!tempId || this.templates.hasOwnProperty(tempId) == false){
+Container.prototype.formatHtml = function(tempId) {
+    if (!tempId || this.templates.hasOwnProperty(tempId) == false) {
         return "";
     }
     var args = [this.templates[tempId]].concat(Array.prototype.slice.call(arguments, 1));

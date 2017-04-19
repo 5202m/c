@@ -166,8 +166,12 @@
                     indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 6,
+                        userTel: '<%= userSession.mobilePhone %>',
+                        requestParams: chatAnalyze.hrefSplit()
+                    }, indexJS.userInfo));
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
-
                     $(".dashang_rule .scrollbox").mCustomScrollbar({
                         theme: "light-thick",
                         scrollbarPosition: "outside",

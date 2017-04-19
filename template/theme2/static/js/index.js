@@ -17,6 +17,7 @@ var Index = {
             Rooms.load();
         }
         Pop.signIn.init();
+        Tool.RedPacket.init(Data.userInfo,Data.apiUrl);
     },
     verifyTrainRoom: function() {
         if (Util.isNotEmpty(Data.userInfo.intentionalRoomId) && Data.userInfo.groupId !== Data.userInfo.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
@@ -33,6 +34,7 @@ var Index = {
         Index.serverTimeTickId = window.setInterval(function() {
             Data.serverTime += 1000;
             Tool.courseTick.tick();
+            Tool.RedPacket.tick();
         }, 1000); //每秒一次
     },
 

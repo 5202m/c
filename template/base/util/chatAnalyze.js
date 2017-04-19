@@ -98,7 +98,16 @@ var chatAnalyze = {
         return /^https?:\/\/(\d{1,3}\.){3}\d{1,3}.+/.test(chatAnalyze.localHref);
     },
     getDasURL: function() {
-        return this.dasUrl;
+        var protocol = document.location.protocol;
+        var dasUrl =  "http://das.gwfx.com/put/insertRoom";
+        if (this.isLocalHref()) {
+            dasUrl = "http://testweboa.gwfx.com:8088/GwUserTrackingManager_NEW/put/insertRoom";
+        }
+        if (protocol.indexOf("https") != -1 && null!=dasUrl){
+            dasUrl = dasUrl.replace('http://', 'https://').replace('8088', '7088');
+        }
+
+        return dasUrl;
     },
     /**
      * 初始化
@@ -113,9 +122,9 @@ var chatAnalyze = {
     },
     //初始化GA
     initGA: function() {
-        _gaq.push(['_setAccount', 'UA-49389835-1']);
-        _gaq.push(['_setDomainName', 'gwfx.com']);
-        _gaq.push(['_addIgnoredRef', 'gwfx.com']);
+        _gaq.push(['_setAccount', 'UA-31478987-1']);
+        _gaq.push(['_setDomainName', '24k.hk']);
+        _gaq.push(['_addIgnoredRef', '24k.hk']);
         _gaq.push(['_setAllowLinker', true]);
         _gaq.push(['_addOrganic', 'soso', 'w']);
         _gaq.push(['_addOrganic', 'sogou', 'query']);
@@ -182,8 +191,8 @@ var chatAnalyze = {
                 return arr[1];
             }
         }
-        var dm = '.gwfx.com';
-        var cval = UUID.prototype.createUUID(dm.indexOf("gwfx") != -1 ? '' : 'G');
+        var dm = '.24k.hk';
+        var cval = UUID.prototype.createUUID(dm.indexOf("24k") != -1 ? 'G' : '');
         document.cookie = this.utmStore.storeKey + '=' + escape(cval) + '; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/;domain=' + dm;
         return cval;
     },
@@ -191,6 +200,7 @@ var chatAnalyze = {
      * 设置utm系统所需行为
      */
     setUTM: function(init, data) {
+
         try {
             //this.getIp();
             /*if(init){
@@ -224,7 +234,8 @@ var chatAnalyze = {
             chatAnalyze.utmStore.courseName = data.courseName;
             chatAnalyze.utmStore.teacherId = data.lecturerId || '';
             chatAnalyze.utmStore.teacherName = data.lecturer || '';
-            chatAnalyze.utmStore.requestParams = data.requestParams || '';
+          //  chatAnalyze.utmStore.requestParams = data.requestParams || '';
+            chatAnalyze.utmStore.requestParams = '';
             if (isLocal) {
                 chatAnalyze.utmStore.userIp = data.ip;
             }
@@ -286,7 +297,8 @@ var chatAnalyze = {
             }
             var bPlatform = tmpData.groupType.indexOf('fx') != -1 ? 1 : 2;
             var userId = this.getUTMCookie();
-            var hrefSplit = this.hrefSplit();
+           // var hrefSplit = this.hrefSplit();
+            var hrefSplit = "";
             var sendData = {
                 userId: userId,
                 customerType: tmpData.clientGroup,
@@ -357,7 +369,7 @@ var chatAnalyze = {
         spli = encodeURIComponent(spli);
         chatAnalyze.setHC(reqid, spli);
     },
-    //设置HTTP COOKIE;domain=.gwfx.com
+    //设置HTTP COOKIE;domain=.24k.hk
     setHC: function(cname, cval) {
         if (typeof(cval) != "undefined" && cval != "" && cval != null) {
             //s20是代表20秒
@@ -365,10 +377,10 @@ var chatAnalyze = {
             //d是天数，30天则：d30
             var strsec = chatAnalyze.setExpiryTime("1h");
             var exp = new Date();
-            //.gwfx.com
+            //.24k.hk
             exp.setTime(exp.getTime() + strsec * 1);
-            document.cookie = cname + '=; expires=' + exp.toGMTString() + '; path=/;domain=.gwfx.com';
-            document.cookie = cname + '=' + escape(cval) + '; expires=' + exp.toGMTString() + '; path=/;domain=.gwfx.com';
+            document.cookie = cname + '=; expires=' + exp.toGMTString() + '; path=/;domain=.24k.hk';
+            document.cookie = cname + '=' + escape(cval) + '; expires=' + exp.toGMTString() + '; path=/;domain=.24k.hk';
         }
     },
     //cookie失效时间

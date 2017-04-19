@@ -3,10 +3,10 @@
  * author Dick.guo
  */
 var Room = new Container({
-    panel : $("#page_room"),
-    url : "/theme2/template/room.html",
-    wechatCode : null,
-    onLoad : function(){
+    panel: $("#page_room"),
+    url: "/theme2/template/room.html",
+    wechatCode: null,
+    onLoad: function() {
         Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();
@@ -16,7 +16,7 @@ var Room = new Container({
         Room.initPage();
         Room.loadRoomClassNote();
         Room.handleNoviceRoom();
-        if(Util.isAppEnv())$('.upload-pic').parent().remove();
+        if (Util.isAppEnv()) $('.upload-pic').parent().remove();
     },
     onHide: function() {
         Player.player.clear($("#roomVideo"));
@@ -64,8 +64,24 @@ Room.initPage = function() {
                 Chat.init();
                 Room.showCourse();
                 PrivateChat.isChangeRoom = true;
+                //判断当前房间是否是红包活动
+                Room.getRedPacketRoom(Room.currGroupId);
             }
             Room.watchRemind(room);
+        }
+    });
+};
+
+/**
+ * 判断是否红包活动培训班
+ */
+Room.getRedPacketRoom = function(currentRoomId) {
+    $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
+        if (data.isOK) {
+            $("#redPacket_header").show();
+        } else {
+            $('.redbag_pop').hide()
+            $("#redPacket_header").hide();
         }
     });
 };
@@ -218,7 +234,7 @@ Room.setEvent = function() {
      * 打开微信QRCode
      */
     $('#room_teacherOps').on('click', 'a.add-wx', function() {
-        if(Util.isAppEnv()){
+        if (Util.isAppEnv()) {
             $('#teacherWechat i').remove();
             var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Room.wechatCode).concat('<br/>就可以加老师为微信好友');
             $('#teacherWechat .pop-msg').html(tipText);
@@ -235,7 +251,7 @@ Room.setEvent = function() {
      * 打开打赏
      */
     $('#room_teacherOps').on('click', 'a.add-ds', function() {
-        if(Util.isAppEnv()){
+        if (Util.isAppEnv()) {
             $('#teacherDollar i').remove();
             var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Room.wechatCode).concat('<br/>加老师为微信好友<br/>就可以给老师打赏发红包啦');
             $('#teacherDollar .pop-msg').html(tipText);
@@ -302,11 +318,11 @@ Room.setEvent = function() {
             Login.load();
         } else if (_class === 'bg-green') { //新手专栏
             var rooms = Data.roomList || [];
-            $.each(rooms,function (index,row) {
-               if(row.roomType === 'simple'){
-                   Novice.currentRoomId = row.id;
-                   return false;
-               }
+            $.each(rooms, function(index, row) {
+                if (row.roomType === 'simple') {
+                    Novice.currentRoomId = row.id;
+                    return false;
+                }
             });
             Novice.load();
         }
@@ -384,30 +400,30 @@ Room.showLecturer = function(lecturerId) {
  * 显示讲师工具栏
  * @param lecturerId
  */
-Room.setLecturerTool = function (lecturerId) {
-    if(!lecturerId) return;
-    Util.postJson('/getShowTeacher',{data:JSON.stringify({groupId:Data.userInfo.groupId,authorId:lecturerId})},function(data) {
-        var userInfo = data.userInfo;
-        if(userInfo){
-            var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
-            $('#room_teacherOps').html(toolHtml);
-            Room.wechatCode = userInfo.wechatCode;
-            var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
-            var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode,userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png',userInfo.wechatCodeImg);
-            $('#teacherWechat').empty().html(wechatHtml);
-            $('#teacherDollar').empty().html(dollarHtml);
-            Subscribe.setSubscribeAttr($('#roomSubscribe'),lecturerId);
-            Subscribe.setSubscribeType(function (subscribeType) {
-                if(lecturerId === subscribeType.userId){
-                    var type = $('#roomSubscribe').attr('type');
-                    var types = type==='' ? [] : type.split(',');
-                    types.push(subscribeType.code);
-                    $('#roomSubscribe').attr('type',types.join(','));
-                    $('#roomSubscribe').show();
-                    return false;
-                }
-            });
-        }
+Room.setLecturerTool = function(lecturerId) {
+        if (!lecturerId) return;
+        Util.postJson('/getShowTeacher', { data: JSON.stringify({ groupId: Data.userInfo.groupId, authorId: lecturerId }) }, function(data) {
+            var userInfo = data.userInfo;
+            if (userInfo) {
+                var toolHtml = '<i class="tri3"></i>' + Room.formatHtml('room_teacherTool', userInfo.praiseNum, userInfo.userNo);
+                $('#room_teacherOps').html(toolHtml);
+                Room.wechatCode = userInfo.wechatCode;
+                var wechatHtml = Room.formatHtml('teacherWechat', userInfo.wechatCode, userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png', userInfo.wechatCodeImg);
+                var dollarHtml = Room.formatHtml('teacherDollar', userInfo.wechatCode, userInfo.wechatCodeImg).replace('/theme2/img/qr-code.png', userInfo.wechatCodeImg);
+                $('#teacherWechat').empty().html(wechatHtml);
+                $('#teacherDollar').empty().html(dollarHtml);
+                Subscribe.setSubscribeAttr($('#roomSubscribe'), lecturerId);
+                Subscribe.setSubscribeType(function(subscribeType) {
+                    if (lecturerId === subscribeType.userId) {
+                        var type = $('#roomSubscribe').attr('type');
+                        var types = type === '' ? [] : type.split(',');
+                        types.push(subscribeType.code);
+                        $('#roomSubscribe').attr('type', types.join(','));
+                        $('#roomSubscribe').show();
+                        return false;
+                    }
+                });
+            }
 
         });
     }
