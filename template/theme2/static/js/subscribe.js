@@ -242,7 +242,7 @@ Subscribe.setPraise = function(obj, lb){
  */
 Subscribe.setSubscribe = function(obj, id, type, analysts, isLast,callback) {
     var remark = {'live_reminder':'订阅直播提醒','shout_single_strategy':'订阅喊单策略','trading_strategy':'订阅交易策略'};
-    var params = {id:id, groupType:Data.userInfo.groupType, noticeType:'email', noticeCycle:'year', type:type, pointsRemark : remark[type], point:0};
+    var params = {id:id, groupType:Data.userInfo.groupType, noticeType:'email', noticeCycle:'week', type:type, pointsRemark : remark[type], point:0};
     params.analyst = analysts.join(',');
     Util.postJson('/subscribe', {params: JSON.stringify(params)}, function (data) {
         if (data.isOK) {
