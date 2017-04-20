@@ -22,7 +22,7 @@ let messageService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("loadMsg! >>loadMsg:", e);
             if (callback) {
                 callback(null);
@@ -45,7 +45,7 @@ let messageService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("saveMsg! >>saveMsg:", e);
             if (callback) {
                 callback(null);
@@ -57,7 +57,7 @@ let messageService = {
     /**
      * 是否存在符合条件的记录 {"toUser.talkStyle":
      * 1,"toUser.userType":3,"toUser.questionId":pushInfo._id}
-     * 
+     *
      * @param searchObj
      */
     existRecord: (searchObj, callback) => {
@@ -69,7 +69,7 @@ let messageService = {
                 callback(result.isExist);
             }
             deferred.resolve(result.isExist);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("existRecord! >>existRecord:", e);
             if (callback) {
                 callback(null);
@@ -81,7 +81,7 @@ let messageService = {
 
     /**
      * 从数据库中加载已有的聊天记录
-     * 
+     *
      * @param groupType
      * @param groupId
      * @param fromUserTypeArr
@@ -89,7 +89,8 @@ let messageService = {
      * @param lastOfflineDate
      * @param callback
      */
-    getWhUseMsgCount: (groupType, groupId, userType, whUserTypeArr, toUserId, lastOfflineDate, callback) => {
+    getWhUseMsgCount: (groupType, groupId, userType, whUserTypeArr, toUserId,
+        lastOfflineDate, callback) => {
         let deferred = new Deferred();
         let path = "/message/getWhUseMsgCount";
         path += "?groupType=" + groupType;
@@ -103,7 +104,7 @@ let messageService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("existRecord! >>existRecord:", e);
             if (callback) {
                 callback(null);
@@ -115,7 +116,7 @@ let messageService = {
 
     /**
      * 加载大图
-     * 
+     *
      * @param publishTime
      * @param callback
      */
@@ -129,7 +130,7 @@ let messageService = {
                 callback(result.content.maxValue);
             }
             deferred.resolve(result.content.maxValue);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("loadBigImg! >>loadBigImg:", e);
             if (callback) {
                 callback(null);
@@ -140,7 +141,7 @@ let messageService = {
     },
     /**
      * 删除聊天记录
-     * 
+     *
      * @param data
      * @param callback
      */
@@ -152,7 +153,7 @@ let messageService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("deleteMsg! >>deleteMsg:", e);
             if (callback) {
                 callback(null);
@@ -163,7 +164,7 @@ let messageService = {
     },
     /**
      * 查询两天内的聊天记录并分组
-     * 
+     *
      * @param params
      * @param callback
      *            params.groupType；params.groupId；params.userId
@@ -179,7 +180,7 @@ let messageService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getLastTwoDaysMsg! >>getLastTwoDaysMsg:", e);
             if (callback) {
                 callback(null);

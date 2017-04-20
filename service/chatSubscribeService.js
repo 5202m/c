@@ -1,33 +1,34 @@
-const logger=require('../resources/logConf').getLogger('chatSubscribeService');// 引入log4js
-const constant = require('../constant/constant');// 引入constant
+const logger = require('../resources/logConf').getLogger(
+    'chatSubscribeService'); // 引入log4js
+const constant = require('../constant/constant'); // 引入constant
 const liveRoomAPIService = require('./liveRoomAPIService');
 const Deferred = require("../util/common").Deferred;
 
 /**
  * 订阅服务类
- * 
+ *
  */
 let chatSubscribeService = {
     /**
      * 获取订阅数据
-     * 
+     *
      * @param params
      * @param callback
      */
-    getSubscribeList: function(params, callback){
+    getSubscribeList: function(params, callback) {
         let deferred = new Deferred();
         let path = "/subscribe/getSubscribeList";
         path += "?groupType=" + params.groupType;
         path += "&userId=" + params.userId;
         liveRoomAPIService.get(path).then(result => {
-            if(callback){
-        	callback(result);
+            if (callback) {
+                callback(result);
             }
             deferred.resolve(result);
-        }).catch(function(e){
+        }).catch(function(e) {
             logger.error("查询数据失败! >>getSubscribeList:", e);
-            if(callback){
-        	callback(null);
+            if (callback) {
+                callback(null);
             }
             deferred.reject(e);
         });
@@ -35,22 +36,22 @@ let chatSubscribeService = {
     },
     /**
      * 保存订阅
-     * 
+     *
      * @param params
      * @param callback
      */
-    saveSubscribe: function(params, callback){
+    saveSubscribe: function(params, callback) {
         let deferred = new Deferred();
         let path = "/subscribe/saveSubscribe";
         liveRoomAPIService.post(path, params).then((result, a, b) => {
-            if(callback){
-        	callback(result);
+            if (callback) {
+                callback(result);
             }
             deferred.resolve(result);
         }).catch(e => {
             logger.error("saveSubscribe失败! >>saveSubscribe:", e);
-            if(callback){
-        	callback(null);
+            if (callback) {
+                callback(null);
             }
             deferred.reject(e);
         });
@@ -58,22 +59,22 @@ let chatSubscribeService = {
     },
     /**
      * 更新订阅
-     * 
+     *
      * @param params
      * @param callback
      */
-    modifySubscribe: function(params, callback){
+    modifySubscribe: function(params, callback) {
         let deferred = new Deferred();
         let path = "/subscribe/modifySubscribe";
         liveRoomAPIService.post(path, params).then(result => {
-            if(callback){
-        	callback(result);
+            if (callback) {
+                callback(result);
             }
             deferred.resolve(result);
         }).catch(e => {
             logger.error("modifySubscribe! >>modifySubscribe:", e);
-            if(callback){
-        	callback(null);
+            if (callback) {
+                callback(null);
             }
             deferred.reject(e);
         });
@@ -82,7 +83,7 @@ let chatSubscribeService = {
 
     /**
      * 保存客户分组到UTM
-     * 
+     *
      * @param groupType
      * @param userId
      * @param subscribeType
@@ -90,7 +91,8 @@ let chatSubscribeService = {
      * @param callback
      *            ({{isOK : boolean, msg : String}})
      */
-    saveSubscribe4UTM : function(groupType, userId, subscribeType, isAdd, callback){
+    saveSubscribe4UTM: function(groupType, userId, subscribeType, isAdd,
+        callback) {
         let deferred = new Deferred();
         let path = "/subscribe/saveSubscribe4UTM";
         liveRoomAPIService.post(path, {
@@ -99,14 +101,14 @@ let chatSubscribeService = {
             subscribeType: subscribeType,
             isAdd: isAdd
         }).then(result => {
-            if(callback){
-        	callback(result);
+            if (callback) {
+                callback(result);
             }
             deferred.resolve(result);
         }).catch(e => {
             logger.error("saveSubscribe4UTM! >>saveSubscribe4UTM:", e);
-            if(callback){
-        	callback(null);
+            if (callback) {
+                callback(null);
             }
             deferred.reject(e);
         });

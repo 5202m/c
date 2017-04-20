@@ -4,12 +4,12 @@ const liveRoomAPIService = require('./liveRoomAPIService');
 const Deferred = require("../util/common").Deferred;
 /**
  * 客户学员服务类型服务类
- * 
+ *
  */
 let clientTrainService = {
     /**
      * 保存培训班
-     * 
+     *
      * @param groupId
      * @param userId
      * @param nickname
@@ -27,7 +27,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("saveTrain失败! >>saveTrain:", e);
             if (callback) {
                 callback(null);
@@ -38,11 +38,11 @@ let clientTrainService = {
     },
     /**
      * 客户学员报名
-     * 
+     *
      * @param params
      * @param callback
      */
-    addClientTrain: function (params, userInfo, callback) {
+    addClientTrain: function(params, userInfo, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/addClientTrain";
         let postData = {
@@ -57,7 +57,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("addClientTrain失败! >>addClientTrain:", e);
             if (callback) {
                 callback(null);
@@ -68,12 +68,12 @@ let clientTrainService = {
     },
     /**
      * 提取培训班数及人数
-     * 
+     *
      * @param groupType
      * @param teachId
      * @param dataCallback
      */
-    getTrainAndClientNum: function (groupType, teachId, callback) {
+    getTrainAndClientNum: function(groupType, teachId, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/getTrainAndClientNum";
         path += "?groupType=" + groupType;
@@ -83,7 +83,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTrainAndClientNum! >>getTrainAndClientNum:", e);
             if (callback) {
                 callback(null);
@@ -94,13 +94,13 @@ let clientTrainService = {
     },
     /**
      * 提取培训班列表
-     * 
+     *
      * @param groupType
      * @param teachId
      * @param isAll
      * @param callback
      */
-    getTrainList: function (groupType, teachId, isAll, userId, callback) {
+    getTrainList: function(groupType, teachId, isAll, userId, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/getTrainList";
         path += "?groupType=" + groupType;
@@ -113,7 +113,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTrainList! >>getTrainList:", e);
             if (callback) {
                 callback(null);
@@ -125,12 +125,12 @@ let clientTrainService = {
 
     /**
      * 添加签到
-     * 
+     *
      * @param userInfo
      * @param clientip
      * @param callback
      */
-    addSignin: function (userInfo, clientip, callback) {
+    addSignin: function(userInfo, clientip, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/addSignin";
         let params = {
@@ -145,7 +145,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("addSignin! >>addSignin:", e);
             if (callback) {
                 callback(null);
@@ -157,10 +157,10 @@ let clientTrainService = {
 
     /**
      * 查询签到
-     * 
+     *
      * @param params
      */
-    getSignin: function (userInfo, callback) {
+    getSignin: function(userInfo, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/getSignin";
         path += "?mobilePhone=" + userInfo.mobilePhone;
@@ -170,7 +170,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getSignin! >>getSignin:", e);
             if (callback) {
                 callback(null);
@@ -184,7 +184,7 @@ let clientTrainService = {
      *
      * @param params
      */
-    checkTodaySignin: function (userInfo, clientip, callback) {
+    checkTodaySignin: function(userInfo, clientip, callback) {
         let deferred = new Deferred();
         let path = "/clientTrain/checkTodaySignin";
         let params = {
@@ -197,7 +197,7 @@ let clientTrainService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkTodaySignin! >>checkTodaySignin:", e);
             if (callback) {
                 callback(null);

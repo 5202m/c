@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+
 "use strict";
 /**
  * Module dependencies.
  */
 
 const app = require('../app');
-const debug = require('debug')('chat-cf:server');
+const debug = require('debug')('chat-pm:server');
 const http = require('http');
 const logConf = require('../resources/logConf');
 const logger = logConf.getLogger('applicationScript');
@@ -36,9 +37,9 @@ server.on('listening', onListening);
 process.on('uncaughtException', err => {
     logger.error("this is some error,please check:", err);
 });
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', (reason, ...args) => {
     let strReason = JSON.stringify(reason);
-    logger.info(`Promise unhandledRejection >> Reason: ${strReason}`);
+    logger.info(`Promise unhandledRejection >> Reason: ${strReason}`, args || "");
 });
 
 /**
@@ -70,22 +71,22 @@ function onError(error) {
         throw error;
     }
 
-    var bind = typeof port === 'string'
-         ? 'Pipe ' + port
-         : 'Port ' + port;
+    var bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
-    case 'EACCES':
-        logger.error(`${bind} requires elevated privileges`);
-        process.exit(1);
-        break;
-    case 'EADDRINUSE':
-        logger.error(`${bind} is already in use`);
-        process.exit(1);
-        break;
-    default:
-        throw error;
+        case 'EACCES':
+            logger.error(`${bind} requires elevated privileges`);
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            logger.error(`${bind} is already in use`);
+            process.exit(1);
+            break;
+        default:
+            throw error;
     }
 }
 
@@ -95,8 +96,8 @@ function onError(error) {
 
 function onListening() {
     var addr = server.address();
-    var bind = typeof addr === 'string'
-         ? 'pipe ' + addr
-         : 'port ' + addr.port;
+    var bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
     debug('Listening on ' + bind);
 }

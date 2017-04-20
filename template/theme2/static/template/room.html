@@ -1,0 +1,439 @@
+<div class="head-top head-fixed mt40 al-c" id="room_header">
+	<a href="javascript:void(0);" class="btn-l" id="room_back"><i class="i-back"></i></a>
+	<b id="room_roomName"></b>
+	<a href="javascript:void(0);" class="menu-list btn-r" id="room_syllabus"><i class="i-list4"></i>课程列表</a>
+</div>
+<section class="video-con mt84 mb50">
+	<div id="chat_player">
+		<div class="video-play-box dn" id="roomVideo">
+		</div>
+		<div class="audio-play-box dn" id="roomAudio">
+			<div class="voicepart stopped" id="roomAudioCtrl">
+				<div class="voice_wave">
+					<div class="style1">
+						<div class=""><img id="roomAudioImg" src="/theme2/img/wave0.jpg" class="audio-img"></div>
+					</div>
+					<a href="javascript:void(0)" class="voice_playbtn"><i></i></a>
+				</div>
+				<div class="voice_ctrl">
+					<a href="javascript:void(0)" class="playbtn" id="roomAudioPlay"><i></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="video-infos pt0 z1" id="room_classnote">
+		<div class="infos-block plrall clearfix" id="roomLiveAnalyst">
+			<div class="avatar-info fl" id="room_teacher" style="display: none;">
+				<img src="" class="img-avatar" id="room_teacherAvatar"/>
+				<div class="a-top"><b id="room_teacherName"></b><i class="i-dot3"></i></div>
+			</div>
+			<div class="teacher-ops dn" style="display: none;" id="room_teacherOps">
+				<div class="share-btns infos-opbar list-col-4" temp="room_teacherTool">
+					<ul class="clearfix">
+						<li>
+							<a href="javascript:void(0);" userNo="{1}" class="support">
+								<span class="top-icons i-dzan3"></span>
+								<label>{0}</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" class="add-ds" userNo="{1}">
+								<span class="top-icons i-dollar3"></span>
+								<label>打赏</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" class="add-wx" userNo="{1}">
+								<span class="top-icons i-chat-wx"></span>
+								<label>加微信</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" class="subscribe" userNo="{1}" analystId="{1}" id="roomSubscribe" type="" lrid="" ssid="" tsid="" style="display: none;">
+								<span class="top-icons i-subscribe"></span>
+								<label>订阅</label>
+							</a>
+						</li>
+					</ul>
+					<div class="more-ops al-c">
+						<a href="javascript:void(0)">更多详情</a>
+					</div>
+				</div>
+			</div>
+			<div class="infos-opbar">
+				<ul class="clearfix">
+					<li>
+						<a href="javascript:void(0);" id="room_pride">
+							<span class="top-icons i-light"></span>
+							<label>直播精华</label>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" id="room_chat">
+							<span class="top-icons i-comments2"><i class="i-tips-txt dn" id="chatMsgCount">0</i></span>
+							<label>聊天室
+								<small>(<span id="chatOnlineNum">0</span>)</small>
+							</label>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" id="room_playerCtrl" class="dn">
+							<span class="top-icons i-volume"></span>
+							<label id="room_playerCtrlTxt">转声音</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="program-con" id="roomAnalystTagCourse">
+			<div class="program-list">
+				<div id="roomAnalystTag" class="badge-group">
+					<label class="u-badge" temp="analyst_tags">{0}<i class="i-badge-arrowr"></i></label>
+				</div>
+			</div>
+			<div class="program-resource" id="roomCourse">
+				<span class="s1"><!--课程标题--></span><span class="s2"><!--2017.01.19 17:30~19:00--></span>
+			</div>
+		</div>
+		<div class="head-top head-fixed mt40 al-c dn" id="prideTopTitle">
+			<span class="btn-l"><b class="head-tit">直播精华</b></span>
+			<a href="javascript:void(0);" class="txt-btn btn-r" id="prideTopClose"><i class="i-close close-btn"></i></a>
+		</div>
+		<div class="infos-block plrall clearfix live-essence dn" id="prideShowAnalyst">
+			<div class="avatar-info fl" id="pride_teacher" style="display: none;">
+				<img src="" class="img-avatar" id="pride_teacherAvatar">
+				<div class="a-top"><b id="pride_teacherName"></b><i class="i-dot3"></i></div>
+			</div>
+			<div class="program-con infos-program fl">
+				<div class="program-list">
+					<div class="badge-group" id="prideAnalystTags">
+
+					</div>
+				</div>
+				<div class="program-resource al-r" id="prideCourse">
+					<div class="s1"></div>
+					<div class="s2"></div>
+				</div>
+			</div>
+		</div>
+		<div id="classNote_panel">
+			<div class="txt-block block-blue" temp="classNote_strategy" dataid="{0}">
+				<div class="txt-tit"><span class="square-dot c-purple"><i class="dot"></i></span>当前交易策略</div>
+				<div class="txt-details">
+					{1}
+				</div>
+				<div class="toggle-op-btn">
+					<i class="i-arrow-down"></i>
+				</div>
+			</div>
+			<div class="call-infos block-yellow" temp="classNote_shoutTrade" dataid="{0}">
+				<div class="call-hd">
+					<span class="call-time">{1}</span><span>{2}</span><p>{3}{2}了，快来围观！</p>
+					{5}
+				</div>
+				{4}
+			</div>
+			<div class="call-infos" temp="classNote_article" dataid="{0}">
+				<div class="call-hd">
+					<span class="call-time">{1}</span>
+				</div>
+				<div class="call-desc-txt">{2}</div>
+			</div>
+			<div class="btn-group al-r" temp="classNote_look" dataid="{0}" item="{1}">
+				<a href="javascript:void(0);" class="btn btn-data">查看数据</a>
+			</div>
+			<div class="call-infos block-purple dn" temp="classNote_trading_strategy_look">
+				<div class="btn-group al-r sildeup" dataid="{0}">
+					<a href="javascript:void(0);" class="btn btn-data">查看数据</a>
+				</div>
+			</div>
+			<i temp="classNote_dim1" class="txt-mban"></i>
+			<i temp="classNote_dim2" class="txt-mban repeat3x"></i>
+			<div class="txt-details" temp="classNote_txt">{0}</div>
+			<div class="details-item-list sildeup" temp="classNote_data">{0}</div>
+			<table class="tb-default" temp="classNote_data1">
+				<tr><th>品种</th><th>方向</th><th>入场点位</th><th>止盈</th><th>止损</th></tr>
+				<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>
+			</table>
+			<div class="instr-txt" temp="classNote_data2">
+				<label>说明</label><span>{0}</span>
+			</div>
+			<div class="blk7 blke3e3ea" temp="classNote_split"></div>
+		</div>
+	</div>
+	<div class="bottom-fixed content_w" id="room_foot">
+		<div class="bottom-con plrall">
+			<div class="bt-infos-l fl">
+				<ul class="infos-play">
+					<li id="li_XAUUSD">
+						<p class="p1"><span>伦敦金</span><i></i><span id="price_XAUUSD">--</span></p>
+						<p class="p2"><span>LLG&nbsp;</span><span id="deltaPercent_XAUUSD">--</span></p>
+					</li>
+					<li id="li_XAGUSD">
+						<p class="p1"><span>伦敦银</span><i></i><span id="price_XAGUSD">--</span></p>
+						<p class="p2">LLS&nbsp;<span id="deltaPercent_XAGUSD">--</span></p>
+					</li>
+					<li id="li_USDX">
+						<p class="p1"><span>美元指数</span><i></i><span id="price_USDX">--</span></p>
+						<p class="p2"><span>USD&nbsp;</span><span id="deltaPercent_USDX">--</span></p>
+					</li>
+					<li id="li_CLWTI">
+						<p class="p1"><span>纽约原油</span><i></i><span id="price_CLWTI">--</span></p>
+						<p class="p2"><span>USOIL&nbsp;</span><span id="deltaPercent_CLWTI">--</span></p>
+					</li>
+				</ul>
+			</div>
+			<div class="infos-opbar">
+				<ul class="clearfix">
+					<li>
+						<a href="javascript:void(0)" id="room_showTrade">
+							<span class="top-icons i-sdan"><i class="i-tips-txt dn" id="showTradeNum">0</i></span>
+							<label>晒单墙</label>
+						</a>
+					</li>
+					<li>
+						<a href="http://m.24k.hk/realaccount_open.html" target="_blank">
+							<span class="top-icons i-key2"></span>
+							<label>开户</label>
+						</a>
+					</li>
+					<!--li>
+						<a href="javascript:void(0)">
+							<span class="top-icons i-send2"></span>
+							<label>分享</label>
+						</a>
+					</li-->
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="fixed-con dn" id="room_talk">
+		<div class="chat-top-bar clearfix" id="chat_ctrl">
+			<span class="fl chat-s1">聊天室</span>
+			<div class="view_select fl">
+				<div class="se_cont">
+					<select class="selected" id="chat_filter">
+						<option value="all">看所有人</option>
+						<option value="analyst">只看分析师</option>
+						<option value="me">与我相关</option>
+					</select>
+				</div>
+				<i class="i-arrow-down2"></i>
+			</div>
+			<div class="view_select view_select_link fl">
+				<div class="se_cont" id="chat_whisper">
+					<a href="javascript:void(0);" class="selected">私聊</a>
+				</div>
+			</div>
+			<span class="chat-s2">
+				<i class="i-arrow i-arrow-up4" id="chat_fullscreen"></i>
+				<i class="i-close close-btn" id="chat_close"></i>
+			</span>
+		</div>
+		<div class="chat-tips-bar dn" id="chat_floatMsg">
+			<div class="iscroll" id="scroll-tips">
+				<div class="scroller">
+					<div class="chat-tips-con">
+						<p class="pr15"></p>
+					</div>
+					<a href="javascript:void(0);" class="tips-arrow-btn"><i class="i-arrow-r"></i></a>
+				</div>
+			</div>
+			<a href="javascript:void(0);" class="tips-close-btn">关闭</a>
+		</div>
+		<div class="chat-block clearfix" id="chat_msg">
+			<div class="dialog{0}" temp="chat_dialog" id="{1}">
+				<div class="headimg" uid="{2}" utype="{8}">
+					<a href="javascript:void(0);"><img src="/theme2/img/user_c.png" alt="{3}"></a>
+				</div>
+				<div class="infobar">
+					{4}
+					<a href="javascript:void(0);" class="uname">{5}</a>
+					<span class="ctime">{6}</span>
+				</div>
+				{7}
+			</div>
+			<div class="dialog dialog-me tag-me" temp="chat_dialogMe" id="{0}">
+				<div class="headimg">
+					<a href="javascript:void(0);"><img src="/theme2/img/user_c.png" alt="{1}"></a>
+				</div>
+				<div class="infobar">
+					{2}
+					<a href="javascript:void(0);" class="uname">{4}</a>
+					<span class="ctime">{3}</span>
+				</div>
+				{5}
+			</div>
+			<span class="level" temp="chat_dialogLevel">{0}</span>
+			<a href="{0}" target="_blank" class="a-block" temp="chat_dialogUrl">{0}</a>
+			<div class="dcont" temp="chat_dialogTxt1" talk="q">
+				{0}
+			</div>
+			<div class="dcont" temp="chat_dialogTxt2">
+				<div class="question">
+					<span>{0}</span>提问：
+					<span class="q" talk="q">{1}</span>
+					<i class="dot-line"></i>
+				</div>
+				<div class="reply">
+					<span>回复：</span>
+					<span talk="a">{2}</span>
+				</div>
+			</div>
+			<div class="dcont" temp="chat_dialogTxt3" talk="q">
+				<span class="txt_dia txt_atname" uid="{1}" utype="-1">@<label>{2}</label></span>
+				{0}
+			</div>
+			<a href="{0}" temp="chat_dialogImg" data-lightbox="dialog-img"  >
+				<img src="/theme2/img/user_c.png" alt="图片" style="width: 100px;"/>
+			</a>
+			<div temp="chat_dialogLoading">
+				<em class="img-loading"><i></i></em>
+				<span class="shadow-box"></span>
+				<s class="shadow-conut"></s>
+			</div>
+			<em class="ruleTipStyle" temp="chat_dialogTip">{0}</em>
+			<div class="dialog" temp="chat_sys_msg">
+				<div class="headimg">
+					<a href="javascript:void(0);"><img src="/theme2/img/avatar-sys.png"></a>
+				</div>
+				<div class="infobar">
+					<a href="javascript:void(0);" class="uname">系统消息</a><span class="ctime">{0}</span>
+				</div>
+				<div class="dcont">
+					<span>{1}</span>
+					<div class="d-btn-op al-r"><a href="javascript:void(0);" class="btn btn-red" to="look" t="{2}" _id="{3}">去看看</a></div>
+				</div>
+			</div>
+		</div>
+		<div class="chat-op" id="chat_editor">
+			<div class="content_w">
+				<div class="chat-op-default">
+					<div class="op-panel">
+						<i class="i-addbtn2" id="chat_contTool"></i>
+						<div class="text-area-box">
+							<div id="chat_cont" contenteditable="true" class="text-area-con"></div>
+							<span id="chat_contHolder" class="placeholder">我来说两句...</span>
+						</div>
+						<button id="chat_send" class="i-sendbtn hide">发送</button>
+					</div>
+				</div>
+				<div class="chat-add-box" id="chat_tools">
+					<div class="add-box-hd" id="chat_tool1">
+						<div class="at-friend al-c" id="chat_gwUsers">
+							<span temp="chat_gwUser" uid="{0}">@<label class="uname">{1}</label></span>
+						</div>
+					</div>
+					<div class="add-box-bd" id="chat_tool2">
+						<ul class="add-btns-list clearfix">
+							<li><a href="javascript:void(0);" id="chat_face"><i class="i-emp2"></i><label>表情</label></a></li>
+							<li>
+								<span class="upload-pic">
+									<input type="file" class="sfile-input file-img"/>
+									<i class="i-pic"></i>
+								</span>
+								<label>图片</label>
+							</li>
+							<!--<li><a href="javascript:void(0);" id="chat_reward"><i class="i-dollar"></i><label>打赏</label></a></li>-->
+						</ul>
+					</div>
+					<div id="chat_tool3" class="swiper-container dn">
+						<div id="chat_facePanel" class="face swiper-wrapper"></div>
+						<div class="face-nav swiper-pagination"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--popup-->
+<div class="popup add-weixin" id="teacherWechat">
+	<div class="popcon" temp="teacherWechat">
+		<span class="i-close3"></span>
+		<div class="pop-main">
+			<img src="/theme2/img/qr-code.png" class="qr-code"/>
+			<a href="{0}" ><i class="i-download"></i></a>
+			<p class="pop-msg al-c">
+				点击上方按钮，将保存图片到本地<br/>
+				然后用微信识别图中二维码<br/>
+				即可关注老师微信号:{0}
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="popup add-weixin" id="teacherDollar">
+	<div class="popcon" temp="teacherDollar">
+		<span class="i-close3"></span>
+		<div class="pop-main">
+			<img src="/theme2/img/qr-code.png" class="qr-code"/>
+			<a href="{0}" ><i class="i-download"></i></a>
+			<p class="pop-msg al-c">
+				点击上方按钮，将保存图片到本地<br/>
+				然后用微信识别图中二维码<br/>
+				即可关注老师微信号:{0}<br/>
+				您也可以复制老师微信号<br/>
+				加老师为好友<br/>
+				就可以给老师打赏发红包啦
+			</p>
+		</div>
+	</div>
+</div>
+
+<!-- 登录指引 -->
+<div class="popup login-guide">
+	<div class="popup-tb">
+		<div class="popup-tb-cell">
+			<div class="popcon">
+				<div class="pop-main">
+					<p class="pop-msg al-c" id="loginTips">您已经观看了3分钟，赶紧登录继续观看</p>
+					<ul class="popcon-block-list list-col-2 clearfix" id="login_ul">
+						<li>
+							<div class="bg-blue">
+								<p class="p1">分析师在线直播<span>登录收听</span></p>
+								<i class="i-iconn1"></i>
+								<a href="javascript:void(0)" class="p-btn"><b>登录继续<span>听直播</span></b></a>
+							</div>
+						</li>
+						<li>
+							<div class="bg-green">
+								<p class="p1">新手教学专区 <span>手把手学操作</span></p>
+								<i class="i-iconn2"></i>
+								<a href="javascript:void(0)" class="p-btn"><b>新手专区<span>免登录</span></b></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 新手学习内容指引 -->
+<div class="popup beginners-guide" >
+	<div class="popup-tb">
+		<div class="popup-tb-cell">
+			<div class="popcon">
+				<span class="close-pop i-close-pop"></span>
+				<div class="pop-main">
+					<p class="pop-msg pt-2 al-c">点击选择你想学习的内容吧</p>
+					<ul class="popcon-block-list list-border1">
+						<li>
+							<a href="" class="p-link p-tb"><span class="i-iconn"><i class="i-iconn3"></i></span><b>伦敦金银是什么？ <span>怎样获利？</span></b></a>
+						</li>
+						<li>
+							<a href="" class="p-link p-tb"><span class="i-iconn"><i class="i-iconn4"></i></span><b>平台操作怎么下单?</b></a>
+						</li>
+						<li>
+							<a href="" class="p-link p-tb"><span class="i-iconn"><i class="i-iconn5"></i></span><b>如何判断基础行情</b></a>
+						</li>
+						<li>
+							<a href="" class="p-link p-tb"><span class="i-iconn"><i class="i-iconn6"></i></span><b>存取款、资金安全</b></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,37 @@
+<div class="head-top head-fixed mt40 al-c">
+	<a href="javascript:void(0);" id="back_userShowTrade"><i class="i-back"></i></a>
+	<b>我要晒单</b>
+	<a href="javascript:void(0);" class="txt-btn btn-r" id="to_userShowTrade">我的晒单</a>
+</div>
+<section class="sdan-con mt84">
+	<div class="sub-form plrall">
+			<div class="form-title">
+				<div class="text-area-box">
+					<div contenteditable="true" class="stxt-input contentText title" id="ttitle"></div>
+					<span class="placeholder">标题，如6月11日，黄金空仓1手，盈利500</span>
+				</div>
+
+				<div class="text-area-box">
+					<div contenteditable="true" class="stxt-input contentText userName" id="tuserName"></div>
+					<span class="placeholder">晒单人</span>
+				</div>
+			</div>
+			<div class="form-main">
+				<span class="upload-pic">
+					<form method="post" enctype='multipart/form-data' id="showTradeAddForm" name="showTradeAddForm">
+						<input type="file"  accept="image/*;capture=camera" class="sfile-input" name="flTradeImg" id="flTradeImg"/>
+						<input type="hidden" name="tradeImg" id="tradeImg" value="" />
+						<i class="pic-thumb"></i>
+						<img src="" class="obj-upload dn"/>
+						<input type="hidden" name="fileDir" value="pic/trade/chat/front" />
+						<input type="hidden" name="fileType" value="showTrade" />
+					</form>
+				</span>
+				<div class="text-area-box">
+					<div contenteditable="true" class="stxt-textarea contentText remark" id="tremark"></div>
+					<span class="placeholder">给大家简单说两句交易心得，可不填</span>
+				</div>
+			</div>
+			<input type="button" class="submit-btn" value="确定" id="tsubmit"/>
+	</div>
+</section>

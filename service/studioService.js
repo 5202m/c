@@ -3,23 +3,24 @@
  */
 const constant = require('../constant/constant'); // 引入constant
 const common = require('../util/common'); // 引入common类
-var errorMessage = require('../util/errorMessage');//引入errorMessage类
+var errorMessage = require('../util/errorMessage'); //引入errorMessage类
 const userService = require('../service/userService'); // 引入userService
-const clientTrainService = require('./clientTrainService');// 引入clientTrainService
-const chatService = require('./chatService');// 引入chatService
+const clientTrainService = require('./clientTrainService'); // 引入clientTrainService
+const chatService = require('./chatService'); // 引入chatService
 const logger = require('../resources/logConf').getLogger('studioService'); // 引入log4js
 const liveRoomAPIService = require('./liveRoomAPIService');
 const querystring = require("querystring");
 const Deferred = require("../util/common").Deferred;
+const apiService = require('../service/pmApiService');
 /**
  * 定义直播服务类
- * 
+ *
  * @type {{}}
  */
 var studioService = {
     /**
      * 提取主页需要加载的数据
-     * 
+     *
      * @param userInfo
      * @param groupId
      * @param isGetRoomList
@@ -30,7 +31,8 @@ var studioService = {
      *            是否客户信息
      * @param dataCallback
      */
-    getIndexLoadData: (userInfo, groupId, isGetRoomList, isGetSyllabus, isGetMember, callback) => {
+    getIndexLoadData: (userInfo, groupId, isGetRoomList, isGetSyllabus,
+        isGetMember, callback) => {
         let deferred = new Deferred();
         let params = {
             userId: userInfo.userId,
@@ -48,7 +50,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getIndexLoadData! >>getIndexLoadData:", e);
             if (callback) {
                 callback(null);
@@ -59,7 +61,7 @@ var studioService = {
     },
     /**
      * 提取房间列表
-     * 
+     *
      * @param callback
      */
     getRoomList: (groupType, callback) => {
@@ -72,7 +74,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomList! >>getRoomList:", e);
             if (callback) {
                 callback(null);
@@ -83,7 +85,7 @@ var studioService = {
     },
     /**
      * 提取客户组列表
-     * 
+     *
      * @param callback
      */
     getClientGroupList: (groupType, callback) => {
@@ -96,7 +98,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getClientGroupList! >>getClientGroupList:", e);
             if (callback) {
                 callback(null);
@@ -123,7 +125,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("resetPwd! >>resetPwd:", e);
             if (callback) {
                 callback(null);
@@ -146,7 +148,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getStudioByGroupId! >>getStudioByGroupId:", e);
             if (callback) {
                 callback(null);
@@ -171,7 +173,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkGroupAuth! >>checkGroupAuth:", e);
             if (callback) {
                 callback(null);
@@ -183,7 +185,7 @@ var studioService = {
 
     /**
      * 通过客户组提取默认房间
-     * 
+     *
      * @param clientGroup
      */
     getDefaultRoom: (groupType, clientGroup, callback) => {
@@ -197,7 +199,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getDefaultRoom! >>getDefaultRoom:", e);
             if (callback) {
                 callback(null);
@@ -208,7 +210,7 @@ var studioService = {
     },
     /**
      * 直播间注册
-     * 
+     *
      * @param callback
      */
     studioRegister: (userInfo, clientGroup, callback) => {
@@ -224,7 +226,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("studioRegister! >>studioRegister:", e);
             if (callback) {
                 callback(null);
@@ -235,7 +237,7 @@ var studioService = {
     },
     /**
      * 检查客户信息是否存在， 1、存在则把需要与接口提取的用户数据（交易账号，账号级别）同步更新 2、不存在则视为新的记录插入
-     * 
+     *
      * @param userInfo
      * @param callback
      */
@@ -251,7 +253,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkMemberAndSave! >>checkMemberAndSave:", e);
             if (callback) {
                 callback(null);
@@ -262,7 +264,7 @@ var studioService = {
     },
     /**
      * 判断昵称唯一
-     * 
+     *
      * @param userInfo
      *            {{mobilePhone:String, groupType:String, nickname:String}}
      * @param callback
@@ -278,7 +280,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkNickName! >>checkNickName:", e);
             if (callback) {
                 callback(null);
@@ -290,7 +292,7 @@ var studioService = {
 
     /**
      * 加入新的房间组
-     * 
+     *
      * @param groupType
      * @param mobilePhone
      * @param userId
@@ -298,7 +300,8 @@ var studioService = {
      * @param isLogin
      * @param callback
      */
-    joinNewGroup: (groupType, mobilePhone, userId, newGroupId, isLogin, callback) => {
+    joinNewGroup: (groupType, mobilePhone, userId, newGroupId, isLogin,
+        callback) => {
         let deferred = new Deferred();
         let result = {
             isOK: false,
@@ -317,25 +320,25 @@ var studioService = {
             userId: userId,
             groupId: newGroupId,
             mobilePhone: mobilePhone
-        }, function (result) {
+        }, function(result) {
             result.isOK = true;
             callback(result);
         });
     },
     /**
      * 通过手机号码检测客户组
-     * 
+     *
      * @param mobilePhone
      */
     checkClientGroup: (mobilePhone, accountNo, platformKey, callback) => {
         var clientGroup = constant.clientGroup.register;
-        var apiService = require('../service/' + platformKey + 'ApiService'); // 引入ApiService
+        // 引入ApiService
         apiService.checkAClient({
             mobilePhone: mobilePhone,
             accountNo: accountNo,
             ip: '',
-            isCheckByMobile: mobilePhone?true:false
-        }, function (result) {
+            isCheckByMobile: mobilePhone ? true : false
+        }, function(result) {
             logger.info("checkAClient->flagResult:" + JSON.stringify(result));
             if (result.flag == 2) {
                 clientGroup = constant.clientGroup.notActive;
@@ -344,15 +347,15 @@ var studioService = {
                 clientGroup = constant.clientGroup.active;
                 callback(clientGroup, result.accountNo);
             } else {
-                if(common.isValid(mobilePhone)) {
+                if (common.isValid(mobilePhone)) {
                     // 检查用户是否模拟用户
-                    apiService.checkSmClient(mobilePhone, function (hasRow) {
+                    apiService.checkSmClient(mobilePhone, function(hasRow) {
                         if (hasRow) {
                             clientGroup = constant.clientGroup.simulate;
                         }
                         callback(clientGroup);
                     });
-                }else{
+                } else {
                     callback(clientGroup, result.accountNo);
                 }
             }
@@ -360,7 +363,7 @@ var studioService = {
     },
     /**
      * 客户登陆
-     * 
+     *
      * @param userInfo
      * @param type
      *            1-手机登录,匹配手机号 2-自动登录,匹配userId 3-第三方平台自动登录,匹配thirdId 4-手机号码+密码登录
@@ -379,7 +382,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("studio.login! >>studio.login:", e);
             if (callback) {
                 callback(null);
@@ -390,44 +393,51 @@ var studioService = {
     },
     /**
      * 通过手机号码检测客户组
-     * 
+     *
      * @param mobilePhone
      * @param clientGroup
      * @param callback
      */
     upgradeClientGroup: (groupType, mobilePhone, clientGroup, callback) => {
-        var apiService = require('../service/' + common.getTempPlatformKey(groupType) + 'ApiService'); // 引入ApiService
-        if (clientGroup === constant.clientGroup.active || clientGroup === constant.clientGroup.notActive) {
+        var apiService = require(
+            '../service/' + common.getTempPlatformKey(groupType) + 'ApiService'); // 引入ApiService
+        if (clientGroup === constant.clientGroup.active || clientGroup ===
+            constant.clientGroup.notActive) {
             // 升级到真实
             apiService.checkAClient({
                 mobilePhone: mobilePhone,
                 isCheckByMobile: true
-            }, function (result) {
+            }, function(result) {
                 logger.info("checkAClient->flagResult:" + JSON.stringify(result));
                 if (result.flag == 2 || result.flag == 3) {
-                    var clientGroupTmp = result.flag == 2 ? constant.clientGroup.notActive : constant.clientGroup.active;
-                    studioService.updateClientGroup(groupType, mobilePhone, clientGroupTmp, result.accountNo, function (isOk) {
-                        if (isOk) {
-                            callback(true, clientGroupTmp);
-                        } else {
-                            callback(false, null);
-                        }
-                    });
+                    var clientGroupTmp = result.flag == 2 ? constant.clientGroup.notActive :
+                        constant.clientGroup.active;
+                    studioService.updateClientGroup(groupType, mobilePhone,
+                        clientGroupTmp, result.accountNo,
+                        function(isOk) {
+                            if (isOk) {
+                                callback(true, clientGroupTmp);
+                            } else {
+                                callback(false, null);
+                            }
+                        });
                 } else {
                     callback(false, null);
                 }
             });
         } else if (clientGroup === constant.clientGroup.simulate) {
             // 升级到模拟
-            apiService.checkSmClient(mobilePhone, function (hasRow) {
+            apiService.checkSmClient(mobilePhone, function(hasRow) {
                 if (hasRow) {
-                    studioService.updateClientGroup(groupType, mobilePhone, constant.clientGroup.simulate, null, function (isOk) {
-                        if (isOk) {
-                            callback(true, constant.clientGroup.simulate);
-                        } else {
-                            callback(false, null);
-                        }
-                    });
+                    studioService.updateClientGroup(groupType, mobilePhone,
+                        constant.clientGroup.simulate, null,
+                        function(isOk) {
+                            if (isOk) {
+                                callback(true, constant.clientGroup.simulate);
+                            } else {
+                                callback(false, null);
+                            }
+                        });
                 } else {
                     callback(false, null);
                 }
@@ -438,13 +448,14 @@ var studioService = {
     },
     /**
      * 更新客户组别
-     * 
+     *
      * @param mobilePhone
      * @param newClientGroup
      * @param accountNo
      * @param callback
      */
-    updateClientGroup: (groupType, mobilePhone, newClientGroup, accountNo, callback) => {
+    updateClientGroup: (groupType, mobilePhone, newClientGroup, accountNo,
+        callback) => {
         let deferred = new Deferred();
         let path = "/studio/updateClientGroup";
         let params = {
@@ -459,7 +470,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateClientGroup! >>updateClientGroup:", e);
             if (callback) {
                 callback(null);
@@ -470,7 +481,7 @@ var studioService = {
     },
     /**
      * 伦敦金/伦敦银看涨看跌投票
-     * 
+     *
      * @param symbol
      *            伦敦金或伦敦银标识 Gold/Silver
      * @param highsorlows
@@ -481,7 +492,7 @@ var studioService = {
         var cacheClient = require('../cache/cacheClient');
         var key = 'highsLowsVote_' + symbol;
         var map = {};
-        cacheClient.hgetall(key, function (err, result) {
+        cacheClient.hgetall(key, function(err, result) {
             if (err) {
                 logger.error("get highs or lows vote fail:" + err);
                 result.highs = 0;
@@ -523,7 +534,7 @@ var studioService = {
     },
     /**
      * 伦敦金/伦敦银看涨看跌投票
-     * 
+     *
      * @param symbol
      *            伦敦金或伦敦银标识 Gold/Silver
      * @param highsorlows
@@ -534,7 +545,7 @@ var studioService = {
         var cacheClient = require('../cache/cacheClient');
         var key = 'highsLowsVote_' + symbol;
         var map = {};
-        cacheClient.hgetall(key, function (err, result) {
+        cacheClient.hgetall(key, function(err, result) {
             if (err) {
                 logger.error("get highs or lows vote fail:" + err);
                 result.highs = 0;
@@ -560,7 +571,7 @@ var studioService = {
     },
     /**
      * 用户修改皮肤样式
-     * 
+     *
      * @param userInfo
      * @param params
      * @param callback
@@ -581,7 +592,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("setUserGroupThemeStyle! >>setUserGroupThemeStyle:", e);
             if (callback) {
                 callback(null);
@@ -592,7 +603,7 @@ var studioService = {
     },
     /**
      * 提取培训班列表
-     * 
+     *
      * @param callback
      */
     getTrainRoomList: (groupType, callback) => {
@@ -605,7 +616,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTrainRoomList! >>getTrainRoomList:", e);
             if (callback) {
                 callback(null);
@@ -616,7 +627,7 @@ var studioService = {
     },
     /**
      * 通过用户userNo提取信息
-     * 
+     *
      * @param userNo
      */
     getUserInfoByUserNo: (groupType, userNo, callback) => {
@@ -630,7 +641,7 @@ var studioService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfoByUserNo! >>getUserInfoByUserNo:", e);
             if (callback) {
                 callback(null);
@@ -641,30 +652,30 @@ var studioService = {
     },
     /**
      * 初始直播老师列表
-     * 
+     *
      * @param params
      * @param callback
      */
     getShowTeacher: (params, callback) => {
-	let deferred = new Deferred();
-	 let path = "/studio/getShowTeacher";
-	 path += "?groupType=" + params.groupType;
-	 path += "&groupId=" + params.groupId;
-	 path += "&authorId=" + params.authorId;
+        let deferred = new Deferred();
+        let path = "/studio/getShowTeacher";
+        path += "?groupType=" + params.groupType;
+        path += "&groupId=" + params.groupId;
+        path += "&authorId=" + params.authorId;
 
-	 liveRoomAPIService.get(path).then((result) => {
-	     if(callback){
-		 callback(result);
-	     }
-	     deferred.resolve(result);
-	 }).catch((e) => {
-	     logger.error("getShowTeacher! >>getShowTeacher:", e);
-	     if(callback){
-		 callback(null);
-	     }
-	     deferred.reject(e);
-	 });
-	 return deferred.promise;
+        liveRoomAPIService.get(path).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getShowTeacher! >>getShowTeacher:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
     }
 };
 

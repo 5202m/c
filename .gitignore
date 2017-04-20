@@ -2,3 +2,5 @@
 /logs
 /.project
 /.vscode
+/npm-debug.log*
+/.idea

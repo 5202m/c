@@ -9,12 +9,12 @@ var syllabusService = {
 
     /**
      * 查询聊天室课程安排 备注：如果groupId是逗号分隔的多个id,则返回多条记录，否则返回一条记录
-     * 
+     *
      * @param groupType
      * @param groupId
      * @param callback
      */
-    getSyllabus: function (groupType, groupId, callback) {
+    getSyllabus: function(groupType, groupId, callback) {
         let loc_dateNow = new Date();
         let deferred = new Deferred();
         let path = "/syllabus/getSyllabus";
@@ -27,7 +27,7 @@ var syllabusService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getSyllabus! >>getSyllabus:", e);
             if (callback) {
                 callback(null);
@@ -38,12 +38,12 @@ var syllabusService = {
     },
     /**
      * 移除课程内容
-     * 
+     *
      * @param coursesObj
      */
-    removeContext: function (coursesObj) {
+    removeContext: function(coursesObj) {
         var tmArr = coursesObj.timeBuckets,
-        courseTmp = null;
+            courseTmp = null;
         for (var i in tmArr) {
             courseTmp = tmArr[i].course;
             for (var k in courseTmp) {
@@ -54,10 +54,10 @@ var syllabusService = {
     },
     /**
      * 通过参数提取课程信息,包括课程分析师的个人信息
-     * 
+     *
      * @param params
      */
-    getCourseInfo: function (params, callback) {
+    getCourseInfo: function(params, callback) {
         let loc_dateNow = new Date();
         let deferred = new Deferred();
         let path = "/syllabus/getCourseInfo";
@@ -68,7 +68,7 @@ var syllabusService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getCourseInfo! >>getCourseInfo:", e);
             if (callback) {
                 callback(null);
@@ -80,13 +80,13 @@ var syllabusService = {
 
     /**
      * 查询聊天室课程安排历史记录
-     * 
+     *
      * @param groupType
      * @param groupId
      * @param date
      * @param callback
      */
-    getSyllabusHis: function (groupType, groupId, date, callback) {
+    getSyllabusHis: function(groupType, groupId, date, callback) {
         let deferred = new Deferred();
         let path = "/syllabus/getSyllabusHis";
         path += "?groupType=" + groupType;
@@ -98,7 +98,7 @@ var syllabusService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getSyllabusHis! >>getSyllabusHis:", e);
             if (callback) {
                 callback(null);

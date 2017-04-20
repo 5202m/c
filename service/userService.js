@@ -10,13 +10,13 @@ let querystring = require("querystring");
 let Deferred = require("../util/common").Deferred;
 /**
  * 定义用户服务类
- * 
+ *
  * @type {{getMemberList: , updateMemberInfo: }}
  */
 var userService = {
     /**
      * 通过用户id提取信息
-     * 
+     *
      * @param id
      */
     getUserInfo: (id, callback) => {
@@ -29,7 +29,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfo! >>getUserInfo:", e);
             if (callback) {
                 callback(null);
@@ -40,7 +40,7 @@ var userService = {
     },
     /**
      * 通过用户userNo提取信息
-     * 
+     *
      * @param userNo
      */
     getUserInfoByUserNo: (userNo, callback) => {
@@ -53,7 +53,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserInfoByUserNo! >>getUserInfoByUserNo:", e);
             if (callback) {
                 callback(null);
@@ -64,7 +64,7 @@ var userService = {
     },
     /**
      * 通过用户id提取信息
-     * 
+     *
      * @param ids
      */
     getUserList: (userNOs, callback) => {
@@ -77,7 +77,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getUserList! >>getUserList:", e);
             if (callback) {
                 callback(null);
@@ -88,7 +88,7 @@ var userService = {
     },
     /**
      * 批量下线房间用户在线状态
-     * 
+     *
      * @param roomId
      */
     batchOfflineStatus: (roomId) => {
@@ -98,7 +98,7 @@ var userService = {
 
         liveRoomAPIService.get(path).then((result) => {
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("batchOfflineStatus! >>batchOfflineStatus:", e);
             deferred.reject(e);
         });
@@ -106,7 +106,7 @@ var userService = {
     },
     /**
      * 验证规则
-     * 
+     *
      * @param clientGroup
      * @param nickname
      * @param isWh
@@ -133,7 +133,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("verifyRule! >>verifyRule:", e);
             if (callback) {
                 callback(null);
@@ -155,7 +155,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getMemberList! >>getMemberList:", e);
             if (callback) {
                 callback(null);
@@ -177,7 +177,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getAuthUsersByGroupId! >>getAuthUsersByGroupId:", e);
             if (callback) {
                 callback(null);
@@ -188,7 +188,7 @@ var userService = {
     },
     /**
      * 新增用户信息
-     * 
+     *
      * @param userInfo
      * @param callback
      */
@@ -201,7 +201,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("createUser! >>createUser:", e);
             if (callback) {
                 callback(null);
@@ -212,7 +212,7 @@ var userService = {
     },
     /**
      * 加入新的房间组
-     * 
+     *
      * @param userInfo
      * @param callback
      */
@@ -229,7 +229,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("joinNewRoom! >>joinNewRoom:", e);
             if (callback) {
                 callback(null);
@@ -241,7 +241,7 @@ var userService = {
     /**
      * 检查后台进入聊天室的用户，是则直接登录聊天室
      */
-    checkSystemUserInfo: function (userInfo, callback) {
+    checkSystemUserInfo: function(userInfo, callback) {
         var result = {
             isOK: false
         };
@@ -256,17 +256,17 @@ var userService = {
             newUserInfo.accountNo = userInfo.userId;
             newUserInfo.userId = ''; // 不需要填值
         }
-        logger.info("checkSystemUserInfo=>newUserInfo:" + JSON.stringify(newUserInfo));
+        logger.info(
+            "checkSystemUserInfo=>newUserInfo:" + JSON.stringify(newUserInfo));
         userService.createUser(newUserInfo).then(result => {
-            result.isOK = true;
-            callback(result);
-        }).catch (err => {
+            callback({ isOK: result });
+        }).catch(err => {
             logger.error("checkSystemUserInfo=>createUser:" + err);
         });
     },
     /**
      * 更新会员信息 备注：判断是否存在登录信息，不存在则新增，存在则更新
-     * 
+     *
      * @param userInfo
      * @param callback
      */
@@ -279,7 +279,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateMemberInfo! >>updateMemberInfo:", e);
             if (callback) {
                 callback(null);
@@ -305,7 +305,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("updateMemberInfo! >>updateMemberInfo:", e);
             if (callback) {
                 callback(null);
@@ -316,7 +316,7 @@ var userService = {
     },
     /**
      * 通过userId及组别检测用户是否已经登录过
-     * 
+     *
      * @param userInfo
      * @param isAllowPass
      *            是否允许通过
@@ -337,7 +337,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkUserLogin! >>checkUserLogin:", e);
             if (callback) {
                 callback(null);
@@ -348,19 +348,19 @@ var userService = {
     },
     /**
      * 检查用户禁言
-     * 
+     *
      * @param row
      *            member信息
      * @param groupId
      *            房间号
      * @returns {*}
      */
-    checkUserGag: function (row, groupId) {
+    checkUserGag: function(row, groupId) {
         var subRow = row.loginPlatform.chatUserGroup[0];
         if (common.isBlank(subRow.gagDate)) {
             var currRoom = !subRow.rooms ? null : subRow.rooms.find(ele => {
-                    return ele._id === groupId;
-                });
+                return ele._id === groupId;
+            });
             if (currRoom) {
                 if (common.dateTimeWeekCheck(currRoom.gagDate, false)) {
                     return {
@@ -393,7 +393,7 @@ var userService = {
     },
     /**
      * 提取cs客服信息
-     * 
+     *
      * @param roomId
      */
     getRoomCsUser: (roomId, callback) => {
@@ -406,7 +406,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomCsUser! >>getRoomCsUser:", e);
             if (callback) {
                 callback(null);
@@ -417,7 +417,7 @@ var userService = {
     },
     /**
      * 提取cs客服信息
-     * 
+     *
      * @param roomId
      */
     getRoomCsUserList: (roomId, callback) => {
@@ -430,7 +430,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getRoomCsUserList! >>getRoomCsUserList:", e);
             if (callback) {
                 callback(null);
@@ -441,7 +441,7 @@ var userService = {
     },
     /**
      * 检查房间是否在开放时间内，或可用
-     * 
+     *
      * @param userId
      * @param groupId
      * @returns {boolean}
@@ -458,7 +458,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkRoomStatus! >>checkRoomStatus:", e);
             if (callback) {
                 callback(null);
@@ -469,7 +469,7 @@ var userService = {
     },
     /**
      * 修改昵称
-     * 
+     *
      * @param mobilePhone
      * @param groupType
      * @param callback
@@ -487,7 +487,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyNickname! >>modifyNickname:", e);
             if (callback) {
                 callback(null);
@@ -498,7 +498,7 @@ var userService = {
     },
     /**
      * 修改头像
-     * 
+     *
      * @param mobilePhone
      * @param groupType
      * @param callback
@@ -512,7 +512,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyAvatar! >>modifyAvatar:", e);
             if (callback) {
                 callback(null);
@@ -523,7 +523,7 @@ var userService = {
     },
     /**
      * 获取分析师
-     * 
+     *
      * @param params
      * @param callback
      */
@@ -538,7 +538,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTeacherList! >>getTeacherList:", e);
             if (callback) {
                 callback(null);
@@ -549,7 +549,7 @@ var userService = {
     },
     /**
      * 根据userid获取分析师二维码等信息
-     * 
+     *
      * @param params
      * @param callback
      */
@@ -563,7 +563,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getTeacherByUserId! >>getTeacherByUserId:", e);
             if (callback) {
                 callback(null);
@@ -574,7 +574,7 @@ var userService = {
     },
     /**
      * 修改用户名
-     * 
+     *
      * @param mobilePhone
      * @param groupType
      * @param callback
@@ -592,7 +592,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyUserName! >>modifyUserName:", e);
             if (callback) {
                 callback(null);
@@ -603,7 +603,7 @@ var userService = {
     },
     /**
      * 修改邮箱
-     * 
+     *
      * @param mobilePhone
      * @param groupType
      * @param callback
@@ -617,7 +617,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyEmail! >>modifyEmail:", e);
             if (callback) {
                 callback(null);
@@ -628,7 +628,7 @@ var userService = {
     },
     /**
      * 修改密码
-     * 
+     *
      * @param mobilePhone
      * @param groupType
      * @param callback
@@ -646,7 +646,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("modifyPwd! >>modifyPwd:", e);
             if (callback) {
                 callback(null);
@@ -671,7 +671,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getClientGroupByMId! >>getClientGroupByMId:", e);
             if (callback) {
                 callback(null);
@@ -682,20 +682,23 @@ var userService = {
     },
     /**
      * 移除在线用户
-     * 
+     *
      * @param userInfo
      * @param isUpdate
      *            是否需要更新数据
      * @param callback
      */
-    removeOnlineUser: function (userInfo, isUpdate, callback) {
-        if (common.hasPrefix(constant.clientGroup.visitor, userInfo.userId) || !isUpdate) {
+    removeOnlineUser: function(userInfo, isUpdate, callback) {
+        if (common.hasPrefix(constant.clientGroup.visitor, userInfo.userId) ||
+            !isUpdate) {
             callback(true);
             return;
         }
         // 更新用户记录表的在线状态(下线设置为0）
-        if (common.isValid(userInfo.userId) && common.isValid(userInfo.groupId) && common.isValid(userInfo.groupType)) {
-            userService.updateChatUserGroupStatus(userInfo, 0, userInfo.sendMsgCount, function (err) {});
+        if (common.isValid(userInfo.userId) && common.isValid(userInfo.groupId) &&
+            common.isValid(userInfo.groupType)) {
+            userService.updateChatUserGroupStatus(userInfo, 0, userInfo.sendMsgCount,
+                function(err) {});
             callback(true);
         } else {
             callback(false);
@@ -703,7 +706,7 @@ var userService = {
     },
     /**
      * 获取分析师列表
-     * 
+     *
      * @param params
      * @param callback
      */
@@ -717,7 +720,7 @@ var userService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getAnalystList! >>getAnalystList:", e);
             if (callback) {
                 callback(null);

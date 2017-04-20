@@ -7,7 +7,7 @@
  * Date : 2016年9月14日 <BR>
  * Description :<BR>
  * <p>
- * 
+ *
  * </p>
  */
 const logger = require('../resources/logConf').getLogger("chatPointsService");
@@ -19,13 +19,13 @@ let chatPointsService = {
 
     /**
      * 查询一个用户积分信息
-     * 
+     *
      * @param groupType
      * @param userId
      * @param hasJournal
      * @param callback
      */
-    getPointsInfo : function (groupType, userId, hasJournal, callback) {
+    getPointsInfo: function(groupType, userId, hasJournal, callback) {
         let defer = new Deferred();
         let path = "/points/pointsInfo";
         path += "?groupType=" + groupType;
@@ -36,7 +36,7 @@ let chatPointsService = {
             if (callback) {
                 callback(data);
             }
-        }, err  => {
+        }, err => {
             if (callback) {
                 callback(err);
             }
@@ -47,7 +47,7 @@ let chatPointsService = {
 
     /**
      * 查询一个用户积分信息
-     * 
+     *
      * @param groupType,
      *            "studio"
      * @param userId,
@@ -55,7 +55,7 @@ let chatPointsService = {
      * @param callback
      *            (err, config)
      */
-    getChatPoints : function (groupType, userId, callback) {
+    getChatPoints: function(groupType, userId, callback) {
         let defer = new Deferred();
         let path = "/points/pointsInfo";
         path += "?groupType=" + groupType;
@@ -77,14 +77,14 @@ let chatPointsService = {
 
     /**
      * 添加积分
-     * 
+     *
      * @param params
      *            {{groupType:String, clientGroup:String, userId:String,
      *            item:String, val:Number, isGlobal:Boolean, remark:String,
      *            opUser:String, opIp:String}}
      * @param callback
      */
-    add : function (params, callback) {
+    add: function(params, callback) {
         let defer = new Deferred();
         let path = "/points/add";
         liveRoomAPIService.post(path, params).then(data => {
@@ -103,11 +103,11 @@ let chatPointsService = {
 
     /**
      * 查询积分配置表
-     * 
+     *
      * @param usrInfo
      * @param callback
      */
-    getChatPointsConfig : function (params, callback) {
+    getChatPointsConfig: function(params, callback) {
         let defer = new Deferred();
         let path = "/points/getChatPointsConfig";
         path += "?" + querystring.stringify(params);

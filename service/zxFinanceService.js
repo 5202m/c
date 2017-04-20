@@ -17,10 +17,10 @@ const Deferred = require("../util/common").Deferred;
 let zxFinanceService = {
     /**
      * 获取最后点评的数据
-     * 
+     *
      * @param callback
      */
-    getFinanceDataLastReview: function (callback) {
+    getFinanceDataLastReview: function(callback) {
         let deferred = new Deferred();
         let path = "/zxFinanceData/getFinanceDataLastReview";
 
@@ -29,7 +29,7 @@ let zxFinanceService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getFinanceDataLastReview! >>getFinanceDataLastReview:", e);
             if (callback) {
                 callback(null);

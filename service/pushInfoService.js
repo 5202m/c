@@ -6,7 +6,7 @@ let liveRoomAPIService = require('./liveRoomAPIService');
 let Deferred = require("../util/common").Deferred;
 /**
  * 定义信息推送服务类
- * 
+ *
  * @type {{}}
  */
 var pushInfoService = {
@@ -25,7 +25,7 @@ var pushInfoService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("getPushInfo! >>getPushInfo:", e);
             if (callback) {
                 callback(null);
@@ -36,7 +36,7 @@ var pushInfoService = {
     },
     /**
      * 检查推送是否符合条件
-     * 
+     *
      * @param groupType
      * @param roomId
      * @param clientGroup
@@ -44,7 +44,8 @@ var pushInfoService = {
      * @param filterTime
      * @param callback
      */
-    checkPushInfo: (groupType, roomId, clientGroup, position, filterTime, callback) => {
+    checkPushInfo: (groupType, roomId, clientGroup, position, filterTime,
+        callback) => {
         let deferred = new Deferred();
         let path = "/pushInfo/checkPushInfo";
         path += "?groupType=" + groupType;
@@ -57,7 +58,7 @@ var pushInfoService = {
                 callback(result);
             }
             deferred.resolve(result);
-        }).catch ((e) => {
+        }).catch((e) => {
             logger.error("checkPushInfo! >>checkPushInfo:", e);
             if (callback) {
                 callback(null);
