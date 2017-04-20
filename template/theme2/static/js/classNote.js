@@ -490,6 +490,9 @@ ClassNote.isHideData = function (id, tag, storeClassNote) {
     if (!Data.userInfo.isLogin) {
         return true;
     }
+    if(Data.userInfo.isLogin && tag == "trading_strategy"){//策略只对游客隐藏
+        return false;
+    }
     if ((tag == "trading_strategy" && ClassNote.strategyIsNotAuth == 1)
         || ((tag == "shout_single" || tag == "resting_order") && ClassNote.callTradeIsNotAuth == 1)) {
         return $.inArray(id, storeClassNote) == -1;
