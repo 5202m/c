@@ -653,6 +653,8 @@ var Chat = {
             if(Chat.cntOnline <= 200){
                 Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
+            }else {
+                Chat.cntOnline = Chat.cntOnline + 300;//pc对于人数多的计算规则复杂，此处直接+300
             }
             Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
         }
@@ -1267,6 +1269,7 @@ var Chat = {
                 $.getJSON('/getCS',{groupId:Data.userInfo.groupId},function(data){
                     if(data && data.length>0) {
                         var cs, csTmp;
+                        Chat.WhTalk.CSMap = {};
                         for(var i = 0, lenI = data.length; i < lenI; i++){
                             cs = data[i];
                             if(Chat.WhTalk.CSMap.hasOwnProperty(cs.userNo)){

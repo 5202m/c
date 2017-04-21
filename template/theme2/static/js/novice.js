@@ -44,6 +44,10 @@ Novice.setRoomCourseInfo = function () {
         if(room && room.isOpen && room.allowVisitor && size<=200){
             size+=size<=10?60:(200/size)*3+10;
             size=Math.round(size);
+            size ++;
+        }else if (room && room.isOpen && room.allowVisitor && size > 200){
+            size = size + 300;//pc对于人数多的计算规则复杂，此处直接+300
+            size ++;
         }
         $('.block-item.item-green.novice').find(".listenership span").text(size);
     });

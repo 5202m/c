@@ -655,12 +655,17 @@ var Util ={
      * 设置页面的min-height
      */
     setPageMinHeight : function () {
-        var _mtbobj;
+        var _mtbobj,page_id;
         $('body > .content_w').each(function(){
-            if($(this).is(":visible")) _mtbobj = $(this).find('section');
+            if($(this).is(":visible")){
+                _mtbobj = $(this).find('section');
+                page_id = $(this).attr('id');
+                return false;
+            }
         });
         var _wheight = $(window).height();
         var _objheight = _mtbobj.outerHeight(true)-_mtbobj.height();
+        if(page_id === 'page_privateChat')_objheight = _objheight - 120;
         $('body > .content_w').css("min-height",_wheight-_objheight+'px'); //高度控制
     },
 
