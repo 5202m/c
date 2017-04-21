@@ -81,6 +81,11 @@ var Data = {
             obj.loginId = Data.userInfo.userId;
             Store.store(key, obj);
         }
+        //如果非游客没有昵称，自动设置一个昵称
+        if (Util.isBlank(Data.userInfo.nickname) && Data.userInfo.clientGroup != 'visitor') {
+            Data.userInfo.isSetName = false;
+            Data.userInfo.nickname = "匿名_" + this.userInfo.userId.substring(8, 12);
+        }
     },
 
     /**

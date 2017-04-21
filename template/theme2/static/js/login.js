@@ -312,6 +312,7 @@ Login.doLogin = function(){
                 return false;
             }else{
                 if(Util.isBlank(result.userInfo.nickname)){
+                    Data.userInfo.isSetName = false;
                     result.userInfo.nickname = '匿名_'+result.userInfo.userId.substring(0,4);
                 }
                 $('#header_ui').text(result.userInfo.nickname);

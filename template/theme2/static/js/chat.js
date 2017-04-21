@@ -317,6 +317,7 @@ var Chat = {
                 }
                 if (Data.userInfo.isSetName === false) {
                     //TODO 弹出设置昵称//studioMbPop.popBox("set", {studioChatObj : studioChatMb});
+                    Pop.msg("请到电脑端设置昵称");
                     return false;
                 }
             });
@@ -373,21 +374,23 @@ var Chat = {
          * 下拉框点击@事件
          */
         $('#chat_filter').bind('click',function (e) {
+            var _value = $('#chat_filter').val();
+            Chat.fastContactValue = _value;
+        });
+
+        $('#chat_filter').bind('change',function () {
             var _value = $('#chat_filter').val(),options = ['all','analyst','me'];
             if($.inArray(_value,options) == -1){
-                e.preventDefault();
                 var nickname = $("#chat_filter").find("option:selected").text();
                 var usertype = $("#chat_filter").find("option:selected").attr('ut');
                 var avatar = $("#chat_filter").find("option:selected").attr('ua') || '';
                 nickname = nickname.substring(1);
                 Chat.setDialog(_value, nickname, 1, usertype, avatar);
                 $('#chat_filter').val(Chat.fastContactValue);
+                setTimeout(function () {//兼容手机版uc浏览器
+                    $('#chat_filter').val(Chat.fastContactValue);
+                },50);
             }
-            Chat.fastContactValue = _value;
-        });
-
-        $('#chat_filter').bind('change',function (e) {
-            $(this).trigger("click");
         });
     },
 
@@ -446,7 +449,8 @@ var Chat = {
                 return;
             }
             if(Data.userInfo.isSetName === false){
-                // TODO 设置昵称
+                //设置昵称
+                Pop.msg("请到电脑端设置昵称");
                 return;
             }
             var toUser = Chat.getToUser();
@@ -565,7 +569,7 @@ var Chat = {
      * 设置聊天框高度
      */
     setHeight : function(){
-        var topH = Chat.fullscreen || Room.isNoviceRoom ? 0 : 44 ;//是否全屏
+        var topH = Chat.fullscreen || Room.isNoviceRoom || ($('#chat_player').height() == 0 )? 0 : 44 ;//是否全屏
         var height = Data.windowHeight
             - 40 //$("#header").height()
             - 50 //$("#chat_editor").height()
@@ -608,7 +612,7 @@ var Chat = {
             Chat.WhTalk.setCSOnline(user.userId, isOnline);
         }
         //快捷@
-        if(user.userType==2 || user.userType==3){
+        if(user.userType==2 || user.userType==1){
             Chat.setFastContact(user,isOnline);
         }
         if(setOnlineNum){
@@ -625,11 +629,8 @@ var Chat = {
         var $panel = $("#chat_filter");
         if(isOnline){
             if($panel.find("option[value='" + userInfo.userId + "']").size() == 0) {
-                if (userInfo.userType === 3) {//3 客服助理  2：分析师
-                    userInfo.nickname = userInfo.nickname + "&nbsp;（助理）"
-                }
                 var userOption = '<option ut="'+ userInfo.userType+'" ua="'+userInfo.avatar+'" un="'+userInfo.nickname+'"  value="' + userInfo.userId + '">@' + userInfo.nickname + '</option>';
-                if(userInfo.userType == 3){//3-客服 2-分析师
+                if(userInfo.userType == 1){//3-客服 2-分析师 1-系统管理员
                     $panel.find("option[value='all']").before(userOption);
                 }else{
                     $panel.prepend(userOption);
@@ -652,6 +653,8 @@ var Chat = {
             if(Chat.cntOnline <= 200){
                 Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
+            }else {
+                Chat.cntOnline = Chat.cntOnline + 300;//pc对于人数多的计算规则复杂，此处直接+300
             }
             Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
         }
@@ -1266,6 +1269,7 @@ var Chat = {
                 $.getJSON('/getCS',{groupId:Data.userInfo.groupId},function(data){
                     if(data && data.length>0) {
                         var cs, csTmp;
+                        Chat.WhTalk.CSMap = {};
                         for(var i = 0, lenI = data.length; i < lenI; i++){
                             cs = data[i];
                             if(Chat.WhTalk.CSMap.hasOwnProperty(cs.userNo)){
