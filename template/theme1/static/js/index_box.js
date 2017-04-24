@@ -314,6 +314,7 @@ var box = {
                             indexJS.toRefreshView();
                         }
                     }
+                  //  chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
                 }, true, function(err) {
                     $(_this).prop('disabled', false);
                     $('#formBtnLoad').hide();
@@ -445,6 +446,7 @@ var box = {
                     $("#regLpBtn").attr("href", "http://www.24k.hk/activity/studioLottery/index.html?userId=" + result.userId + "#ba");
                     $(".register_result").show();
                 }
+               // chatAnalyze.setUTM(false, $.extend({operationType:3,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#popBoxRegister .img-loading').hide();
@@ -556,10 +558,12 @@ var box = {
                         indexJS.toRefreshView();
                     }
                 }
+               //chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#formBtnLoad').hide();
             });
+
         });
 
         $(".sdking_rule .rank_tabnav a").click(function() {

@@ -453,7 +453,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                     platform: fromPlatform || "",
                     userAgent: req.headers["user-agent"],
                     groupType: getGroupType(req),
-                    roomName: '',
+                    roomName: snUser.roomName || '',
                     roomId: snUser.groupId,
                     nickname: snUser.nickname,
                     userName: snUser.userName,
@@ -580,6 +580,7 @@ router.post('/login', function(req, res) {
         cookieId = req.body['cookieId'],
         visitorId = req.body['visitorId'],
         roomName = req.body['roomName'],
+        roomId = req.body['roomId'],
         courseId = req.body['courseId'],
         courseName = req.body['courseName'],
         teacherId = req.body['teacherId'],
@@ -626,6 +627,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
+
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -633,12 +635,11 @@ router.post('/login', function(req, res) {
                         mobile: mobilePhone,
                         cookieId: cookieId,
                         clientGroup: snUser.clientGroup,
-                        roomName: roomName,
-                        roomId: snUser.groupId,
+                        roomName: snUser.roomName || roomName,
+                        roomId: snUser.groupId || roomId,
                         platform: '',
                         userAgent: req.headers['user-agent'],
                         sessionId: req.sessionID,
-                        roomId: snUser.groupId,
                         clientStoreId: snUser.clientStoreId,
                         groupType: snUser.groupType,
                         userName: snUser.userName,
@@ -718,12 +719,11 @@ router.post('/login', function(req, res) {
                                     mobile: mobilePhone,
                                     cookieId: cookieId,
                                     clientGroup: snUser.clientGroup,
-                                    roomName: snUser.roomName,
-                                    roomId: snUser.groupId,
+                                    roomName: snUser.roomName || roomName,
+                                    roomId: snUser.groupId  || roomId,
                                     platform: '',
                                     userAgent: req.headers['user-agent'],
                                     sessionId: req.sessionID,
-                                    roomId: snUser.groupId,
                                     clientStoreId: clientStoreId,
                                     groupType: snUser.groupType,
                                     userName: snUser.userName,
@@ -1345,7 +1345,7 @@ router.post('/reg', function(req, res) {
                                             clientStoreId: params.clientStoreId,
                                             clientGroup: userInfo.clientGroup,
                                             ip: userInfo.ip,
-                                            nickname: (userSessionInfo.nickname ||
+                                            nickName: (userSessionInfo.nickname ||
                                                 params.nickname),
                                             platform: params.platform || '',
                                             userAgent: req.headers["user-agent"],
@@ -2958,7 +2958,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    }else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
