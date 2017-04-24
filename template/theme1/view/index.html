@@ -168,7 +168,8 @@
                     indexJS.init(); //初始化
                     chatAnalyze.setUTM(false, $.extend({
                         operationType: 6,
-                        userTel: '<%= userSession.mobilePhone %>',
+                        userTel: '<%= userSession.mobilePhone %>' ,
+                        roomName:$('#roomInfoId').text(),
                         requestParams: chatAnalyze.hrefSplit()
                     }, indexJS.userInfo));
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式

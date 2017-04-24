@@ -1450,7 +1450,8 @@ var chat = {
             });
             $(".img-loading[pf=chatMessage]").show();
             chatAnalyze.setUTM(false, $.extend({
-                operationType: 1
+                operationType: 1,
+                roomName:$('#roomInfoId').text(),
             }, indexJS.userInfo, indexJS.courseTick.course));
         });
         //进入聊天室加载的在线用户

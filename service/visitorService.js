@@ -60,7 +60,7 @@ let visitorService = {
             touristId: data.visitorId,
             roomId: data.roomId, //房间名称
             sessionId: data.sessionId,
-            nickName: common.isBlank(data.nickname) ? '' : data.nickname,
+            nickName: common.isBlank(data.nickName) ? '' : data.nickName,
             email: common.isBlank(data.email) ? '' : data.email,
             courseId: data.courseId,
             courseName: common.isValid(data.courseName) && data.courseName.indexOf(
