@@ -2115,6 +2115,7 @@ body {
     text-align: center;
     height: 28px;
     line-height: 18px;
+    border: 0
 }
 
 .calenda_show li td.tl {
@@ -4635,8 +4636,9 @@ body {
     max-height: 160px;
 }
 
-
-.teacher_select .inner-scrollbox .mCSB_outside + .mCSB_scrollTools{ right: -4px; }
+.teacher_select .inner-scrollbox .mCSB_outside+.mCSB_scrollTools {
+    right: -4px;
+}
 
 .tebox_tit {
     font-size: 15px;
@@ -4686,7 +4688,7 @@ body {
     font-size: 14px;
     color: #939599;
     line-height: 28px;
-;
+    ;
 }
 
 .sd_show .sd_tit span.dep {
@@ -8932,7 +8934,7 @@ body {
 /*广告banner*/
 
 .popup_box.popbanner {
-;
+    ;
     margin-left: -400px;
     width: 800px;
     height: 400px;
@@ -9132,7 +9134,7 @@ body {
     float: right;
     z-index: 101;
     background: rgba(31, 35, 47, .9);
-;
+    ;
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=#E61f232f, endColorstr=#E61f232f);
 }
 
