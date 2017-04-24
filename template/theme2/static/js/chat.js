@@ -250,11 +250,16 @@ var Chat = {
             }
         }).bind("keyup", function(e){
             if(e.keyCode == 8){
-                var text = $(this).text();
+/*                var text = $(this).text();
                 var arrayText = text.split(/\s/);//空格
                 if(arrayText.length > 1 && arrayText[1].indexOf("@") > -1){
                     $(this).text("");
+                }*/
+                var divText = $(this).text().replace(/(^\s*)/g,""),spanText = $(this).find('span').text().trim();
+                if(divText.length === spanText.length){
+                    $(this).text("");
                 }
+
             }
         }).bind("input", function(e){
             var isOk = ($.trim($(this).text()) != $(this).find(".txt_dia").text() || $(this).find("img").size() > 0);
@@ -436,6 +441,7 @@ var Chat = {
         $("#chat_cont .txt_dia").remove();
         $("#chat_cont").html($("#chat_cont").html().replace(/^((&nbsp;)+)/g,''));
         $("#chat_cont").prepend('&nbsp;<span class="txt_dia txt_atname" contenteditable="false" uid="'+userId+'" utype="'+userType+'" avatar="'+avatar+'">@<label>'+nickname+'</label></span>&nbsp;').focusEnd();
+        $('#chat_cont').focus();
     },
 
     /**
@@ -986,7 +992,7 @@ var Chat = {
                     break;
 
                 case 0:
-                    result.level = Room.formatHtml("chat_dialogLevel", Data.getUserLevel(userInfo.pointsGlobal));
+                    //result.level = Room.formatHtml("chat_dialogLevel", Data.getUserLevel(Data.userInfo.pointsGlobal));
                     break;
             }
             if(userInfo.userId == Data.userInfo.userId){

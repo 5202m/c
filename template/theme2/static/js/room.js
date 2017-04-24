@@ -7,6 +7,7 @@ var Room = new Container({
     url: "/theme2/template/room.html",
     wechatCode: null,
     isNoviceRoom : false,
+    timeNum : -1,//定时器序号
     onLoad: function() {
         Player.init();
         Room.setEvent();
@@ -60,6 +61,9 @@ Room.initPage = function() {
                 Chat.init();
                 Room.showCourse();
                 PrivateChat.isChangeRoom = true;
+                setTimeout(function () {//进入页面不播放音频，需要用户点击才播放
+                 $('#roomAudioPlay').click();
+                 },500);
                 //判断当前房间是否是红包活动
                 Room.getRedPacketRoom(Room.currGroupId);
             }
@@ -96,7 +100,7 @@ Room.watchRemind = function(room) {
             if (Store.store("simpleTip")) {
                 Room.showUnLoginWatchTip(true, lgt, lgtTips);
             } else {
-                window.setTimeout(function() {
+                Room.timeNum = window.setTimeout(function() {
                     Store.store("simpleTip", true);
                     Room.showUnLoginWatchTip(true, lgt, lgtTips);
                 }, lgt * 60 * 1000);
