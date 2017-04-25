@@ -92,9 +92,13 @@ var videosTrain = {
                     }
                 }
             }
+            var msg = result.checkState.message;
+            if (groupId == "studio_57" && result.checkState.code == "4002") {
+                msg = "该房间暂未开放，请关注开课时间: 每周三 15:30-17:30！";
+            }
             box.showMsg({
                 title: groupName || "",
-                msg: (result.checkState.message || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。'
+                msg: (msg || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。'
             });
         });
     },

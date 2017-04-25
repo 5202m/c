@@ -6,14 +6,14 @@
         </div>
         <div class="per_info">
             <ul>
-                <li><span>昵称</span><img id="person_hp" src="/theme4/img/user1.png"><b id="person_nn"></b></li>
+                <li><span>昵称</span><img id="person_hp" src="/theme4/img/user.png"><b id="person_nn"></b></li>
                 <li><span>账号</span>
                     <a class="btn" href="javascript:void(0)" id="personPop_repwd">修改密码</a>
                     <b id="person_mb"><%= userSession.mobilePhone %></b>
                 </li>
             </ul>
         </div>
-        <p class="per_p">金道直播间用户分为5级，根据用户注册情况选择升级，情况如下：</p>
+        <p class="per_p">金道在线教育用户分为5级，根据用户注册情况选择升级，情况如下：</p>
         <table class="level-table" border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
                 <th width="17%">级别</th>
@@ -31,6 +31,7 @@
     </div>
 </section>
 
+
 <!-- 直播间登录 -->
 <section class="popupbox pop-member dn" id="loginPop">
     <div class="cont">
@@ -42,16 +43,17 @@
         <span id="login_tip">您已经观看了3分钟，赶紧登录再继续观看吧</span>
         <div class="mform">
             <form method="post" id="loginForm">
+                <input type="hidden" id="loginForm_csi" name="clientStoreId"/>
+                <input type="hidden" name="loginType" id="loginForm_lt" value="pwd"/>
                 <input type="hidden" name="cookieId" />
                 <input type="hidden" name="visitorId" />
+                <input type="hidden" name="clientStoreId" />
                 <input type="hidden" name="roomId" />
                 <input type="hidden" name="roomName" />
                 <input type="hidden" name="courseId" />
                 <input type="hidden" name="courseName" />
                 <input type="hidden" name="teacherId" />
                 <input type="hidden" name="teacherName" />
-                <input type="hidden" id="loginForm_csi" name="clientStoreId"/>
-                <input type="hidden" name="loginType" id="loginForm_lt" value="pwd"/>
                 <div class="inp">
                     <div class="inp_l">
                         <i class="phone"></i>
@@ -88,7 +90,7 @@
                         <a href="javascript:void(0)" id="loginForm_pwdBtn" target="_blank">忘记密码</a>
                     </p>
                     <p class="no-acc-pfon fr dn" lt="verify">
-                        如未收到验证码，请咨询<a onclick="openLive800Chat();_gaq.push(['_trackEvent', 'm_24k_studio', 'chat_live800', 'content_login', 1, true]);" href="javascript:void(0);">在线客服</a>
+                        如未收到验证码，请咨询<a onclick="live800Prompt();_gaq.push(['_trackEvent', 'webui_fx_studio', '在线客服-登录', 'pop', 1, true]);" href="javascript:void(0);">在线客服</a>
                     </p>
                 </div>
                 <div class="btnbar new-btn-mar2">
@@ -97,8 +99,33 @@
                 <div class="inp-tip">
                     <p class="no-acc-pfon">
                         您还没有金道直播间账号？
-                        <a href="javascript:void(0)" target="_blank" id="loginForm_reg">免费注册</a>
+                        <a href="javascript:void(0)" target="_blank" id="loginForm_reg" onclick="_gaq.push(['_trackEvent', 'webui_fx_studio', '免费注册', 'pop', 1, true]);">免费注册</a>
                     </p>
+                </div>
+            </form>
+        </div>
+        <a href="javascript:void(0)" class="pop-close"></a>
+    </div>
+</section>
+
+<!-- 设置 -->
+<section class="popupbox pop-member dn" id="setPop">
+    <div class="cont">
+        <div class="mtit t2">
+            <div class="line"><i></i></div>
+            <span>设置</span>
+            <div class="line"><i></i></div>
+        </div>
+        <div class="mform">
+            <form method="post" id="setForm">
+                <div class="inp">
+                    <div class="inp_l">
+                        <i class="user"></i>
+                        <input id="setForm_nn" name="nickname" type="text" placeholder="昵称">
+                    </div>
+                </div>
+                <div class="btnbar">
+                    <input id="setForm_sub" type="button" class="mbtn" value="确认">
                 </div>
             </form>
         </div>
@@ -152,16 +179,16 @@
                 </div>
                 <div class="inp-tip">
                     <p class="no-acc-pfon fr">
-                        如未收到验证码，请咨询<a onclick="openLive800Chat();_gaq.push(['_trackEvent', 'm_24k_studio', 'chat_live800', 'content_reg', 1, true]);" href="javascript:void(0);">在线客服</a>
+                        如未收到验证码，请咨询<a onclick="live800Prompt();_gaq.push(['_trackEvent', 'webui_fx_studio', '在线客服-注册', 'pop', 1, true]);" href="javascript:void(0);">在线客服</a>
                     </p>
                 </div>
                 <div class="btnbar new-btn-mar2">
-                    <input id="regForm_sub" type="button" class="mbtn" value="注册" onclick="_gaq.push(['_trackEvent', 'm_studio', 'Login_tijiao ', 'content_top']);">
+                    <input id="regForm_sub" type="button" class="mbtn" value="注册">
                 </div>
                 <div class="inp-tip">
                     <p class="no-acc-pfon">
                         已有账号，我要
-                        <a href="javascript:void(0)" target="_blank" id="regForm_login">登录</a>
+                        <a href="javascript:void(0)" target="_blank" id="regForm_login" onclick="_gaq.push(['_trackEvent', 'webui_fx_studio', '登录', 'pop', 1, true]);">登录</a>
                     </p>
                 </div>
             </form>
@@ -179,11 +206,11 @@
                     <p>恭喜你注册成功！</p>
                 </div>
                 <div class="btnbar">
-                    <input id="reg1Form_sub" type="button" class="mbtn" value="确认" onclick="_gaq.push(['_trackEvent', 'm_studio ', 'activity_guanbi', 'content_middle']);">
+                    <input id="reg1Form_sub" type="button" class="mbtn" value="确认">
                 </div>
             </form>
         </div>
-        <a href="javascript:void(0)" class="pop-close" onclick="_gaq.push(['_trackEvent', 'm_studio ', 'activity_guanbi', 'content_middle']);"></a>
+        <a href="javascript:void(0)" class="pop-close"></a>
     </div>
 </section>
 
@@ -296,31 +323,6 @@
     </div>
 </section>
 
-<!-- 直播间设置 -->
-<section class="popupbox pop-member dn" id="setPop">
-    <div class="cont">
-        <div class="mtit t2">
-            <div class="line"><i></i></div>
-            <span>直播间设置</span>
-            <div class="line"><i></i></div>
-        </div>
-        <div class="mform">
-            <form method="post" id="setForm">
-                <div class="inp">
-                    <div class="inp_l">
-                        <i class="user"></i>
-                        <input id="setForm_nn" name="nickname" type="text" placeholder="直播间昵称">
-                    </div>
-                </div>
-                <div class="btnbar">
-                    <input id="setForm_sub" type="button" class="mbtn" value="确认">
-                </div>
-            </form>
-        </div>
-        <a href="javascript:void(0)" class="pop-close"></a>
-    </div>
-</section>
-
 <!-- 升级成功 -->
 <section class="popupbox pop-member dn" id="resultPop">
     <div class="cont">
@@ -328,7 +330,7 @@
             <form method="get" id="resultForm">
                 <div class="resultbox">
                     <i></i>
-                    <p id="resultForm_msg">升级成功！刷新页面后，您可享用更多直播间权限。</p>
+                    <p id="resultForm_msg">升级成功！刷新页面后，您可享用更多权限。</p>
                 </div>
                 <div class="btnbar">
                     <input id="resultForm_sub" type="button" class="mbtn" value="确认">

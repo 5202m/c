@@ -304,16 +304,12 @@ var Tool = {
             init: false, //初始化
             cycleTime: 300000, //红包周期5分钟
             stayTime: 5000, //红包停留时间5秒
-            startTime: 57540001, //16:00
-            endTime: 64740001, //18:00
-            nextStartTime: 71940001, //20:00
-            nextEndTime: 79140001, //22:00
+            startTime: 55740001, //15:30
+            endTime: 62940001, //17:30
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
-                /* 16:00——18:00*/
-                { start: 57540001, userId: "joe_zhuangToCJ", userName: "庄蓝玉", wechat: "xuechaojin1", wechatImg: "/theme1/img/joe_zhuangToCJ.png" },
-                /* 20:00——22:00*/
-                { start: 71940001, userId: "buck_chenToCJ", userName: "陈铎", wechat: "xuechaojin2", wechatImg: "/theme1/img/buck_chenToCJ.png" }
+                /* 15:30——17:30*/
+                { start: 55740001, userId:"lin_gw24k", userName:"林意轩",  wechat:"lin_gw24k", wechatImg:"/theme1/img/yx_lin.png"}
             ],
 
             redPacketPopFlag: true, //红包弹出标记
@@ -356,7 +352,7 @@ var Tool = {
             //红包视图-右侧小窗
             $("#redPacket_mini").bind("view", function() {
                 var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getcurrentPariod();
+                var currentPariod = Tool.RedPacket.getCurrentPariod();
                 $("#redPacket_mini [rp='timesLabel']").text(currentPariod);
                 if (Tool.RedPacket.isStayTime()) {
                     $("#redPacket_miniWait").hide();
@@ -389,7 +385,7 @@ var Tool = {
             //红包视图-主界面
             $("#redPacket_normal").bind("view", function() {
                 var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getcurrentPariod();
+                var currentPariod = Tool.RedPacket.getCurrentPariod();
                 $("#timesLabel").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
@@ -468,7 +464,7 @@ var Tool = {
          * 获取当前红包期数
          * @returns {number}
          */
-        getcurrentPariod: function() {
+        getCurrentPariod: function() {
             var now = new Date();
             var curHours = now.getHours();
             var curMinutes = now.getMinutes();
@@ -580,10 +576,6 @@ var Tool = {
             var today = new Date(time);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             time -= today.getTime();
-            if (time > config.endTime) {
-                Tool.RedPacket.tick2();
-                return;
-            }
             if (Tool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
                 if (time - config.redPacketPeriods >= config.stayTime) {
                     config.miniClose = false;
@@ -592,7 +584,7 @@ var Tool = {
             }
             this.isRedPacketTime(function(isOK) {
                 if (isOK) {
-                    var currentPariod = Tool.RedPacket.getcurrentPariod();
+                    var currentPariod = Tool.RedPacket.getCurrentPariod();
                     config.timesLabel = currentPariod;
                     var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
                     config.minutes = Math.floor(countDown / 60000);
@@ -618,51 +610,6 @@ var Tool = {
             });
         },
 
-        /**
-         * 第二个时间段定时器
-         */
-        tick2: function() {
-            if (!this.config.init) {
-                return;
-            }
-            var config = this.config;
-            var time = Data.serverTime;
-            var today = new Date(time);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            time -= today.getTime();
-            if (Tool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
-                if (time - config.redPacketPeriods >= config.stayTime) {
-                    config.miniClose = false;
-                    config.redPacketPeriods = 0;
-                }
-            }
-            this.isRedPacketTimeToNight(function(isOK) {
-                if (isOK) {
-                    var currentPariod = Tool.RedPacket.getcurrentPariod();
-                    config.timesLabel = currentPariod;
-                    var countDown = config.cycleTime - ((time - config.nextStartTime) % config.cycleTime);
-                    config.minutes = Math.floor(countDown / 60000);
-                    config.seconds = Math.floor(countDown % 60000 / 1000);
-                    if (config.minutes == 0 && config.seconds == 0) {
-                        //抢红包开始，记录红包期数
-                        config.redPacketPeriods = time;
-                        config.minutes = Math.floor(config.cycleTime / 60000);
-                        config.seconds = Math.floor(config.cycleTime % 60000 / 1000);
-                    }
-                    config.minutesLabel = (config.minutes < 10 ? "0" : "") + config.minutes;
-                    config.secondsLabel = (config.seconds < 10 ? "0" : "") + config.seconds;
-                } else {
-                    config.times = 0;
-                    config.timesLabel = "--";
-                    config.minutes = -1;
-                    config.minutesLabel = "--";
-                    config.seconds = -1;
-                    config.secondsLabel = "--";
-                    config.redPacketPeriods = 0;
-                }
-                Tool.RedPacket.view();
-            });
-        },
         /**
          * 初始化课程时间
          */
@@ -711,22 +658,6 @@ var Tool = {
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
             var time = Data.serverTime - today;
             if (time <= this.config.startTime || time > this.config.endTime) {
-                callback(false);
-                return;
-            }
-            this.initCourseTime(function(courseTime) {
-                callback(today + 86400000 - 1 == courseTime);
-            });
-        },
-
-        /**
-         * 是否红包时间(晚上时间)
-         */
-        isRedPacketTimeToNight: function(callback) {
-            var today = new Date(Tool.serverTime);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Data.serverTime - today;
-            if (time <= this.config.nextStartTime || time > this.config.nextEndTime) {
                 callback(false);
                 return;
             }
