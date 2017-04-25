@@ -240,13 +240,6 @@ var chatTeacher = {
                 }
             }
             if (null != teacherList) { //分析师列表
-                //var html = [],
-                //    analyst = null;
-                //for (var i = 0; i < teacherList.length; i++) {
-                //    analyst = teacherList[i];
-                //    html.push('<a href="javascript:void(0)" onclick="chatTeacher.selectAnalyst(this);_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'right_ls_OthenTeacher\', \'' + analyst.userName + '\', 1, true]);" uid="' + analyst.userNo + '">' + analyst.userName + '</a>');
-                //}
-                //$('.main_tab .teacherlist .teacherbox  .clearfix .teacher_select .selectlist').html(html.join(""));
                 var html = [],analyst = null;
                 for(var i = 0;i<teacherList.length;i++){
                     analyst = teacherList[i];
