@@ -147,6 +147,10 @@ ClassNote.appendRoomClassNote = function (dataArr, isMore) {
         }
         html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
+    if(dataArr.length == 0){
+        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
+    }
+    $('#classNote_panel .myloading').remove();//删除
     if (isMore) {
         $("#classNote_panel").append(html.join(""));
     } else {
@@ -202,6 +206,10 @@ ClassNote.appendClassNote = function(dataArr, isMore){
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
         html.push(ClassNote.getClassNoteHtml(dataArr[i]));
     }
+    if(dataArr.length == 0 || html.join('').length === 0){
+        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
+    }
+    $('#classNodeContainer .myloading').remove();//删除
     if (isMore) {
         $("#classNodeContainer").append(html.join(""));
     } else {
