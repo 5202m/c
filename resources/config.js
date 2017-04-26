@@ -39,7 +39,7 @@ var config = {
     sessionConfig: { key: 'connect.sid', secret: 'pm@chat' }, //session 对应key,secret
     redisUrlObj: { host: '192.168.35.81', port: 6379 }, //链接redis缓存客户端连接
     isAllowCopyHomeUrl: true, //是否允许copy链接（针对微信进入聊天室）
-    apiUrl: 'http://192.168.35.81:3003/api', //pmApi地址
+    apiUrl: 'http://192.168.35.81:3004/api', //pmApi地址
     //apiUrl: 'http://127.0.0.1:3000/api', //pmApi地址
     goldApiUrl: 'http://192.168.35.160/goldoffice_api/RESTful', //gwapi地址
     gwfxGTS2ApiUrl: 'http://192.168.35.100:8083/Goldoffice_gateway_uat/RESTful', //外汇GTS2 Api地址
