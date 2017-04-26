@@ -340,7 +340,7 @@ Login.doLogin = function(){
                 keyVal.loginId = Data.userInfo.userId;
                 Store.store(key, keyVal);
                 if(Login.groupId){
-                    Login.changeRoom({groupId:Login.groupId});
+                    Trains.changeRoom(Login.groupId);
                 }else{
                     Container.back();
                 }

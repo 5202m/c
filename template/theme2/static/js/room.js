@@ -212,6 +212,7 @@ Room.setEvent = function() {
         if (Data.userInfo.isLogin) {
             ClassNote.viewData($(this));
         } else {
+            Login.groupId = Room.currGroupId;
             Login.load();
         }
     });
@@ -449,5 +450,10 @@ Room.showCourse = function() {
  */
 Room.toRefreshView = function(groupId) {
     Data.userInfo.groupId = groupId;
+    if(Login.groupId){
+        Login.groupId = null;
+        window.location.reload();
+        return;
+    }
     Room.load();
 };
