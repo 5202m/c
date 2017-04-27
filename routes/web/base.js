@@ -3155,7 +3155,7 @@ router.post('/rob', function(req, res) {
     }
 
     var robParams = {
-        ac_periods: "20170501",
+        ac_periods: "20170502",
         phone: userInfo.mobilePhone.replace("86-", ""),
         nper: currentPariod
     };
@@ -3181,7 +3181,7 @@ router.post('/rob', function(req, res) {
             var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
             cacheClient.set("redPacket_" + robParams.phone, currentPariod);
             cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170501/draw'), form: robParams }, function(error, response, data) {
+            request.post({ url: (config.pmOAPath + '/lottery/activity20170502/draw'), form: robParams }, function(error, response, data) {
                 var result = { result: 0, money: 0, msg: "" };
                 if (data) {
                     logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
