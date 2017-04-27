@@ -29,6 +29,7 @@ var clientTrainService = require('../../service/clientTrainService'); //引入ch
 var zxFinanceService = require('../../service/zxFinanceService.js');
 var activityService = require("../../service/activityService");
 var cacheClient = require('../../cache/cacheClient');
+const APIAuth = require('../../util/APIAuth');
 var Geetest = require('geetest');
 var geetest = {};
 for (var i in config.geetest) {
@@ -288,9 +289,11 @@ router.get('/', function(req, res) {
 //转到页面
 function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
     res) {
-    studioService.getIndexLoadData(chatUser, groupId, true,
-        (!isMobile || (isMobile && common.isValid(groupId))), chatUser.isLogin,
-        function(data) {
+    let isGetSyllabus = (!isMobile || (isMobile && common.isValid(groupId)));
+    studioService.getIndexLoadData(
+            chatUser, groupId, true,
+            isGetSyllabus, chatUser.isLogin)
+        .then(data => {
             if (chatUser.isLogin) {
                 //每次刷新，从后台数据库重新获取最新客户信息后更新session，应用于升级和修改昵称等
                 for (var key in data.memberInfo) {
@@ -720,7 +723,7 @@ router.post('/login', function(req, res) {
                                     cookieId: cookieId,
                                     clientGroup: snUser.clientGroup,
                                     roomName: snUser.roomName || roomName,
-                                    roomId: snUser.groupId  || roomId,
+                                    roomId: snUser.groupId || roomId,
                                     platform: '',
                                     userAgent: req.headers['user-agent'],
                                     sessionId: req.sessionID,
@@ -2454,9 +2457,9 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            if(result) {
+            if (result) {
                 res.json(result);
-            }else{
+            } else {
                 res.json(errorMessage.code_4020);
             }
         });
@@ -2958,7 +2961,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
@@ -3268,5 +3271,16 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
         }
     });
 });
+
+let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSecret);
+router.get('/apiToken', (req, res) => {
+    apiAuth.getToken()
+        .then(token => {
+            res.json({ isOK: true, token: token });
+        }).catch(e => {
+            logger.error(e);
+            res.json({ isOK: false, msg: '参数错误' });
+        });
+})
 
 module.exports = router;
