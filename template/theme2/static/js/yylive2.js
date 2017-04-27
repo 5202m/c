@@ -44,7 +44,8 @@ $(window).scroll(function () {
 					}else if($('#classNodeContainer .myloading span').text() === '没有最新数据了' ){
 						return;
 					}
-					dom = $("#classNodeContainer>[aid]:last");
+					//dom = $("#classNodeContainer>[aid]:last");
+					dom = $("#classNodeContainer div[aid]:last");
 					noteId = dom.size() > 0 ? dom.attr("aid") || "" : "";
 					ClassNote.loadData(true, false,noteId);
 					return false;

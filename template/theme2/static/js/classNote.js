@@ -91,7 +91,7 @@ ClassNote.loadData = function (isMore, isRoom,classNoteId) {
             if(isRoom) {
                 ClassNote.appendRoomClassNote(dataArr, isMore ? isMore : false);
             }else{
-                ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
+                ClassNote.appendClassNote(dataArr, isMore ? isMore : false,dataList.totalRecords || 0);
             }
         }
     });
@@ -201,13 +201,10 @@ ClassNote.appendPushRoomClassNote = function (data) {
  * @param dataArr
  * @param isMore
  */
-ClassNote.appendClassNote = function(dataArr, isMore){
+ClassNote.appendClassNote = function(dataArr, isMore,restSize){
     var html = [];
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
         html.push(ClassNote.getClassNoteHtml(dataArr[i]));
-    }
-    if(dataArr.length == 0 || html.join('').length === 0){
-        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
     }
     $('#classNodeContainer .myloading').remove();//删除
     if (isMore) {
@@ -217,6 +214,11 @@ ClassNote.appendClassNote = function(dataArr, isMore){
     }
     for (var i = 0, lenI = !ClassNote.classNoteInfo ? 0 : ClassNote.classNoteInfo.length; i < lenI; i++) {
         ClassNote.setOtherClassNoteHtml(ClassNote.classNoteInfo[i]);
+    }
+    if(dataArr.length == 0 || restSize < 30){
+        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
+        $("#classNodeContainer").append(html.join(""));
+        return;
     }
 };
 /**
