@@ -1040,7 +1040,7 @@ router.get('/getArticleList', function(req, res) {
     }
     baseApiService.getArticleList(params, function(data) {
         if (data) {
-            data = JSON.parse(data);
+            data = typeof data === "string" ? JSON.parse(data) : data;
             if (params.code == 'class_note') {
                 var dataList = data.data,
                     row = null;
@@ -3273,10 +3273,10 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
 });
 
 let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSecret);
-router.get('/apiToken', (req, res) => {
+router.get('/getToken', (req, res) => {
     apiAuth.getToken()
         .then(token => {
-            res.json({ isOK: true, token: token });
+            res.json({ isOK: true, token: token, secret: config.apiAuthForWeb.appSecret });
         }).catch(e => {
             logger.error(e);
             res.json({ isOK: false, msg: '参数错误' });

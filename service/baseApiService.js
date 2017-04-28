@@ -3,6 +3,8 @@ var util = require('util');
 var common = require('../util/common'); //引入公共的js
 var config = require('../resources/config'); //引入config
 var logger = require('../resources/logConf').getLogger('baseApiService');
+const liveRoomAPIService = require('./liveRoomAPIService');
+const Deferred = common.Deferred;
 /**
  * baseApi服务类
  * @type {{}}
@@ -49,17 +51,24 @@ var baseApiService = {
      * @param callback
      */
     getArticleList: function(params, callback) {
-        var url = util.format(
+        let deferred = new Deferred();
+        let path = util.format(
             '/article/getArticleList?authorId=%s&platform=%s&code=%s&lang=%s&hasContent=%s&isAll=%s&pageNo=%d&pageSize=%d&pageLess=%s&pageKey=%s&orderByJsonStr=%s', params.authorId, params.platform, params.code, 'zh', params.hasContent, params.isAll, params.pageNo, params.pageSize, params.pageLess,
             params.pageKey, params.orderByStr);
-        request(this.formatApiUrl(url), function(err, response, data) {
-            if (!err && response.statusCode == 200) {
-                callback(data);
-            } else {
-                logger.error("getArticleList>>>error:" + err);
-                callback(null);
-            }
-        });
+        liveRoomAPIService.get(path)
+            .then((result) => {
+                if (callback) {
+                    callback(result);
+                }
+                deferred.resolve(result);
+            }).catch((e) => {
+                logger.error("getArticleList>>>error:" + e);
+                if (callback) {
+                    callback(null);
+                }
+                deferred.reject(e);
+            });
+        return deferred.promise;
     },
     /**
      * 提取文档详情接口
@@ -67,15 +76,22 @@ var baseApiService = {
      * @param callback
      */
     getArticleInfo: function(params, callback) {
-        request(this.formatApiUrl("/article/getArticleInfo?id=" + params.id),
-            function(err, response, data) {
-                if (!err && response.statusCode == 200) {
-                    callback(data);
-                } else {
-                    logger.error("getArticleInfo>>>error:" + err);
+        let deferred = new Deferred();
+        let path = `/article/getArticleInfo?id=${params.id}`;
+        liveRoomAPIService.get(path)
+            .then((result) => {
+                if (callback) {
+                    callback(result);
+                }
+                deferred.resolve(result);
+            }).catch((e) => {
+                logger.error("getArticleInfo>>>error:" + err);
+                if (callback) {
                     callback(null);
                 }
+                deferred.reject(e);
             });
+        return deferred.promise;
     },
 
     /**
@@ -86,23 +102,26 @@ var baseApiService = {
      * @param callback
      */
     getMobileVerifyCode: function(mobilePhone, useType, ip, callback) {
-        request.post(config.apiUrl + "/sms/send",
-            function(error, response, data) {
-                if (!error && response.statusCode == 200 && common.isValid(data)) {
-                    data = JSON.parse(data);
-                    if (data.result != 0) {
-                        logger.error("getMobileVerifyCode fail:" + data.errmsg);
-                    }
-                    callback(data);
-                } else {
-                    logger.error("getMobileVerifyCode fail:" + error);
-                    callback({ result: 1, errcode: -1, errmsg: "短信发送失败！" });
-                }
-            }).form({
+        let deferred = new Deferred();
+        let path = "/sms/send";
+        let data = {
             mobilePhone: mobilePhone,
             useType: useType,
             deviceKey: ip
+        };
+        liveRoomAPIService.post(path, data).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getMobileVerifyCode fail:" + e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
         });
+        return deferred.promise;
     },
 
     /**
@@ -113,23 +132,26 @@ var baseApiService = {
      * @param callback
      */
     checkMobileVerifyCode: function(mobilePhone, useType, verifyCode, callback) {
-        request.post(config.apiUrl + "/sms/checkAuth",
-            function(error, response, data) {
-                if (!error && response.statusCode == 200 && common.isValid(data)) {
-                    data = JSON.parse(data);
-                    if (data.result != 0) {
-                        logger.error("checkMobileVerifyCode fail:" + data.error);
-                    }
-                    callback(data);
-                } else {
-                    logger.error("checkMobileVerifyCode fail:" + error);
-                    callback({ result: 1, errcode: -1, errmsg: "短信验证失败！" });
-                }
-            }).form({
+        let deferred = new Deferred();
+        let path = "/sms/checkAuth";
+        let data = {
             mobilePhone: mobilePhone,
             useType: useType,
             authCode: verifyCode
+        };
+        liveRoomAPIService.post(path, data).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("checkMobileVerifyCode fail:" + e);
+            if (callback) {
+                callback({ result: 1, errcode: -1, errmsg: "短信验证失败！" });
+            }
+            deferred.reject({ result: 1, errcode: -1, errmsg: "短信验证失败！" });
         });
+        return deferred.promise;
     },
 
     /**
