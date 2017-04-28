@@ -688,10 +688,10 @@ var chatPride = {
                 formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
                 formatHtmlArr.push('        <tr>');
                 formatHtmlArr.push('            <th>品种</th>');
-                formatHtmlArr.push('            <th width="21%">方向</th>');
-                formatHtmlArr.push('            <th width="21%">进场点位</th>');
-                formatHtmlArr.push('            <th width="21%">止盈</th>');
-                formatHtmlArr.push('            <th width="21%">止损</th>');
+                formatHtmlArr.push('            <th width="21%">参考方向</th>');
+                formatHtmlArr.push('            <th width="21%">参考区间</th>');
+                formatHtmlArr.push('            <th width="21%">目标位</th>');
+                formatHtmlArr.push('            <th width="21%">风控位</th>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr>');
                 formatHtmlArr.push('            <td>{0}</td>'); //品种
