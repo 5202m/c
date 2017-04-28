@@ -1,4 +1,4 @@
-﻿body{font:12px/1.4 'Microsoft YaHei','Arial';color:#626366;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
+body{font:12px/1.4 'Microsoft YaHei','Arial';color:#626366;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;text-size-adjust:none}
 body,p,ol,ul,li,h1,h2,h3,h4,h5,h6,dl,dt,dd,pre,input,table,tr,td,form{margin:0;padding:0}
 ol,ul,li{list-style:none}
 input{border:0 none}
@@ -43,7 +43,7 @@ body{ background:#dadfe6;font-family:'Microsoft YaHei','Microsoft JhengHei','Sim
 
 /*images*/
 .mymsg .closebtn i,.message_list li i,.guideli .support,.roomctrl i,.mod_userlist .headimg b,.rbox_top .rname i,.rbox_top .peo_num i,.hqbox li i,.votebox a,.notebtn.on i,.calendar_table .stars span,.error i,.per_item .level i,.per_item .tipbtn i,.upg_tip i,.kh-btn a i,.mult_dialog .close,.mult_dialog .num,.mult_dialog .headimg b,.pletter_win .pl_close,.pletter_win .pl_small,.tec_videolist .list-icon i,.tec_videolist .v_name i,.tec_videolist .refresh-icon i,.cate_box .cate_name i,.cate_box li a i,.nextbox .live_time i,.pletter_win .whcls > i,.sd_ul .cont > i,.sd_pages .arr i,.sd_stat p i,.usersd_list .lightbox > i,.usersd_list .support,.usersd_list .state,.mod_scrollnews a i,.mod_scrollnews .newsbtn i,.mod_scrollnews .newsclose i,.textlive li .dot{ background-image:url(../img/img_css.png); background-repeat:no-repeat;}
-.header-btn a i,.myaid i,.mod_livelist .minbox a i,.maxbox .hidebtn i,.login_option .option i,.social_icon,.sub-tabnav > a i,.numctrl i,.pop_close i,.dytable .item em i,.progressbar .current,.rewardpoint p .arr,.signinbtn i,.sign_vistor .vtit i,.benefit_table .tick,.live_prevlist li i,.taglist .tag i,.dialog .bubble > i,.info_push .pushclose i,.toolbar .tbtn,.toolbar .tosigninbtn i,.hdbox .hdbox-i,.stateshow .item i,.sd_bot .sd_cbtn i,.tabnav .khbtn i,.view_select i,.pop_small i,.nextbox .live_time i,.picpart .imgbox i,.sd_ul .cont .i-zoom,.ligg_st .st i,.detail_ph .ph_cont .picbox i,.skilldata .pdname i,.train_ad .actrulebtn i,.detail_ph .t_list li .arrow,.iestory .closebtn i,.pop_mysd .status,.pop_back i,.prule_table .sx,.wechatbox .wechatbtn i,.topbtn.skin .skin-ico,.skinbox .sk_item i,.skinbox .sk_item .sebox,.userlist i,.casel_more .seltop i,.camore_list li s,.sl_prev i,.sl_next i,.hall_select .countdown i,.ranklist .rankfloat i,.ranklist .cytip i,.ranklist .loadmore_arr i,.sdking_prize td i,.courselist .course_ctrl i,.dashang_rule >a i,.sd_comment .com-replybtn{ background-image:url(../img/icons.png); background-repeat:no-repeat; background-position: 0 0}
+.header-btn a i,.myaid i,.mod_livelist .minbox a i,.maxbox .hidebtn i,.login_option .option i,.social_icon,.sub-tabnav > a i,.numctrl i,.pop_close i,.dytable .item em i,.progressbar .current,.rewardpoint p .arr,.signinbtn i,.sign_vistor .vtit i,.benefit_table .tick,.live_prevlist li i,.taglist .tag i,.dialog .bubble > i,.info_push .pushclose i,.toolbar .tbtn,.toolbar .tosigninbtn i,.hdbox .hdbox-i,.stateshow .item i,.sd_bot .sd_cbtn i,.tabnav .khbtn i,.view_select i,.pop_small i,.nextbox .live_time i,.picpart .imgbox i,.sd_ul .cont .i-zoom,.ligg_st .st i,.detail_ph .ph_cont .picbox i,.skilldata .pdname i,.train_ad .actrulebtn i,.detail_ph .t_list li .arrow,.iestory .closebtn i,.pop_mysd .status,.pop_back i,.prule_table .sx,.wechatbox .wechatbtn i,.topbtn.skin .skin-ico,.skinbox .sk_item i,.skinbox .sk_item .sebox,.userlist i,.casel_more .seltop i,.camore_list li s,.sl_prev i,.sl_next i,.hall_select .countdown i,.ranklist .rankfloat i,.ranklist .cytip i,.ranklist .loadmore_arr i,.sdking_prize td i,.courselist .course_ctrl i,.dashang_rule >a i,.sd_comment .com-replybtn,.risktip i{ background-image:url(../img/icons.png); background-repeat:no-repeat; background-position: 0 0}
 .rb_checkbox input[type=checkbox]:checked + label > i,.inp_checkbox input[type=checkbox]:checked + label > i,.inp_radio label,.inp_radio input[type=radio]:checked + label > i{ background-image:url(../img/icons.png); background-repeat:no-repeat; background-position: 0 0}
 .img-loading{position:absolute;bottom:0;display:block;width:25px;height:25px;border-radius:4px;background:url(../img/loading2.gif) no-repeat center;background-size:40px 40px;z-index:9}
 
@@ -1537,8 +1537,6 @@ body{ background:#dadfe6;font-family:'Microsoft YaHei','Microsoft JhengHei','Sim
 .newbie_guide .n_guide.g5 .jumpbtn{ bottom: 0; right: 98px; }
 .newbie_guide .h_menu1{ position: absolute; background: #fff; right: 104px; top: 3px; padding: 3px; padding-left: 0; padding-right: 6px; box-shadow: 2px 3px 0 rgba(0,0,0,.3)}
 
-/*.newbie_guide .n_guide.g1{ display: block; }*/
-
 /* 晒单王中王活动 */
 .sd_king{ background: #fce3d8; border-radius: 3px; margin: 20px 0 10px;}
 .sd_king > .cont{ padding: 0 10px }
@@ -1652,6 +1650,14 @@ body{ background:#dadfe6;font-family:'Microsoft YaHei','Microsoft JhengHei','Sim
 /*培训班广告*/
 .train_ad{ padding-left: 20px; position: relative; z-index: 2}
 .train_ad a{ display: block; width: 141px; background: url(../img/train_ad0330.png) center no-repeat; height: 70px;  }
+
+/*风险提示*/
+.risktip{ font-size: 12px; color: #b2b2b2; display:inline-block; margin-left:25px; line-height:14px;margin-top:3px; position: relative; padding-left: 16px; }
+.risktip i{ position: absolute; left: 0; display: block; top: 1px; width: 13px; height: 13px; background-position: -150px -330px; margin-right:4px }
+@media(max-width: 1280px){
+    .risktip { margin-top: -3px; margin-left: 15px; }
+    .risktip .br-b{ display: block; }
+}
 
 /* rewrite */
 .swiper-slide{ overflow: hidden; }
