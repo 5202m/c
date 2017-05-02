@@ -5,8 +5,8 @@ const logger = require('../resources/logConf').getLogger("apiAuth");
 const apiUrl = config.apiUrl;
 
 const constants = {
-    secondsPerHour: 3600,
-    expiredGap: 1000
+    millisecondsPerHour: 3600 * 1000,
+    expiredGap: 10000
 };
 
 let getOptions = (url, method, data) => {
@@ -21,9 +21,15 @@ let getOptions = (url, method, data) => {
     return options;
 };
 let isLocalTokenValid = (apiToken) => {
-    let currenttime = new Date().getTime();
-    let expiredTime = apiToken.beginTime - 0 + apiToken.expires * constants.secondsPerHour;
-    return (currenttime + constants.expiredGap) >= expiredTime;
+    let currentTime = new Date().getTime();
+    let expiredTime = apiToken.beginTime - 0 + apiToken.expires * constants.millisecondsPerHour;
+    let isValid = (currentTime + constants.expiredGap) <= expiredTime;
+    if (!isValid) {
+        logger.info("local token invalid, currentTime:", currentTime, " expiredTime: ", expiredTime);
+        logger.debug(JSON.stringify(apiToken), "currentTime:", new Date(currentTime).toLocaleString(), " expiredTime: ", new Date(expiredTime).toLocaleString());
+    }
+
+    return isValid;
 };
 
 let verifyTokenFromAPI = (apiToken, appSecret) => {
@@ -57,12 +63,7 @@ class APIAuth {
         if (isLocalTokenValid(this.apiToken)) { //Token 离过期至少还有一段的时间，因此不需要发请求去api验证token。
             deferred.resolve(true);
         } else {
-            verifyTokenFromAPI(this.apiToken)
-                .then(isOK => {
-                    deferred.resolve(true);
-                }).catch(e => {
-                    deferred.resolve(false);
-                });
+            deferred.resolve(false);
         }
 
         return deferred.promise;
