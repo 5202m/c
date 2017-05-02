@@ -92,9 +92,13 @@ var videosTrain = {
                     }
                 }
             }
+            var msg = result.checkState.message;
+            if (groupId == "studio_21" && result.checkState.code == "4002") {
+                msg = "该房间暂未开放，请关注开课时间: 每周三 15:30-17:30！";
+            }
             box.showMsg({
                 title: groupName || "",
-                msg: (result.checkState.message || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。'
+                msg: (msg || "") + '<a class="contactContact" style="color:#2980d1; font-size:14px;text-decoration:none;cursor:pointer" onclick="videosLive.contactTeacher();_gaq.push([\'_trackEvent\', \'pmchat_studio\', \'left_zb_callzhuli\', \'content_left\', 1, true]);">如有疑问请联系老师助理</a>。'
             });
         });
     },
@@ -122,18 +126,22 @@ var videosTrain = {
                 if (!data || data.code == "4016") {
                     videosTrain.changeRoom(groupId, groupName);
                 } else {
+                    var msg = "";
                     if (data.errcode == "4019" && groupId == "studio_57") {
                         var startTime = common.formatterDate(beginDate, '/').substring(5);
                         var endTime = common.formatterDate(endDate, '/').substring(5);
                         $(".pop_train_suc [rp='studyTime']").text(startTime + "—" + endTime);
                         $(".pop_train").css("z-index", 99);
                         $(".pop_train_suc").show();
-                    } else {
-                        var msg = "";
+                    }
+                    else {
                         if (data.errmsg) {
                             msg = data.errmsg;
                         } else {
                             msg = data.message;
+                        }
+                        if (data.errcode == "3010" && groupId == "studio_21") {
+                            msg = "该房间暂未开放，请关注开课时间: 每周三 15:30-17:30！";
                         }
                         box.showMsg({
                             title: groupName || "",

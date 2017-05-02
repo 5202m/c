@@ -8,9 +8,9 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>视频直播间 - 金道贵金属打造在线贵金属实盘直播室，掘金之旅在此起航！</title>
-    <meta content="实盘直播,贵金属实盘直播室,金道贵金属实盘直播,金道贵金属" name="keywords">
-    <meta content="金道贵金属打造在线贵金属实盘直播室，金道研究院名家观点即时播报，让您的掘金之旅在此起航！携手金道，生金有道！" name="description">
+    <title>金道在线教育 - 金道贵金属打造的投资者在线教育频道，掘金之旅在此起航！</title>
+    <meta content="金道在线教育,金道贵金属" name="keywords">
+    <meta content="金道贵金属打造在线教育频道，金道研究院名家观点即时播报，名家在线指导教学，让您的掘金之旅在此起航！携手金道，生金有道！" name="description">
     <link href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="/base/lib/jqueryUI/jquery-ui.min.css" type="text/css" rel="stylesheet" />
     <link href="/base/lib/lightbox/lightbox.css" type="text/css" rel="stylesheet" />
@@ -66,9 +66,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="train_ad fl">
+                <!--<div class="train_ad fl">
                     <a href="http://www.24k.hk/lp_v182_201704pxb.html" target="_blank"></a>
-                </div>
+                </div>-->
                 <%} else{ %>
                     <div class="header_ad fl">
                         <a href="http://www.24k.hk/special/analyst.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
@@ -82,10 +82,10 @@
                         <div class="header-right fr clearfix">
                             <div class="h_menu1">
                                 <%if(userSession.isLogin){%>
-                                    <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道直播间</span>
+                                    <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道在线教育</span>
                                     <a href="javascript:void(0)" id="logout" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zhuxiao', 'content_top', 1, true]);">注销</a>
                                     <%} else {%>
-                                        <span class="welcome">嗨！欢迎进入金道直播间</span>
+                                        <span class="welcome">嗨！欢迎进入金道在线教育</span>
                                         <a href="javascript:void(0)" id="login_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_login', 'content_top', 1, true]);">登录</a>
                                         <a href="javascript:void(0)" id="register_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_register', 'content_top', 1, true]);">免费注册</a>
                                         <%}%>
@@ -132,7 +132,7 @@
                                 <span>|</span>
                                 <a href="http://www.24k.hk/special/analyst.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_analystLP', 'content_top', 1, true]);">分析师专栏</a>
                                 <span>|</span>
-                                <a href="http://www.24k.hk/lp_v144_studio.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_studioLP', 'content_top', 1, true]);">关于直播</a>
+                                <a href="http://www.24k.hk/lp_v144_studio.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_studioLP', 'content_top', 1, true]);">关于在线教育</a>
                                 <span>|</span>
                                 <a href="javascript:void(0);" id="qqcs" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_QQcs', 'content_top', 1, true]);">QQ客服</a>
                             </div>

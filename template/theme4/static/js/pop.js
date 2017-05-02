@@ -47,7 +47,7 @@ var studioMbPerson = {
                         common.getJson("/upgrade",{clientGroup : loc_upLevel},function(result){
                             studioMbPop.loadingBlock($("#personPop"), true);
                             if(result.isOK){
-                                var msg = "升级成功！刷新页面后，您可享用更多直播间权限。";
+                                var msg = "升级成功！刷新页面后，您可享用更多权限。";
                                 if(result.clientGroup === "active" && "notActive" === loc_upLevel){
                                     msg += "<br/>注：你已经激活真实交易账户，直接为你升级到A级别。"
                                 }
@@ -74,15 +74,15 @@ var studioMbPerson = {
             /**
              * 登出事件
              */
-            $(".logoutbtn").bind("click", function(e){
+            $(".logoutbtn").bind("click", function(){
                 LoginAuto.setAutoLogin(false);
                 var urlParam = '';
                 if(common.isValid(studioMbPop.pageJSObj.courseTick)) {
                     urlParam = '&roomName='+$('#currStudioInfo').attr('rm')
-                        +'&courseName='+studioChatMb.courseTick.course.courseName+'&courseId='+studioChatMb.courseTick.course.courseId||''+'&teacherId='+studioChatMb.courseTick.course.lecturerId||''
-                        +'&teacherName='+studioChatMb.courseTick.course.lecturer||'';
+                        +'&courseName='+studioChatMb.courseTick.course.courseName+'&courseId='+studioMbPop.courseTick.course.courseId||''+'&teacherId='+studioMbPop.courseTick.course.lecturerId||''
+                        +'&teacherName='+studioMbPop.courseTick.course.lecturer||'';
                 }
-                window.location.href="/logout?cookieId="+chatAnalyze.getUTMCookie()+urlParam;
+                window.location.href="logout?cookieId="+chatAnalyze.getUTMCookie()+urlParam;
             });
 
             /**
@@ -251,7 +251,7 @@ var studioMbVC = {
 };
 
 /**
- * 直播间登录
+ * 登录
  */
 var studioMbLogin = {
     verifyCodeIntervalId : 0,
@@ -304,11 +304,11 @@ var studioMbLogin = {
             $('#loginForm [name="visitorId"]').val(studioMbPop.userInfo.visitorId||'');
             $('#loginForm [name="clientStoreId"]').val(studioMbPop.userInfo.clientStoreId||'');
             $('#loginForm [name="roomName"]').val($('#currStudioInfo').attr('rm')||'大厅');
-            if(studioChatMb.courseTick.course) {
+            if(common.isValid(studioChatMb.courseTick.course)) {
                 $('#loginForm [name="courseId"]').val(studioChatMb.courseTick.course.courseId||'');
                 $('#loginForm [name="courseName"]').val(studioChatMb.courseTick.course.courseName);
-                $('#loginForm [name="teacherId"]').val(studioChatMb.courseTick.course.lecturerId||'');
-                $('#loginForm [name="teacherName"]').val(studioChatMb.courseTick.course.lecturer||'');
+                $('#loginForm [name="teacherId"]').val(studioMbPop.courseTick.course.lecturerId||'');
+                $('#loginForm [name="teacherName"]').val(studioMbPop.courseTick.course.lecturer||'');
             }
             common.getJson("/login",$("#loginForm").serialize(),function(result){
                 if(!result.isOK){
@@ -322,11 +322,9 @@ var studioMbLogin = {
                     }else{
                         studioMbPop.loadingBlock($("#loginPop"), true);
                         LoginAuto.setAutoLogin($("#loginForm_al").prop("checked"));
-                        if(studioMbPop.onWelcome){
-                            studioMbPop.onWelcome(result.userInfo.clientGroup);
-                        }
                         studioMbPop.reload();
                     }
+                    chatAnalyze.setUTM(false, $.extend({operationType:4}, studioMbPop.userInfo, studioMbPop.courseTick.course));
                 }
             },true,function(){
                 studioMbLogin.resetFormInput();
@@ -376,7 +374,7 @@ var studioMbLogin = {
         });
 
         //登录页面验证码功能
-        studioMbVC.init("login", "studio_login", $("#loginForm_vcb"), $("#loginForm_mb"));
+        studioMbVC.init("login", "fxstudio_login", $("#loginForm_vcb"), $("#loginForm_mb"));
     },
     /**
      * 重置页面
@@ -466,7 +464,7 @@ var studioMbMsg = {
     load : function(){
         $("#resultForm_sub").bind("click", function(){
             if(studioMbMsg.type == "logout"){
-                window.location.href="/studio?platform=webui";
+                window.location.href="/?platform=webui";
             }else{
                 studioMbPop.popHide();
             }
@@ -489,7 +487,7 @@ var studioMbMsg = {
 };
 
 /**
- * 直播间设置
+ * 设置
  */
 var studioMbSet = {
     studioChatObj : null,
@@ -587,14 +585,14 @@ var studioMbReg = {
             }
             studioMbPop.loadingBlock($("#regPop"));
             $('#regForm [name="cookieId"]').val(chatAnalyze.getUTMCookie());
-            $('#regForm [name="visitorId"]').val(studioMbPop.userInfo.visitorId||'');
-            $('#regForm [name="clientStoreId"]').val(studioMbPop.userInfo.clientStoreId||'');
+            $('#regForm [name="visitorId"]').val(studioMbPop.userInfo.visitorId);
+            $('#regForm [name="clientStoreId"]').val(studioMbPop.userInfo.clientStoreId);
             $('#regForm [name="roomName"]').val($('#currStudioInfo').attr('rm')||'大厅');
             if(common.isValid(studioChatMb.courseTick.course)) {
-                $('#regForm [name="courseId"]').val(studioChatMb.courseTick.course.courseId||'');
+                $('#regForm [name="courseId"]').val(studioChatMb.courseTick.course.courseId);
                 $('#regForm [name="courseName"]').val(studioChatMb.courseTick.course.courseName);
-                $('#regForm [name="teacherId"]').val(studioChatMb.courseTick.course.lecturerId||'');
-                $('#regForm [name="teacherName"]').val(studioChatMb.courseTick.course.lecturer||'');
+                $('#regForm [name="teacherId"]').val(studioMbPop.courseTick.course.lecturerId);
+                $('#regForm [name="teacherName"]').val(studioMbPop.courseTick.course.lecturer);
             }
             common.getJson("/reg",$("#regForm").serialize(),function(result){
                 studioMbPop.loadingBlock($("#regPop"), true);
@@ -604,6 +602,7 @@ var studioMbReg = {
                 }else{
                     studioMbPop.showMessage("注册成功");
                     studioMbPop.popShow($("#reg1Pop"));
+                    chatAnalyze.setUTM(false, $.extend({operationType:3}, studioMbPop.userInfo, studioMbPop.courseTick.course));
                 }
             },true,function(){
                 studioMbPop.loadingBlock($("#setPop"), true);
@@ -625,7 +624,7 @@ var studioMbReg = {
         });
 
         //注册页面验证码功能
-        studioMbVC.init("reg", "studio_reg", $("#regForm_vcb"), $("#regForm_mb"));
+        studioMbVC.init("reg", "fxstudio_reg", $("#regForm_vcb"), $("#regForm_mb"));
     },
     /**
      * 检查页面输入
@@ -812,7 +811,7 @@ var studioMbPwd2 = {
         });
 
         //登录页面验证码功能
-        studioMbVC.init("pwd", "studio_resetPWD", $("#pwd2Form_vcb"), $("#pwd2Form_mb"));
+        studioMbVC.init("pwd", "fxstudio_resetPWD", $("#pwd2Form_vcb"), $("#pwd2Form_mb"));
     },
 
     /**
@@ -921,7 +920,7 @@ var studioMbPwd3 = {
 };
 
 /**
- * 直播间弹出层控制类
+ * 弹出层控制类
  */
 var studioMbPop = {
     userInfo : null,
@@ -935,7 +934,6 @@ var studioMbPop = {
     Msg : studioMbMsg,
     onShow : null,
     onHide : null,
-    onWelcome : null,
     /**
      * 显示提示信息
      */
@@ -951,7 +949,8 @@ var studioMbPop = {
      * params :{{[groupId]:String, [roomType]:String}}
      */
     changeRoom : function(params){
-        common.getJson("/checkGroupAuth",params,function(result){
+        common.getJson("/checkGroupAuth", params, function(result){
+            studioMbPop.loadingBlock($("body"), true);
             if(!result.isOK){
                 if(result.error && result.error.errcode === "1000"){
                     studioMbPop.changeRoomMsg({msg: "您长时间未操作，请刷新页面后重试，"});
@@ -959,12 +958,11 @@ var studioMbPop = {
                     studioMbPop.changeRoomMsg({roomType: result.roomType, clientGroups : result.clientGroups});
                 }
             }else{
-                studioMbPop.loadingBlock($("#loginPop"), true);
                 studioMbPop.reload();
             }
         },true,function(err){
-            studioMbPop.loadingBlock($("#loginPop"), true);
             if("success"!=err) {
+                studioMbPop.loadingBlock($("body"), true);
                 studioMbPop.changeRoomMsg({type: "error"});
             }
         });
@@ -1064,7 +1062,6 @@ var studioMbPop = {
         if(events){
             this.onShow = typeof events.onShow == "function" ? events.onShow : null;
             this.onHide = typeof events.onHide == "function" ? events.onHide : null;
-            this.onWelcome = typeof events.onWelcome == "function" ? events.onWelcome : null;
         }
         this.Person.load(userInfo, options);
         this.Login.load();

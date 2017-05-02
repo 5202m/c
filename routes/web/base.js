@@ -309,7 +309,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 apiUrl: common.formatHostUrl(req.hostname, config.apiUrl),
                 filePath: common.formatHostUrl(req.hostname, config.filesDomain),
                 web24kPath: config.web24kPath,
-                mobile24kPath: config.mobile24kPath
+                mobile24kPath: config.mobile24kPath,
+                dasUrl: config.dasUrl
             }; //输出参数
             chatUser.groupId = groupId;
             viewDataObj.theme = options.theme || "";
@@ -484,8 +485,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
-            if (!isMobile && fromPlatform == config.studioThirdUsed.webui &&
-                chatUser.groupType != constant.fromPlatform.studio) {
+            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui ) {
                 res.render(
                     common.renderPath(req, constant.tempPlatform.webui, "room"),
                     viewDataObj);
@@ -3158,7 +3158,7 @@ router.post('/rob', function(req, res) {
     }
 
     var robParams = {
-        ac_periods: "20170401",
+        ac_periods: "20170502",
         phone: userInfo.mobilePhone.replace("86-", ""),
         nper: currentPariod
     };
@@ -3169,8 +3169,8 @@ router.post('/rob', function(req, res) {
         return;
     }
 
-    /*如果真实客户,直接返回*/
-    if (userInfo.clientGroup == "active") {
+    /*如果非注册用户,直接返回*/
+    if (userInfo.clientGroup != "register") {
         res.json({ result: 0, money: 0, msg: "" });
         return;
     }
@@ -3184,7 +3184,7 @@ router.post('/rob', function(req, res) {
             var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
             cacheClient.set("redPacket_" + robParams.phone, currentPariod);
             cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170401/draw'), form: robParams }, function(error, response, data) {
+            request.post({ url: (config.pmOAPath + '/lottery/activity20170502/draw'), form: robParams }, function(error, response, data) {
                 var result = { result: 0, money: 0, msg: "" };
                 if (data) {
                     logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);

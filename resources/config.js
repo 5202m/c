@@ -7,7 +7,8 @@ var config = {
     defaultGroupType: "studio",
     studioThirdUsed: { //第三方引用直播间默认房间
         platfrom: 'webui,app,pc,web24k',
-        webui: 'webui', //直播间中studio.js中针对webui不跳转到mini版本
+        webui: 'webui', //直播间中studio.js中针对webui不跳转到mini版本,
+        gts2webui: 'gts2webui', //直播间中studio.js中针对webui不跳转到mini版本
         web24k: 'web24k', //api中课程表信息，web24k只取一条课程记录
         roomId: {
             studio: 'studio_teach'

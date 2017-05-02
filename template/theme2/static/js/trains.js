@@ -139,7 +139,11 @@ Trains.changeRoom = function(groupId) {
                 }
             }
         }
-        Pop.msg(result.checkState.message);
+        var msg = result.checkState.message;
+        if (groupId == "studio_21" && result.checkState.code == "4002") {
+            msg = "该房间暂未开放，请关注开课时间: 每周三 15:30-17:30！";
+        }
+        Pop.msg(msg);
     });
 };
 

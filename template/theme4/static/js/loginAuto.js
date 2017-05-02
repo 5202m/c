@@ -4,7 +4,7 @@
 var LoginAuto = {
     sessionUser : null,
     enable : true,
-    storeInfoKey : "storeInfo_",
+    storeInfoKey : "storeInfos_",
 
     /**
      * 初始化
@@ -15,7 +15,7 @@ var LoginAuto = {
             console.log('Local storage is not supported by your browser.');
         }
 
-        this.storeInfoKey = 'storeInfo_' + (this.sessionUser && this.sessionUser.groupType);
+        this.storeInfoKey = 'storeInfos_' + (this.sessionUser && this.sessionUser.groupType);
 
         this.autoLogin();
     },
@@ -37,7 +37,9 @@ var LoginAuto = {
         if(!this.enable){
             return false;
         }else{
-            store.set(this.storeInfoKey, storeObj);
+            if (store.enabled) {
+                store.set(this.storeInfoKey, storeObj);
+            }
             return true;
         }
     },
