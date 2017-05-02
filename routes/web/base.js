@@ -1055,6 +1055,7 @@ router.get('/getArticleList', function(req, res) {
                                     remarkRow.open = '****';
                                     remarkRow.profit = '****';
                                     remarkRow.loss = '****';
+                                    remarkRow.drag2 = '****';
                                     remarkRow.description = '****';
                                 }
                                 /*if (detailInfo.tag == 'trading_strategy' && strategyIsNotAuth == 1) {
