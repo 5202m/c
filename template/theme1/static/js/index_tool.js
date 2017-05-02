@@ -218,16 +218,13 @@ var indexTool = {
         config: {
             init: false, //初始化
             cycleTime: 300000, //红包周期5分钟
-            //cycleTime: 60000*2,
             stayTime: 5000, //红包停留时间5秒
-            startTime: 35940001, //10:00
-            endTime: 43140001, //12:00
-            //startTime: 55740001, //15:30
-            //endTime: 62940001, //17:30
+            startTime: 55740001, //15:30
+            endTime: 62940001, //17:30
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
                 /* 15:30——17:30*/
-                { start: 35940001, userId:"lin_gw24k", userName:"林意轩",  wechat:"lin_gw24k", wechatImg:"/theme1/img/yx_lin.png"}
+                { start: 55740001, userId:"lin_gw24k", userName:"林意轩",  wechat:"lin_gw24k", wechatImg:"/theme1/img/yx_lin.png"}
             ],
 
             redPacketPopFlag: true, //红包弹出标记
