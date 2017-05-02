@@ -162,60 +162,70 @@ var baseApiService = {
      * @param callback
      */
     checkChatPraise: function(clientId, praiseId, fromPlatform, callback) {
-        request.post({
-            url: this.formatApiUrl('/chat/checkChatPraise'),
-            form: { clientId: clientId, praiseId: praiseId, fromPlatform: fromPlatform }
-        }, function(err, response, data) {
-            if (err) {
-                callback(false);
-            } else {
-                try {
-                    callback(JSON.parse(data).data);
-                } catch (e) {
-                    logger.error("checkChatPraise fail:" + e);
-                    callback(false);
-                }
+        let deferred = new Deferred();
+        let path = "/chat/checkChatPraise";
+        let data = {
+            clientId: clientId,
+            praiseId: praiseId,
+            fromPlatform: fromPlatform
+        };
+        liveRoomAPIService.post(path, data).then((result) => {
+            if (callback) {
+                callback(result);
             }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("checkChatPraise fail:" + e);
+            if (callback) {
+                callback(false);
+            }
+            deferred.reject(e);
         });
+        return deferred.promise;
     },
 
     /**
      * 获取CFTC持仓比例数据
      */
     get24kCftc: function(callback) {
-        request(this.formatApiUrl('/common/get24kCftc'),
-            function(err, response, data) {
-                if (err) {
-                    callback(false);
-                } else {
-                    try {
-                        callback(JSON.parse(data));
-                    } catch (e) {
-                        logger.error("get24kCftc fail:" + e);
-                        callback(false);
-                    }
+        let deferred = new Deferred();
+        let path = `/common/get24kCftc`;
+        liveRoomAPIService.get(path)
+            .then((result) => {
+                if (callback) {
+                    callback(result);
                 }
+                deferred.resolve(result);
+            }).catch((e) => {
+                logger.error("get24kCftc fail:" + e);
+                if (callback) {
+                    callback(false);
+                }
+                deferred.reject(e);
             });
+        return deferred.promise;
     },
     /**
      * 获取财经日历列表数据
      * @param callback
      */
     getZxFinanceDataList: function(releaseTime, dataTypeCon, callback) {
-        request(this.formatApiUrl(
-            '/zxFinanceData/list?releaseTime=' + releaseTime + '&dataTypeCon=' +
-            dataTypeCon), function(err, response, data) {
-            if (err) {
-                callback(false);
-            } else {
-                try {
-                    callback(JSON.parse(data));
-                } catch (e) {
-                    logger.error("getZxFinanceDataList fail:" + e);
+        let deferred = new Deferred();
+        let path = `/zxFinanceData/list?releaseTime=${releaseTime}&dataTypeCon=${dataTypeCon}`;
+        liveRoomAPIService.get(path)
+            .then((result) => {
+                if (callback) {
+                    callback(result);
+                }
+                deferred.resolve(result);
+            }).catch((e) => {
+                logger.error("getZxFinanceDataList fail:" + e);
+                if (callback) {
                     callback(false);
                 }
-            }
-        });
+                deferred.reject(e);
+            });
+        return deferred.promise;
     },
     /**
      * 发送邮件
@@ -224,21 +234,28 @@ var baseApiService = {
      * @param callback
      */
     sendEmail: function(key, data, callback) {
-        request.post({
-            url: this.formatApiUrl('/common/email'),
-            form: { key: key, data: JSON.stringify(data) }
-        }, function(err, response, data) {
-            if (err) {
-                callback(false);
-            } else {
-                try {
-                    callback(JSON.parse(data));
-                } catch (e) {
-                    logger.error("sendEmail fail:" + e);
-                    callback(false);
-                }
+        let deferred = new Deferred();
+        let path = "/common/email";
+        let form = {
+            key: key,
+            data: JSON.stringify(data)
+        };
+        liveRoomAPIService.post(path, form).then((result) => {
+            if (typeof result === 'string') {
+                result = JSON.parse(result);
             }
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("sendEmail fail:" + e);
+            if (callback) {
+                callback(false);
+            }
+            deferred.reject(e);
         });
+        return deferred.promise;
     },
     /**
      * 添加文档
@@ -249,20 +266,27 @@ var baseApiService = {
         if (typeof data != 'string') {
             data = JSON.stringify(data);
         }
-        request.post({ url: this.formatApiUrl('/article/add'), form: { data: data } },
-            function(err, response, result) {
-                if (err) {
-                    logger.error("addArticle fail:" + err);
-                    callback(null);
-                } else {
-                    try {
-                        callback(JSON.parse(result));
-                    } catch (e) {
-                        logger.error("addArticle fail:" + e);
-                        callback(null);
-                    }
-                }
-            });
+        let deferred = new Deferred();
+        let path = "/article/add";
+        let form = {
+            data: data
+        };
+        liveRoomAPIService.post(path, form).then((result) => {
+            if (typeof result === 'string') {
+                result = JSON.parse(result);
+            }
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("addArticle fail:" + e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
     },
     /**
      * 更新文章
@@ -288,22 +312,29 @@ var baseApiService = {
                 return;
             }
         }
-        request.post({
-            url: this.formatApiUrl('/article/modify'),
-            form: { query: query, field: field, data: updater }
-        }, function(err, response, result) {
-            if (err) {
-                logger.error("modifyArticle fail:" + err);
-                callback(null);
-            } else {
-                try {
-                    callback(JSON.parse(result));
-                } catch (e) {
-                    logger.error("modifyArticle fail:" + e);
-                    callback(null);
-                }
+        let deferred = new Deferred();
+        let path = "/article/add";
+        let data = {
+            query: query,
+            field: field,
+            data: updater
+        };
+        liveRoomAPIService.post(path, data).then((result) => {
+            if (typeof result === 'string') {
+                result = JSON.parse(result);
             }
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("modifyArticle fail:" + e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
         });
+        return deferred.promise;
     },
     /**
      * 获取未平仓品种比率
