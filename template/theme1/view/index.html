@@ -183,16 +183,16 @@
                         scrollbarPosition: "outside",
                         scrollButtons: false
                     });
-                    $.getJSON("/getToken").done(function(result) {
-                        if (result.isOK) {
-                            $.ajaxSetup({
-                                headers: {
-                                    "access_token": result.token || "",
-                                    "access_secret": result.secret || ""
-                                }
-                            });
-                        }
-                    });
+                    // $.getJSON("/getToken").done(function(result) {
+                    //     if (result.isOK) {
+                    //         $.ajaxSetup({
+                    //             headers: {
+                    //                 "access_token": result.token || "",
+                    //                 "access_secret": result.secret || ""
+                    //             }
+                    //         });
+                    //     }
+                    // });
                 }
             </script>
             <%if(isDevTest) {%>
