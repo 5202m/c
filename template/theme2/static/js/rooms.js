@@ -57,6 +57,7 @@ Rooms.setStudioRoomList = function() {
     var html = [],
         trainObj = null,
         currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
+    html.push('<div class="blk7 blke3e3ea"></div>');
     Data.getRoomList(function(rooms) {
         var cls = ['blue', 'red', 'green', 'brown','green2'],
             trainNum = 0;
