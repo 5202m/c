@@ -53,14 +53,21 @@ var baseApiService = {
     getArticleList: function(params, callback) {
         let deferred = new Deferred();
         let path = util.format(
-            '/article/getArticleList?authorId=%s&platform=%s&code=%s&lang=%s&hasContent=%s&isAll=%s&pageNo=%d&pageSize=%d&pageLess=%s&pageKey=%s&orderByJsonStr=%s', params.authorId, params.platform, params.code, 'zh', params.hasContent, params.isAll, params.pageNo, params.pageSize, params.pageLess,
-            params.pageKey, params.orderByStr);
-        liveRoomAPIService.get(path)
-            .then((result, rawData) => {
-                if (callback) {
-                    callback(rawData);
-                }
-                deferred.resolve(rawData);
+            '/article/getArticleList?authorId=%s&platform=%s&code=%s&lang=%s&hasContent=%s&isAll=%s&pageNo=%d&pageSize=%d&pageLess=%s&pageKey=%s&orderByJsonStr=%s',
+            params.authorId,
+            params.platform,
+            params.code,
+            'zh',
+            params.hasContent,
+            params.isAll,
+            params.pageNo,
+            params.pageSize,
+            params.pageLess,
+            params.pageKey,
+            params.orderByStr);
+        liveRoomAPIService.get(path, callback)
+            .then((result) => {
+                deferred.resolve(result);
             }).catch((e) => {
                 logger.error("getArticleList>>>error:" + e);
                 if (callback) {

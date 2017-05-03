@@ -485,7 +485,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
-            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui ) {
+            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui) {
                 res.render(
                     common.renderPath(req, constant.tempPlatform.webui, "room"),
                     viewDataObj);
@@ -1038,7 +1038,8 @@ router.get('/getArticleList', function(req, res) {
         callTradeIsNotAuth = req.query['callTradeIsNotAuth'] || 0;
         strategyIsNotAuth = req.query['strategyIsNotAuth'] || 0;
     }
-    baseApiService.getArticleList(params, function(data) {
+    baseApiService.getArticleList(params, function(pureData, rawData) {
+        let data = rawData;
         if (data) {
             data = typeof data === "string" ? JSON.parse(data) : data;
             if (params.code == 'class_note') {
