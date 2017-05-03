@@ -331,16 +331,13 @@ Login.doLogin = function(){
                 Data.userInfo.userName = result.userInfo.userName;
                 Data.userInfo.visitorId = result.userInfo.visitorId;
                 Data.userInfo.userType = 0;
-                if(Room.timeNum || -1 > -1){//登录成功去掉三分钟提醒提示
-                    window.clearTimeout(Room.timeNum);
-                }
                 LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
                 var key = 'storeInfos_' + Data.userInfo.groupType,
                     keyVal = Store.store(key);
                 keyVal.loginId = Data.userInfo.userId;
                 Store.store(key, keyVal);
                 if(Login.groupId){
-                    Login.changeRoom({groupId:Login.groupId});
+                    Trains.changeRoom(Login.groupId);
                 }else{
                     Container.back();
                 }

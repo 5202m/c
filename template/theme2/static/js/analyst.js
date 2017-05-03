@@ -185,9 +185,9 @@ Analyst.setVideoList = function(){
                 }else  if(article.categoryId == "student_style" ){ //学员风采
                     if(studentLiveCount <= 3){
                         studentLiveHtml.push(Analyst.formatHtml('analystStudentVideo',
-                            //article.mediaUrl,
                             articleDetail.title,
-                            articleDetail.tag
+                            articleDetail.tag,
+                            article.mediaUrl
                         ).replace('/theme2/img/cm.png',article.mediaUrl));
                         studentLiveCount++;
                     }
