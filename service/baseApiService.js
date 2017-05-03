@@ -56,11 +56,11 @@ var baseApiService = {
             '/article/getArticleList?authorId=%s&platform=%s&code=%s&lang=%s&hasContent=%s&isAll=%s&pageNo=%d&pageSize=%d&pageLess=%s&pageKey=%s&orderByJsonStr=%s', params.authorId, params.platform, params.code, 'zh', params.hasContent, params.isAll, params.pageNo, params.pageSize, params.pageLess,
             params.pageKey, params.orderByStr);
         liveRoomAPIService.get(path)
-            .then((result) => {
+            .then((result, rawData) => {
                 if (callback) {
-                    callback(result);
+                    callback(rawData);
                 }
-                deferred.resolve(result);
+                deferred.resolve(rawData);
             }).catch((e) => {
                 logger.error("getArticleList>>>error:" + e);
                 if (callback) {

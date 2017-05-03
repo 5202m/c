@@ -56,11 +56,11 @@ let responseHandler = (deferred, callback) => {
      * 处理正常数据的方法(result == 0)
      * @param {Object} result
      */
-    let done = (result) => {
+    let done = (result, rawData) => {
         if (callback) {
-            callback(result);
+            callback(result, rawData);
         }
-        deferred.resolve(result);
+        deferred.resolve(result, rawData);
     };
     /**
      * 处理上游的异常数据(result != 0)
@@ -88,22 +88,17 @@ let responseHandler = (deferred, callback) => {
             if (dataObj["errcode"] && dataObj["errcode"] != 0) {
                 failure(dataObj);
             } else {
-                done(dataObj.data);
+                done(dataObj.data, dataObj);
             }
             return;
         }
-        done(dataObj);
+        done(dataObj, dataObj);
     };
     /**
      * 处理失败请求的方法, 通常由于系统报错产生的异常.
      * @param err 需要处理的异常错误
      */
-    handler.failure = err => {
-        if (callback) {
-            callback(false);
-        }
-        deferred.reject(err);
-    };
+    handler.failure = failure;
     return handler;
 };
 
