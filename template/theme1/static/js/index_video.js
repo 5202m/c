@@ -516,11 +516,14 @@ var videos = {
      */
     playAuto: function(isOnlyLive) {
         var course = indexJS.courseTick.course;
-        $.each(course.liveLink, function(i, row){
-            if(row.code == '1'){
-                course.studioLink = row.url;
-            }
-        });
+        if (course.liveLink && course.liveLink.length > 0) {
+            $.each(course.liveLink, function(i, row) {
+                if (row.code == '1') {
+                    course.studioLink = row.url;
+                }
+            });
+        }
+
         var $panel = $("#videoPlayerPanel");
         if (!course ||
             !course.lecturerId ||

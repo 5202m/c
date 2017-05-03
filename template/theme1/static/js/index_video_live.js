@@ -226,64 +226,62 @@ var videosLive = {
             releaseTime = videosLive.currentDate();
         }
         common.getJson('/getFinancData', { releaseTime: releaseTime, dataTypeCon: dataTypeCon }, function(result) {
-            if (result.result == 0) {
-                var countryImg = { '德国': 'Germany', '法国': 'France', '欧元区': 'EUR', '加拿大': 'CAD', '美国': 'USD', '澳大利亚': 'AUD', '日本': 'JPY', '瑞士': 'CHF', '意大利': 'Italy', '英国': 'GBP', '中国': 'CNY', '新西兰': 'NZD', '韩国': 'SK', '香港': 'HKD', '西班牙': 'Spain', '台湾': 'Taiwan', '印度': 'INR', '新加坡': 'Singapore' };
-                var financeHtml = '';
-                var financeFormat = videosLive.formatHtml('finance');
-                $.each(result.data.financeData, function(key, value) {
-                    var liOu = "";
-                    if (key % 2 == 0 && key != 0) {
-                        liOu = "r";
-                    }
-                    /*if(key>3){
-                     return false;
-                     }*/
-                    var name = common.isBlank(value.name) ? '---' : value.name;
-                    var predictValue = common.isBlank(value.predictValue) ? '---' : value.predictValue;
-                    var valueA = common.isBlank(value.value) ? '---' : value.value;
-                    var time = value.time.substring(0, 5);
-                    var countryPic = common.isBlank(value.country) ? '---' : value.country;;
-                    var country = common.isBlank(countryImg[countryPic]) ? 'none' : countryImg[countryPic];
-                    var importanceLevel = videosLive.importanceLevel(value.importanceLevel);
+            var countryImg = { '德国': 'Germany', '法国': 'France', '欧元区': 'EUR', '加拿大': 'CAD', '美国': 'USD', '澳大利亚': 'AUD', '日本': 'JPY', '瑞士': 'CHF', '意大利': 'Italy', '英国': 'GBP', '中国': 'CNY', '新西兰': 'NZD', '韩国': 'SK', '香港': 'HKD', '西班牙': 'Spain', '台湾': 'Taiwan', '印度': 'INR', '新加坡': 'Singapore' };
+            var financeHtml = '';
+            var financeFormat = videosLive.formatHtml('finance');
+            $.each(result.financeData, function(key, value) {
+                var liOu = "";
+                if (key % 2 == 0 && key != 0) {
+                    liOu = "r";
+                }
+                /*if(key>3){
+                 return false;
+                 }*/
+                var name = common.isBlank(value.name) ? '---' : value.name;
+                var predictValue = common.isBlank(value.predictValue) ? '---' : value.predictValue;
+                var valueA = common.isBlank(value.value) ? '---' : value.value;
+                var time = value.time.substring(0, 5);
+                var countryPic = common.isBlank(value.country) ? '---' : value.country;;
+                var country = common.isBlank(countryImg[countryPic]) ? 'none' : countryImg[countryPic];
+                var importanceLevel = videosLive.importanceLevel(value.importanceLevel);
 
-                    if (typeof(data) != "undefined") {
-                        //美元指数
-                        if (data == "usdx") {
-                            if (countryPic == "欧元区" || countryPic == "美国") {
-                                financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
-                            }
-                        } else if (data == "pm") {
-                            var description = value.description;
-                            var deStart = description.indexOf("PM_");
-                            //判断是否已PM开头
-                            if (deStart != -1) {
-                                financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
-                            }
-                        } else if (data == "all") {
+                if (typeof(data) != "undefined") {
+                    //美元指数
+                    if (data == "usdx") {
+                        if (countryPic == "欧元区" || countryPic == "美国") {
                             financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
-                        } else {
-                            if (data.indexOf("countrysel_") != -1) {
-                                var datas = data.split("_")[1];
-                                if (countryPic == datas) {
-                                    financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
-                                }
-                            }
-                            if (data.indexOf("stars_") != -1) {
-                                var datastar = data.split("_")[1];
-                                if (value.importanceLevel == datastar) {
-                                    financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
-                                }
+                        }
+                    } else if (data == "pm") {
+                        var description = value.description;
+                        var deStart = description.indexOf("PM_");
+                        //判断是否已PM开头
+                        if (deStart != -1) {
+                            financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
+                        }
+                    } else if (data == "all") {
+                        financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
+                    } else {
+                        if (data.indexOf("countrysel_") != -1) {
+                            var datas = data.split("_")[1];
+                            if (countryPic == datas) {
+                                financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
                             }
                         }
-                    } else {
-                        financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
+                        if (data.indexOf("stars_") != -1) {
+                            var datastar = data.split("_")[1];
+                            if (value.importanceLevel == datastar) {
+                                financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
+                            }
+                        }
                     }
+                } else {
+                    financeHtml += financeFormat.formatStr(liOu, name, predictValue, valueA, time, country, countryPic, importanceLevel);
+                }
 
 
-                });
-                $('.calenda_show .scrollbox ul').html(financeHtml);
-                indexJS.setListScroll('.calenda_show .scrollbox', { isCustom: false, scrollbarPosition: "outside", theme: "dark-2" }); //*设置滚动条*/
-            }
+            });
+            $('.calenda_show .scrollbox ul').html(financeHtml);
+            indexJS.setListScroll('.calenda_show .scrollbox', { isCustom: false, scrollbarPosition: "outside", theme: "dark-2" }); //*设置滚动条*/
         });
     },
     /**
