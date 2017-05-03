@@ -58,7 +58,7 @@ Rooms.setStudioRoomList = function() {
         trainObj = null,
         currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
     Data.getRoomList(function(rooms) {
-        var cls = ['blue', 'red', 'green', 'brown'],
+        var cls = ['blue', 'red', 'green', 'brown','green2'],
             trainNum = 0;
         $.each(rooms, function(i, row) {
             if (row.roomType == 'train') {
@@ -80,6 +80,12 @@ Rooms.setStudioRoomList = function() {
                     loc_index = 2;
                 } else if (row.roomType == 'normal') {
                     loc_index = 0;
+                    if(row.name.split('(').length > 1){
+                        if(row.name.length > 6){
+                            row.name = row.name.substring(0,6).concat('...');
+                        }
+                        loc_index = 4;
+                    }
                 } else {
                     loc_index = 1;
                 }
