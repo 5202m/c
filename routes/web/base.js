@@ -1093,7 +1093,12 @@ router.get('/getArticleInfo', function(req, res) {
     var params = {};
     params.id = req.query["id"];
     baseApiService.getArticleInfo(params, function(data) {
-        res.json(data ? JSON.parse(data) : null);
+        if (data && typeof data === "string") {
+            data = JSON.parse(data);
+        } else {
+            data = data || null;
+        }
+        res.json(data);
     });
 });
 
