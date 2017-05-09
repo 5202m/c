@@ -44,11 +44,11 @@ var config = {
     //apiUrl: 'http://127.0.0.1:3000/api', //pmApi地址
     apiAuth: {
         appId: "chatPlatform",
-        appSecret: "fa520001"
+        appSecret: "d5a20003"
     },
     apiAuthForWeb: {
         appId: "chatPlatform_web",
-        appSecret: "5ef10001"
+        appSecret: "cd2a0004"
     },
     goldApiUrl: 'http://192.168.35.160/goldoffice_api/RESTful', //gwapi地址
     gwfxGTS2ApiUrl: 'http://192.168.35.100:8083/Goldoffice_gateway_uat/RESTful', //外汇GTS2 Api地址
