@@ -204,7 +204,7 @@ router.get('/', function(req, res) {
             });
         return;
     } else if (chatUser && chatUser.isLogin) {
-        clientGroup = chatUser.clientGroup||constant.clientGroup.register;
+        clientGroup = chatUser.clientGroup || constant.clientGroup.register;
     } else {
         if (!chatUser) {
             chatUser = {};
@@ -563,8 +563,13 @@ router.get('/getMobileVerifyCode', function(req, res) {
     } else {
         baseApiService.getMobileVerifyCode(mobilePhone, useType, ip,
             function(result) {
-                delete result["data"];
-                res.json(result);
+                if (typeof result == "string") {
+                    res.json({ result: 0 });
+                } else {
+                    delete result.data;
+                    res.json(result);
+                }
+
             });
     }
 });
@@ -698,9 +703,9 @@ router.post('/login', function(req, res) {
             baseApiService.checkMobileVerifyCode(mobilePhone,
                 userSession.groupType + "_login", verifyCode,
                 function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
+                    if (chkCodeRes !== true) {
+                        if (chkCodeRes.errcode &&
+                            (chkCodeRes.errcode === "1006" || chkCodeRes.errcode === "1007")) {
                             result.error = {
                                 'errcode': chkCodeRes.errcode,
                                 'errmsg': chkCodeRes.errmsg
@@ -750,7 +755,7 @@ router.post('/login', function(req, res) {
                                             accountNo: accountNo,
                                             thirdId: null
                                         };
-                                        userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
+                                        userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
                                                 if (result && result.isOK) {
@@ -848,7 +853,7 @@ router.post('/login', function(req, res) {
                                                 accountNo: accountNo,
                                                 thirdId: thirdId
                                             };
-                                            userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
+                                            userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                             studioService.studioRegister(userInfo, clientGroup,
                                                 function(result) {
                                                     if (result.isOK) {
