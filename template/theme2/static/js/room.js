@@ -7,7 +7,6 @@ var Room = new Container({
     url: "/theme2/template/room.html",
     wechatCode: null,
     isNoviceRoom : false,
-    timeNum : -1,//定时器序号
     onLoad: function() {
         Player.init();
         Room.setEvent();
@@ -100,7 +99,8 @@ Room.watchRemind = function(room) {
             if (Store.store("simpleTip")) {
                 Room.showUnLoginWatchTip(true, lgt, lgtTips);
             } else {
-                Room.timeNum = window.setTimeout(function() {
+                Login.groupId = Room.currGroupId;
+                window.setTimeout(function() {
                     Store.store("simpleTip", true);
                     Room.showUnLoginWatchTip(true, lgt, lgtTips);
                 }, lgt * 60 * 1000);
@@ -212,6 +212,7 @@ Room.setEvent = function() {
         if (Data.userInfo.isLogin) {
             ClassNote.viewData($(this));
         } else {
+            Login.groupId = Room.currGroupId;
             Login.load();
         }
     });
@@ -449,5 +450,10 @@ Room.showCourse = function() {
  */
 Room.toRefreshView = function(groupId) {
     Data.userInfo.groupId = groupId;
+    if(Login.groupId){
+        Login.groupId = null;
+        location.reload();
+        return;
+    }
     Room.load();
 };

@@ -91,7 +91,7 @@ ClassNote.loadData = function (isMore, isRoom,classNoteId) {
             if(isRoom) {
                 ClassNote.appendRoomClassNote(dataArr, isMore ? isMore : false);
             }else{
-                ClassNote.appendClassNote(dataArr, isMore ? isMore : false);
+                ClassNote.appendClassNote(dataArr, isMore ? isMore : false,dataList.totalRecords || 0);
             }
         }
     });
@@ -147,6 +147,10 @@ ClassNote.appendRoomClassNote = function (dataArr, isMore) {
         }
         html.push(ClassNote.getRoomClassNoteHtml(dataArr[i]));
     }
+    if(dataArr.length == 0){
+        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
+    }
+    $('#classNote_panel .myloading').remove();//删除
     if (isMore) {
         $("#classNote_panel").append(html.join(""));
     } else {
@@ -197,11 +201,12 @@ ClassNote.appendPushRoomClassNote = function (data) {
  * @param dataArr
  * @param isMore
  */
-ClassNote.appendClassNote = function(dataArr, isMore){
+ClassNote.appendClassNote = function(dataArr, isMore,restSize){
     var html = [];
     for (var i = 0, lenI = !dataArr ? 0 : dataArr.length; i < lenI; i++) {
         html.push(ClassNote.getClassNoteHtml(dataArr[i]));
     }
+    $('#classNodeContainer .myloading').remove();//删除
     if (isMore) {
         $("#classNodeContainer").append(html.join(""));
     } else {
@@ -209,6 +214,11 @@ ClassNote.appendClassNote = function(dataArr, isMore){
     }
     for (var i = 0, lenI = !ClassNote.classNoteInfo ? 0 : ClassNote.classNoteInfo.length; i < lenI; i++) {
         ClassNote.setOtherClassNoteHtml(ClassNote.classNoteInfo[i]);
+    }
+    if(dataArr.length == 0 || restSize < 30){
+        html.push('<div class="myloading"><span>没有最新数据了</span></div>');
+        $("#classNodeContainer").append(html.join(""));
+        return;
     }
 };
 /**
@@ -239,7 +249,8 @@ ClassNote.getRoomClassNoteHtml = function (data) {
                 isHideData ? dimHtml : dataDataTemp.upordown == "up" ? "多" : "空",
                 isHideData ? dimHtml : dataDataTemp.open || "",
                 isHideData ? dimHtml : dataDataTemp.profit || "",
-                isHideData ? dimHtml : dataDataTemp.loss || ""
+                isHideData ? dimHtml : dataDataTemp.loss || "",
+                isHideData ? dimHtml : dataDataTemp.drag2 || ""
             ));
             if (dataDataTemp.description) {
                 dataHtml.push(Room.formatHtml("classNote_data2", isHideData ? Room.formatHtml("classNote_dim2") : dataDataTemp.description));
@@ -321,7 +332,9 @@ ClassNote.getClassNoteHtml = function(data,isPush){
                     isHideData ? '****<i class="txt-mban"></i>'
                         : dataDataTemp.profit || "",
                     isHideData ? '****<i class="txt-mban"></i>'
-                        : dataDataTemp.loss || ""
+                        : dataDataTemp.loss || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : dataDataTemp.drag2 || ""
                 ));
                 if (dataDataTemp.description) {
                     dataHtml.push(ClassNote.formatHtml("dataTableRemark",
@@ -372,7 +385,9 @@ ClassNote.getClassNoteHtml = function(data,isPush){
                     isHideData ? '****<i class="txt-mban"></i>'
                         : row.profit || "",
                     isHideData ? '****<i class="txt-mban"></i>'
-                        : row.loss || ""
+                        : row.loss || "",
+                    isHideData ? '****<i class="txt-mban"></i>'
+                        : row.drag2 || ""
                 ));
                 if (row.description) {
                     dataHtml.push(ClassNote.formatHtml("dataTableRemark",
@@ -435,7 +450,8 @@ ClassNote.setOtherClassNoteHtml = function(data,isPush){
             upOrDown[dataDataTemp.upordown],
             isHideData ? '****<i class="txt-mban repeatx"></i>' : dataDataTemp.open || "",
             isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.profit || "",
-            isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.loss || ""
+            isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.loss || "",
+            isHideData ? '****<i class="txt-mban"></i>' : dataDataTemp.drag2 || ""
         ));
         if (dataDataTemp.description) {
             dataHtml.push(ClassNote.formatHtml("dataTableRemark",
@@ -570,7 +586,7 @@ ClassNote.setViewDataHtml = function (dom, data) {
             if (Util.isBlank(row.description)) {
                 hideDesc = ' style="display:none;"';
             }
-            tradeStrategyHdDetailHtml.push(Util.format(tradeStrategyHdDetail, row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+            tradeStrategyHdDetailHtml.push(Util.format(tradeStrategyHdDetail, row.name, upOrDown[row.upordown], row.open, row.profit, row.loss,row.drag2 || '', row.description, '', hideDesc));
         });
         dom.parent().children('table').remove();
         dom.parent().children('.instr-txt').remove();
@@ -588,7 +604,7 @@ ClassNote.setViewDataHtml = function (dom, data) {
             if (Util.isBlank(row.description)) {
                 hideDesc = ' style="display:none;"';
             }
-            tradeStrategySupportHtml.push(Util.format(tradeStrategySupport, row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+            tradeStrategySupportHtml.push(Util.format(tradeStrategySupport, row.name, upOrDown[row.upordown], row.open, row.profit, row.loss,row.drag2 || '', row.description, '', hideDesc));
         });
         var hdBoxDom = dom.parent('div.hdbox').children('div.showpart').children('div.hdbox2');
         hdBoxDom.children('table').remove();
@@ -645,21 +661,23 @@ ClassNote.formatViewDataHtml = function (region) {
             formatHtmlArr.push('<div class="hdbox2 clearfix">');
             formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
             formatHtmlArr.push('        <tr>');
-            formatHtmlArr.push('            <th>品种</th>');
-            formatHtmlArr.push('            <th width="21%">方向</th>');
-            formatHtmlArr.push('            <th width="21%">进场点位</th>');
-            formatHtmlArr.push('            <th width="21%">止盈</th>');
-            formatHtmlArr.push('            <th width="21%">止损</th>');
+            formatHtmlArr.push('            <th>产品</th>');
+            formatHtmlArr.push('            <th>方向</th>');
+            formatHtmlArr.push('            <th>第一支撑</th>');
+            formatHtmlArr.push('            <th>第二支撑</th>');
+            formatHtmlArr.push('            <th>第一阻力</th>');
+            formatHtmlArr.push('            <th>第二阻力</th>');
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('        <tr>');
             formatHtmlArr.push('            <td>{0}</td>');//品种
             formatHtmlArr.push('            <td>{1}</td>');//涨跌
-            formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
-            formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
-            formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{2}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{3}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{4}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{5}</span></td>');
             formatHtmlArr.push('        </tr>');
-            formatHtmlArr.push('        <tr{7}>');
-            formatHtmlArr.push('            <td colspan="5" class="explain">说明：<span class="{6}">{5}</span></td>');
+            formatHtmlArr.push('        <tr{8}>');
+            formatHtmlArr.push('            <td colspan="5" class="explain">说明：<span class="{7}">{6}</span></td>');
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('    </table>');
             formatHtmlArr.push('</div>');
@@ -688,25 +706,27 @@ ClassNote.formatViewDataHtml = function (region) {
             formatHtmlArr.push('<table class="tb-default">');
             formatHtmlArr.push('    <tbody>');
             formatHtmlArr.push('        <tr>');
-            formatHtmlArr.push('            <th>品种</th>');
-            formatHtmlArr.push('            <th width="21%">方向</th>');
-            formatHtmlArr.push('            <th width="21%">进场点位</th>');
-            formatHtmlArr.push('            <th width="21%">止盈</th>');
-            formatHtmlArr.push('            <th width="21%">止损</th>');
+            formatHtmlArr.push('            <th>产品</th>');
+            formatHtmlArr.push('            <th>方向</th>');
+            formatHtmlArr.push('            <th>第一支撑</th>');
+            formatHtmlArr.push('            <th>第二支撑</th>');
+            formatHtmlArr.push('            <th>第一阻力</th>');
+            formatHtmlArr.push('            <th>第二阻力</th>');
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('        <tr>');
             formatHtmlArr.push('            <td>{0}</td>');
             formatHtmlArr.push('            <td>{1}</td>');
-            formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
-            formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
-            formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{2}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{3}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{4}</span></td>');
+            formatHtmlArr.push('            <td><span class="{7}">{5}</span></td>');
             formatHtmlArr.push('        </tr>');
             formatHtmlArr.push('    </tbody>');
             formatHtmlArr.push('</table>');
             //formatHtmlArr.push('<div class="details-item-list sildeup">');
             formatHtmlArr.push('<div class="instr-txt">');
             formatHtmlArr.push('<label>说明</label>');
-            formatHtmlArr.push('<span class="{6}">{5}</span>');
+            formatHtmlArr.push('<span class="{7}">{6}</span>');
             formatHtmlArr.push('</div>');
             //formatHtmlArr.push('</div>');
             break;

@@ -233,7 +233,7 @@ var studioChatMb={
             for(var i in data){
                 row = data[i];
                 //TODO, this need to be deleted after socket released next time.
-                row.userType = common.parseInt(row.userType);
+                row.userType = parseInt(row.userType);
                 if(studioChatMb.whTalk.enable && row.userType==3){
                     studioChatMb.whTalk.setCSOnline(row.userId, true);
                 }
@@ -272,7 +272,7 @@ var studioChatMb={
                 case 'onlineNum':
                     var data=result.data,userInfoTmp=data.onlineUserInfo;
                     //TODO, this need to be deleted after socket released next time.
-                    userInfoTmp.userType = common.parseInt(userInfoTmp.userType);
+                    userInfoTmp.userType = parseInt(userInfoTmp.userType);
                     if(userInfoTmp.userType==3 && studioChatMb.whTalk.enable){
                         studioChatMb.whTalk.setCSOnline(userInfoTmp.userId, data.online);
                     }
@@ -960,7 +960,7 @@ var studioChatMb={
          * 打开视频新窗口
          * */
         popVideoWindow : function(){
-            studioChatMb.video.player.clear($("#tVideoDiv"));
+            //studioChatMb.video.player.clear($("#tVideoDiv"));
             $("#videoPop").hide();
             $("#videoPopPlay").show();
             var $panel = $("#tVideoDiv");

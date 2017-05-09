@@ -307,8 +307,8 @@ var studioMbLogin = {
             if(common.isValid(studioChatMb.courseTick.course)) {
                 $('#loginForm [name="courseId"]').val(studioChatMb.courseTick.course.courseId||'');
                 $('#loginForm [name="courseName"]').val(studioChatMb.courseTick.course.courseName);
-                $('#loginForm [name="teacherId"]').val(studioMbPop.courseTick.course.lecturerId||'');
-                $('#loginForm [name="teacherName"]').val(studioMbPop.courseTick.course.lecturer||'');
+                $('#loginForm [name="teacherId"]').val(studioChatMb.courseTick.course.lecturerId||'');
+                $('#loginForm [name="teacherName"]').val(studioChatMb.courseTick.course.lecturer||'');
             }
             common.getJson("/login",$("#loginForm").serialize(),function(result){
                 if(!result.isOK){
@@ -324,7 +324,7 @@ var studioMbLogin = {
                         LoginAuto.setAutoLogin($("#loginForm_al").prop("checked"));
                         studioMbPop.reload();
                     }
-                    chatAnalyze.setUTM(false, $.extend({operationType:4}, studioMbPop.userInfo, studioMbPop.courseTick.course));
+                    chatAnalyze.setUTM(false, $.extend({operationType:4}, studioMbPop.userInfo, studioChatMb.courseTick.course));
                 }
             },true,function(){
                 studioMbLogin.resetFormInput();

@@ -204,7 +204,7 @@ router.get('/', function(req, res) {
             });
         return;
     } else if (chatUser && chatUser.isLogin) {
-        clientGroup = chatUser.clientGroup;
+        clientGroup = chatUser.clientGroup||constant.clientGroup.register;
     } else {
         if (!chatUser) {
             chatUser = {};
@@ -750,6 +750,7 @@ router.post('/login', function(req, res) {
                                             accountNo: accountNo,
                                             thirdId: null
                                         };
+                                        userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
                                                 if (result && result.isOK) {
@@ -847,6 +848,7 @@ router.post('/login', function(req, res) {
                                                 accountNo: accountNo,
                                                 thirdId: thirdId
                                             };
+                                            userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                             studioService.studioRegister(userInfo, clientGroup,
                                                 function(result) {
                                                     if (result.isOK) {
@@ -1059,6 +1061,7 @@ router.get('/getArticleList', function(req, res) {
                                     remarkRow.open = '****';
                                     remarkRow.profit = '****';
                                     remarkRow.loss = '****';
+                                    remarkRow.drag2 = '****';
                                     remarkRow.description = '****';
                                 }
                                 /*if (detailInfo.tag == 'trading_strategy' && strategyIsNotAuth == 1) {
@@ -3171,12 +3174,6 @@ router.post('/rob', function(req, res) {
 
     /*如果期数小于0,直接返回*/
     if (currentPariod < 0) {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
-    }
-
-    /*如果非注册用户,直接返回*/
-    if (userInfo.clientGroup != "register") {
         res.json({ result: 0, money: 0, msg: "" });
         return;
     }
