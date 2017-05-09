@@ -14,7 +14,7 @@ let apiAuth = new APIAuth(config.apiAuth.appId, config.apiAuth.appSecret);
  * @returns string
  */
 let addCompanyIdToPath = path => {
-    let companIdParam = `companyId=${config.companyId}&systemCategory=${config.companyId}`;
+    let companIdParam = `companyId=${config.companyId}`;
     let params = path.split("?")[1];
     path += params ? "&" + companIdParam : "?" + companIdParam;
     return path;
