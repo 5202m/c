@@ -92,7 +92,7 @@ var baseApiService = {
                 }
                 deferred.resolve(result);
             }).catch((e) => {
-                logger.error("getArticleInfo>>>error:" + err);
+                logger.error("getArticleInfo>>>error:" + e);
                 if (callback) {
                     callback(null);
                 }
