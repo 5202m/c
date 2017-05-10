@@ -888,7 +888,7 @@ var chat = {
                 mainDiv += '<a href="javascript:void(0);" class="d1" t="0"><b></b><span>@TA</span></a>';
                 cnt++;
             }
-            if (gIdDom.attr("aw") == "true" && common.containSplitStr(gIdDom.attr("awr"), userType)) {
+            if (gIdDom.attr("aw") == "true" && common.containSplitStr(gIdDom.attr("awr"), userType) && userType != 1) {
                 mainDiv += '<a href="javascript:void(0);"' + (cnt == 0 ? ' class="d1"' : "") + ' t="1"><b></b><span>私聊</span></a>';
                 cnt++;
             }
