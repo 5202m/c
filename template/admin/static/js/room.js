@@ -1008,11 +1008,7 @@ var room = {
 
         $('.right-teacher .teacher .open-video').click(function() {
             $('.video').removeClass('dn');
-<<<<<<< Updated upstream
             room.setVideo();
-=======
-			      room.setVideo();
->>>>>>> Stashed changes
         });
         $(".video .video-close").click(function() {
             $('.video').addClass('dn');
