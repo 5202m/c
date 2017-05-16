@@ -27,8 +27,8 @@ var noticeJS = {
       console.log('disconnect');
     });
     //通知信息 5星等级数据 及 点评数据
-    this.socket.on('financeData', function(result) {console.log(result);
-      if (!result || (!result.finance && result.review)) { //非4 5星 非评论数据不显示
+    this.socket.on('financeData', function(result) {
+      if (!result && !result.finance && result.review) { //非4 5星 非评论数据不显示
         return;
       }
       var finance = result.finance;
@@ -42,7 +42,9 @@ var noticeJS = {
       var lastValue = common.isValid(finance.lastValue) && $.isNumeric(finance.lastValue) ? Number(finance.lastValue.toString().match(/^\d+(?:\.\d{0,2})?/)) : finance.lastValue;
       var value = common.isValid(finance.value) && $.isNumeric(finance.value) ? Number(finance.value.toString().match(/^\d+(?:\.\d{0,2})?/)) : finance.value;
       dataHtml = dataFormatHtml.formatStr(finance.name, predictValue, lastValue, value, starHtml, profitHtml, finance.basicIndexId, finance.date);
-      $('#push_top_id').prepend(dataHtml);
+      if($('#push_top_id .push-ss-tk-info[dname="'+finance.name+'"][bid="'+finance.basicIndexId+'"][date="'+finance.date+'"]').size() == 0) {
+        $('#push_top_id').prepend(dataHtml);
+      }
       noticeJS.blinkTip();
     });
   },
@@ -59,25 +61,24 @@ var noticeJS = {
       params.name = $(this).attr('dname');
       params.date = $(this).attr('date');
       params.comment = $(this).prev().val();
-      noticeJS.setReview(params, $(this).parent().parent());
+      noticeJS.setReview(params);
     });
   },
   /**
    * 提交点评
    * @param params
-   * @param obj
    */
-  setReview: function(params, obj){
+  setReview: function(params){
     if(common.isBlank(params.comment)){
       room.showTipBox("点评内容为空！");
-    }else{console.log('test');
-      common.getJson('/admin/saveFinanceDataReview', {data:JSON.stringify(params)}, function(data){console.log(data);
-        var result = data.data;
-        if(data.result == 0 && result.isOK){
+    }else{
+      common.getJson('/admin/saveFinanceDataReview', {data:JSON.stringify(params)}, function(data){
+        if(data.isOK){
           room.showTipBox("点评成功！");
-          $(obj).remove();
+          $('#push_top_id .push-ss-tk-info[dname="'+params.name+'"][bid="'+params.bid+'"][date="'+params.date+'"]').remove()
+          noticeJS.clearTip();
         }else{
-          room.showTipBox(data.errmsg || result.msg);
+          room.showTipBox(data.msg);
         }
       });
     }
@@ -91,7 +92,7 @@ var noticeJS = {
     var html = [];
     switch (region) {
       case 'financeData':
-        html.push('<section class="push-ss-tk-info clearfix">');
+        html.push('<section class="push-ss-tk-info clearfix" dname="{0}" bid="{6}" date="{7}">');
         html.push('    <div style="text-align:justify;">');
         html.push('    {0}');
         html.push('    </div>');
@@ -263,6 +264,7 @@ var noticeJS = {
   clearTip : function(){
     if($('#push_top_id .push-ss-tk-info').size() == 0) {
       $('#pushNotice').text('公布值提醒');
+      $(".push-top-box").addClass('dn');
       clearInterval(noticeJS.intervalObj);
     }
   }

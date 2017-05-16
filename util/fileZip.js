@@ -260,7 +260,8 @@ var fileList = [
         "out": "\\template\\admin\\static\\js\\room.min.js",
         "marge": false,
         "in": ["\\template\\admin\\static\\js\\room.js",
-            "\\template\\base\\util\\chatAnalyze.js"
+            "\\template\\base\\util\\chatAnalyze.js",
+            "\\template\\admin\\static\\js\\notice.js"
         ]
     },
 
