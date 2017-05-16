@@ -203,7 +203,7 @@ router.get('/', function(req, res) {
             });
         return;
     } else if (chatUser && chatUser.isLogin) {
-        clientGroup = chatUser.clientGroup||constant.clientGroup.register;
+        clientGroup = chatUser.clientGroup || constant.clientGroup.register;
     } else {
         if (!chatUser) {
             chatUser = {};
@@ -482,7 +482,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
-            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui ) {
+            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui) {
                 res.render(
                     common.renderPath(req, constant.tempPlatform.webui, "room"),
                     viewDataObj);
@@ -720,7 +720,7 @@ router.post('/login', function(req, res) {
                                     cookieId: cookieId,
                                     clientGroup: snUser.clientGroup,
                                     roomName: snUser.roomName || roomName,
-                                    roomId: snUser.groupId  || roomId,
+                                    roomId: snUser.groupId || roomId,
                                     platform: '',
                                     userAgent: req.headers['user-agent'],
                                     sessionId: req.sessionID,
@@ -747,7 +747,7 @@ router.post('/login', function(req, res) {
                                             accountNo: accountNo,
                                             thirdId: null
                                         };
-                                        userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
+                                        userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
                                                 if (result && result.isOK) {
@@ -845,7 +845,7 @@ router.post('/login', function(req, res) {
                                                 accountNo: accountNo,
                                                 thirdId: thirdId
                                             };
-                                            userInfo.item = 'register_reg';//使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
+                                            userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                             studioService.studioRegister(userInfo, clientGroup,
                                                 function(result) {
                                                     if (result.isOK) {
@@ -2457,9 +2457,9 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            if(result) {
+            if (result) {
                 res.json(result);
-            }else{
+            } else {
                 res.json(errorMessage.code_4020);
             }
         });
@@ -2961,7 +2961,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
@@ -3264,6 +3264,28 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
             res.json({ num: result });
         }
     });
+});
+router.get('/getRoomOnlineList', function(req, res) {
+    let params = req.query;
+    chatService.getRoomOnlineList(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("getRoomOnlineList Error:", e);
+            res.json(null);
+        });
+});
+
+
+router.get('/loadMsg', function(req, res) {
+    let params = req.query;
+    messageService.loadMsg(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("loadMsg Error:", e);
+            res.json(null);
+        });
 });
 
 module.exports = router;
