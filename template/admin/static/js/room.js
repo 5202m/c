@@ -37,6 +37,7 @@ var room = {
         this.setEvent();
         this.getOnlineUserList();
         this.getRoomChatMessageList();
+        noticeJS.init();
     },
     /**
      * 设置视频
@@ -79,7 +80,7 @@ var room = {
             $(".sender").html(fromUser.nickname);
             var talkContent = data.content.value;
             if (data.content.msgType == room.msgType.img) {
-                talkContent = '<img src="' + data.content.value + '" />';
+                talkContent = '<a href="/getBigImg?publishTime='+fromUser.publishTime+'&amp;userId='+fromUser.userId+'" data-lightbox="dialog-img"><img src="' + data.content.value + '" /></a>';
             }
             $(".xcont").html(talkContent);
             $("#talk_top_id").prepend('<section class="ss-tk-info clearfix" tm="' + fromUser.publishTime + '"><label><strong>' + fromUser.nickname + '</strong>：</label><span style="margin-left:5px;text-align:justify;">' + talkContent + '</span><button type="button">关闭</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '" ' + (hasWh ? '' : 'style="display:none;"') + '" cg="' + fromUser.clientGroup + '" nk="' + fromUser.nickname + '" iswh="true">私聊</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '">回复</button></section>');
@@ -829,7 +830,7 @@ var room = {
             $(".top-box").addClass('dn');
         });
         $("#show_top_btn").click(function() {
-            $(".top-box").toggleClass('dn');
+            $(".top-box").toggleClass('dn').draggable({ containment: ".main", scroll: false });
         });
         //点击document,关闭dom
         $(document).click(function(e) {
@@ -970,6 +971,9 @@ var room = {
                     } else if (room.userInfo.userType == 3) {
                         dasData.clientGroup = 'cs'; //return "客服";
                     }
+                    if($('#talk_top_id .ss-tk-info').size() == 0 && $('.top-box').is(':visible')){
+                        $('.top-box').addClass('dn');//没有@ 消息时，自动关闭@消息框
+                    }
                     chatAnalyze.setUTM(false, dasData);
                 }
                 return false;
@@ -1004,7 +1008,11 @@ var room = {
 
         $('.right-teacher .teacher .open-video').click(function() {
             $('.video').removeClass('dn');
+<<<<<<< Updated upstream
             room.setVideo();
+=======
+			      room.setVideo();
+>>>>>>> Stashed changes
         });
         $(".video .video-close").click(function() {
             $('.video').addClass('dn');
@@ -1094,6 +1102,14 @@ var room = {
         $('#wh_close').click(function() {
             $('.wh_tab_history_div').addClass('dn');
             return false;
+        });
+        //公布值记录框显示隐藏事件
+        $("#close-push-top-box").click(function() {
+            $(".push-top-box").addClass('dn');
+        });
+        $("#pushNotice").click(function() {
+            $(".push-top-box").toggleClass('dn').draggable({ containment: ".main", scroll: false });
+            noticeJS.clearTip();
         });
     },
 

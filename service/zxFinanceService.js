@@ -37,6 +37,40 @@ let zxFinanceService = {
             deferred.reject(e);
         });
         return deferred.promise;
+    },
+    /**
+     * 保存点评内容
+     * @param params
+     * @param callback
+     * @returns {*}
+     */
+    saveFinanceDataReview: function(params, callback){
+        let deferred = new Deferred();
+        let path = "/zxFinanceData/saveFinanceDataReview";
+        let data = {
+            name : params.name,
+            bid : params.bid,
+            date : params.date,
+            userId : params.userId,
+            userName : params.userName,
+            avatar : params.avatar,
+            comment : params.comment,
+            ip : params.ip
+        };
+
+        liveRoomAPIService.post(path, data).then((result) => {
+            if (callback) {
+                callback(result);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("saveFinanceDataReview! >>saveFinanceDataReview:", e);
+            if (callback) {
+                callback(null);
+            }
+            deferred.reject(e);
+        });
+        return deferred.promise;
     }
 };
 
