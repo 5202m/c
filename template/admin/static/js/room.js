@@ -1108,7 +1108,6 @@ var room = {
         });
         $("#pushNotice").click(function() {
             $(".push-top-box").toggleClass('dn').draggable({ containment: ".main", scroll: false });
-            noticeJS.clearTip();
         });
     },
 
