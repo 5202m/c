@@ -80,7 +80,7 @@ var room = {
             $(".sender").html(fromUser.nickname);
             var talkContent = data.content.value;
             if (data.content.msgType == room.msgType.img) {
-                talkContent = '<a href="/getBigImg?publishTime='+fromUser.publishTime+'&amp;userId='+fromUser.userId+'" data-lightbox="dialog-img"><img src="' + data.content.value + '" /></a>';
+                talkContent = '<a href="/admin/getBigImg?publishTime='+fromUser.publishTime+'&amp;userId='+fromUser.userId+'" data-lightbox="dialog-img"><img src="' + data.content.value + '" /></a>';
             }
             $(".xcont").html(talkContent);
             $("#talk_top_id").prepend('<section class="ss-tk-info clearfix" tm="' + fromUser.publishTime + '"><label><strong>' + fromUser.nickname + '</strong>：</label><span style="margin-left:5px;text-align:justify;">' + talkContent + '</span><button type="button">关闭</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '" ' + (hasWh ? '' : 'style="display:none;"') + '" cg="' + fromUser.clientGroup + '" nk="' + fromUser.nickname + '" iswh="true">私聊</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '">回复</button></section>');
@@ -101,6 +101,9 @@ var room = {
                     $(".mymsg .replybtn[tm=" + tm + "]").parent().hide();
                     if ($("#contentText .txt_dia[tm=" + tm + "]").length > 0) {
                         $("#contentText").html("");
+                    }
+                    if($('#talk_top_id .ss-tk-info').size() == 0 && $('.top-box').is(':visible')){
+                        $('.top-box').addClass('dn');//没有@ 消息时，自动关闭@消息框
                     }
                 }
             });
