@@ -594,9 +594,9 @@ var Tool = {
                 return;
             }
             config.courseTime = -3;
-
-            var groupId = config.userInfo.groupId;
             var groupType = config.userInfo.groupType;
+            var curGroupId = config.userInfo.groupId;
+            var groupId = curGroupId == null ? Data.appDefaultGroupId : curGroupId;
 
             $.getJSON(config.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
                 if (data.result == 0) {

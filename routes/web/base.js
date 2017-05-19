@@ -288,6 +288,7 @@ router.get('/', function(req, res) {
 //转到页面
 function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
     res) {
+
     studioService.getIndexLoadData(chatUser, groupId, true,
         (!isMobile || (isMobile && common.isValid(groupId))), chatUser.isLogin,
         function(data) {
@@ -479,6 +480,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             // } else {
             //     viewDataObj.isRedPacket = false;
             // }
+            viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
             viewDataObj.isRedPacket = config.isRedPacket;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
@@ -3168,7 +3170,7 @@ router.post('/rob', function(req, res) {
     /*如果整点且真实客户-未激活或者模拟用户,直接返回*/
     if (1 == isDepart) {
         logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
-        if (userInfo.clientGroup != "active" && userInfo.clientGroup != "simulate") {
+        if (userInfo.clientGroup == "active" || userInfo.clientGroup == "register") {
             res.json({ result: 0, money: 0, msg: "" });
             return;
         }
