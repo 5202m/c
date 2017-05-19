@@ -302,20 +302,22 @@ var Tool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000, //红包周期5分钟
+            cycleTime: 300000 * 2, //红包周期10分钟
             stayTime: 5000, //红包停留时间5秒
-            startTime: 55740001, //15:30
-            endTime: 62940001, //17:30
+            startTime: 30720000, //08:30
+            endTime: 84600000, //23:30
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
-                /* 15:30——17:30*/
-                { start: 55740001, userId:"lin_gw24k", userName:"林意轩",  wechat:"lin_gw24k", wechatImg:"/theme1/img/yx_lin.png"}
+                /*08:32*/
+                { start: 30720000, userId: "gw_yang24k", userName: "杨多多", wechat: "gw_yang24k", wechatImg: "/theme2/img/dd_yang.png" },
+                /*13:31*/
+                { start: 48600001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme2/img/yx_lin.png" },
+                /*19:31*/
+                { start: 70140001, userId: "chan24k2", userName: "陈丞", wechat: "chan24k2", wechatImg: "/theme2/img/cheng_chen.png" },
             ],
-
             redPacketPopFlag: true, //红包弹出标记
             miniClose: false, //mini窗关闭标识，手动关闭后，当次不再弹出
             opened: false, //是否已经点击抢红包标记
-
             times: 0, //次数
             minutes: 0, //分钟数
             seconds: 0, //秒数
@@ -352,8 +354,7 @@ var Tool = {
             //红包视图-右侧小窗
             $("#redPacket_mini").bind("view", function() {
                 var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getCurrentPariod();
-                $("#redPacket_mini [rp='timesLabel']").text(currentPariod);
+                $("#redPacket_mini [rp='timesLabel']").text(config.timesLabel);
                 if (Tool.RedPacket.isStayTime()) {
                     $("#redPacket_miniWait").hide();
                     $("#redPacket_miniRob").show();
@@ -385,8 +386,6 @@ var Tool = {
             //红包视图-主界面
             $("#redPacket_normal").bind("view", function() {
                 var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getCurrentPariod();
-                $("#timesLabel").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
                 });
@@ -458,37 +457,12 @@ var Tool = {
                 }
             });
 
-        },
+            //登录
+            $("#redPacket_loginBtn").bind("click", function() {
+                $("#redPacket_noLogin").hide();
+                Login.load();
+            });
 
-        /**
-         * 获取当前红包期数
-         * @returns {number}
-         */
-        getCurrentPariod: function() {
-            var now = new Date();
-            var curHours = now.getHours();
-            var curMinutes = now.getMinutes();
-            if (curHours < 10) {
-                curHours = '0' + curHours;
-            }
-            if (curMinutes < 10) {
-                curMinutes = '0' + curMinutes;
-            }
-            var curHMDate = curHours + ":" + curMinutes;
-            var redPacketPeriods = 0;
-            try {
-                redPacketPeriods = Data.redPacketLastPeriods.split(',');
-            } catch (e) {
-
-            }
-            var currentPariod = 1;
-            for (var i = 0; i < redPacketPeriods.length; i++) {
-                if (curHMDate < redPacketPeriods[i]) {
-                    currentPariod = i + 1;
-                    break;
-                }
-            }
-            return currentPariod;
         },
 
         /**显示视图*/
@@ -584,8 +558,8 @@ var Tool = {
             }
             this.isRedPacketTime(function(isOK) {
                 if (isOK) {
-                    var currentPariod = Tool.RedPacket.getCurrentPariod();
-                    config.timesLabel = currentPariod;
+                    config.times = Math.ceil((time - config.startTime) / config.cycleTime);
+                    config.timesLabel = config.times;
                     var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
                     config.minutes = Math.floor(countDown / 60000);
                     config.seconds = Math.floor(countDown % 60000 / 1000);
@@ -699,9 +673,9 @@ var Tool = {
          * 获取分析是信息
          */
         getAnalyst: function() {
-            var today = new Date(Tool.serverTime);
+            var today = new Date(Data.serverTime);
             today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Tool.serverTime - today;
+            var time = Data.serverTime - today;
             var analysts = Tool.RedPacket.config.analysts;
             var analystTmp = null;
             for (var i = analysts.length - 1; i >= 0; i--) {

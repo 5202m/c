@@ -25,6 +25,20 @@ class ChatService {
         return defer.promise;
     }
 
+    getRoomOnlineList(params) {
+        let defer = new Deferred();
+        let path = "/chat/getRoomOnlineList";
+        path += "?groupId=" + params.groupId;
+        path += "&groupType=" + params.groupType;
+        liveRoomAPIService.get(path).then(function(data) {
+            defer.resolve(data);
+        }, function(err) {
+            logger.error("getRoomOnlineList! >>getRoomOnlineList:", err);
+            defer.reject(err);
+        });
+        return defer.promise;
+    }
+
     acceptMsg(data) {
         let defer = new Deferred();
         let path = "/chat/acceptMsg";

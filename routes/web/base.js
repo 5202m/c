@@ -476,12 +476,13 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 };
                 visitorService.saveVisitorRecord("login", vrRow);
             }
-            //是否炒金培训班
-            if (snUser.groupId == config.cjTrainRoom) {
-                viewDataObj.isRedPacket = config.isRedPacket;
-            } else {
-                viewDataObj.isRedPacket = false;
-            }
+            // //是否炒金培训班
+            // if (snUser.groupId == config.cjTrainRoom) {
+            //     viewDataObj.isRedPacket = config.isRedPacket;
+            // } else {
+            //     viewDataObj.isRedPacket = false;
+            // }
+            viewDataObj.isRedPacket = config.isRedPacket;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
@@ -3139,6 +3140,7 @@ router.get("/geetest/register", function(req, res) {
 });
 
 router.post('/rob', function(req, res) {
+    logger.info("redPacket<<rob begin！");
     //没有登录
     var userInfo = req.session.studioUserInfo;
     if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
@@ -3151,51 +3153,54 @@ router.post('/rob', function(req, res) {
         res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
         return;
     }
+    var start = 30600000; //8:30
+    var cycle = 300000 * 2; //周期10分钟
     var now = new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var curHours = now.getHours();
-    var curMinutes = now.getMinutes();
-    if (curHours < 10) {
-        curHours = '0' + curHours;
+    var time = now.getTime() - today;
+    //确定期数
+    var periods = parseInt((time - start) / cycle);
+    var isDepart = 0;
+    //获取整点时间
+    var temp = (time - ((time - start) % cycle));
+    var curTime = temp % 3600000;
+    if (0 == curTime) {
+        isDepart = 1;
     }
-    if (curMinutes < 10) {
-        curMinutes = '0' + curMinutes;
-    }
-    var curHMDate = curHours + ":" + curMinutes;
-    var pariods = constant.periods;
-    var currentPariod = 1; //默认从第一期开始
-    for (var i = 0; i < pariods.length; i++) {
-        if (curHMDate < pariods[i]) {
-            currentPariod = i + 1;
-            break;
-        }
-    }
-
     var robParams = {
-        ac_periods: "20170502",
+        ac_periods: "20170503",
         phone: userInfo.mobilePhone.replace("86-", ""),
-        nper: currentPariod
+        nper: periods,
+        is_depart: isDepart
     };
 
-    /*如果期数小于0,直接返回*/
-    if (currentPariod < 0) {
+    if (periods < 0) {
         res.json({ result: 0, money: 0, msg: "" });
         return;
+    }
+
+    /*如果整点且真实客户-未激活或者模拟用户,直接返回*/
+    if (1 == isDepart) {
+        logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
+        if (userInfo.clientGroup != "active" && userInfo.clientGroup != "simulate") {
+            res.json({ result: 0, money: 0, msg: "" });
+            return;
+        }
     }
 
     cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
         if (err) {
             logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && 0 == currentPariod) {
+        } else if (result != true && 0 == periods) {
             res.json({ result: 0, money: 0, msg: "" });
-        } else if (common.isBlank(result) || result != currentPariod) {
+        } else if (result != true && result != periods) {
             var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
-            cacheClient.set("redPacket_" + robParams.phone, currentPariod);
+            cacheClient.set("redPacket_" + robParams.phone, periods);
             cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170502/draw'), form: robParams }, function(error, response, data) {
+            request.post({ url: (config.pmOAPath + '/lottery/activity20170503/draw'), form: robParams }, function(error, response, data) {
                 var result = { result: 0, money: 0, msg: "" };
                 if (data) {
-                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
+                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
                     try {
                         data = JSON.parse(data);
                         if (data.infoNo == 1) {
@@ -3215,6 +3220,7 @@ router.post('/rob', function(req, res) {
             res.json({ result: 0, money: 0, msg: "" });
         }
     });
+    logger.info("redPacket<<rob end！");
 });
 
 /**
@@ -3278,6 +3284,28 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
             res.json({ num: result });
         }
     });
+});
+router.get('/getRoomOnlineList', function(req, res) {
+    let params = req.query;
+    chatService.getRoomOnlineList(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("getRoomOnlineList Error:", e);
+            res.json(null);
+        });
+});
+
+
+router.get('/loadMsg', function(req, res) {
+    let params = req.query;
+    messageService.loadMsg(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("loadMsg Error:", e);
+            res.json(null);
+        });
 });
 
 let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSecret);

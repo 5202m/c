@@ -35,6 +35,9 @@ var room = {
     init: function() {
         this.setSocket();
         this.setEvent();
+        this.getOnlineUserList();
+        this.getRoomChatMessageList();
+        noticeJS.init();
     },
     /**
      * 设置视频
@@ -77,7 +80,7 @@ var room = {
             $(".sender").html(fromUser.nickname);
             var talkContent = data.content.value;
             if (data.content.msgType == room.msgType.img) {
-                talkContent = '<img src="' + data.content.value + '" />';
+                talkContent = '<a href="/admin/getBigImg?publishTime='+fromUser.publishTime+'&amp;userId='+fromUser.userId+'" data-lightbox="dialog-img"><img src="' + data.content.value + '" /></a>';
             }
             $(".xcont").html(talkContent);
             $("#talk_top_id").prepend('<section class="ss-tk-info clearfix" tm="' + fromUser.publishTime + '"><label><strong>' + fromUser.nickname + '</strong>：</label><span style="margin-left:5px;text-align:justify;">' + talkContent + '</span><button type="button">关闭</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '" ' + (hasWh ? '' : 'style="display:none;"') + '" cg="' + fromUser.clientGroup + '" nk="' + fromUser.nickname + '" iswh="true">私聊</button><button type="button" uid="' + fromUser.userId + '" utype="' + fromUser.userType + '">回复</button></section>');
@@ -98,6 +101,9 @@ var room = {
                     $(".mymsg .replybtn[tm=" + tm + "]").parent().hide();
                     if ($("#contentText .txt_dia[tm=" + tm + "]").length > 0) {
                         $("#contentText").html("");
+                    }
+                    if($('#talk_top_id .ss-tk-info').size() == 0 && $('.top-box').is(':visible')){
+                        $('.top-box').addClass('dn');//没有@ 消息时，自动关闭@消息框
                     }
                 }
             });
@@ -827,7 +833,7 @@ var room = {
             $(".top-box").addClass('dn');
         });
         $("#show_top_btn").click(function() {
-            $(".top-box").toggleClass('dn');
+            $(".top-box").toggleClass('dn').draggable({ containment: ".main", scroll: false });
         });
         //点击document,关闭dom
         $(document).click(function(e) {
@@ -968,6 +974,9 @@ var room = {
                     } else if (room.userInfo.userType == 3) {
                         dasData.clientGroup = 'cs'; //return "客服";
                     }
+                    if($('#talk_top_id .ss-tk-info').size() == 0 && $('.top-box').is(':visible')){
+                        $('.top-box').addClass('dn');//没有@ 消息时，自动关闭@消息框
+                    }
                     chatAnalyze.setUTM(false, dasData);
                 }
                 return false;
@@ -1002,11 +1011,11 @@ var room = {
 
         $('.right-teacher .teacher .open-video').click(function() {
             $('.video').removeClass('dn');
-			room.setVideo();
+            room.setVideo();
         });
         $(".video .video-close").click(function() {
             $('.video').addClass('dn');
-			$('#yyVideoDiv').empty();
+            $('#yyVideoDiv').empty();
         });
         $('.video').draggable({ handle: ".close-title" }).resizable({ minWidth: 450, minHeight: 420, maxWidth: 1024, maxHeight: 900 });
         $('.video').resize(function(e) {
@@ -1092,6 +1101,13 @@ var room = {
         $('#wh_close').click(function() {
             $('.wh_tab_history_div').addClass('dn');
             return false;
+        });
+        //公布值记录框显示隐藏事件
+        $("#close-push-top-box").click(function() {
+            $(".push-top-box").addClass('dn');
+        });
+        $("#pushNotice").click(function() {
+            $(".push-top-box").toggleClass('dn').draggable({ containment: ".main", scroll: false });
         });
     },
 
@@ -1561,9 +1577,25 @@ var room = {
         } else {
             pHtml = content.value;
         }
-        var html = '<div class="' + cls + '" id="' + fromUser.publishTime + '" isMe="' + isMe + '" utype="' + fromUser.userType + '" mType="' + content.msgType + '" t="header">' +
-            '<a href="javascript:" class="headimg" uId="' + fromUser.userId + '">' + room.getUserAImgCls(fromUser.clientGroup, fromUser.userType, fromUser.avatar) + '</a><i></i>' +
-            '<p><a href="javascript:"  class="' + uName + '">' + nickname + '</a><span class="dtime">' + room.formatPublishTime(fromUser.publishTime) + '</span><a href="javascript:void(0);" class="close"></a>';
+        var html = '<div class="{class}" id="{publishTime}" isMe="{isMe}" utype="{userType}" mType="{msgType}" t="header">' +
+            '<a href="javascript:" class="headimg" uId="{userId}">{userAImg}</a><i></i>' +
+            '<p>' +
+            '<a href="javascript:"  class="{uName}">{nickname}</a>{userMark}' +
+            '<span class="dtime">{formattedPublishTime}</span>' +
+            '<a href="javascript:void(0);" class="close"></a>';
+        html = html.formatStr({
+            class: cls,
+            isMe: isMe,
+            publishTime: fromUser.publishTime,
+            formattedPublishTime: room.formatPublishTime(fromUser.publishTime),
+            userType: fromUser.userType,
+            userId: fromUser.userId,
+            msgType: content.msgType,
+            uName: uName,
+            nickname: nickname,
+            userMark: room.getUserMark(fromUser),
+            userAImg: room.getUserAImgCls(fromUser.clientGroup, fromUser.userType, fromUser.avatar)
+        });
         if (content.status == 0) { //需要审批
             html += '<span class="approve"><input type="checkbox"/><button btnType="1">通过</button><button btnType="2">拒绝</button></span>';
             $("#approveAllHandler").show();
@@ -1579,6 +1611,17 @@ var room = {
         }
         html += '</span></p>' + dialog + '</div>';
         return html;
+    },
+    getUserMark: function(userInfo) {
+        var clientGroup = userInfo.clientGroup || common.clientGroup.visitor;
+        if (["active", "notActive"].indexOf(clientGroup) < 0) {
+            return "";
+        }
+        var mark = clientGroup.slice(0, 1).toUpperCase();
+        return '<em class="mb-cls" title="{clientGroup}">({userMark})</em>'.formatStr({
+            userMark: mark,
+            clientGroup: clientGroup
+        });
     },
     /**
      * 格式链接
@@ -1669,6 +1712,39 @@ var room = {
         } else {
             return '<div class="dialogbtn" style="display:none;" cg="' + clientGroup + '" nk="' + nickname + '" uId="' + userId + '" utype="' + userType + '"></div>';
         }
+    },
+    getOnlineUserList: function() {
+        $.get("/getRoomOnlineList", { groupType: room.userInfo.groupType, groupId: room.userInfo.groupId })
+            .done(this.handleOnlineUserList)
+            .always(function() {
+                room.setUserListClick($("#userListId li a[t=header]"));
+                $("#onLineSizeNum").text($('#userListId li').length);
+                room.setListScroll(".user_box");
+            });
+    },
+    handleOnlineUserList: function(data) {
+        $('#userListId').html("");
+        var row = null,
+            userArr = [];
+        data = room.sortUserList(data);
+        for (var i in data) {
+            row = data[i];
+            if (row.userType == 2) {
+                room.setOnlineUser(row);
+            } else {
+                userArr.push(room.getOnlineUserDom(row).dom); //设置在线用户
+            }
+        }
+        $('#userListId').append(userArr.join(""));
+    },
+    sortUserList: function(list) {
+        var currentUserId = room.userInfo.userId;
+        var sorter = function(userA, userB) {
+            var seqA = userA.userId === currentUserId ? 0 : userA.sequence;
+            var seqB = userB.userId === currentUserId ? 0 : userB.sequence;
+            return seqA > seqB;
+        };
+        return list.sort(sorter);
     },
     /**
      * 提取在线用户的dom
@@ -1811,26 +1887,8 @@ var room = {
             $.post(room.apiUrl + "/message/join", postData, function() {
                 console.log("join ok");
             });
-            $(".img-loading[pf=chatMessage]").show();
         });
-        //进入聊天室加载的在线用户
-        this.socket.on('onlineUserList', function(data, dataSize) {
-            $('#userListId').html("");
-            var row = null,
-                userArr = [];
-            for (var i in data) {
-                row = data[i];
-                if (row.userType == 2) {
-                    room.setOnlineUser(row);
-                } else {
-                    userArr.push(room.getOnlineUserDom(row).dom); //设置在线用户
-                }
-            }
-            $('#userListId').append(userArr.join(""));
-            room.setUserListClick($("#userListId li a[t=header]"));
-            $("#onLineSizeNum").text($('#userListId li').length);
-            room.setListScroll(".user_box");
-        });
+
         //断开连接
         this.socket.on('disconnect', function(e) {
             console.log('disconnect');
@@ -1927,24 +1985,6 @@ var room = {
                     }
             }
         });
-        //信息传输
-        this.socket.on('loadMsg', function(data) {
-            $(".img-loading[pf=chatMessage]").hide();
-            var msgData = data.msgData,
-                isAdd = data.isAdd;
-            if (!isAdd) {
-                $("#content_ul").html("");
-            }
-            if (msgData && $.isArray(msgData)) {
-                msgData.reverse();
-                for (var i in msgData) {
-                    var row = msgData[i];
-                    row.content.status = row.status;
-                    room.formatUserToContent(row);
-                }
-                room.setTalkListScroll(true);
-            }
-        });
         //加载私聊信息
         this.socket.on('loadWhMsg', function(result) {
             var data = result.data;
@@ -1972,6 +2012,27 @@ var room = {
                 }
             }
         });
+    },
+    getRoomChatMessageList: function() {
+        $("#chatMsgContentDiv .img-loading").show();
+        $.get("/loadMsg", {
+                groupId: room.userInfo.groupId,
+                groupType: room.userInfo.groupType,
+                userId: room.userInfo.userId
+            })
+            .done(this.handleRoomChatMessageList);
+    },
+    handleRoomChatMessageList: function(msgData) {
+        $("#chatMsgContentDiv .img-loading").hide();
+        if (msgData && $.isArray(msgData)) {
+            msgData.reverse();
+            for (var i in msgData) {
+                var row = msgData[i];
+                row.content.status = row.status;
+                room.formatUserToContent(row);
+            }
+            room.setTalkListScroll(true);
+        }
     },
     /**
      * 聊天记录数据转换

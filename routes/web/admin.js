@@ -17,6 +17,7 @@ var messageService = require('../../service/messageService');
 var chatService = require('../../service/chatService');
 var syllabusService = require('../../service/syllabusService');
 var visitorService = require('../../service/visitorService');
+var zxFinanceService = require('../../service/zxFinanceService');
 var logger = require('../../resources/logConf').getLogger('admin');
 var versionUtil = require('../../util/versionUtil');
 
@@ -499,6 +500,33 @@ router.get('/getArticleList', function(req, res) {
         } else {
             res.json(null);
         }
+    });
+});
+
+/**
+ * 保存财经数据点评内容
+ */
+router.post('/saveFinanceDataReview', function(req, res){
+    let data = req.body['data'], params = {};
+    let adminUserInfo = req.session.adminUserInfo;
+    if (typeof data == 'string') {
+        try {
+            params = JSON.parse(data);
+        } catch (e) {
+            res.json({isOK:false, msg:'参数错误'});
+            return;
+        }
+    }
+    if(common.isBlank(params.comment) || common.isBlank(params.bid) || common.isBlank(params.name) || common.isBlank(params.date)){
+        res.json({isOK:false, msg:'参数值为空'});
+        return;
+    }
+    params.userId = params.userId || adminUserInfo.userId;
+    params.userName = params.userName || adminUserInfo.nickname;
+    params.avatar = params.avatar || adminUserInfo.avatar;
+    params.ip = common.getClientIp(req);
+    zxFinanceService.saveFinanceDataReview(params, function(result){
+        res.json(result);
     });
 });
 

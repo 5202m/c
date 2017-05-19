@@ -1450,6 +1450,23 @@
 </div>
 
 <%if(isRedPacket) {%>
+<!-- 抢红包-未登录状态 -->
+<div class="redbag_pop nologin dn" id="redPacket_noLogin">
+    <div class="cont">
+        <div class="rb_top">
+            <span>马上登录金道在线教育</span>
+            <h4>抢大量<b>5</b>~<b>30</b>元微信现金红包</h4>
+        </div>
+        <a href="javascript:void(0)" class="rb_btn" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_bigmfzc', 'content_middle', 1, true]);">
+            <i class="reg">免费注册</i><b class="bg"><b></b></b>
+        </a>
+        <div class="rb_tip">
+            <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_madl', 'content_middle', 1, true]);">马上登录</a></span>
+            <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
+        </div>
+        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+    </div>
+</div>
 <!--抢红包-已登录状态 -->
 <div class="redbag_pop dn" id="redPacket_normal">
     <div class="cont">
@@ -1463,8 +1480,8 @@
         <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob"><i class="">抢</i><b class="bg"><b></b></b></a>
         <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait"><i class="wait">等待开抢</i><b class="bg"><b></b></b></a>
         <div class="rb_tip">
-            <div class="rbnum">第<span id="timesLabel2"></span>波微信红包</div>
-            <div class="tspan">培训班直播时段内每5分钟将有一大波10元微信现金红包来袭！<br>人人有份，即刻开抢啦！
+            <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
+            <div class="tspan">在线时段内每10分钟将有一大波5-30元微信现金红包来袭！<br>人人有份，即刻开抢啦！
                 <div class="dashang_rule">
                     <a href="javascript:void(0)">活动规则<i></i></a>
                     <div class="ds_rulecont">
@@ -1472,10 +1489,10 @@
                         <div class="scrollbox">
                             <span><b>•</b>活动规则</span>
                             <ul>
-                                <li>1.培训班开课期间，培训班内每隔5分钟将发放一波奖金红包，所有参加培训班的客户皆可参与“抢红包”；</li>
-                                <li>2.中奖客户需要同步关注培训班分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                                <li>3.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系在线教育助理登记验证，以发放双倍红包奖金；</li>
-                                <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户5月3日中奖，则奖金红包于5月4日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
+                                <li>1.活动期间，金道在线教育课程时段内，每隔10分钟将发放一波奖金红包，所有在线教育注册客户皆可参与“夏日狂欢抢红包”活动，客户所中奖金将通过微信发放；</li>
+                                <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系在线教育助理登记验证，以发放双倍红包奖金；</li>
+                                <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                                <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户5月30日中奖，则奖金红包于5月31日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
                                 <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
                             </ul>
                         </div>
@@ -1492,11 +1509,11 @@
     <div class="cont">
         <div class="rb_top2">
             <span>很遗憾，此次未中奖！</span>
-            <span class="sp2"><b>5分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
+            <span class="sp2"><b>10分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
         </div>
         <div class="qrcode-con">
             <div class="rb_tip2">
-                <div class="tspan">欢迎扫码关注下方分析师微信，实时领取分析师交易/喊单策略！</div>
+                <div class="tspan">欢迎扫码关注下方分析师微信，实时领取分析师交易策略！</div>
             </div>
             <img src="" alt="" rp="wechatImg">
             <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>

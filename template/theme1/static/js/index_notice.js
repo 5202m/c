@@ -54,7 +54,7 @@ var noticeJS = {
         });
         //通知信息 5星等级数据 及 点评数据
         this.socket.on('financeData', function(result) {
-            if (!result || !result.finance || (result.finance.importanceLevel < 4 || !result.review)) { //非4 5星 非评论数据不显示
+            if (!result || !result.finance || !result.review) { //非4 5星 非评论数据不显示
                 return;
             }
             var comments = result.review,
