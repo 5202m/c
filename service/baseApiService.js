@@ -219,19 +219,18 @@ var baseApiService = {
     getZxFinanceDataList: function(releaseTime, dataTypeCon, callback) {
         let deferred = new Deferred();
         let path = `/zxFinanceData/list?releaseTime=${releaseTime}&dataTypeCon=${dataTypeCon}`;
-        liveRoomAPIService.get(path)
-            .then((result) => {
-                if (callback) {
-                    callback(result);
-                }
-                deferred.resolve(result);
-            }).catch((e) => {
-                logger.error("getZxFinanceDataList fail:" + e);
-                if (callback) {
-                    callback(false);
-                }
-                deferred.reject(e);
-            });
+        liveRoomAPIService.get(path, (result, rawResult) => {
+            if (callback) {
+                callback(rawResult);
+            }
+            deferred.resolve(result);
+        }).catch((e) => {
+            logger.error("getZxFinanceDataList fail:" + e);
+            if (callback) {
+                callback(false);
+            }
+            deferred.reject(e);
+        });
         return deferred.promise;
     },
     /**
