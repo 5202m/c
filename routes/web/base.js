@@ -1311,17 +1311,9 @@ router.post('/reg', function(req, res) {
     } else {
         //手机号+验证码登陆
         baseApiService.checkMobileVerifyCode(params.mobilePhone,
-            userSession.groupType + "_reg", params.verifyCode,
-            function(chkCodeRes) {
-                if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                    if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                        "1007") {
-                        res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                    } else {
-                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                    }
-                    return;
-                } else {
+            userSession.groupType + "_reg", params.verifyCode)
+            .then((chkCodeRes) => {
+                if (chkCodeRes === true)  {
                     //验证码通过校验
                     studioService.checkClientGroup(params.mobilePhone, null,
                         common.getTempPlatformKey(userSession.groupType),
@@ -1388,7 +1380,17 @@ router.post('/reg', function(req, res) {
                                     res.json(result);
                                 });
                         });
+                } else {
+                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                 }
+            }).catch(chkCodeRes => {
+                if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
+                        "1007") {
+                        res.json({ isOK: false, msg: chkCodeRes.errmsg });
+                    } else {
+                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                    }
+                    return;
             });
     }
 });
