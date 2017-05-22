@@ -34,10 +34,15 @@ let isLocalTokenValid = (apiToken) => {
 
 let verifyTokenFromAPI = (apiToken, appSecret) => {
     let deferred = new Deferred();
+    if (!apiToken) {
+        logger.info("apiToken null, will generat a new one...");
+        deferred.resolve(false);
+        return deferred.promise;
+    }
     let currentToken = apiToken.token;
     let url = `${apiUrl}/token/verifyToken`;
     let data = { token: currentToken, appSecret: appSecret };
-    logger.info("Verifing token from API: ", url);
+    logger.debug("Verifing token from API: ", url);
     logger.debug("Posting token: ", data);
     request(getOptions(url, 'POST', data))
         .then(res => {
@@ -89,11 +94,13 @@ class APIAuth {
     getToken() {
         let deferred = new Deferred();
         let _this = this;
+        //verifyTokenFromAPI(_this.apiToken, _this.appSecret).then(isOK => {
         _this.verifyToken().then(isOK => {
             if (isOK) {
                 deferred.resolve(_this.apiToken.token);
             } else {
                 _this.getNewToken().then(newToken => {
+                    this.apiToken = newToken;
                     deferred.resolve(newToken.token);
                 }).catch(e => {
                     deferred.reject(e);
