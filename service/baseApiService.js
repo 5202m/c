@@ -146,9 +146,9 @@ var baseApiService = {
             useType: useType,
             authCode: verifyCode
         };
-        liveRoomAPIService.post(path, data, (result, rawResult) => {
+        liveRoomAPIService.post(path, data).then((result) => {
             if (callback) {
-                callback(rawResult);
+                callback(result);
             }
             deferred.resolve(result);
         }).catch((e) => {
