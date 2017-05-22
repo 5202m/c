@@ -35,8 +35,8 @@ let addAccessToken = headers => {
     headers = headers ? headers : {};
     apiAuth.getToken()
         .then(token => {
-            headers['access_token'] = token;
-            headers['access_secret'] = config.apiAuth.appSecret;
+            headers['apptoken'] = token;
+            headers['appsecret'] = config.apiAuth.appSecret;
             deferred.resolve(headers);
         })
         .catch(e => {
@@ -124,6 +124,7 @@ module.exports = {
                 });
             })
             .catch(e => {
+                logger.error("addAccessToken faile ", e);
                 handler.failure(e);
             });
         return deferred.promise;
@@ -151,6 +152,7 @@ module.exports = {
                 });
             })
             .catch(e => {
+                logger.error("addAccessToken faile ", e);
                 handler.failure(e);
             });
 
