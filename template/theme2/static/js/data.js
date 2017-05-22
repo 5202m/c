@@ -214,8 +214,8 @@ var Data = {
     getVideoUrl: function(syllabusPlan) {
         var result = { pc: "", mobile: "", audio: "", oneTV: "", https: "" },
             linkTmp = null;
-        for (var i = 0, lenI = syllabusPlan.studioLink ? syllabusPlan.studioLink.length : syllabusPlan.studioLink; i < lenI; i++) {
-            linkTmp = syllabusPlan.studioLink[i];
+        for (var i = 0, lenI = syllabusPlan.liveLink ? syllabusPlan.liveLink.length : syllabusPlan.liveLink; i < lenI; i++) {
+            linkTmp = syllabusPlan.liveLink[i];
             switch (linkTmp.code) {
                 case "1":
                     result.pc = linkTmp.url || "";
