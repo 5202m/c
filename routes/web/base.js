@@ -1311,9 +1311,9 @@ router.post('/reg', function(req, res) {
     } else {
         //手机号+验证码登陆
         baseApiService.checkMobileVerifyCode(params.mobilePhone,
-            userSession.groupType + "_reg", params.verifyCode)
+                userSession.groupType + "_reg", params.verifyCode)
             .then((chkCodeRes) => {
-                if (chkCodeRes === true)  {
+                if (chkCodeRes === true) {
                     //验证码通过校验
                     studioService.checkClientGroup(params.mobilePhone, null,
                         common.getTempPlatformKey(userSession.groupType),
@@ -1385,12 +1385,12 @@ router.post('/reg', function(req, res) {
                 }
             }).catch(chkCodeRes => {
                 if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                        "1007") {
-                        res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                    } else {
-                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                    }
-                    return;
+                    "1007") {
+                    res.json({ isOK: false, msg: chkCodeRes.errmsg });
+                } else {
+                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                }
+                return;
             });
     }
 });
@@ -1652,9 +1652,9 @@ router.post('/setUserPraise', function(req, res) {
                                 params.opUser = userInfo.userId;
                                 params.opIp = common.getClientIp(req);
                                 params.remark = "每日点赞";
-                                chatPointsService.add(params, function(result) {
+                                chatPointsService.add(params).then((result) => {
                                     logger.debug("点赞添加积分成功!", result);
-                                }).then(e => {
+                                }).catch(e => {
                                     logger.error("点赞添加积分失败!", e);
                                 });
                             }
@@ -1667,7 +1667,7 @@ router.post('/setUserPraise', function(req, res) {
 
 /**
  * 设置点赞
- */
+ 
 router.post('/setUserPraise', function(req, res) {
     var clientId = req.body.clientId,
         praiseId = req.body.praiseId;
@@ -1705,7 +1705,7 @@ router.post('/setUserPraise', function(req, res) {
                 res.json({ isOK: isOK });
             });
     }
-});
+});*/
 
 /**
  * 房间对应的课程数据包括房间对应的在线人数
