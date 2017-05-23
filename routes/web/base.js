@@ -2053,18 +2053,18 @@ router.post('/setTradePraise', function(req, res) {
     if (common.isBlank(params.clientId) || common.isBlank(params.praiseId)) {
         res.json({ isOK: false });
     } else {
-        var fromPlatform = getGroupType(req);
-        baseApiService.checkChatPraise(params.clientId, params.praiseId,
+        params.fromPlatform = getGroupType(req);
+        /*baseApiService.checkChatPraise(params.clientId, params.praiseId,
             fromPlatform,
             function(isOK) {
-                if (isOK) {
+                if (isOK) {*/
                     showTradeService.setShowTradePraise(params, function(result) {
                         res.json(result);
                     });
-                } else {
+                /*} else {
                     res.json({ isOK: isOK });
                 }
-            });
+            });*/
     }
 });
 
