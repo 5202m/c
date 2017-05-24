@@ -12,6 +12,10 @@ var Novice = new Container({
     },
     onShow : function () {
         Novice.setRoomCourseInfo();
+        if (Util.isAppEnv()) {
+            $('#novice_simuopen').attr('href','https://m.24k.hk/demoaccount_open.html?clientSource=app');
+            $('#novice_realopen').attr('href','https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     }
 });
 

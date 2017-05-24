@@ -16,7 +16,10 @@ var Room = new Container({
     },
     onShow: function() {
         Room.initPage();
-        if (Util.isAppEnv()) $('.upload-pic').parent().remove();
+        if (Util.isAppEnv()) {
+            $('.upload-pic').parent().remove();
+            $('#room_realopen').attr('href','https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     },
     onHide: function() {
         Player.player.clear($("#roomVideo"));
