@@ -1443,13 +1443,8 @@ router.post('/resetPwd', function(req, res) {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
                 userSession.groupType + "_resetPWD", params.verifyCode,
                 function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
-                            res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                        } else {
-                            res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                        }
+                    if (chkCodeRes !== true) {
+                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
                         res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
