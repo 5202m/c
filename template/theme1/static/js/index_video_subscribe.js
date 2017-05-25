@@ -3,7 +3,7 @@
  * author Jade.zhu
  */
 var videosSubscribe = {
-    subscribeData: null,
+    subscribeData: [],
     init: function() {
         this.setEvent();
     },
