@@ -11,11 +11,12 @@ var Index = {
         this.setEvent();
         this.verifyTrainRoom();
 
-        if (Util.isNotBlank(Data.userInfo.groupId)) {
+/*        if (Util.isNotBlank(Data.userInfo.groupId)) {
             Room.load();
         } else {
             Rooms.load();
-        }
+        }*/
+        Rooms.load();
         Pop.signIn.init();
         Tool.RedPacket.init(Data.userInfo,Data.apiUrl);
     },
