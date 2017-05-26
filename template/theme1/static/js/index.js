@@ -288,8 +288,8 @@ var indexJS = {
                 $(this).addClass("on");
                 $('.live_preview .tabcont .main_tab[t=' + $(this).attr("t") + ']').addClass("on");
             });
-            $('.live_preview .tabcont').css('height', '200px');
-            indexJS.setListScroll('.live_preview .tabcont');
+            $('.live_preview .live_prevlist').css('height', '250px');
+            indexJS.setListScroll('.live_preview .live_prevlist');
 
             //晒单墙顶部tab切换
             $(".sd_king .rank_tabnav a").click(function() {
