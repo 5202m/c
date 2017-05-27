@@ -885,6 +885,7 @@ var Chat = {
                 closeable : false,
                 autoClose : 2000,
                 onOK : function(){
+                    LoginAuto.set(null);//避免无法退出登录的情况
                     window.location.href="/logout";
                 }
             });
