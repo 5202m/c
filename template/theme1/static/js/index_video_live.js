@@ -229,7 +229,7 @@ var videosLive = {
             var countryImg = { '德国': 'Germany', '法国': 'France', '欧元区': 'EUR', '加拿大': 'CAD', '美国': 'USD', '澳大利亚': 'AUD', '日本': 'JPY', '瑞士': 'CHF', '意大利': 'Italy', '英国': 'GBP', '中国': 'CNY', '新西兰': 'NZD', '韩国': 'SK', '香港': 'HKD', '西班牙': 'Spain', '台湾': 'Taiwan', '印度': 'INR', '新加坡': 'Singapore' };
             var financeHtml = '';
             var financeFormat = videosLive.formatHtml('finance');
-            $.each(result.financeData, function(key, value) {
+            $.each(result.data.financeData, function(key, value) {
                 var liOu = "";
                 if (key % 2 == 0 && key != 0) {
                     liOu = "r";
