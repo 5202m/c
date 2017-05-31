@@ -674,5 +674,17 @@ var Util ={
      */
     isAppEnv : function () {
         return Data.userInfo.platform === 'app' ? true : false;
+    },
+
+    /**
+     * 动态加载css
+     * @param url
+     */
+    loadStyles : function (url) {
+        var link = document.createElement("link");
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.href = url;
+        document.getElementsByTagName("head")[0].appendChild(link);
     }
 };

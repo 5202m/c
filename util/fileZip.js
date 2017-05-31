@@ -146,7 +146,9 @@ var fileList = [
         "out": "template\\theme2\\static\\css\\index.min.css",
         "in": [
             "\\template\\theme2\\static\\css\\index.css",
-            "\\template\\theme2\\static\\css\\guide.css"
+            "\\template\\theme2\\static\\css\\guide.css",
+            "\\template\\base\\lib\\swipe\\swiper.min.css",
+            "\\template\\base\\lib\\mScroll\\jquery.mCustomScrollbar.min.css"
         ]
     },
     {
@@ -164,7 +166,17 @@ var fileList = [
             "template\\base\\lib\\lazyload\\img.lazyload.js",
             "template\\base\\lib\\toucher.js",
             "template\\base\\lib\\websocket.min.js",
-            "template\\base\\lib\\iphone-inline-video.browser.js"
+            "template\\base\\lib\\iphone-inline-video.browser.js",
+            "template\\base\\lib\\mScroll\\jquery.mCustomScrollbar.concat.min.js"
+        ]
+    },
+    {
+        "out": "template\\theme2\\static\\js\\top.min.js",
+        "marge": true,
+        "in": [
+               "template\\base\\lib\\lazyload\\lazyload.min.js",
+                "template\\base\\lib\\store.min.js",
+               "template\\theme2\\static\\js\\store.js"
         ]
     },
     {

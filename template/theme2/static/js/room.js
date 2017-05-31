@@ -8,6 +8,7 @@ var Room = new Container({
     wechatCode: null,
     isNoviceRoom: false,
     onLoad: function() {
+        Util.loadStyles('/base/lib/lightbox/lightbox.css');
         Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();

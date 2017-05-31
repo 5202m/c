@@ -9,24 +9,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <script type="text/javascript" src="/base/lib/store.min.js"></script>
-    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
-    <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
-    <link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />
     <% if(isDevTest) { %>
         <link rel="stylesheet" media="screen" href="/theme2/css/index.css" />
         <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
+        <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
+        <!--<link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />-->
+        <link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
+        <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+        <script type="text/javascript" src="/base/lib/store.min.js"></script>
+        <script type="text/javascript" src="/theme2/js/store.js"></script>
         <% }else{ %>
-            <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-            <% } %>
-                <script type="text/javascript" src="/theme2/js/store.js"></script>
-                <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-                <script>
-                    //自动登录中...
-                    LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-                    LoginAuto.init();
-                    //自动登录完成
-                </script>
+        <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
+        <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
+        <% } %>
+    <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+    <script>
+        //自动登录中...
+        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+        LoginAuto.init();
+        //自动登录完成
+    </script>
 </head>
 
 <body class="home">
@@ -140,10 +142,17 @@
                     'positionFromTop': 200,
                     'showImageNumberLabel': false
                 });
+
+                $(".scrollbox").mCustomScrollbar({
+                    theme: "light-thick",
+                    scrollbarPosition: "outside",
+                    scrollButtons: false
+                });
             }
         </script>
         <% if(isDevTest) { %>
             <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+            <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
             <script type="text/javascript" src="/base/lib/socket.io.js"></script>
             <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
             <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
@@ -182,7 +191,7 @@
                 $(pageFunc);
             </script>
             <% }else{ %>
-                <script type="text/javascript" src="/base/lib/basket.min.js"></script>
+            <script type="text/javascript" src="/base/lib/basket.min.js"></script>
                 <script type="text/javascript">
                     basket.version = '<%=version%>';
                     basket.require({
