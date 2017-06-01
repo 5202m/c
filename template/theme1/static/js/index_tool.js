@@ -239,40 +239,20 @@ var indexTool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000*2, //红包周期10分钟
+            cycleTime: 300000, //红包周期5分钟
             stayTime: 5000, //红包停留时间5秒
-            startTime: 30720000, //08:30
-            endTime: 84600000, //23:30
+            startTime: 55740001, //15:30
+            endTime: 62940001, //17:30
             courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
             analysts: [
-                /*08:32*/
-                {
-                    start: 30720000,
-                    userId: "gw_yang24k",
-                    userName: "杨多多",
-                    wechat: "gw_yang24k",
-                    wechatImg: "/theme1/img/dd_yang.png"
-                },
-                /*13:31*/
-                {
-                    start: 48600001,
-                    userId: "lin_gw24k",
-                    userName: "林意轩",
-                    wechat: "lin_gw24k",
-                    wechatImg: "/theme1/img/yx_lin.png"
-                },
-                /*19:31*/
-                {
-                    start: 70140001,
-                    userId: "chan24k2",
-                    userName: "陈丞",
-                    wechat: "chan24k2",
-                    wechatImg: "/theme1/img/cheng_chen.png"
-                },
+                /* 15:30——17:30*/
+                { start: 55740001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme1/img/yx_lin.png" }
             ],
+
             redPacketPopFlag: true, //红包弹出标记
             miniClose: false, //mini窗关闭标识，手动关闭后，当次不再弹出
             opened: false, //是否已经点击抢红包标记
+
             times: 0, //次数
             minutes: 0, //分钟数
             seconds: 0, //秒数
@@ -292,6 +272,32 @@ var indexTool = {
         },
 
         /**
+         * 获取最新红包期数
+         * @returns {number}
+         */
+        getCurrentPariod: function() {
+            var now = new Date();
+            var curHours = now.getHours();
+            var curMinutes = now.getMinutes();
+            if (curHours < 10) {
+                curHours = '0' + curHours;
+            }
+            if (curMinutes < 10) {
+                curMinutes = '0' + curMinutes;
+            }
+            var curHMDate = curHours + ":" + curMinutes;
+            var redPacketPeriods = indexJS.redPacketLastPeriods.split(',');
+            var currentPariod = 1;
+            for (var i = 0; i < redPacketPeriods.length; i++) {
+                if (curHMDate < redPacketPeriods[i]) {
+                    currentPariod = i + 1;
+                    break;
+                }
+            }
+            return currentPariod;
+        },
+
+        /**
          * 绑定事件
          */
         setEvent: function() {
@@ -299,6 +305,9 @@ var indexTool = {
             //红包视图-顶部
             $("#redPacket_header").bind("view", function() {
                 var config = indexTool.RedPacket.config;
+                //获取红包期数
+                var currentPariod = indexTool.RedPacket.getCurrentPariod();
+                $("#timesLabel").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
                 });
@@ -307,7 +316,8 @@ var indexTool = {
             //红包视图-右侧小窗
             $("#redPacket_mini").bind("view", function() {
                 var config = indexTool.RedPacket.config;
-                $("#redPacket_mini [rp='timesLabel']").text(config.timesLabel);
+                var currentPariod = indexTool.RedPacket.getCurrentPariod();
+                $("#redPacket_mini [rp='timesLabel']").text(currentPariod);
                 if (indexTool.RedPacket.isStayTime()) {
                     $("#redPacket_miniWait").hide();
                     $("#redPacket_miniRob").show();
@@ -318,10 +328,7 @@ var indexTool = {
                 } else {
                     //未中奖结果
                     var analyst = indexTool.RedPacket.getAnalyst();
-                    indexTool.RedPacket.showPop("resNo", {
-                        wechatImg: analyst.wechatImg,
-                        wechat: analyst.wechat
-                    });
+                    indexTool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
                 }
             });
 
@@ -342,6 +349,8 @@ var indexTool = {
             //红包视图-主界面
             $("#redPacket_normal").bind("view", function() {
                 var config = indexTool.RedPacket.config;
+                var currentPariod = indexTool.RedPacket.getCurrentPariod();
+                $("#timesLabel2").text(currentPariod);
                 $(this).find("[rp]").each(function() {
                     $(this).text(config[$(this).attr("rp")]);
                 });
@@ -397,7 +406,7 @@ var indexTool = {
             });
 
             //抢红包打开
-            $('#redPacket_header').bind("click", function() {
+            $('#redPacket_header,#redPacket_chat').bind("click", function() {
                 if (!indexTool.RedPacket.config.redPacketPopFlag) {
                     indexTool.RedPacket.config.redPacketPopFlag = true;
                     $("#redPacket_popFlag").prop("checked", false);
@@ -444,15 +453,7 @@ var indexTool = {
                     $item = $("#redPacket_noLogin");
                     if (!$item.is(":visible")) {
                         $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css({
-                            'opacity': 0,
-                            'left': '30%',
-                            'top': '30%'
-                        }).show().animate({
-                            opacity: 1,
-                            left: '50%',
-                            top: '50%'
-                        }, 300);
+                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
                     }
                     break;
 
@@ -462,13 +463,7 @@ var indexTool = {
                         $item.trigger("view");
                         $('.redbag_pop_box,.redbag_pop').hide();
                         $item.show();
-                        $('#redPacket_mini2').css({
-                            'opacity': 0,
-                            'top': '-10%'
-                        }).show().animate({
-                            opacity: 1,
-                            top: 0
-                        }, 300);
+                        $('#redPacket_mini2').css({ 'opacity': 0, 'top': '-10%' }).show().animate({ opacity: 1, top: 0 }, 300);
                     }
                     break;
 
@@ -477,15 +472,7 @@ var indexTool = {
                     if (!$item.is(":visible")) {
                         $item.trigger("view");
                         $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css({
-                            'opacity': 0,
-                            'left': '30%',
-                            'top': '30%'
-                        }).show().animate({
-                            opacity: 1,
-                            left: '50%',
-                            top: '50%'
-                        }, 300);
+                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
                     }
                     break;
 
@@ -494,9 +481,7 @@ var indexTool = {
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
                         $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css('opacity', 0).show().animate({
-                            opacity: 1
-                        }, 300);
+                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
                     }
                     break;
 
@@ -505,9 +490,7 @@ var indexTool = {
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
                         $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css('opacity', 0).show().animate({
-                            opacity: 1
-                        }, 300);
+                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
                     }
                     break;
             }
@@ -533,8 +516,8 @@ var indexTool = {
             }
             this.isRedPacketTime(function(isOK) {
                 if (isOK) {
-                    config.times = Math.ceil((time - config.startTime) / config.cycleTime);
-                    config.timesLabel = config.times;
+                    var currentPariod = indexTool.RedPacket.getCurrentPariod();
+                    config.timesLabel = currentPariod;
                     var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
                     config.minutes = Math.floor(countDown / 60000);
                     config.seconds = Math.floor(countDown % 60000 / 1000);
@@ -572,11 +555,7 @@ var indexTool = {
             var groupId = indexJS.userInfo.groupId;
             var groupType = indexJS.userInfo.groupType;
 
-            $.getJSON(indexJS.apiUrl + '/common/getCourse', {
-                'flag': 'D',
-                'groupId': groupId,
-                'groupType': groupType
-            }, function(data) {
+            $.getJSON(indexJS.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
                 if (data.result == 0) {
                     if (!data.data || data.data.length == 0) {
                         indexTool.RedPacket.config.courseTime = -2;
@@ -628,23 +607,14 @@ var indexTool = {
             } else if (config.redPacketPeriods == 0) {
                 box.showMsg("红包已过期!");
             } else {
-                common.getJson("/rob", {
-                    t: indexJS.serverTime
-                }, function(data) {
+                common.getJson("/rob", { t: indexJS.serverTime }, function(data) {
                     if (data.result == 0) {
                         indexTool.RedPacket.config.redPacketPeriods = 0;
                         var analyst = indexTool.RedPacket.getAnalyst();
                         if (data.money > 0) {
-                            indexTool.RedPacket.showPop("resYes", {
-                                money: data.money,
-                                wechatImg: analyst.wechatImg,
-                                wechat: analyst.wechat
-                            });
+                            indexTool.RedPacket.showPop("resYes", { money: data.money, wechatImg: analyst.wechatImg, wechat: analyst.wechat });
                         } else {
-                            indexTool.RedPacket.showPop("resNo", {
-                                wechatImg: analyst.wechatImg,
-                                wechat: analyst.wechat
-                            });
+                            indexTool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
                         }
                     } else {
                         //服务器时间异常，重新同步服务器时间

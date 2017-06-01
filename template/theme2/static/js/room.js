@@ -67,6 +67,8 @@ Room.initPage = function() {
                 setTimeout(function() { //进入页面不播放音频，需要用户点击才播放
                     $('#roomAudioPlay').click();
                 }, 500);
+                //判断当前房间是否是红包活动
+                Room.getRedPacketRoom(Room.currGroupId);
             }
             Room.watchRemind(room);
         }
@@ -76,7 +78,6 @@ Room.initPage = function() {
 /**
  * 判断是否红包活动培训班
  */
-/*
 Room.getRedPacketRoom = function(currentRoomId) {
     $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
         if (data.isOK) {
@@ -86,7 +87,7 @@ Room.getRedPacketRoom = function(currentRoomId) {
             $("#redPacket_header").hide();
         }
     });
-};*/
+};
 
 /**
  * 游客累计观看提醒
