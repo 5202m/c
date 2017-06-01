@@ -31,7 +31,8 @@ Rooms.setAdvertisement = function() {
         if (dataList.result == 0) {
             var data = dataList.data;
             for (var i in data) {
-                html.push(Rooms.formatHtml("banner", (Util.isBlank(data[i].linkUrl) ? "javascript:void(0);" : data[i].linkUrl), data[i].mediaUrl, data[i].detailList[0].title).replace('/theme2/img/noviceGuide/banner-1.jpg', data[i].mediaUrl));
+                var imgStr = '<img src="'+data[i].mediaUrl+'" alt="'+data[i].detailList[0].title+'"/>';
+                html.push(Rooms.formatHtml("banner", (Util.isBlank(data[i].linkUrl) ? "javascript:void(0);" : data[i].linkUrl), imgStr));
                 if (data.length > 1) {
                     $("#position").append('<span class="' + (parseInt(i) == 0 ? 'p-click' : '') + '"></span>');
                 }
@@ -68,7 +69,8 @@ Rooms.setStudioRoomList = function() {
                         '',
                         'brown',
                         '精品培训班',
-                        row.roomType
+                        row.roomType,
+                        '/theme2/img/block-bg4.jpg'
                     ));
                     trainNum++;
                 }
@@ -92,10 +94,12 @@ Rooms.setStudioRoomList = function() {
                     row.id,
                     cls[loc_index],
                     row.name,
-                    row.roomType).replace('/theme2/img/block-bg4.jpg', uurl));
+                    row.roomType,
+                    uurl));
             }
         });
         $('#roomList').empty().html(html.join(''));
+        $('#roomList img.lazy').lazyload({ threshold : 200 });
         if ($('#roomList .block-item a[rt="train"]').size() > 0 && trainObj) {
             $('#roomList .block-item a[rt="train"] .item-hd .course-info .course-time').text(trainObj.openDate.beginDate + '~' + trainObj.openDate.endDate);
             $('#roomList .block-item a[rt="train"] .item-hd .course-info .teacher').text(trainObj.name);
