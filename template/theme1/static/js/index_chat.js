@@ -1388,7 +1388,7 @@ var chat = {
             return;
         }
         $(".right_row .main_tabnav a[t='chat'] .dialognum span").text(parseInt(num));
-        $(".userListOnline").text(parseInt(num));
+        //$(".userListOnline").text(parseInt(num));
 
     },
     /**
@@ -1459,7 +1459,7 @@ var chat = {
             data = common.sortOnlineUserList(data, indexJS.userInfo.userId);
             //如客户数小于200，则追加额外游客数
             var onLineNum = dataLength;
-            if ($("#roomInfoId").attr("av") == "true") {
+/*            if ($("#roomInfoId").attr("av") == "true") {
                 var randId = 0,
                     size = 0;
                 if (dataLength > 100) {
@@ -1486,9 +1486,13 @@ var chat = {
                     chat.contactAnalystEvent(row);
                 }
             }
-            $('#userListIdNew').html(userArr.join(""));
+            $('#userListIdNew').html(userArr.join(""));*/
             indexJS.setListScroll(".otheruser .scrollbox");
-            onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;
+            //onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;
+            var $_room = $('#roomList_panel .on');
+            var room = {isOpen : $_room.attr('sp'), allowVisitor : $_room.attr('av'), roomType : $_room.attr('rt'),
+                name : $_room.children('span').children('b').text() };
+            onLineNum = indexJS.calculateRoomOnlineNum(room,onLineNum);
             chat.setOnlineNum(onLineNum); //设置在线人数
         });
         //断开连接

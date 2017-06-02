@@ -686,5 +686,28 @@ var Util ={
         link.rel = "stylesheet";
         link.href = url;
         document.getElementsByTagName("head")[0].appendChild(link);
+    },
+
+    /**
+     * 直播间在线人数计算(产品给出的计算公式)
+     * @param room
+     * @param size
+     */
+    calculateRoomOnlineNum : function (room,size) {
+
+        if(room && room.isOpen && room.allowVisitor){
+            var currentHour = new Date(Data.serverTime).getHours(), minuts = new Date(Data.serverTime).getMinutes(),
+                currentS = currentHour * 60 * 60 + minuts * 60;
+            if(room.roomType === 'vip'){//vip房间
+                size = (currentHour >= 20 && currentHour < 22) ? ( size * 16 ) + 300 : 0;
+            }else if( room.roomType === 'simple' || (room.roomType === 'normal' && room.name === '交流大厅') ){//新手房间与交流大厅0830-2330
+                var beginTime = 8 * 60 * 60 + 30 * 60,endTime = 23 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? ( size * 32 ) + 200 : ( size * 5 ) + 10;
+            }else if( room.roomType === 'normal' && room.name !== '交流大厅'){//分析专场 15:30-17:30
+                var beginTime = 15 * 60 * 60 + 30 * 60,endTime = 17 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? ( size * 12 ) + 200 : 0;
+            }
+        }
+        return size;
     }
 };
