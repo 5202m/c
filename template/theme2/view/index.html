@@ -50,13 +50,16 @@
                 <%}%>
                     <div class="rightbar">
                         <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
-                        <%if(userSession.isLogin){%>
+                        <a id="header_ui" href="javascript:void(0)" class="loginbtn">
+                            <%= userSession.isLogin ? userSession.nickname : '登录' %>
+                        </a>
+                        <!--<%if(userSession.isLogin){%>
                             <a href="javascript:void(0);" class="loginbtn">
                                 <%= userSession.nickname || "匿名_xxx" %>
                             </a>
                             <%} else {%>
                                 <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
-                                <%}%>
+                                <%}%>-->
                     </div>
         </section>
     </header>
@@ -112,6 +115,47 @@
     <article class="content_w bgfff dn" id="page_classNote">
 
     </article>
+
+    <article class="content_w accUserCenter dn" id="account_index">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_point">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_subscribe">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_info">
+
+    </article>
+
+    <article class="content_w accUserCenter dn " id="account_setAvatar">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_setMail">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_setName">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_setPwd">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_setNickname">
+
+    </article>
+
+    <article class="content_w accUserCenter dn" id="account_subscribeDetail">
+
+    </article>
+
     <% include pop.html %>
 
         <script type="text/javascript">
@@ -126,6 +170,12 @@
                 Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
                 Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
                 Data.appDefaultGroupId = '<%- appDefaultGroupId %>';
+                Data.userInfo.avatar = '<%= userSession.avatar %>';
+                Data.userInfo.userName = '<%= userSession.userName %>';
+                Data.userInfo.email = '<%= userSession.email %>';
+                Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
+
+
                 Index.init();
                 chatAnalyze.setUTM(false, $.extend({
                     operationType: 1,
@@ -178,6 +228,16 @@
             <script type="text/javascript" src="/theme2/js/privateChat.js"></script>
             <script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
             <script type="text/javascript" src="/theme2/js/yylive2.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountIndex.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountInfo.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountPoint.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSubscribe.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountEmail.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSetPwd.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSetName.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSetNickname.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSetAvatar.js"></script>
+            <script type="text/javascript" src="/theme2/js/accountSubscribeDetail.js"></script>
             <script type="text/javascript">
                 $(pageFunc);
             </script>
