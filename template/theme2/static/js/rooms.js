@@ -70,7 +70,7 @@ Rooms.setStudioRoomList = function() {
                         'brown',
                         '精品培训班',
                         row.roomType,
-                        '/theme2/img/block-bg4.jpg'
+                        '<img class="block-bg" src="/theme2/img/block-bg4.jpg"/>'
                     ));
                     trainNum++;
                 }
@@ -89,7 +89,7 @@ Rooms.setStudioRoomList = function() {
                 } else {
                     loc_index = 1;
                 }
-                uurl = Util.format('/theme2/img/block-bg{0}.jpg', loc_index + 1);
+                uurl = Util.format('<img class="block-bg" src="/theme2/img/block-bg{0}.jpg"/>', loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
                     cls[loc_index],
@@ -99,7 +99,6 @@ Rooms.setStudioRoomList = function() {
             }
         });
         $('#roomList').empty().html(html.join(''));
-        $('#roomList img.lazy').lazyload({ threshold : 200 });
         if ($('#roomList .block-item a[rt="train"]').size() > 0 && trainObj) {
             $('#roomList .block-item a[rt="train"] .item-hd .course-info .course-time').text(trainObj.openDate.beginDate + '~' + trainObj.openDate.endDate);
             $('#roomList .block-item a[rt="train"] .item-hd .course-info .teacher').text(trainObj.name);
@@ -121,16 +120,8 @@ Rooms.setRoomCourseList = function() {
             var roomId = $this.attr("gi");
             //在线人数
             var size = (Data.onlineNumMap && Data.onlineNumMap[roomId]) || 0;
-
             Data.getRoom(roomId, function(room) {
-                if (room && room.isOpen && room.allowVisitor && size <= 200) {
-                    size += size <= 10 ? 60 : (200 / size) * 3 + 10;
-                    size = Math.round(size);
-                    size ++;
-                }else if (room && room.isOpen && room.allowVisitor && size > 200){
-                    size = size + 300;//pc对于人数多的计算规则复杂，此处直接+300
-                    size ++;
-                }
+                size = Util.calculateRoomOnlineNum(room,size);
                 $this.find(".item-hd .block-tit .listenership span").text(size);
             });
             //课程安排

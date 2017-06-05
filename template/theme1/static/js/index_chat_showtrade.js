@@ -549,7 +549,7 @@ var chatShowTrade = {
      */
     getPointsInfo: function(sendGet) {
         common.getJson('/getPointsInfo', { params: JSON.stringify({ groupType: indexJS.userInfo.groupType }) }, function(data) {
-            if (data) {
+            if (common.isBlank(data.result) && data) {
                 var levelPointObj = {},
                     nextPointObj = {};
                 for (var i = indexJS.pointLevel.length - 1; i >= 0; i--) {
