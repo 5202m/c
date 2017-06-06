@@ -54,7 +54,7 @@ var Index = {
         $("#header_ui").bind("click", function() {
             if (Data.userInfo && Data.userInfo.isLogin) {
                 //已登录，显示用户信息
-                //studioMbPop.popBox("person");
+                AccountIndex.load();
             } else {
                 Login.load();
             }
