@@ -710,12 +710,13 @@ var indexJS = {
         if(room && room.isOpen && room.allowVisitor){
             var currentHour = new Date(indexJS.serverTime).getHours(), minuts = new Date(indexJS.serverTime).getMinutes(),
                 currentS = currentHour * 60 * 60 + minuts * 60;
+            room.id = indexJS.userInfo.groupId
             if(room.roomType === 'vip'){//vip房间
                 size = (currentHour >= 20 && currentHour < 22) ? ( size * 16 ) + 300 : 0;
-            }else if( room.roomType === 'simple' || (room.roomType === 'normal' && room.name === '实时解盘') ){//新手房间与交流大厅0830-2330
+            }else if( room.roomType === 'simple' || (room.roomType === 'normal' && (room.id === 'studio_3' || room.id === 'studio_teach' )) ){//新手房间与交流大厅0830-2330
                 var beginTime = 8 * 60 * 60 + 30 * 60,endTime = 23 * 60 * 60 + 30 * 60;
                 size = (beginTime < currentS && endTime > currentS) ? ( size * 32 ) + 200 : ( size * 5 ) + 10;
-            }else if( room.roomType === 'normal' && room.name !== '实时解盘'){//分析专场 15:30-17:30
+            }else if( room.roomType === 'normal'  && room.id !== 'studio_3' && room.id !== 'studio_teach'){//分析专场 15:30-17:30
                 var beginTime = 15 * 60 * 60 + 30 * 60,endTime = 17 * 60 * 60 + 30 * 60;
                 size = (beginTime < currentS && endTime > currentS) ? ( size * 12 ) + 200 : 0;
             }
