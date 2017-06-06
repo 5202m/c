@@ -18,34 +18,35 @@
     <link href="/base/lib/face/face.css" type="text/css" rel="stylesheet" />
     <link href="/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
     <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
-    <!--[if lt IE 9]>
+    <%if(isRedPacket) {%>
+        <link href="/theme1/css/redbag201705.css" rel="stylesheet" type="text/css">
+        <%}%>
+            <!--[if lt IE 9]>
     <link href="/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
-    <!--<%if(isRedPacket) {%>-->
-    <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
-    <!--<%}%>-->
+    
     <![endif]-->
-    <!--[if lt IE 7]>
+            <!--[if lt IE 7]>
     <html class="lt-ie9 lt-ie8 lt-ie7">
     <![endif]-->
-    <!--[if IE 7]>
+            <!--[if IE 7]>
     <html class="lt-ie9 lt-ie8">
     <![endif]-->
-    <!--[if IE 8]>
+            <!--[if IE 8]>
     <html xmlns:ng="http://angularjs.org" class="lt-ie9">
     <![endif]-->
-    <!--[if gt IE 9]>
+            <!--[if gt IE 9]>
     <!-->
-    <html class="">
-    <!--<![endif]-->
-    <script type="text/javascript" src="/base/lib/store.min.js"></script>
-    <!-- 自动登录 begin -->
-    <script type="text/javascript" src="/theme1/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-    <script src="http://static.geetest.com/static/tools/gt.js"></script>
-    <script>
-        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-        LoginAuto.init();
-    </script>
-    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+            <html class="">
+            <!--<![endif]-->
+            <script type="text/javascript" src="/base/lib/store.min.js"></script>
+            <!-- 自动登录 begin -->
+            <script type="text/javascript" src="/theme1/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+            <script src="http://static.geetest.com/static/tools/gt.js"></script>
+            <script>
+                LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+                LoginAuto.init();
+            </script>
+            <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
 </head>
 
 <body class="">
@@ -56,13 +57,14 @@
             <%if(isRedPacket) {%>
                 <div class="header_redbag fl" id="redPacket_header">
                     <div class="redbag_pic"></div>
-                    <div class="rb_text">
-                        <div class="te1">第<b rp="timesLabel"></b>波微信红包</div>
-                        <div class="timecount">
-                            <b rp="minutesLabel"></b>
-                            <span>分</span>
-                            <b rp="secondsLabel"></b>
-                            <span>秒</span>
+                    <div class="hongb-act">
+                        <p class="hongb-pfon">一大波<span>5-500</span>元现金红包</p>
+                        <div class="gund-box">
+                            <ul>
+                                <li>恭喜137***217 获得200元</li>
+                                <li>恭喜138***200 获得100元</li>
+                                <li>恭喜134***222 获得300元</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -199,6 +201,7 @@
                 <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
                 <script type="text/javascript" src="/base/lib/socket.io.js"></script>
                 <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+                <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
                 <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
                 <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
                 <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
