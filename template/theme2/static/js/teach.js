@@ -12,6 +12,10 @@ var Teach = new Container({
     },
     onShow : function () {
         Teach.initPage();
+        if (Util.isAppEnv()) {
+            $('#teach_simuopen').attr('href','https://m.24k.hk/demoaccount_open.html?clientSource=app');
+            $('#teach_realopen').attr('href','https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     }
 });
 

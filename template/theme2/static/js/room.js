@@ -8,6 +8,7 @@ var Room = new Container({
     wechatCode: null,
     isNoviceRoom: false,
     onLoad: function() {
+        Util.loadStyles('/base/lib/lightbox/lightbox.css');
         Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();
@@ -16,7 +17,10 @@ var Room = new Container({
     },
     onShow: function() {
         Room.initPage();
-        if (Util.isAppEnv()) $('.upload-pic').parent().remove();
+        if (Util.isAppEnv()) {
+            $('.upload-pic').parent().remove();
+            $('#room_realopen').attr('href','https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     },
     onHide: function() {
         Player.player.clear($("#roomVideo"));
@@ -63,6 +67,8 @@ Room.initPage = function() {
                 setTimeout(function() { //进入页面不播放音频，需要用户点击才播放
                     $('#roomAudioPlay').click();
                 }, 500);
+                //判断当前房间是否是红包活动
+                Room.getRedPacketRoom(Room.currGroupId);
             }
             Room.watchRemind(room);
         }
@@ -72,7 +78,6 @@ Room.initPage = function() {
 /**
  * 判断是否红包活动培训班
  */
-/*
 Room.getRedPacketRoom = function(currentRoomId) {
     $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
         if (data.isOK) {
@@ -82,7 +87,7 @@ Room.getRedPacketRoom = function(currentRoomId) {
             $("#redPacket_header").hide();
         }
     });
-};*/
+};
 
 /**
  * 游客累计观看提醒

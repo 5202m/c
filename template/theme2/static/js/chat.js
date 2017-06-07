@@ -14,6 +14,7 @@ var Chat = {
     cntOnline : 0,  //在线用户
     fastContactValue : '',
     chatMsgHeight : 0,
+
     /**
      * 初始化
      */
@@ -656,13 +657,18 @@ var Chat = {
         }
         Chat.cntOnline += (num || 1);
         if(isAddVirtual){
-            if(Chat.cntOnline <= 200){
+/*            if(Chat.cntOnline <= 200){
                 Chat.cntOnline += Chat.cntOnline <= 10 ? 60 : (200 / Chat.cntOnline) * 3 + 10;
                 Chat.cntOnline = Math.round(Chat.cntOnline);
             }else {
                 Chat.cntOnline = Chat.cntOnline + 300;//pc对于人数多的计算规则复杂，此处直接+300
             }
-            Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致
+            Chat.cntOnline ++ ;//此处为了和pc的在线人数保持一致*/
+            Data.getRoom(Room.currGroupId,function(room) {
+                Chat.cntOnline = Util.calculateRoomOnlineNum(room,Chat.cntOnline);
+                $('#roomList a[gi="studio_teach"]').find(".item-hd .block-tit .listenership span").text(Chat.cntOnline);
+            });
+
         }
         Chat.cntOnline = Math.abs(Chat.cntOnline); //避免出现负数
         $("#chatOnlineNum").text(Chat.cntOnline);
@@ -885,6 +891,7 @@ var Chat = {
                 closeable : false,
                 autoClose : 2000,
                 onOK : function(){
+                    LoginAuto.set(null);//避免无法退出登录的情况
                     window.location.href="/logout";
                 }
             });

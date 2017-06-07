@@ -31,7 +31,8 @@ Rooms.setAdvertisement = function() {
         if (dataList.result == 0) {
             var data = dataList.data;
             for (var i in data) {
-                html.push(Rooms.formatHtml("banner", (Util.isBlank(data[i].linkUrl) ? "javascript:void(0);" : data[i].linkUrl), data[i].mediaUrl, data[i].detailList[0].title).replace('/theme2/img/noviceGuide/banner-1.jpg', data[i].mediaUrl));
+                var imgStr = '<img src="'+data[i].mediaUrl+'" alt="'+data[i].detailList[0].title+'"/>';
+                html.push(Rooms.formatHtml("banner", (Util.isBlank(data[i].linkUrl) ? "javascript:void(0);" : data[i].linkUrl), imgStr));
                 if (data.length > 1) {
                     $("#position").append('<span class="' + (parseInt(i) == 0 ? 'p-click' : '') + '"></span>');
                 }
@@ -68,7 +69,8 @@ Rooms.setStudioRoomList = function() {
                         '',
                         'brown',
                         '精品培训班',
-                        row.roomType
+                        row.roomType,
+                        '<img class="block-bg" src="/theme2/img/block-bg4.jpg"/>'
                     ));
                     trainNum++;
                 }
@@ -87,12 +89,13 @@ Rooms.setStudioRoomList = function() {
                 } else {
                     loc_index = 1;
                 }
-                uurl = Util.format('/theme2/img/block-bg{0}.jpg', loc_index + 1);
+                uurl = Util.format('<img class="block-bg" src="/theme2/img/block-bg{0}.jpg"/>', loc_index + 1);
                 html.push(Rooms.formatHtml("roomInfo",
                     row.id,
                     cls[loc_index],
                     row.name,
-                    row.roomType).replace('/theme2/img/block-bg4.jpg', uurl));
+                    row.roomType,
+                    uurl));
             }
         });
         $('#roomList').empty().html(html.join(''));
@@ -117,16 +120,8 @@ Rooms.setRoomCourseList = function() {
             var roomId = $this.attr("gi");
             //在线人数
             var size = (Data.onlineNumMap && Data.onlineNumMap[roomId]) || 0;
-
             Data.getRoom(roomId, function(room) {
-                if (room && room.isOpen && room.allowVisitor && size <= 200) {
-                    size += size <= 10 ? 60 : (200 / size) * 3 + 10;
-                    size = Math.round(size);
-                    size ++;
-                }else if (room && room.isOpen && room.allowVisitor && size > 200){
-                    size = size + 300;//pc对于人数多的计算规则复杂，此处直接+300
-                    size ++;
-                }
+                size = Util.calculateRoomOnlineNum(room,size);
                 $this.find(".item-hd .block-tit .listenership span").text(size);
             });
             //课程安排

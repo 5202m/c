@@ -11,11 +11,12 @@ var Index = {
         this.setEvent();
         this.verifyTrainRoom();
 
-        if (Util.isNotBlank(Data.userInfo.groupId)) {
+/*        if (Util.isNotBlank(Data.userInfo.groupId)) {
             Room.load();
         } else {
             Rooms.load();
-        }
+        }*/
+        Rooms.load();
         Pop.signIn.init();
         Tool.RedPacket.init(Data.userInfo,Data.apiUrl);
     },
@@ -53,7 +54,7 @@ var Index = {
         $("#header_ui").bind("click", function() {
             if (Data.userInfo && Data.userInfo.isLogin) {
                 //已登录，显示用户信息
-                //studioMbPop.popBox("person");
+                AccountIndex.load();
             } else {
                 Login.load();
             }

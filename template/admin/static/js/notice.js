@@ -13,7 +13,21 @@ var noticeJS = {
    * 连接socket
    */
   setSocket: function() {
-    this.socket = io.connect(room.socketUrl.apiSocket);
+    if (common.isWebSocket()) {
+      console.log("used websocket!");
+      if (/Firefox\/\s/.test(navigator.userAgent)){
+        this.socket = io.connect(room.socketUrl.apiSocket, {transports:['xhr-polling']});
+      }
+      else if (/MSIE (\d+.\d+);/.test(navigator.userAgent)){
+        this.socket = io.connect(room.socketUrl.apiSocket, {transports:['jsonp-polling']});
+      }
+      else {
+        this.socket = io.connect(room.socketUrl.apiSocket, { transports: ['websocket'] });
+      }
+    } else {
+      this.socket = io.connect(room.socketUrl.apiSocket);
+    }
+    //this.socket = io.connect(room.socketUrl.apiSocket);
     //建立连接
     this.socket.on('connect', function() {
       console.log('connected to server!');

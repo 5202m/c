@@ -1,4 +1,3 @@
-<link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
 
 <div class="popup look-data" id="pop_msg">
     <div class="popcon">
@@ -42,7 +41,7 @@
 </div>
 
 <!-- 签到 -->
-<div class="popup sign-pop dn">
+<!--<div class="popup sign-pop dn">
     <div class="animatebox amin">
         <i class="i-line" style="height: 245px;"></i>
         <div class="popcon">
@@ -59,7 +58,7 @@
 	                </span>
                 </div>
             </div>
-            <!-- 签到成功 -->
+            &lt;!&ndash; 签到成功 &ndash;&gt;
             <div class="sign-main sign-result dn">
                 <div class="pop-light"></div>
                 <img src="/theme2/img/sign-pic2.png" class="sign-pic">
@@ -67,7 +66,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 <%if(isRedPacket) {%>
     <!-- 抢红包-未登录状态 -->
     <div class="redbag_pop nologin dn" id="redPacket_noLogin">
@@ -107,7 +106,7 @@
                                     <li>1.活动期间，金道在线教育课程时段内，每隔10分钟将发放一波奖金红包，所有在线教育注册客户皆可参与“夏日狂欢抢红包”活动，客户所中奖金将通过微信发放；</li>
                                     <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系在线教育助理登记验证，以发放双倍红包奖金；</li>
                                     <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                                    <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户5月30日中奖，则奖金红包于5月31日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
+                                    <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户6月07日中奖，则奖金红包于6月08日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
                                     <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
                                 </ul>
                             </div>
@@ -176,13 +175,3 @@
         </div>
     </div>
     <%}%>
-        <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
-        <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
-
-        <script type="text/javascript">
-            $(".scrollbox").mCustomScrollbar({
-                theme: "light-thick",
-                scrollbarPosition: "outside",
-                scrollButtons: false
-            });
-        </script>

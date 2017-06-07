@@ -12,6 +12,10 @@ var Novice = new Container({
     },
     onShow : function () {
         Novice.setRoomCourseInfo();
+        if (Util.isAppEnv()) {
+            $('#novice_simuopen').attr('href','https://m.24k.hk/demoaccount_open.html?clientSource=app');
+            $('#novice_realopen').attr('href','https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     }
 });
 
@@ -41,14 +45,15 @@ Novice.setRoomCourseInfo = function () {
     //在线人数
     var size = (Data.onlineNumMap && Data.onlineNumMap[Novice.currentRoomId]) || 0;
     Data.getRoom(Novice.currentRoomId, function(room){
-        if(room && room.isOpen && room.allowVisitor && size<=200){
+/*        if(room && room.isOpen && room.allowVisitor && size<=200){
             size+=size<=10?60:(200/size)*3+10;
             size=Math.round(size);
             size ++;
         }else if (room && room.isOpen && room.allowVisitor && size > 200){
             size = size + 300;//pc对于人数多的计算规则复杂，此处直接+300
             size ++;
-        }
+        }*/
+        size = Util.calculateRoomOnlineNum(room,size);
         $('.block-item.item-green.novice').find(".listenership span").text(size);
     });
     //课程安排

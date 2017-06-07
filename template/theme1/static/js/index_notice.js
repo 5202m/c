@@ -116,8 +116,8 @@ var noticeJS = {
                 html.push('        </tr>');
                 html.push('        <tr>');
                 html.push('            <td>');
-                html.push('                <span class="ca_value">前值：<b>{6}</b></span>');
-                html.push('                <span class="ca_value">预期值：<b>{7}</b></span>');
+                html.push('                <span class="ca_value">前值：<b>{7}</b></span>');
+                html.push('                <span class="ca_value">预期值：<b>{6}</b></span>');
                 html.push('                <span class="ca_value">实际值：<b>{8}</b></span>');
                 html.push('            </td>');
                 html.push('        </tr>');
@@ -148,8 +148,8 @@ var noticeJS = {
                 html.push('            </tr>');
                 html.push('            <tr>');
                 html.push('                <td>');
-                html.push('                    <span class="ca_value">前值：<b>{7}</b></span>');
-                html.push('                    <span class="ca_value">预期值：<b>{8}</b></span>');
+                html.push('                    <span class="ca_value">前值：<b>{8}</b></span>');
+                html.push('                    <span class="ca_value">预期值：<b>{7}</b></span>');
                 html.push('                    <span class="ca_value">实际值：<b>{9}</b></span>');
                 html.push('                </td>');
                 html.push('            </tr>');
