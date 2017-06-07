@@ -3188,6 +3188,12 @@ router.post('/rob', function(req, res) {
         return;
     }
 
+    /*如果非注册用户,直接返回*/
+    if (userInfo.clientGroup != "register") {
+        res.json({ result: 0, money: 0, msg: "" });
+        return;
+    }
+
     cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
         if (err) {
             logger.error("redPacket get cache fail:" + err);
