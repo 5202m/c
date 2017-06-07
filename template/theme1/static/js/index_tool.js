@@ -246,11 +246,10 @@ var indexTool = {
             analysts: [
                 /* 15:30——17:30*/
                 { start: 55740001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme1/img/yx_lin.png" }
-            ],
+            ]
 
-            opened: false //是否已经点击抢红包标记
-
-
+            //opened: false //是否已经点击抢红包标记
+            ,lottryNum : 1 //抽奖机会次数，6月12—30号注册的用户1次机会，激活的3次机会
         },
 
         /**
@@ -259,32 +258,6 @@ var indexTool = {
         init: function() {
             this.setEvent();
             this.config.init = true;
-        },
-
-        /**
-         * 获取最新红包期数
-         * @returns {number}
-         */
-        getCurrentPariod: function() {
-            var now = new Date();
-            var curHours = now.getHours();
-            var curMinutes = now.getMinutes();
-            if (curHours < 10) {
-                curHours = '0' + curHours;
-            }
-            if (curMinutes < 10) {
-                curMinutes = '0' + curMinutes;
-            }
-            var curHMDate = curHours + ":" + curMinutes;
-            var redPacketPeriods = indexJS.redPacketLastPeriods.split(',');
-            var currentPariod = 1;
-            for (var i = 0; i < redPacketPeriods.length; i++) {
-                if (curHMDate < redPacketPeriods[i]) {
-                    currentPariod = i + 1;
-                    break;
-                }
-            }
-            return currentPariod;
         },
 
         /**
@@ -332,10 +305,10 @@ var indexTool = {
             $("#lotteryBtn").rotate({
                 bind: {
                     click: function() {
-                        if (!indexTool.RedPacket.config.opened) {
-                            indexTool.RedPacket.config.opened = true;
+                        //if (!indexTool.RedPacket.config.opened) {
+                        //    indexTool.RedPacket.config.opened = true;
                             indexTool.RedPacket.rob();
-                        }
+                        //}
                     }
                 }
             });
@@ -482,14 +455,18 @@ var indexTool = {
          * 抢红包
          */
         rob: function() {
-            var config = indexTool.RedPacket.config;
-
             //判断用户是否满足条件,2017年06年12日00:00:00至2017年6月30日23:59:59注册直播间的用户
-            var user = indexJS.userInfo;
+            var beginDate = '2017.06.12 00:00:00';
+            var endDate = '2017.06.30 23:59:59';
 
-            if (!indexJS.userInfo.isLogin) {
-                this.showPop("noLogin");
+            if(!indexTool.RedPacket.isDateBetween(indexJS.userInfo.createDate,beginDate,endDate)){
+                box.showMsg('很遗憾，您的当前账户未达到活动要求，立即参与其他活动！');
+                return;
             } else {
+                if("active" == indexJS.userInfo.clientGroup){
+                    indexTool.RedPacket.config.lottryNum = 3;
+                }
+                
                 common.getJson("/rob", { t: indexJS.serverTime }, function(data) {
                     if (data.result == 0) {
                         indexTool.RedPacket.config.redPacketPeriods = 0;
@@ -504,7 +481,7 @@ var indexTool = {
                         chat.socket.emit('serverTime');
                         box.showMsg(data.msg || "红包信息异常!");
                     }
-                    indexTool.RedPacket.config.opened = false;
+                    //indexTool.RedPacket.config.opened = false;
                 });
             }
         },
@@ -526,7 +503,26 @@ var indexTool = {
             }
             return analystTmp;
         },
-        /** 
+
+        /** 日期解析，字符串转日期
+        * @param dateString 可以为2017-02-16，2017/02/16，2017.02.16
+        * @returns {Date} 返回对应的日期对象
+        */
+         dateParse: function(dateString){
+            var SEPARATOR_BAR = "-";
+            var SEPARATOR_SLASH = "/";
+            var SEPARATOR_DOT = ".";
+            var dateArray;
+            if(dateString.indexOf(SEPARATOR_BAR) > -1){
+                dateArray = dateString.split(SEPARATOR_BAR);
+            }else if(dateString.indexOf(SEPARATOR_SLASH) > -1){
+                dateArray = dateString.split(SEPARATOR_SLASH);
+            }else{
+                dateArray = dateString.split(SEPARATOR_DOT);
+            }
+            return new Date(dateArray[0], dateArray[1]-1, dateArray[2]);
+        },
+        /**
          * 日期比较大小 
          * compareDateString大于dateString，返回1； 
          * 等于返回0； 
@@ -535,8 +531,8 @@ var indexTool = {
          * @param compareDateString 比较的日期 
          */
         dateCompare: function(dateString, compareDateString) {
-            var dateTime = dateParse(dateString).getTime();
-            var compareDateTime = dateParse(indexTool.RedPacket.compareDateString).getTime();
+            var dateTime = indexTool.RedPacket.dateParse(dateString).getTime();
+            var compareDateTime = indexTool.RedPacket.dateParse(compareDateString).getTime();
             if (compareDateTime > dateTime) {
                 return 1;
             } else if (compareDateTime == dateTime) {
