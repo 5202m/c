@@ -1472,12 +1472,12 @@ var chat = {
                     data.push({ userId: ("visitor_" + randId), clientGroup: 'visitor', nickname: ('游客_' + randId), sequence: 15, userType: -1 });
                 }
                 onLineNum = onLineNum + size;
-            }
+            }*/
             var row = null;
             var userArr = [];
             for (var i in data) {
 
-                userArr.push(chat.getOnlineUserDom(data[i]).dom); //设置在线用户
+                //userArr.push(chat.getOnlineUserDom(data[i]).dom); //设置在线用户
                 row = data[i];
                 chat.setOnlineUser(row); //设置在线用户
                 if (row.userType == 3 && $('.mult_dialog a[uid=' + row.userId + ']').length > 0) {
@@ -1486,9 +1486,9 @@ var chat = {
                     chat.contactAnalystEvent(row);
                 }
             }
-            $('#userListIdNew').html(userArr.join(""));*/
+            /*$('#userListIdNew').html(userArr.join(""));
+            onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;*/
             indexJS.setListScroll(".otheruser .scrollbox");
-            //onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;
             var $_room = $('#roomList_panel .on');
             var room = {isOpen : $_room.attr('sp'), allowVisitor : $_room.attr('av'), roomType : $_room.attr('rt'),
                 name : $_room.children('span').children('b').text() };
