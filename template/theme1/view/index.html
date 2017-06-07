@@ -171,7 +171,7 @@
                     indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
                     indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
                     indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
-                    indexJS.userInfo.createDate = '<%= userSession.createDate %>'
+                    indexJS.userInfo.createDate = '<%= userSession.joinDate %>'
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
                     chatAnalyze.setUTM(false, $.extend({
