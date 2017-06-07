@@ -6,6 +6,7 @@ var AccountIndex = new Container({
         AccountIndex.setEvent();
     },
     onShow: function() {
+        $("#header").hide();
         AccountIndex.getUserPoint();
     }
 });
@@ -20,7 +21,7 @@ AccountIndex.getUserPoint = function() {
 };
 
 AccountIndex.setEvent = function() {
-    $("#header").hide();
+
     $("#nickname").text(Data.userInfo.nickname);
     $("#myAvatar").attr('src', Data.userInfo.avatar);
 
@@ -49,6 +50,7 @@ AccountIndex.setEvent = function() {
         $("#header").show();
         Container.back();
     });
+
 };
 
 
