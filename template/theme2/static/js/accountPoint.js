@@ -67,13 +67,13 @@ AccountPoint.formatHtml = function(region) {
     var formatHtmlArr = [];
     switch (region) {
         case 'getPoint':
-            formatHtmlArr.push('<div class="cen-st-litem">');
+            formatHtmlArr.push('<div class="cen-st-litem cen-item-line">');
             formatHtmlArr.push('{0}');
             formatHtmlArr.push('<p class="acc-item-rst"><span>+{1}</span><i>{2}</i></p>');
             formatHtmlArr.push('</div>');
             break;
         case 'pointConsume':
-            formatHtmlArr.push('<div class="cen-st-litem">');
+            formatHtmlArr.push('<div class="cen-st-litem cen-item-line">');
             formatHtmlArr.push('{0}');
             formatHtmlArr.push('<p class="acc-item-rst"><span>{1}</span><i>{2}</i></p>');
             formatHtmlArr.push('</div>');
@@ -86,7 +86,7 @@ AccountPoint.setEvent = function() {
     /** 返回个人主页 */
     $('#point_back').bind('click', Container.back);
 
-    //登录切换
+    //积分切换
     $('#TabMenu span').bind('click', function() {
         var _index = $(this).index();
         $(this).addClass('active').siblings().removeClass('active');

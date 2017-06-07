@@ -15,14 +15,16 @@ AccountSubscribe.setEvent = function() {
     /** 返回个人主页 */
     $('#subscribe_back').bind('click', Container.back);
 
-    /** */
-    $(document).on("click", ".cen-st-litem", function(e) {
+    /** 进入订阅详情 */
+    $(document).on("click", ".subType", function(e) {
         var $this = $(this);
-        var subscribeType = $this.attr("t");
+        var subscribeType = $this.attr("id");
         Data.userInfo.curSubscribeType = subscribeType;
         AccountSubscribeDetail.load();
     });
 };
+
+
 
 AccountSubscribe.getSubscribeType = function() {
     common.getJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
@@ -56,8 +58,8 @@ AccountSubscribe.formatHtml = function(region) {
     var formatHtmlArr = [];
     switch (region) {
         case 'subscribeType':
-            formatHtmlArr.push(' <div class="cen-st-litem" t="{1}"> ');
-            formatHtmlArr.push('    <a href="javascript:void(0);" id="{1}"> ');
+            formatHtmlArr.push(' <div class="cen-st-litem cen-item-line" t="{1}"> ');
+            formatHtmlArr.push('    <a href="javascript:void(0);" id="{1}" class="subType"> ' );
             formatHtmlArr.push('    {0} ');
             formatHtmlArr.push('    <p class="acc-item-rst"><span>未订阅</span><i class="i-arrow-down"></i></p> ');
             formatHtmlArr.push('    </a>');

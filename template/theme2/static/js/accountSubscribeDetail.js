@@ -6,7 +6,6 @@ var AccountSubscribeDetail = new Container({
         AccountSubscribeDetail.setEvent();
     },
     onShow: function() {
-
         AccountSubscribeDetail.chooseSubscribe();
     }
 });
@@ -16,8 +15,6 @@ AccountSubscribeDetail.setEvent = function() {
 
     /** 返回订阅列表 */
     $('#subscribeDetail_back').bind('click', Container.back);
-
-
 
 };
 
@@ -119,11 +116,6 @@ AccountSubscribeDetail.chooseSubscribe = function() {
                     }
                     subscribeTypeHtml.push(subscribeType.formatStr(analystsHtml.join(''), noticeTypesHtml.join(''), noticeCycleHtml.join(''), subscribeBtnHtml.join(''), cls1, cls2, row.code));
                     $("#subcribeList").html(subscribeTypeHtml.join(''));
-                    // $('#teacherList ul').html(analystsHtml.join(''));
-                    // $('#noticeType ul').html(noticeTypesHtml.join(''));
-                    // $('#noticeCycle ul').html(noticeCycleHtml.join(''));
-                    // $('#subscribeBtn').html(subscribeBtnHtml.join(''));
-
                 }
 
             });
@@ -144,8 +136,10 @@ AccountSubscribeDetail.setSubscribeEvent = function() {
             liClassName = liChildrenN.attr("class");
         if (liClassName == "i-arrow-right") {
             liChildrenN.removeClass("i-arrow-right");
+            $("#noticeType,#noticeCycle").find("i").removeClass("i-arrow-right");
         } else {
             liChildrenN.addClass("i-arrow-right");
+            $("#noticeType,#noticeCycle").find("i").addClass("i-arrow-right");
         }
         AccountSubscribeDetail.getSubcribePoint();
     });
@@ -160,7 +154,6 @@ AccountSubscribeDetail.setSubscribeEvent = function() {
             noticeTypesArr = [],
             noticeCycleArr = [];
         $('p[t="' + curType + '"]').each(function(i, row) {
-            //$('#subcribeList .account-box-style li[t="' + $(this).attr('t') + '"] p[t="' + $(this).attr('t') + '"]').each(function() {
             if ($(row).find('i').hasClass('i-arrow-right')) {
                 totalPoint += parseInt($(this).attr('p'));
                 if ($(this).attr('name') == 'analyst') {
@@ -329,7 +322,7 @@ AccountSubscribeDetail.formatHtml = function(region) {
             formatHtmlArr.push('<div class="sub-form subcrp-diny-btn" id="subscribeBtn">{3}</div>');
             break;
         case 'analysts':
-            formatHtmlArr.push('<li class="cen-st-litem" id="{0}_{3}"  t="{3}">');
+            formatHtmlArr.push('<li class="cen-st-litem cen-item-line" id="{0}_{3}"  t="{3}">');
             formatHtmlArr.push('  {1}');
             formatHtmlArr.push('    <p class="acc-item-rst" p="{2}" name="analyst" value="{0}" cval="{1}" t="{3}"> ');
             formatHtmlArr.push('    <span>{2}积分</span><i></i></p>');
@@ -357,7 +350,7 @@ AccountSubscribeDetail.formatHtml = function(region) {
             formatHtmlArr.push('邮件订阅</a></div>');
             break;
         case 'noticeCycle':
-            formatHtmlArr.push('<li class="cen-st-litem"   id="{0}_{3}" t="{3}">');
+            formatHtmlArr.push('<li class="cen-st-litem" id="{0}_{3}" t="{3}">');
             formatHtmlArr.push('{1}');
             formatHtmlArr.push('    <p class="acc-item-rst"  value="{0}" name="noticeCycle" p="{2}" cval="{1}" t="{3}">    ');
             formatHtmlArr.push('    <span>{2}积分</span><i></i></p>   ');
