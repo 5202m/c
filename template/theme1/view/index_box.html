@@ -1541,7 +1541,7 @@
     <!-- =======红包层beign======== -->
     <div class="hongb-laybox dn">
         <a href="javascript:void(0)" class="lay-del-btn" title="关闭"></a>
-        <i class="hongb-cout">3</i>
+        <i class="hongb-cout">1</i>
         <div class="zhuanp-box" id="lotteryYuan"></div>
         <div class="deng-box"></div>
         <div class="jiant-box" id="lotteryBtn"></div>
@@ -1601,11 +1601,46 @@
         </div>
     </div>
 
+    <!-- 没有机会抽奖提示 -->
+    <div class="popup_box login_hint dn" id="activeNoChance">
+        <div class="cont">
+            <div class="new-hongb-con">
+                <div class="new-hongb-tt new-hong-siz">
+                    <p>很遗憾，您当前账户没有抽奖机会</p>
+                    <p class="new-hb-sm"><strong>参与聊天室互动，赢最佳活跃奖<br /><span>（100元现金红包）</span></strong></p>
+                </div>
+                <div class="new-hongb-btn">
+                    <a href="javascript:void(0);" class="new-hongb-sum" id="joinChat">立刻参与互动</a>
+                </div>
+            </div>
+            <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
+        </div>
+    </div>
+
+    <!-- 抽奖机会已用完提示 -->
+    <div class="popup_box login_hint dn" id="registerChanceOver">
+        <div class="cont">
+            <div class="new-hongb-con">
+                <div class="new-hongb-tt">
+                    <p class="new-hb-mm"><strong>抱歉，您的抽奖机会已使用完</strong></p>
+                </div>
+                <div class="new-hongb-btn">
+                    <a href="https://goldadmin.24k.hk/goldadmin/login.do" class="new-hongb-sum" target="_blank">立即激活</a>
+                    <div class="new-hongb-dl">
+                        <span>增加2次抽奖机会</span>
+                    </div>
+                </div>
+                <p class="new-hongb-tis">温馨提示：您激活账户后，需退出账号重新登录，方可刷新抽奖机会哦！</p>
+            </div>
+            <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
+        </div>
+    </div>
+
     <!-- 抽奖结果层 -->
     <div class="new-hongb-prize dn" id="redPacket_resYes">
         <a class="pop_close" href="javascript:void(0)" id="resultDel"><i>关闭</i></a>
         <div class="new-hongb-jpbox">
-            <div class="new-hongb-img d n" id="prizeCon1">
+            <div class="new-hongb-img dn" id="prizeCon1">
                 <img src="/theme1/img/prize-im1.png" alt="5元" width="100%" />
             </div>
             <div class="new-hongb-img dn" id="prizeCon2">
@@ -1627,21 +1662,22 @@
         <div class="new-hongb-title">
             <h3>恭喜获得<span rp="money"></span>元微信红包</h3>
             <!-- 状态1 -->
-            <div class="new-hongb-thei thei-wid d n" id="nowJoin">
+            <div class="new-hongb-thei thei-wid dn" id="active_yes_threeChanceOver">
                 <span>即刻参与互动，赢最佳活跃奖(100元现金红包)</span>
             </div>
             <!-- 状态2 -->
-            <div class="new-hongb-thei dn" id="chanceOver">
-                <span>您的抽奖机会已用完</span>
+            <div class="new-hongb-thei dn" id="rigster_yes_hasNoChance" style="margin-bottom:78px">
+                <span>您的抽奖机会已用完<br>点击激活按钮，再增加2次抽奖机会</span>
+                <a href="https://goldadmin.24k.hk/goldadmin/login.do" target="_blank">立即激活</a>
             </div>
             <!-- 状态3 -->
-            <div class="new-hongb-thei dn" id="onChance">
-                <span>您还有1次抽奖机会<a href="javascript:void(0)">立即抽奖</a></span>
+            <div class="new-hongb-thei dn" id="active_yes_hasOneChance">
+                <span>您还有1次抽奖机会<a href="javascript:void(0)" id="goRob">立即抽奖</a></span>
             </div>
         </div>
         <div class="new-hongb-ewm">
-            <div class="hb-ewm-img">
-                <img src="" alt="" width="100%" rp="wechatImg" />
+            <div class="hb-ewm-img ">
+                <img src=" " alt=" " width="100% " rp="wechatImg" />
             </div>
             <p>当期老师微信二维码
                 <br />微信号：<span rp="wechat"></span></p>

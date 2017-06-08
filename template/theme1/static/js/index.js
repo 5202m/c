@@ -352,7 +352,7 @@ var indexJS = {
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            indexTool.RedPacket.tick();
+            // indexTool.RedPacket.tick();
         }, 1000); //每秒一次
     },
     /**
@@ -536,9 +536,9 @@ var indexJS = {
         switch (indexJS.onlineCsStatus) {
             case 0:
                 indexJS.onlineCsStatus = 1;
-                var url = protocol+"//jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
+                var url = protocol + "//jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
                 if (common.isLocalHref()) {
-                    url = protocol+"//csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
+                    url = protocol + "//csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
                 }
                 var csScriptUrl = url +
                     '&tln=' + indexJS.userInfo.userId +
@@ -705,19 +705,22 @@ var indexJS = {
      * @param room
      * @param size
      */
-    calculateRoomOnlineNum : function (room,size) {
+    calculateRoomOnlineNum: function(room, size) {
 
-        if(room && room.isOpen && room.allowVisitor){
-            var currentHour = new Date(indexJS.serverTime).getHours(), minuts = new Date(indexJS.serverTime).getMinutes(),
+        if (room && room.isOpen && room.allowVisitor) {
+            var currentHour = new Date(indexJS.serverTime).getHours(),
+                minuts = new Date(indexJS.serverTime).getMinutes(),
                 currentS = currentHour * 60 * 60 + minuts * 60;
-            if(room.roomType === 'vip'){//vip房间
-                size = (currentHour >= 20 && currentHour < 22) ? ( size * 16 ) + 300 : 0;
-            }else if( room.roomType === 'simple' || (room.roomType === 'normal' && room.name === '实时解盘') ){//新手房间与交流大厅0830-2330
-                var beginTime = 8 * 60 * 60 + 30 * 60,endTime = 23 * 60 * 60 + 30 * 60;
-                size = (beginTime < currentS && endTime > currentS) ? ( size * 32 ) + 200 : ( size * 5 ) + 10;
-            }else if( room.roomType === 'normal' && room.name !== '实时解盘'){//分析专场 15:30-17:30
-                var beginTime = 15 * 60 * 60 + 30 * 60,endTime = 17 * 60 * 60 + 30 * 60;
-                size = (beginTime < currentS && endTime > currentS) ? ( size * 12 ) + 200 : 0;
+            if (room.roomType === 'vip') { //vip房间
+                size = (currentHour >= 20 && currentHour < 22) ? (size * 16) + 300 : 0;
+            } else if (room.roomType === 'simple' || (room.roomType === 'normal' && room.name === '实时解盘')) { //新手房间与交流大厅0830-2330
+                var beginTime = 8 * 60 * 60 + 30 * 60,
+                    endTime = 23 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? (size * 32) + 200 : (size * 5) + 10;
+            } else if (room.roomType === 'normal' && room.name !== '实时解盘') { //分析专场 15:30-17:30
+                var beginTime = 15 * 60 * 60 + 30 * 60,
+                    endTime = 17 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? (size * 12) + 200 : 0;
             }
         }
 

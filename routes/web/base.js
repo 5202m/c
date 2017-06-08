@@ -120,7 +120,10 @@ router.get('/', function(req, res) {
     var openId = req.query["userId"];
     let appToken = req.query['token'];
     if (openId) {
-        studioService.login({ thirdId: openId, groupType: getGroupType(req) }, 3,
+        studioService.login({
+                thirdId: openId,
+                groupType: getGroupType(req)
+            }, 3,
             function(loginRes) {
                 if (loginRes.isOK) {
                     loginRes.userInfo.isLogin = true;
@@ -150,7 +153,10 @@ router.get('/', function(req, res) {
             'clientId=' + params.clientId + '&token=' + appToken + '&remoteIp=' +
             params.remoteIp + '&timestamp=' + params.timestamp + '&key=' +
             config.appAutoLogin.rgsKey);
-        request.post({ url: config.appAutoLogin.rgsUrl, form: params },
+        request.post({
+                url: config.appAutoLogin.rgsUrl,
+                form: params
+            },
             function(error, response, tmpData) {
                 if (error) {
                     logger.error("rgs validate->error" + error);
@@ -172,7 +178,10 @@ router.get('/', function(req, res) {
                                 };
                                 studioService.checkMemberAndSave(userInfo,
                                     function(result) {
-                                        studioService.login({ userId: result.userId, groupType: targetGType },
+                                        studioService.login({
+                                                userId: result.userId,
+                                                groupType: targetGType
+                                            },
                                             2,
                                             function(loginRes) {
                                                 if (loginRes.isOK) {
@@ -541,7 +550,9 @@ router.get('/gotoVideo', function(req, res) {
  */
 router.get('/isRedPacketRoom', function(req, res) {
     var roomId = req.query["roomId"];
-    var result = { isOK: false };
+    var result = {
+        isOK: false
+    };
     //是否炒金培训班
     if (roomId == config.cjTrainRoom) {
         result.isOK = config.isRedPacket;
@@ -566,7 +577,9 @@ router.get('/getMobileVerifyCode', function(req, res) {
         baseApiService.getMobileVerifyCode(mobilePhone, useType, ip,
             function(result) {
                 if (typeof result == "string") {
-                    res.json({ result: 0 });
+                    res.json({
+                        result: 0
+                    });
                 } else {
                     delete result.data;
                     res.json(result);
@@ -595,7 +608,10 @@ router.post('/login', function(req, res) {
         courseName = req.body['courseName'],
         teacherId = req.body['teacherId'],
         teacherName = req.body['teacherName'];
-    var result = { isOK: false, error: null };
+    var result = {
+        isOK: false,
+        error: null
+    };
     var isAutoLogin = !common.isBlank(userId) && common.isBlank(loginType);
     var userSession = req.session.studioUserInfo;
     if (!userSession || !userSession.groupType) {
@@ -671,7 +687,10 @@ router.post('/login', function(req, res) {
                             function(clientGroup, accountNo) {
                                 if (constant.clientGroupSeq[clientGroup] <
                                     constant.clientGroupSeq[loginRes.userInfo.clientGroup]) {
-                                    res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                                    res.json({
+                                        isOK: true,
+                                        userInfo: req.session.studioUserInfo
+                                    });
                                 } else {
                                     var userInfo = {
                                         mobilePhone: loginRes.userInfo.mobilePhone,
@@ -692,10 +711,16 @@ router.post('/login', function(req, res) {
                                 }
                             });
                     } else {
-                        res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                        res.json({
+                            isOK: true,
+                            userInfo: req.session.studioUserInfo
+                        });
                     }
                 } else if (loginRes.isOK) {
-                    res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                    res.json({
+                        isOK: true,
+                        userInfo: req.session.studioUserInfo
+                    });
                 } else {
                     res.json(loginRes);
                 }
@@ -820,7 +845,10 @@ router.post('/login', function(req, res) {
                                 req.session.studioUserInfo.roomName = roomName;
                                 //req.session.studioUserInfo.courseId = courseId;
                                 //req.session.studioUserInfo.courseName = courseName;
-                                res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                                res.json({
+                                    isOK: true,
+                                    userInfo: req.session.studioUserInfo
+                                });
                             } else {
                                 studioService.checkClientGroup(mobilePhone, null,
                                     common.getTempPlatformKey(userSession.groupType),
@@ -886,7 +914,10 @@ router.post('/login', function(req, res) {
         }
     } else {
         //userId自动登录
-        studioService.login({ userId: userId, groupType: userSession.groupType }, 2,
+        studioService.login({
+                userId: userId,
+                groupType: userSession.groupType
+            }, 2,
             function(loginRes) {
                 if (loginRes.isOK) {
                     loginRes.userInfo.isLogin = true;
@@ -927,7 +958,10 @@ router.post('/login', function(req, res) {
                             function(clientGroup, accountNo) {
                                 if (constant.clientGroupSeq[clientGroup] <
                                     constant.clientGroupSeq[loginRes.userInfo.clientGroup]) {
-                                    res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                                    res.json({
+                                        isOK: true,
+                                        userInfo: req.session.studioUserInfo
+                                    });
                                 } else {
                                     var userInfo = {
                                         mobilePhone: loginRes.userInfo.mobilePhone,
@@ -948,7 +982,10 @@ router.post('/login', function(req, res) {
                                 }
                             });
                     } else {
-                        res.json({ isOK: true, userInfo: req.session.studioUserInfo });
+                        res.json({
+                            isOK: true,
+                            userInfo: req.session.studioUserInfo
+                        });
                     }
                 } else {
                     res.json(loginRes);
@@ -1128,7 +1165,10 @@ router.get('/getSyllabus', function(req, res) {
     var groupType = req.query["groupType"];
     var groupId = req.query["groupId"];
     syllabusService.getSyllabus(groupType, groupId, function(data) {
-        res.json({ data: data, serverTime: new Date().getTime() });
+        res.json({
+            data: data,
+            serverTime: new Date().getTime()
+        });
     });
 });
 
@@ -1174,7 +1214,10 @@ router.post('/checkGroupAuth', function(req, res) {
  * 升级客户组权限
  */
 router.post('/upgrade', function(req, res) {
-    var result = { isOK: false, error: null },
+    var result = {
+            isOK: false,
+            error: null
+        },
         chatUser = req.session.studioUserInfo;
     var clientGroup = req.body["clientGroup"];
     if (clientGroup === constant.clientGroup.register) {
@@ -1257,9 +1300,15 @@ router.post('/modifyName', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         nickname = req.body["nickname"];
     if (!userInfo || common.isBlank(userInfo.mobilePhone)) {
-        res.json({ isOK: false, msg: '请重新登录后再修改！' });
+        res.json({
+            isOK: false,
+            msg: '请重新登录后再修改！'
+        });
     } else if (common.isBlank(nickname)) {
-        res.json({ isOK: false, msg: '昵称不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '昵称不能为空！'
+        });
     } else {
         userService.modifyNickname(userInfo.mobilePhone, getGroupType(req),
                 nickname)
@@ -1271,7 +1320,10 @@ router.post('/modifyName', function(req, res) {
                 res.json(result);
             })
             .catch(e => {
-                res.json({ isOK: false, msg: '系统错误，请稍后再试！' });
+                res.json({
+                    isOK: false,
+                    msg: '系统错误，请稍后再试！'
+                });
             });
     }
 });
@@ -1298,16 +1350,31 @@ router.post('/reg', function(req, res) {
         platform: req.query['platform']
     };
     if (!userSession || common.isBlank(userSession.groupType)) {
-        res.json({ isOK: false, msg: '注册失败，请刷新后重试！' });
+        res.json({
+            isOK: false,
+            msg: '注册失败，请刷新后重试！'
+        });
     } else if (common.isBlank(params.mobilePhone)) {
-        res.json({ isOK: false, msg: '手机号不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '手机号不能为空！'
+        });
     } else if (common.isBlank(params.verifyCode)) {
-        res.json({ isOK: false, msg: '手机验证码不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '手机验证码不能为空！'
+        });
     } else if (common.isBlank(params.password) || common.isBlank(
             params.password1)) {
-        res.json({ isOK: false, msg: '密码不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '密码不能为空！'
+        });
     } else if (params.password != params.password1) {
-        res.json({ isOK: false, msg: '两次密码输入不一致！' });
+        res.json({
+            isOK: false,
+            msg: '两次密码输入不一致！'
+        });
     } else {
         //手机号+验证码登陆
         baseApiService.checkMobileVerifyCode(params.mobilePhone,
@@ -1381,14 +1448,23 @@ router.post('/reg', function(req, res) {
                                 });
                         });
                 } else {
-                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                    res.json({
+                        isOK: false,
+                        msg: errorMessage.code_1007.errmsg
+                    });
                 }
             }).catch(chkCodeRes => {
                 if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
                     "1007") {
-                    res.json({ isOK: false, msg: chkCodeRes.errmsg });
+                    res.json({
+                        isOK: false,
+                        msg: chkCodeRes.errmsg
+                    });
                 } else {
-                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                    res.json({
+                        isOK: false,
+                        msg: errorMessage.code_1007.errmsg
+                    });
                 }
                 return;
             });
@@ -1410,14 +1486,26 @@ router.post('/resetPwd', function(req, res) {
     };
     if (params.type == 1) { //修改密码
         if (!userSession && common.isBlank(userSession.mobilePhone)) {
-            res.json({ isOK: false, msg: '修改密码失败，请刷新后重试！' });
+            res.json({
+                isOK: false,
+                msg: '修改密码失败，请刷新后重试！'
+            });
         } else if (common.isBlank(params.password0)) {
-            res.json({ isOK: false, msg: '原始密码不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '原始密码不能为空！'
+            });
         } else if (common.isBlank(params.password) || common.isBlank(
                 params.password1)) {
-            res.json({ isOK: false, msg: '密码不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '密码不能为空！'
+            });
         } else if (params.password != params.password1) {
-            res.json({ isOK: false, msg: '两次密码输入不一致！' });
+            res.json({
+                isOK: false,
+                msg: '两次密码输入不一致！'
+            });
         } else {
             studioService.resetPwd(userSession.groupType, userSession.mobilePhone,
                 params.password, params.password0,
@@ -1434,11 +1522,20 @@ router.post('/resetPwd', function(req, res) {
         }
     } else if (params.type == 2) {
         if (!userSession || common.isBlank(userSession.groupType)) {
-            res.json({ isOK: false, msg: '重置密码失败，请刷新后重试！' });
+            res.json({
+                isOK: false,
+                msg: '重置密码失败，请刷新后重试！'
+            });
         } else if (common.isBlank(params.mobilePhone)) {
-            res.json({ isOK: false, msg: '手机号不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '手机号不能为空！'
+            });
         } else if (common.isBlank(params.verifyCode)) {
-            res.json({ isOK: false, msg: '手机验证码不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '手机验证码不能为空！'
+            });
         } else {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
                 userSession.groupType + "_resetPWD", params.verifyCode,
@@ -1446,28 +1543,53 @@ router.post('/resetPwd', function(req, res) {
                     if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
                         if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
                             "1007") {
-                            res.json({ isOK: false, msg: chkCodeRes.errmsg });
+                            res.json({
+                                isOK: false,
+                                msg: chkCodeRes.errmsg
+                            });
                         } else {
-                            res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                            res.json({
+                                isOK: false,
+                                msg: errorMessage.code_1007.errmsg
+                            });
                         }
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
-                        res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
+                        res.json({
+                            isOK: true,
+                            msg: "",
+                            mobilePhone: params.mobilePhone
+                        });
                     }
                 });
         }
     } else if (params.type == 3) {
         if (!userSession) {
-            res.json({ isOK: false, msg: '重置密码失败，请刷新后重试！' });
+            res.json({
+                isOK: false,
+                msg: '重置密码失败，请刷新后重试！'
+            });
         } else if (common.isBlank(params.mobilePhone)) {
-            res.json({ isOK: false, msg: '手机号不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '手机号不能为空！'
+            });
         } else if (params.mobilePhone != userSession.mobilePhoneChk) {
-            res.json({ isOK: false, msg: '手机验证码校验失败！' });
+            res.json({
+                isOK: false,
+                msg: '手机验证码校验失败！'
+            });
         } else if (common.isBlank(params.password) || common.isBlank(
                 params.password1)) {
-            res.json({ isOK: false, msg: '密码不能为空！' });
+            res.json({
+                isOK: false,
+                msg: '密码不能为空！'
+            });
         } else if (params.password != params.password1) {
-            res.json({ isOK: false, msg: '两次密码输入不一致！' });
+            res.json({
+                isOK: false,
+                msg: '两次密码输入不一致！'
+            });
         } else {
             studioService.resetPwd(userSession.groupType, params.mobilePhone,
                 params.password, null,
@@ -1482,7 +1604,10 @@ router.post('/resetPwd', function(req, res) {
                 });
         }
     } else {
-        res.json({ isOK: false, msg: '参数错误！' });
+        res.json({
+            isOK: false,
+            msg: '参数错误！'
+        });
     }
 });
 
@@ -1499,7 +1624,9 @@ router.get('/getBigImg', function(req, res) {
             if (common.isBlank(bigImgData)) {
                 res.end("");
             } else {
-                res.writeHead(200, { "Content-Type": "image/jpeg" });
+                res.writeHead(200, {
+                    "Content-Type": "image/jpeg"
+                });
                 res.end(new Buffer(bigImgData.replace(/^data:image.*base64,/,
                     ""), 'base64'));
             }
@@ -1516,7 +1643,9 @@ router.post('/uploadData', function(req, res) {
         var domain = require('domain').create();
         domain.on('error', function(er) {
             logger.error("uploadImg fail,please check it", er);
-            res.json({ success: false });
+            res.json({
+                success: false
+            });
         });
         domain.run(function() {
             //执行进程监控
@@ -1534,24 +1663,34 @@ router.post('/uploadData', function(req, res) {
                                         data.content.maxValue = maxResult.data;
                                         chatService.acceptMsg(data, null);
                                     }
-                                    res.json({ success: maxResult.isOK });
+                                    res.json({
+                                        success: maxResult.isOK
+                                    });
                                 });
                             } else {
                                 chatService.acceptMsg(data, null);
-                                res.json({ success: minResult.isOK });
+                                res.json({
+                                    success: minResult.isOK
+                                });
                             }
                         } else {
-                            res.json({ success: minResult.isOK });
+                            res.json({
+                                success: minResult.isOK
+                            });
                         }
                     });
                 } else {
-                    res.json({ success: false });
+                    res.json({
+                        success: false
+                    });
                 }
             });
         });
     } else {
         logger.warn("warn:please upload img by linux server!");
-        res.json({ success: false });
+        res.json({
+            success: false
+        });
     }
 });
 
@@ -1565,7 +1704,10 @@ router.get('/getCourseInfo', function(req, res) {
         endTime = req.query["endTime"],
         authorId = req.query["authorId"];
     if (!userInfo || common.isBlank(day)) {
-        res.json({ remark: '', authors: [] });
+        res.json({
+            remark: '',
+            authors: []
+        });
     } else {
         syllabusService.getCourseInfo({
             groupType: userInfo.groupType,
@@ -1617,12 +1759,18 @@ router.post('/addShowTradeComment', function(req, res) {
         content: reqParam.content
     };
     if (!params.id || !params.content) {
-        res.json({ 'isOK': false, 'msg': '参数错误！' });
+        res.json({
+            'isOK': false,
+            'msg': '参数错误！'
+        });
     } else {
         showTradeService.addComments(params).then(result => {
             res.json(result);
         }).catch(e => {
-            res.json({ isOK: false, msg: '系统错误，请稍后再试！' });
+            res.json({
+                isOK: false,
+                msg: '系统错误，请稍后再试！'
+            });
         });
     }
 });
@@ -1630,7 +1778,9 @@ router.post('/setUserPraise', function(req, res) {
     var clientId = req.body.clientId,
         praiseId = req.body.praiseId;
     if (common.isBlank(clientId) || common.isBlank(praiseId)) {
-        res.json({ isOK: false });
+        res.json({
+            isOK: false
+        });
     } else {
         var fromPlatform = getGroupType(req);
         baseApiService.checkChatPraise(clientId, praiseId, fromPlatform,
@@ -1660,7 +1810,9 @@ router.post('/setUserPraise', function(req, res) {
                             }
                         });
                 }
-                res.json({ isOK: isOK });
+                res.json({
+                    isOK: isOK
+                });
             });
     }
 });
@@ -1713,7 +1865,10 @@ router.post('/setUserPraise', function(req, res) {
 router.get('/getRmCourseList', function(req, res) {
     var roomIds = req.query["roomIds"];
     var userInfo = req.session.studioUserInfo;
-    var result = { isOK: false, data: {} };
+    var result = {
+        isOK: false,
+        data: {}
+    };
     if (!userInfo || common.isBlank(roomIds)) {
         res.json(result);
     } else {
@@ -1783,7 +1938,11 @@ router.get('/getRmCourseList', function(req, res) {
 router.get('/getSyllabusList', function(req, res) {
     var roomIds = req.query["roomIds"];
     var userInfo = req.session.studioUserInfo;
-    var result = { isOK: false, syllabuses: {}, onlineNums: {} };
+    var result = {
+        isOK: false,
+        syllabuses: {},
+        onlineNums: {}
+    };
     if (!userInfo || common.isBlank(roomIds)) {
         res.json(result);
     } else {
@@ -1822,9 +1981,15 @@ router.post('/highsLowsVote', function(req, res) {
     params.symbol = req.body['symbol']; //产品名
     params.highslows = req.body['highslows']; //看涨或看跌
     if (common.isBlank(params.symbol)) {
-        res.json({ isOK: false, msg: '产品不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '产品不能为空！'
+        });
     } else if (common.isBlank(params.highslows)) {
-        res.json({ isOK: false, msg: '看跌或看涨不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '看跌或看涨不能为空！'
+        });
     } else {
         studioService.highsLowsVote(params.symbol, params.highslows,
             function(result) {
@@ -1862,9 +2027,15 @@ router.post('/getFinancData', function(req, res) {
     var releaseTime = req.body['releaseTime'];
     var dataTypeCon = req.body['dataTypeCon'] ? req.body['dataTypeCon'] : 1;
     if (common.isBlank(releaseTime)) {
-        res.json({ "result": 1, "msg": '日期不能为空！' });
+        res.json({
+            "result": 1,
+            "msg": '日期不能为空！'
+        });
     } else if (common.isBlank(dataTypeCon)) {
-        res.json({ "result": 1, "msg": '数据类型不能为空！' });
+        res.json({
+            "result": 1,
+            "msg": '数据类型不能为空！'
+        });
     } else {
         baseApiService.getZxFinanceDataList(releaseTime, dataTypeCon,
             function(result) {
@@ -1894,9 +2065,15 @@ router.post('/modifyAvatar', function(req, res) {
     }
     params.ip = common.getClientIp(req);
     if (!userInfo || common.isBlank(userInfo.mobilePhone)) {
-        res.json({ isOK: false, msg: '请重新登录后再修改！' });
+        res.json({
+            isOK: false,
+            msg: '请重新登录后再修改！'
+        });
     } else if (common.isBlank(avatar)) {
-        res.json({ isOK: false, msg: '头像不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '头像不能为空！'
+        });
     } else {
         params.avatar = avatar;
         params.groupType = getGroupType(req);
@@ -1940,20 +2117,38 @@ router.post('/email', function(req, res) {
     var data = req.body['data'];
     data = JSON.parse(data);
     if (common.isBlank(data.email)) {
-        res.json({ isOK: false, msg: '请输入发件人！' });
+        res.json({
+            isOK: false,
+            msg: '请输入发件人！'
+        });
     } else if (common.isBlank(data.content)) {
-        res.json({ isOK: false, msg: '请输入邮件内容！' });
+        res.json({
+            isOK: false,
+            msg: '请输入邮件内容！'
+        });
     } else if (common.isBlank(data.code)) {
-        res.json({ isOK: false, msg: '请输入验证码！' });
+        res.json({
+            isOK: false,
+            msg: '请输入验证码！'
+        });
     } else if (req.session.emailVerifyCode && data.code.toLowerCase() !=
         req.session.emailVerifyCode) {
-        res.json({ isOK: false, msg: '验证码错误，请重新输入！' });
+        res.json({
+            isOK: false,
+            msg: '验证码错误，请重新输入！'
+        });
     } else {
         baseApiService.sendEmail(key, data, function(result) {
             if (result.result == 0) {
-                res.json({ isOK: true, msg: '邮件发送成功！' });
+                res.json({
+                    isOK: true,
+                    msg: '邮件发送成功！'
+                });
             } else {
-                res.json({ isOK: false, msg: result.msg });
+                res.json({
+                    isOK: false,
+                    msg: result.msg
+                });
             }
         });
     }
@@ -1976,7 +2171,9 @@ router.get('/getVerifyCode', function(req, res) {
             res.end("");
             return;
         }
-        res.writeHead(200, { "Content-Type": "image/jpeg" });
+        res.writeHead(200, {
+            "Content-Type": "image/jpeg"
+        });
         res.end(new Buffer(verifyCodeObj.dataURL.replace(/^data:image.*base64,/,
             ""), 'base64'));
     }
@@ -1998,13 +2195,21 @@ router.post('/getShowTrade', function(req, res) {
     }
     params.pageSize = common.isBlank(params.pageSize) ? 100 : params.pageSize;
     if (isNaN(params.pageSize) || common.isBlank(params.groupType)) {
-        res.json({ 'isOK': false, 'data': null, 'msg': '参数错误' });
+        res.json({
+            'isOK': false,
+            'data': null,
+            'msg': '参数错误'
+        });
     } else {
         if (common.isValid(params.userNo) && params.userNo != userInfo.userId) {
             params.status = 1;
         }
         showTradeService.getShowTradeList(params, function(page) {
-            res.json({ 'isOK': true, 'data': page, 'msg': '' });
+            res.json({
+                'isOK': true,
+                'data': page,
+                'msg': ''
+            });
         });
     }
 });
@@ -2025,14 +2230,26 @@ router.post('/addShowTrade', function(req, res) {
     }
     params.Ip = common.getClientIp(req);
     if (common.isBlank(params.title)) {
-        res.json({ 'isOK': false, 'msg': '请输入晒单标题' });
+        res.json({
+            'isOK': false,
+            'msg': '请输入晒单标题'
+        });
     } else if (common.isBlank(params.tradeImg)) {
-        res.json({ 'isOK': false, 'msg': '请上传晒单图片' });
+        res.json({
+            'isOK': false,
+            'msg': '请上传晒单图片'
+        });
     } else if (common.isBlank(params.userName)) {
-        res.json({ 'isOK': false, 'msg': '请输入晒单人' });
+        res.json({
+            'isOK': false,
+            'msg': '请输入晒单人'
+        });
     } else if (common.isBlank(params.groupType) || common.isBlank(params.userNo) ||
         common.isBlank(params.avatar) || common.isBlank(params.tradeType)) {
-        res.json({ 'isOK': false, 'msg': '参数错误' });
+        res.json({
+            'isOK': false,
+            'msg': '参数错误'
+        });
     } else {
         params.groupId = common.isBlank(params.groupId) ? '' : params.groupId;
         params.telePhone = userInfo.mobilePhone;
@@ -2051,7 +2268,9 @@ router.post('/setTradePraise', function(req, res) {
         params = JSON.parse(params);
     }
     if (common.isBlank(params.clientId) || common.isBlank(params.praiseId)) {
-        res.json({ isOK: false });
+        res.json({
+            isOK: false
+        });
     } else {
         params.fromPlatform = getGroupType(req);
         /*baseApiService.checkChatPraise(params.clientId, params.praiseId,
@@ -2084,7 +2303,10 @@ router.post('/modifyUName', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body["params"];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2097,9 +2319,15 @@ router.post('/modifyUName', function(req, res) {
     }
     params.ip = common.getClientIp(req);
     if (!userInfo || common.isBlank(userInfo.mobilePhone)) {
-        res.json({ isOK: false, msg: '请重新登录后再修改！' });
+        res.json({
+            isOK: false,
+            msg: '请重新登录后再修改！'
+        });
     } else if (common.isBlank(params.userName)) {
-        res.json({ isOK: false, msg: '用户名不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '用户名不能为空！'
+        });
     } else {
         userService.modifyUserName(userInfo, params, function(result) {
             if (result.isOK) {
@@ -2118,7 +2346,10 @@ router.post('/modifyEmail', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body["params"];
     if (common.isBlank(params) || !userInfo) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2131,13 +2362,25 @@ router.post('/modifyEmail', function(req, res) {
     }
     //params.ip = common.getClientIp(req);
     if (!userInfo || common.isBlank(userInfo.mobilePhone)) {
-        res.json({ isOK: false, msg: '请重新登录后再修改！' });
+        res.json({
+            isOK: false,
+            msg: '请重新登录后再修改！'
+        });
     } else if (common.isBlank(params.email)) {
-        res.json({ isOK: false, msg: '邮箱地址不能为空！' });
+        res.json({
+            isOK: false,
+            msg: '邮箱地址不能为空！'
+        });
     } else if (!common.isEmail(params.email)) {
-        res.json({ isOK: false, msg: '邮箱地址有误！' });
+        res.json({
+            isOK: false,
+            msg: '邮箱地址有误！'
+        });
     } else if (common.isBlank(userInfo.nickname)) {
-        res.json({ isOK: false, msg: '请先设置一个好听的昵称吧！' });
+        res.json({
+            isOK: false,
+            msg: '请先设置一个好听的昵称吧！'
+        });
     } else {
         //http:192.168.35.91:3006/studio/confirmMail?grouptype=<%= groupType %>&userid=<%= userId %>&email=<%= encodeURI(email) %>&key=<%= key %>
         var ref = req.headers.referer.indexOf('?') > -1 ?
@@ -2183,12 +2426,18 @@ router.get('/confirmMail', function(req, res) {
     params.ip = common.getClientIp(req);
     params.item = 'register_email';
     if (common.isBlank(params.email)) {
-        res.render("error", { error: '邮箱地址不能为空！' });
+        res.render("error", {
+            error: '邮箱地址不能为空！'
+        });
     } else if (!common.isEmail(params.email)) {
-        res.render("error", { error: '邮箱地址有误！' });
+        res.render("error", {
+            error: '邮箱地址有误！'
+        });
     } else if (common.getMD5(constant.emailKey + params.email + params.userId) !=
         params.key) {
-        res.render("error", { error: '校验码错误！' });
+        res.render("error", {
+            error: '校验码错误！'
+        });
     } else {
         userService.modifyEmail(params, function(result) {
             if (result.isOK) {
@@ -2196,7 +2445,9 @@ router.get('/confirmMail', function(req, res) {
                     req.session.studioUserInfo.email = params.email;
                 }
             }
-            res.render("tip", { tip: result.isOK ? '邮箱验证通过！' : result.msg });
+            res.render("tip", {
+                tip: result.isOK ? '邮箱验证通过！' : result.msg
+            });
         });
     }
 });
@@ -2208,7 +2459,10 @@ router.post('/modifyPwd', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body["params"];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2222,16 +2476,31 @@ router.post('/modifyPwd', function(req, res) {
 
     params.ip = common.getClientIp(req);
     if (!userInfo || common.isBlank(userInfo.mobilePhone)) {
-        res.json({ isOK: false, msg: '请重新登录后再修改！' });
+        res.json({
+            isOK: false,
+            msg: '请重新登录后再修改！'
+        });
     } else if (common.isBlank(userInfo.password) && common.isBlank(
             params.password)) {
-        res.json({ isOK: false, msg: '请输入原始密码！' });
+        res.json({
+            isOK: false,
+            msg: '请输入原始密码！'
+        });
     } else if (common.isBlank(params.newPwd)) {
-        res.json({ isOK: false, msg: '请输入新密码！' });
+        res.json({
+            isOK: false,
+            msg: '请输入新密码！'
+        });
     } else if (common.isBlank(params.newPwd1)) {
-        res.json({ isOK: false, msg: '请输入确认新的密码！' });
+        res.json({
+            isOK: false,
+            msg: '请输入确认新的密码！'
+        });
     } else if (params.newPwd != params.newPwd1) {
-        res.json({ isOK: false, msg: '新密码输入不一致，请重新输入！' });
+        res.json({
+            isOK: false,
+            msg: '新密码输入不一致，请重新输入！'
+        });
     } else {
         userService.modifyPwd(userInfo, params, function(result) {
             if (result.isOK) {
@@ -2248,7 +2517,10 @@ router.post('/modifyPwd', function(req, res) {
 router.post('/getSubscribeType', function(req, res) {
     var params = req.body['params'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2260,7 +2532,10 @@ router.post('/getSubscribeType', function(req, res) {
         }
     }
     if (common.isBlank(params.groupType)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
     } else {
         chatSubscribeTypeService.getSubscribeTypeList(params, function(result) {
             /*var row = null;
@@ -2279,7 +2554,10 @@ router.post('/getSubscribe', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body['params'];
     if (common.isBlank(params) || !userInfo) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2291,11 +2569,17 @@ router.post('/getSubscribe', function(req, res) {
         }
     }
     if (common.isBlank(params.groupType)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
     } else {
         params.userId = userInfo.mobilePhone;
         if (common.isBlank(params.userId)) {
-            res.json({ isOK: false, msg: '参数错误' });
+            res.json({
+                isOK: false,
+                msg: '参数错误'
+            });
         } else {
             chatSubscribeService.getSubscribeList(params, function(result) {
                 res.json(result);
@@ -2311,7 +2595,10 @@ router.post('/subscribe', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body['params'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2337,16 +2624,31 @@ router.post('/subscribe', function(req, res) {
     }
     if (common.isBlank(params.groupType) || common.isBlank(params.userId) ||
         common.isBlank(params.type) || !common.isNumber(params.point)) {
-        res.json({ 'isOK': false, 'msg': '参数错误' });
+        res.json({
+            'isOK': false,
+            'msg': '参数错误'
+        });
     } else if (common.isBlank(userInfo.email) && 'email'.indexOf(
             params.noticeType) > -1) {
-        res.json({ 'isOK': false, 'msg': '请先绑定邮箱' });
+        res.json({
+            'isOK': false,
+            'msg': '请先绑定邮箱'
+        });
     } else if (common.isBlank(params.id) && common.isBlank(params.analyst)) {
-        res.json({ 'isOK': false, 'msg': '请选择订阅老师！' });
+        res.json({
+            'isOK': false,
+            'msg': '请选择订阅老师！'
+        });
     } else if (common.isBlank(params.id) && common.isBlank(params.noticeType)) {
-        res.json({ 'isOK': false, 'msg': '请选择订阅方式！' });
+        res.json({
+            'isOK': false,
+            'msg': '请选择订阅方式！'
+        });
     } else if (common.isBlank(params.id) && common.isBlank(params.noticeCycle)) {
-        res.json({ 'isOK': false, 'msg': '请选择订阅周期！' });
+        res.json({
+            'isOK': false,
+            'msg': '请选择订阅周期！'
+        });
     } else {
         if (common.isBlank(params.id)) {
             chatSubscribeService.saveSubscribe(params, function(result) {
@@ -2367,7 +2669,10 @@ router.post('/getPointsInfo', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body['params'];
     if (common.isBlank(params) || !userInfo) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2379,7 +2684,10 @@ router.post('/getPointsInfo', function(req, res) {
         }
     }
     if (common.isBlank(params.groupType)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     } else {
         chatPointsService.getPointsInfo(params.groupType, userInfo.mobilePhone,
@@ -2399,7 +2707,10 @@ router.post('/addPointsInfo', function(req, res) {
     var userInfo = req.session.studioUserInfo,
         params = req.body['params'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2411,7 +2722,10 @@ router.post('/addPointsInfo', function(req, res) {
         }
     }
     if (common.isBlank(params.item) || !userInfo) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     } else {
         params.userId = userInfo.mobilePhone;
@@ -2422,9 +2736,15 @@ router.post('/addPointsInfo', function(req, res) {
         params.opIp = common.getClientIp(req);
         chatPointsService.add(params, function(err, result) {
             if (err && err.errcode != '3001') {
-                res.json({ isOK: false, msg: err.errmsg });
+                res.json({
+                    isOK: false,
+                    msg: err.errmsg
+                });
             } else {
-                res.json({ isOK: true, msg: result });
+                res.json({
+                    isOK: true,
+                    msg: result
+                });
             }
         });
     }
@@ -2452,11 +2772,15 @@ router.get('/getTrainRoomList', function(req, res) {
 router.get('/getTrainRoomNum', function(req, res) {
     var userInfo = req.session.studioUserInfo;
     if (!userInfo) {
-        res.json({ num: 0 });
+        res.json({
+            num: 0
+        });
     } else {
         clientTrainService.getTrainList(userInfo.groupType, null, true,
             function(result) {
-                res.json({ num: result ? result.length : 0 });
+                res.json({
+                    num: result ? result.length : 0
+                });
             });
     }
 });
@@ -2566,7 +2890,10 @@ router.post('/getchatGroupByGroupId', function(req, res) {
 router.post('/updateSession', function(req, res) {
     var params = req.body['params'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2578,7 +2905,10 @@ router.post('/updateSession', function(req, res) {
         }
     }
     req.session.studioUserInfo.toGroup = params.groupId;
-    res.json({ isOK: true, msg: '更新成功' });
+    res.json({
+        isOK: true,
+        msg: '更新成功'
+    });
 });
 /**
  * 查询积分配置表
@@ -2587,7 +2917,10 @@ router.post('/getChatPointsConfig', function(req, res) {
     var userInfo = req.session.studioUserInfo;
     var params = req.body['data'];
     if (common.isBlank(params) || !userInfo) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -2667,15 +3000,24 @@ router.post('/setThemeStyle', function(req, res) {
         }
     }
     if (common.isBlank(params.defTemplate)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
     } else {
         studioService.setUserGroupThemeStyle(req.session.studioUserInfo, params,
             function(result) {
                 if (result) {
                     req.session.studioUserInfo.defTemplate = params.defTemplate;
-                    res.json({ isOK: true, msg: '' });
+                    res.json({
+                        isOK: true,
+                        msg: ''
+                    });
                 } else {
-                    res.json({ isOK: false, msg: '' });
+                    res.json({
+                        isOK: false,
+                        msg: ''
+                    });
                 }
             });
     }
@@ -2691,7 +3033,10 @@ router.get('/getSymbolLongShortRatios', function(req, res) {
                 result = JSON.parse(result);
             }
         } catch (e) {
-            result = { code: 'FAIL', result: [] };
+            result = {
+                code: 'FAIL',
+                result: []
+            };
         }
         res.json(result);
     });
@@ -2707,7 +3052,10 @@ router.get('/findSymbolOpenPositionRatios', function(req, res) {
                 result = JSON.parse(result);
             }
         } catch (e) {
-            result = { code: 'FAIL', result: [] };
+            result = {
+                code: 'FAIL',
+                result: []
+            };
         }
         res.json(result);
     });
@@ -2863,7 +3211,9 @@ router.get('/getAnalystList', function(req, res) {
     if (common.isValid(systemCategory) && common.isValid(platform)) {
         async.parallel({
                 analysts: function(callback) {
-                    userService.getAnalystList({ systemCategory: systemCategory },
+                    userService.getAnalystList({
+                            systemCategory: systemCategory
+                        },
                         function(result) {
                             callback(null, result);
                         });
@@ -2898,9 +3248,15 @@ router.get('/getAuthUsersByGroupId', function(req, res) {
                     if (err || !cacheData) {
                         let num = Math.floor(200 * common.randomN2M(0.8, 1));
                         cacheClient.set(key, num);
-                        result.push({ userNo: userNo, subscribe: num });
+                        result.push({
+                            userNo: userNo,
+                            subscribe: num
+                        });
                     } else {
-                        result.push({ userNo: userNo, subscribe: cacheData });
+                        result.push({
+                            userNo: userNo,
+                            subscribe: cacheData
+                        });
                     }
                     if (dataLen == result.length) {
                         res.json(result);
@@ -2971,7 +3327,10 @@ router.post('/pmLogin', function(req, res) {
         courseName = req.body['courseName'],
         teacherId = req.body['teacherId'],
         teacherName = req.body['teacherName'];
-    var result = { isOK: false, error: null };
+    var result = {
+        isOK: false,
+        error: null
+    };
     var userSession = req.session.studioUserInfo;
     if (!userSession || !userSession.groupType) {
         res.json(result);
@@ -2989,7 +3348,11 @@ router.post('/pmLogin', function(req, res) {
     if (result.error) {
         res.json(result);
     } else {
-        apiService.checkAccountLogin({ loginname: accountNo, password: pwd, ip: common.getClientIp(req) },
+        apiService.checkAccountLogin({
+                loginname: accountNo,
+                password: pwd,
+                ip: common.getClientIp(req)
+            },
             function(checkAResult) {
                 logger.info(
                     "checkAccountLogin->flagResult:" + JSON.stringify(checkAResult));
@@ -3146,81 +3509,76 @@ router.post('/rob', function(req, res) {
     logger.info("redPacket<<rob begin！");
     //没有登录
     var userInfo = req.session.studioUserInfo;
-    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
-        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
-        return;
-    }
-    var clientTime = req.body['t'];
-    var minutes = clientTime - new Date().getTime();
-    if (Math.abs(minutes) >= 60000) {
-        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
-        return;
-    }
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var curHours = now.getHours();
-    var curMinutes = now.getMinutes();
-    if (curHours < 10) {
-        curHours = '0' + curHours;
-    }
-    if (curMinutes < 10) {
-        curMinutes = '0' + curMinutes;
-    }
-    var curHMDate = curHours + ":" + curMinutes;
-    var pariods = constant.periods;
-    var currentPariod = 1; //默认从第一期开始
-    for (var i = 0; i < pariods.length; i++) {
-        if (curHMDate < pariods[i]) {
-            currentPariod = i + 1;
-            break;
-        }
-    }
-
     var robParams = {
-        ac_periods: "20170607",
+        ac_periods: "20170612",
         phone: userInfo.mobilePhone.replace("86-", ""),
-        nper: currentPariod
-    };
-
-    /*如果期数小于0,直接返回*/
-    if (currentPariod < 0) {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
+        userGroup: userInfo.clientGroup
     }
-
-    cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
-        if (err) {
-            logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && 0 == currentPariod) {
-            res.json({ result: 0, money: 0, msg: "" });
-        } else if (common.isBlank(result) || result != currentPariod) {
-            var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
-            cacheClient.set("redPacket_" + robParams.phone, currentPariod);
-            cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170607/draw'), form: robParams }, function(error, response, data) {
-                var result = { result: 0, money: 0, msg: "" };
-                if (data) {
-                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
-                    try {
-                        data = JSON.parse(data);
-                        if (data.infoNo == 1) {
-                            cacheClient.set("redPacket_" + robParams.nper, true);
-                            cacheClient.expire("redPacket_" + robParams.nper, cacheTime);
-                            result.result = 0;
-                            result.money = data.infoGiftName;
-                            res.json(result);
-                            return;
-                        }
-                        result.msg = data.infoMsg;
-                    } catch (e) {}
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimple'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("redPacket<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.money = data.infoGiftName;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
                 }
-                res.json(result);
-            });
-        } else {
-            res.json({ result: 0, money: 0, msg: "" });
+                result.msg = data.infoMsg;
+            } catch (e) {}
         }
+        res.json(result);
     });
     logger.info("redPacket<<rob end！");
+});
+
+/** 获取当前剩余抽奖机会 */
+router.post('/getLastRobChance', function(req, res) {
+    logger.info("get last redPacket chance<<begin！");
+    //没有登录
+    var userInfo = req.session.studioUserInfo;
+    var robParams = {
+        ac_periods: "20170612",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        userGroup: userInfo.clientGroup
+    }
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimpleSearch'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
+                }
+                result.msg = data.infoMsg;
+            } catch (e) {}
+        }
+        res.json(result);
+    });
+    logger.info("get last redPacket chance<<end！");
 });
 
 /**
@@ -3229,7 +3587,10 @@ router.post('/rob', function(req, res) {
 router.get('/getAnalystSubscribeNum', function(req, res) {
     let params = req.query['data'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -3246,9 +3607,13 @@ router.get('/getAnalystSubscribeNum', function(req, res) {
         if (err || !result) {
             let num = Math.floor(200 * common.randomN2M(0.8, 1));
             cacheClient.set(key, num);
-            res.json({ num: num });
+            res.json({
+                num: num
+            });
         } else {
-            res.json({ num: result });
+            res.json({
+                num: result
+            });
         }
     });
 });
@@ -3259,7 +3624,10 @@ router.get('/getAnalystSubscribeNum', function(req, res) {
 router.post('/setAnalystSubscribeNum', function(req, res) {
     let params = req.body['data'];
     if (common.isBlank(params)) {
-        res.json({ isOK: false, msg: '参数错误' });
+        res.json({
+            isOK: false,
+            msg: '参数错误'
+        });
         return;
     }
     if (typeof params == 'string') {
@@ -3277,11 +3645,15 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
             let num = Math.floor(200 * common.randomN2M(0.8, 1));
             num = num + 1;
             cacheClient.set(key, num);
-            res.json({ num: num });
+            res.json({
+                num: num
+            });
         } else {
             result = parseInt(result) + 1;
             cacheClient.set(key, result);
-            res.json({ num: result });
+            res.json({
+                num: result
+            });
         }
     });
 });
@@ -3312,10 +3684,17 @@ let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSe
 router.get('/getToken', (req, res) => {
     apiAuth.getToken()
         .then(token => {
-            res.json({ isOK: true, token: token, secret: config.apiAuthForWeb.appSecret });
+            res.json({
+                isOK: true,
+                token: token,
+                secret: config.apiAuthForWeb.appSecret
+            });
         }).catch(e => {
             logger.error(e);
-            res.json({ isOK: false, msg: '参数错误' });
+            res.json({
+                isOK: false,
+                msg: '参数错误'
+            });
         });
 })
 
