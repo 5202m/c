@@ -702,7 +702,7 @@ var Util ={
                 size = (currentHour >= 20 && currentHour < 22) ? ( size * 16 ) + 300 : 0;
             }else if( room.roomType === 'simple' || (room.roomType === 'normal' && (room.id === 'studio_3' || room.id === 'studio_teach' )) ){//新手房间与交流大厅0830-2330
                 var beginTime = 8 * 60 * 60 + 30 * 60,endTime = 23 * 60 * 60 + 30 * 60;
-                size = (beginTime < currentS && endTime > currentS) ? ( size * 32 ) + 200 : ( size * 5 ) + 10;
+                size = (beginTime < currentS && endTime > currentS) ? ( size * 16 ) + 200 : ( size * 5 ) + 10;
             }else if( room.roomType === 'normal' && room.id !== 'studio_3' && room.id !== 'studio_teach' ){//分析专场 15:30-17:30
                 var beginTime = 15 * 60 * 60 + 30 * 60,endTime = 17 * 60 * 60 + 30 * 60;
                 size = (beginTime < currentS && endTime > currentS) ? ( size * 12 ) + 200 : 0;

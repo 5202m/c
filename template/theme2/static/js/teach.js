@@ -136,7 +136,7 @@ Teach.appendVideos = function(dataArr){
                     '#' + Teach.currentRank + ' ul li:gt(4)';
     $(_select).remove();
     _select = '#' + Teach.currentRank + ' ul';
-    $(_select).append(html.join());
+    $(_select).append(html.join(''));
 };
 
 /**
