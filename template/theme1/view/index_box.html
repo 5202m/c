@@ -30,7 +30,8 @@
                 <div class="in_line clearfix">
                     <i class="ic_msg"></i>
                     <input type="text" name="verifyCode" placeholder="短信验证码" class="in1 in2">
-                    <a href="javascript:void(0)" class="rbtn" ut="studio_reg" t="120" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zc_PIN', 'content_top', 1, true]);">获取验证码</a><!--<a href="" class="rbtn pressed">60s...</a>按钮点击后的样式-->
+                    <a href="javascript:void(0)" class="rbtn" ut="studio_reg" t="120" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zc_PIN', 'content_top', 1, true]);">获取验证码</a>
+                    <!--<a href="" class="rbtn pressed">60s...</a>按钮点击后的样式-->
                 </div>
             </div>
             <div class="error dn"></div>
@@ -54,8 +55,8 @@
                 <a href="javascript:void(0)" class=" on" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_dl_phone', 'content_top', 1, true]);">手机登录</a>
                 <a href="javascript:void(0)" class="b2" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_dl_account', 'content_top', 1, true]);">账户登录</a>
             </div>
-            <input type="hidden" name="clientStoreId"/>
-            <input type="hidden" name="loginType" id="loginType" value="pwd"/>
+            <input type="hidden" name="clientStoreId" />
+            <input type="hidden" name="loginType" id="loginType" value="pwd" />
             <input type="hidden" name="cookieId" />
             <input type="hidden" name="visitorId" />
             <input type="hidden" name="roomId" />
@@ -69,7 +70,7 @@
                 <div class="formcont">
                     <div class="in_line">
                         <i class="ic_phone"></i>
-                        <input type="text" name="mobilePhone" placeholder="用户名/手机号/邮箱" class="in1" >
+                        <input type="text" name="mobilePhone" placeholder="用户名/手机号/邮箱" class="in1">
                     </div>
                     <div class="login_option">
                         <a href="javascript:void(0)" class="option selected" lt="pwd"><i></i>客户密码</a>
@@ -81,7 +82,7 @@
                     </div>
                     <div class="in_line clearfix" lt="verify" style="display: none;">
                         <i class="ic_msg"></i>
-                        <input type="text"  name="verifyCode" placeholder="请输入动态密码" class="in1 in2"/>
+                        <input type="text" name="verifyCode" placeholder="请输入动态密码" class="in1 in2" />
                         <a href="javascript:void(0)" class="rbtn" ut="studio_login" t="120">获取动态密码</a>
                     </div>
                 </div>
@@ -211,10 +212,14 @@
             <a href="javascript:void(0);" id="modifyAvatar" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zh_profile', 'content_top', 1, true]);">修改头像</a>
             <form method="post" enctype='multipart/form-data' id="fileForm" name="fileForm" style="display: none;">
                 <input type="file" name="file" />
-                <input type="hidden" name="fileDir" value="pic/header/chat/front"/>
+                <input type="hidden" name="fileDir" value="pic/header/chat/front" />
                 <input type="hidden" name="fileType" value="avatar" />
             </form>
-            <h4 class="username"><%if(userSession.isLogin){%><%= userSession.nickname||"匿名_xxx" %><%}%></h4>
+            <h4 class="username">
+                <%if(userSession.isLogin){%>
+                    <%= userSession.nickname||"匿名_xxx" %>
+                        <%}%>
+            </h4>
             <div class="infobar">
                 <div class="item">
                     <span class="in_name">等级：</span>
@@ -273,7 +278,8 @@
                         <div class="item">
                             <span class="iname">手机号</span>
                             <div class="inp_div">
-                                <input type="text" id="myMobilePhone" t="<%= userSession.mobilePhone%>" value="<%if(userSession.isLogin){%><%= userSession.mobilePhone ? (userSession.mobilePhone.substring(0,3)+'****'+userSession.mobilePhone.substring(8,11)) : '未绑定' %><%}%>" disabled="disabled" />
+                                <input type="text" id="myMobilePhone" t="<%= userSession.mobilePhone%>" value="<%if(userSession.isLogin){%><%= userSession.mobilePhone ? (userSession.mobilePhone.substring(0,3)+'****'+userSession.mobilePhone.substring(8,11)) : '未绑定' %><%}%>" disabled="disabled"
+                                />
                             </div>
                             <div class="edit_div">
                                 <!--a href="javascript:void(0);" id="modifyMobilePhone">更换</a>
@@ -285,7 +291,8 @@
                         <div class="item">
                             <span class="iname">邮箱</span>
                             <div class="inp_div">
-                                <input type="email" id="myEmail" e="<%=userSession.email %>" placeholder="<%if(userSession.isLogin){%><%= userSession.email ? (userSession.email.substring(0,3)+'*****'+userSession.email.substring(userSession.email.lastIndexOf('.')+1)) : '未绑定' %><%}%>" value="<%if(userSession.isLogin){%><%= userSession.email ? (userSession.email.substring(0,3)+'*****'+userSession.email.substring(userSession.email.lastIndexOf('.')+1)) : '' %><%}%>" disabled="disabled" />
+                                <input type="email" id="myEmail" e="<%=userSession.email %>" placeholder="<%if(userSession.isLogin){%><%= userSession.email ? (userSession.email.substring(0,3)+'*****'+userSession.email.substring(userSession.email.lastIndexOf('.')+1)) : '未绑定' %><%}%>"
+                                    value="<%if(userSession.isLogin){%><%= userSession.email ? (userSession.email.substring(0,3)+'*****'+userSession.email.substring(userSession.email.lastIndexOf('.')+1)) : '' %><%}%>" disabled="disabled" />
                             </div>
                             <div class="edit_div">
                                 <a href="javascript:void(0);" id="bindEmail">绑定</a>
@@ -327,10 +334,10 @@
                         <div class="borbox">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <thead>
-                                <tr>
-                                    <th width="13%">日期</th>
-                                    <th>积分明细</th>
-                                </tr>
+                                    <tr>
+                                        <th width="13%">日期</th>
+                                        <th>积分明细</th>
+                                    </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -341,10 +348,10 @@
                         <div class="borbox">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <thead>
-                                <tr>
-                                    <th width="13%">日期</th>
-                                    <th>积分明细</th>
-                                </tr>
+                                    <tr>
+                                        <th width="13%">日期</th>
+                                        <th>积分明细</th>
+                                    </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -582,72 +589,74 @@
                 <div class="scrollbox">
                     <div class="prule_table">
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <tbody><tr>
-                                <th width="25%" class="fir">分类</th>
-                                <th width="">项目</th>
-                                <th width="25%">加分值（积分）</th>
-                                <th width="25%">上限设定</th>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="3" class="catename">注册加分</td>
-                                <td><span>注册</span></td>
-                                <td><span><b>1000</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>上传头像</span></td>
-                                <td><span><b>500</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>完成邮箱认证</span></td>
-                                <td><span><b>1000</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="3" class="catename">日常加分</td>
-                                <td><span>每日签到</span></td>
-                                <td><span><b>500</b>积分</span></td>
-                                <td><span><b>500</b>积分/天</span></td>
-                            </tr>
-                            <tr class="dn">
-                                <td><span>每日累计1小时</span></td>
-                                <td><span><b>500</b>积分</span></td>
-                                <td><span><b>2000</b>积分/天</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>晒单</span></td>
-                                <td><span><b>500</b>积分</span></td>
-                                <td><span><b>1000</b>积分/天</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>每日点赞</span></td>
-                                <td><span><b>100</b>积分</span></td>
-                                <td><span><b>500</b>积分/天</span></td>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="3" class="catename">会员加分</td>
-                                <td><span>开立模拟账户</span></td>
-                                <td><span><b>5000</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>开立真实账户</span></td>
-                                <td><span><b>8000</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>首次入金</span></td>
-                                <td><span><b>15000</b>积分</span></td>
-                                <td><span>仅一次</span></td>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="1" class="catename">手动加分</td>
-                                <td><span>特殊活动</span></td>
-                                <td><span>酌情加分</span></td>
-                                <td><span>无上限</span></td>
-                            </tr>
-                            </tbody></table>
+                            <tbody>
+                                <tr>
+                                    <th width="25%" class="fir">分类</th>
+                                    <th width="">项目</th>
+                                    <th width="25%">加分值（积分）</th>
+                                    <th width="25%">上限设定</th>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="3" class="catename">注册加分</td>
+                                    <td><span>注册</span></td>
+                                    <td><span><b>1000</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>上传头像</span></td>
+                                    <td><span><b>500</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>完成邮箱认证</span></td>
+                                    <td><span><b>1000</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="3" class="catename">日常加分</td>
+                                    <td><span>每日签到</span></td>
+                                    <td><span><b>500</b>积分</span></td>
+                                    <td><span><b>500</b>积分/天</span></td>
+                                </tr>
+                                <tr class="dn">
+                                    <td><span>每日累计1小时</span></td>
+                                    <td><span><b>500</b>积分</span></td>
+                                    <td><span><b>2000</b>积分/天</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>晒单</span></td>
+                                    <td><span><b>500</b>积分</span></td>
+                                    <td><span><b>1000</b>积分/天</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>每日点赞</span></td>
+                                    <td><span><b>100</b>积分</span></td>
+                                    <td><span><b>500</b>积分/天</span></td>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="3" class="catename">会员加分</td>
+                                    <td><span>开立模拟账户</span></td>
+                                    <td><span><b>5000</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>开立真实账户</span></td>
+                                    <td><span><b>8000</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>首次入金</span></td>
+                                    <td><span><b>15000</b>积分</span></td>
+                                    <td><span>仅一次</span></td>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="1" class="catename">手动加分</td>
+                                    <td><span>特殊活动</span></td>
+                                    <td><span>酌情加分</span></td>
+                                    <td><span>无上限</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -655,92 +664,94 @@
                 <div class="scrollbox">
                     <div class="prule_table">
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <tbody><tr>
-                                <th width="23%" class="fir">分类</th>
-                                <th width="">项目</th>
-                                <th width="35%">消费积分</th>
-                            </tr>
-                            <!--<tr class="myrow">
+                            <tbody>
+                                <tr>
+                                    <th width="23%" class="fir">分类</th>
+                                    <th width="">项目</th>
+                                    <th width="35%">消费积分</th>
+                                </tr>
+                                <!--<tr class="myrow">
                                 <td rowspan="1" class="catename">兑换消费</td>
                                 <td><span>积分等级</span><em class="sx">已上线</em></td>
                                 <td><span><b>1000</b>积分</span></td>
                             </tr>-->
-                            <tr class="myrow">
-                                <td rowspan="4" class="catename">使用消费</td>
-                                <td><span>送花/666等魔法表情</span></td>
-                                <td><span><b>100</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>分析师有问必答</span></td>
-                                <td><span><b>10000</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>抽奖消费</span></td>
-                                <td><span><b>500</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>资料下载</span><em class="sx">已上线</em></td>
-                                <td><span>根据资料定价</span></td>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="7" class="catename">特权消费</td>
-                                <!--<td><span>查看喊单</span><em class="sx">已上线</em></td>
+                                <tr class="myrow">
+                                    <td rowspan="4" class="catename">使用消费</td>
+                                    <td><span>送花/666等魔法表情</span></td>
+                                    <td><span><b>100</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>分析师有问必答</span></td>
+                                    <td><span><b>10000</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>抽奖消费</span></td>
+                                    <td><span><b>500</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>资料下载</span><em class="sx">已上线</em></td>
+                                    <td><span>根据资料定价</span></td>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="7" class="catename">特权消费</td>
+                                    <!--<td><span>查看喊单</span><em class="sx">已上线</em></td>
                                 <td><span><b>500</b>积分</span></td>-->
-                            </tr>
-                            <tr>
-                                <td><span>查看当前持仓</span><em class="sx">已上线</em></td>
-                                <td><span><b>1000</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>高级房间</span><em class="sx">已上线</em></td>
-                                <td><span>待定</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>账户诊断</span></td>
-                                <td><span><b>10000</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>微信一对一</span></td>
-                                <td><span><b>10000</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>尊贵专线指导</span><em class="sx">已上线</em></td>
-                                <td><span><b>20000</b>积分</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>培训班优先权</span><em class="sx">已上线</em></td>
-                                <td><span>待定</span></td>
-                            </tr>
-                            <tr class="myrow">
-                                <td rowspan="7" class="catename">订阅服务</td>
-                                <td><span>课程提醒</span><em class="sx">已上线</em></td>
-                                <td><span><b>2500</b>起</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>交易策略</span><em class="sx">已上线</em></td>
-                                <td><span><b>4800</b>起</span></td>
-                            </tr>
-                            <!--<tr>
+                                </tr>
+                                <tr>
+                                    <td><span>查看当前持仓</span><em class="sx">已上线</em></td>
+                                    <td><span><b>1000</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>高级房间</span><em class="sx">已上线</em></td>
+                                    <td><span>待定</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>账户诊断</span></td>
+                                    <td><span><b>10000</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>微信一对一</span></td>
+                                    <td><span><b>10000</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>尊贵专线指导</span><em class="sx">已上线</em></td>
+                                    <td><span><b>20000</b>积分</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>培训班优先权</span><em class="sx">已上线</em></td>
+                                    <td><span>待定</span></td>
+                                </tr>
+                                <tr class="myrow">
+                                    <td rowspan="7" class="catename">订阅服务</td>
+                                    <td><span>课程提醒</span><em class="sx">已上线</em></td>
+                                    <td><span><b>2500</b>起</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>交易策略</span><em class="sx">已上线</em></td>
+                                    <td><span><b>4800</b>起</span></td>
+                                </tr>
+                                <!--<tr>
                                 <td><span>喊单策略</span><em class="sx">已上线</em></td>
                                 <td><span><b>5800</b>起</span></td>
                             </tr>-->
-                            <tr>
-                                <td><span>每日周评</span><em class="sx">已上线</em></td>
-                                <td><span><b>3800</b>起</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>日常评论</span><em class="sx">已上线</em></td>
-                                <td><span><b>3800</b>起</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>大行情</span><em class="sx">已上线</em></td>
-                                <td><span><b>4000</b>起</span></td>
-                            </tr>
-                            <tr>
-                                <td><span>日常行情</span><em class="sx">已上线</em></td>
-                                <td><span><b>3800</b>起</span></td>
-                            </tr>
-                            </tbody></table>
+                                <tr>
+                                    <td><span>每日周评</span><em class="sx">已上线</em></td>
+                                    <td><span><b>3800</b>起</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>日常评论</span><em class="sx">已上线</em></td>
+                                    <td><span><b>3800</b>起</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>大行情</span><em class="sx">已上线</em></td>
+                                    <td><span><b>4000</b>起</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>日常行情</span><em class="sx">已上线</em></td>
+                                    <td><span><b>3800</b>起</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -749,28 +760,30 @@
                     <div class="prule_table">
                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
 
-                            <tbody><tr class="myrow">
-                                <td rowspan="5" class="catename">特权</td>
-                                <th width="35%">用户级别</th>
-                                <th width="35%">享受积分折扣</th>
-                            </tr>
-                            <tr class="myrow">
-                                <td><span>注册用户</span></td>
-                                <td><span><b>无折扣</b></span></td>
-                            </tr>
-                            <tr>
-                                <td><span>模拟会员</span></td>
-                                <td><span><b>8折</b></span></td>
-                            </tr>
-                            <tr>
-                                <td><span>真实会员</span></td>
-                                <td><span><b>6折</b></span></td>
-                            </tr>
-                            <tr>
-                                <td><span>激活会员</span></td>
-                                <td><span><b>3折</b></span></td>
-                            </tr>
-                            </tbody></table>
+                            <tbody>
+                                <tr class="myrow">
+                                    <td rowspan="5" class="catename">特权</td>
+                                    <th width="35%">用户级别</th>
+                                    <th width="35%">享受积分折扣</th>
+                                </tr>
+                                <tr class="myrow">
+                                    <td><span>注册用户</span></td>
+                                    <td><span><b>无折扣</b></span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>模拟会员</span></td>
+                                    <td><span><b>8折</b></span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>真实会员</span></td>
+                                    <td><span><b>6折</b></span></td>
+                                </tr>
+                                <tr>
+                                    <td><span>激活会员</span></td>
+                                    <td><span><b>3折</b></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -803,7 +816,7 @@
             <a href="javascript:void(0);" class="rankbtn" sort="uptime" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zl_shangchuanshijian', 'content_top', 1, true]);">上传时间<i>↓</i><b></b></a>
             <div class="search_bar">
                 <input type="text" class="sinp" placeholder="在结果中搜索" />
-                <input type="button" class="sbtn" value="搜索" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zl_search', 'content_top', 1, true]);"/>
+                <input type="button" class="sbtn" value="搜索" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zl_search', 'content_top', 1, true]);" />
             </div>
             <div class="page_bar">
                 <span id="totalRecords">共</span>
@@ -815,15 +828,15 @@
         <div class="downtable">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <thead>
-                <tr>
-                    <th width="11%">课件类型</th>
-                    <th>课件/书名</th>
-                    <th width="16%">作者/推荐人</th>
-                    <th width="13%">上传日期</th>
-                    <th width="12%">消耗积分</th>
-                    <th width="11%">下载量</th>
-                    <th width="11%">下载</th>
-                </tr>
+                    <tr>
+                        <th width="11%">课件类型</th>
+                        <th>课件/书名</th>
+                        <th width="16%">作者/推荐人</th>
+                        <th width="13%">上传日期</th>
+                        <th width="12%">消耗积分</th>
+                        <th width="11%">下载量</th>
+                        <th width="11%">下载</th>
+                    </tr>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -873,11 +886,11 @@
         <div class="expert_box">
             <div class="set_box b2 clearfix">
                 <div class="set_name">标&nbsp;&nbsp;&nbsp;题 <em class="require">*</em></div>
-                <input type="text" id="title" name="title" class="set_inp" placeholder="如6月21日，黄金空仓1手，盈利500美元" >
+                <input type="text" id="title" name="title" class="set_inp" placeholder="如6月21日，黄金空仓1手，盈利500美元">
             </div>
             <div class="set_box b2 clearfix">
                 <div class="set_name s1">晒单人 <em class="require">*</em></div>
-                <input type="text" id="userName" name="userName" class="set_inp" placeholder="您在金道在线教育的昵称" >
+                <input type="text" id="userName" name="userName" class="set_inp" placeholder="您在金道在线教育的昵称">
             </div>
             <div class="set_box b2 clearfix">
                 <div class="set_name s1">图&nbsp;&nbsp;&nbsp;片 <em class="require">*</em></div>
@@ -892,33 +905,33 @@
                 </div>
             </div>
             <!--<div class="set_box b2" style="z-index:2">-->
-                <!--<div class="sdking_cont">-->
-                    <!--<span class="red">以下选项填入自动参与晒单王中王活动</span>-->
-                    <!--<div class="inpbox clearfix inp_fl">-->
-                        <!--<div class="set_name">保证金</div>-->
-                        <!--<input type="text" id="deposit" name="deposit" class="set_inp">-->
-                    <!--</div>-->
-                    <!--<div class="inpbox clearfix">-->
-                        <!--<div class="set_name">盈亏金额</div>-->
-                        <!--<input type="text" id="breakevenAmount" name="breakevenAmount" class="set_inp">-->
-                    <!--</div>-->
-                    <!--<div class="inpbox clearfix inp_fl">-->
-                        <!--<div class="set_name">平仓时间</div>-->
-                        <!--<input type="text" id="closeTime" name="closeTime" value="2016-11-29" class="set_inp timesel">-->
-                    <!--</div>-->
-                    <!--<div class="write_aid">-->
-                        <!--<span>填写帮助<i>&gt;</i></span>-->
-                        <!--<div class="aidbox">-->
-                            <!--<div class="arr"><i></i><i class="i2"></i></div>-->
-                            <!--<div class="cont">-->
-                                <!--<b>保证金计算规则：</b>-->
-                                <!--所做手数*产品一手金额=所用保证金<br>如<br>0.25手伦敦金：0.25*1手($1000)=$250 <br>1.5手白银：1.5*1手($5000)=$7500-->
-                                <!--<b>平仓时间：</b>-->
-                                <!--如果晒单截图中含有多天交易记录,请根据所填的平仓日期计算对应的保证金以及盈亏<br>如：包含三天的交易记录,填写日期为12月15日,则只计算截图中对应12月15日的保证金以及盈亏综合-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+            <!--<div class="sdking_cont">-->
+            <!--<span class="red">以下选项填入自动参与晒单王中王活动</span>-->
+            <!--<div class="inpbox clearfix inp_fl">-->
+            <!--<div class="set_name">保证金</div>-->
+            <!--<input type="text" id="deposit" name="deposit" class="set_inp">-->
+            <!--</div>-->
+            <!--<div class="inpbox clearfix">-->
+            <!--<div class="set_name">盈亏金额</div>-->
+            <!--<input type="text" id="breakevenAmount" name="breakevenAmount" class="set_inp">-->
+            <!--</div>-->
+            <!--<div class="inpbox clearfix inp_fl">-->
+            <!--<div class="set_name">平仓时间</div>-->
+            <!--<input type="text" id="closeTime" name="closeTime" value="2016-11-29" class="set_inp timesel">-->
+            <!--</div>-->
+            <!--<div class="write_aid">-->
+            <!--<span>填写帮助<i>&gt;</i></span>-->
+            <!--<div class="aidbox">-->
+            <!--<div class="arr"><i></i><i class="i2"></i></div>-->
+            <!--<div class="cont">-->
+            <!--<b>保证金计算规则：</b>-->
+            <!--所做手数*产品一手金额=所用保证金<br>如<br>0.25手伦敦金：0.25*1手($1000)=$250 <br>1.5手白银：1.5*1手($5000)=$7500-->
+            <!--<b>平仓时间：</b>-->
+            <!--如果晒单截图中含有多天交易记录,请根据所填的平仓日期计算对应的保证金以及盈亏<br>如：包含三天的交易记录,填写日期为12月15日,则只计算截图中对应12月15日的保证金以及盈亏综合-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
 
             <!--</div>-->
 
@@ -937,7 +950,11 @@
     <div class="cont">
         <div class="personal_info">
             <div class="headimg"><img width="120" height="120" src="<%if(userSession.isLogin){%><%= userSession.avatar || '/theme1/img/user.png' %><%}%>" alt=""></div>
-            <h4 class="username"><%if(userSession.isLogin){%><%= userSession.nickname||"匿名_xxx" %><%}%></h4>
+            <h4 class="username">
+                <%if(userSession.isLogin){%>
+                    <%= userSession.nickname||"匿名_xxx" %>
+                        <%}%>
+            </h4>
             <div class="infobar">
                 <div class="item">
                     <span class="in_name">等级：</span>
@@ -1020,8 +1037,10 @@
         <div class="pop_tit"><span><i class="fr"></i></span>您已经观看了<em id="pop_stTime" style="font-style: normal;">3</em>分钟，赶紧登录继续观看<span><i></i></span></div>
         <div class="hall_select">
             <div class="enteritem">
-                <a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])"><i></i><span>分析师在线直播，登录收听</span></a>
-                <a href="javascript:void(0)" class="entbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])">登录继续听直播</a>
+                <!--<a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])"><i></i><span>分析师在线直播，登录收听</span></a>
+                <a href="javascript:void(0)" class="entbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])">登录继续听直播</a>-->
+                <a href="javascript:void(0)" class="ico zhuc-login-bor"><i></i><span>5-500元现金红包，100%有奖</span></a>
+                <a href="javascript:void(0)" class="entbtn zhuc-login-fon">注册领现金红包</a>
             </div>
             <div class="enteritem newbie">
                 <a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_mianlogin', 'content_middle',1,true])"><i></i><span>新手教学专区，手把手学操作</span></a>
@@ -1153,7 +1172,8 @@
     </div>
     <div class="n_guide g3">
         <div class="contactbar">
-            <div class="contactbox"><div class="himg"><img src="/theme1/img/t_headimg2.png" alt=""></div><a href="javascript:void(0)" class="contactbtn">联系周游</a></div>
+            <div class="contactbox">
+                <div class="himg"><img src="/theme1/img/t_headimg2.png" alt=""></div><a href="javascript:void(0)" class="contactbtn">联系周游</a></div>
         </div>
         <a href="javascript:void(0)" class="jumpbtn" step="2"></a>
     </div>
@@ -1163,7 +1183,7 @@
     </div>
     <div class="n_guide g5">
         <div class="h_menu1">
-            <a href="javascript:void(0)" class="topbtn btn_login"  id="pop_guideLogin">登录</a>
+            <a href="javascript:void(0)" class="topbtn btn_login" id="pop_guideLogin">登录</a>
             <a href="javascript:void(0)" class="topbtn btn_regist" id="pop_guideReg">免费注册</a>
         </div>
         <a href="javascript:void(0)" class="jumpbtn" step="end"></a>
@@ -1192,16 +1212,22 @@
                         <a href="javascript:void(0)" t="week_rank"><span>周排行榜<b>(11月14日-18日)</b></span><i></i><i class="i2"></i></a>
                         <a href="javascript:void(0)" t="month_rank"><span>月排行榜<b>(10月)</b></span><i></i><i class="i2"></i></a>
                     </div>
-                    <div class="sd_ranklist" >
+                    <div class="sd_ranklist">
                         <div class="ranklist on" t="day_rank">
                             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                 <tbody>
                                     <tr>
-                                        <th><div class="padl">排名</div></th>
+                                        <th>
+                                            <div class="padl">排名</div>
+                                        </th>
                                         <th class="uname">用户名</th>
                                         <th class="phone">手机号</th>
-                                        <th><div class="padl">总收益率</div></th>
-                                        <th><div class="padl">总收益</div></th>
+                                        <th>
+                                            <div class="padl">总收益率</div>
+                                        </th>
+                                        <th>
+                                            <div class="padl">总收益</div>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <td>
@@ -1210,74 +1236,118 @@
                                                 <span class="rankfloat"><span>4</span><i></i></span>
                                             </div>
                                         </td>
-                                        <td><div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">小精灵</span></td>
+                                        <td>
+                                            <div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">小精灵</span></td>
                                         <td><span>139****1902</span></td>
-                                        <td><div class="padl"><span>80%</span></div></td>
-                                        <td><div class="padl"><span>$1000</span></div></td>
+                                        <td>
+                                            <div class="padl"><span>80%</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="padl"><span>$1000</span></div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td><div class="padl"><b class="ranknum silver">2</b><span class="rankfloat fall"><span>1</span><i></i></span></div></td>
-                                        <td><div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">王五</span></td>
+                                        <td>
+                                            <div class="padl"><b class="ranknum silver">2</b><span class="rankfloat fall"><span>1</span><i></i></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">王五</span></td>
                                         <td><span>137****6622</span></td>
-                                        <td><div class="padl"><span>79%</span></div></td>
-                                        <td><div class="padl"><span>$900</span></div></td>
+                                        <td>
+                                            <div class="padl"><span>79%</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="padl"><span>$900</span></div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="ranklist" t="week_rank">
                             <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                <tbody><tr>
-                                    <th><div class="padl">排名</div></th>
-                                    <th class="uname">用户名</th>
-                                    <th class="phone">手机号</th>
-                                    <th><div class="padl">总收益率</div></th>
-                                    <th><div class="padl">总收益</div></th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="padl">
-                                            <b class="ranknum gold">1</b>
-                                            <span class="rankfloat"><span>4</span><i></i></span>
-                                        </div>
-                                    </td>
-                                    <td><div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">叫做什么</span></td>
-                                    <td><span>158****5913</span></td>
-                                    <td><div class="padl"><span>20%</span></div></td>
-                                    <td><div class="padl"><span>$400</span></div></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="padl"><b class="ranknum silver">2</b><span class="rankfloat fall"><span>1</span><i></i></span></div></td>
-                                    <td><div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">哈哈哈</span></td>
-                                    <td><span>137****6622</span></td>
-                                    <td><div class="padl"><span>79%</span></div></td>
-                                    <td><div class="padl"><span>$900</span></div></td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            <div class="padl">排名</div>
+                                        </th>
+                                        <th class="uname">用户名</th>
+                                        <th class="phone">手机号</th>
+                                        <th>
+                                            <div class="padl">总收益率</div>
+                                        </th>
+                                        <th>
+                                            <div class="padl">总收益</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="padl">
+                                                <b class="ranknum gold">1</b>
+                                                <span class="rankfloat"><span>4</span><i></i></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">叫做什么</span></td>
+                                        <td><span>158****5913</span></td>
+                                        <td>
+                                            <div class="padl"><span>20%</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="padl"><span>$400</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="padl"><b class="ranknum silver">2</b><span class="rankfloat fall"><span>1</span><i></i></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">哈哈哈</span></td>
+                                        <td><span>137****6622</span></td>
+                                        <td>
+                                            <div class="padl"><span>79%</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="padl"><span>$900</span></div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="ranklist" t="month_rank">
                             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                 <tbody>
-                                <tr>
-                                    <th><div class="padl">排名</div></th>
-                                    <th class="uname">用户名</th>
-                                    <th class="phone">手机号</th>
-                                    <th><div class="padl">总收益率</div></th>
-                                    <th><div class="padl">总收益</div></th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="padl">
-                                            <b class="ranknum gold">1</b>
-                                            <span class="rankfloat"><span>4</span><i></i></span>
-                                        </div>
-                                    </td>
-                                    <td><div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">xixi</span></td>
-                                    <td><span>135****7717</span></td>
-                                    <td><div class="padl"><span>30%</span></div></td>
-                                    <td><div class="padl"><span>$500</span></div></td>
-                                </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="padl">排名</div>
+                                        </th>
+                                        <th class="uname">用户名</th>
+                                        <th class="phone">手机号</th>
+                                        <th>
+                                            <div class="padl">总收益率</div>
+                                        </th>
+                                        <th>
+                                            <div class="padl">总收益</div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="padl">
+                                                <b class="ranknum gold">1</b>
+                                                <span class="rankfloat"><span>4</span><i></i></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="himg"><img src="/theme1/img/user.png" alt=""></div><span class="username">xixi</span></td>
+                                        <td><span>135****7717</span></td>
+                                        <td>
+                                            <div class="padl"><span>30%</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="padl"><span>$500</span></div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1313,37 +1383,55 @@
                                 <th><span>月排行</span></th>
                             </tr>
                             <tr>
-                                <td><div class="pad1">
-                                    <i class="gold"></i><span>赠送积分<b>2000</b>分</span>
-                                </div></td>
-                                <td><div class="pad2">
-                                    <i class="gold"></i><span>代币<b>100</b></span>
-                                </div></td>
-                                <td><div class="pad3">
-                                    <i class="gold"></i><span>赠送<b>500</b>代币</span>
-                                </div></td>
+                                <td>
+                                    <div class="pad1">
+                                        <i class="gold"></i><span>赠送积分<b>2000</b>分</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad2">
+                                        <i class="gold"></i><span>代币<b>100</b></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad3">
+                                        <i class="gold"></i><span>赠送<b>500</b>代币</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                                <td><div class="pad1">
-                                    <i class="silver"></i><span>赠送积分<b>1000</b>分</span>
-                                </div></td>
-                                <td><div class="pad2">
-                                    <i class="silver"></i><span>代币<b>50</b></span>
-                                </div></td>
-                                <td><div class="pad3">
-                                    <i class="silver"></i><span>赠送<b>200</b>代币</span>
-                                </div></td>
+                                <td>
+                                    <div class="pad1">
+                                        <i class="silver"></i><span>赠送积分<b>1000</b>分</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad2">
+                                        <i class="silver"></i><span>代币<b>50</b></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad3">
+                                        <i class="silver"></i><span>赠送<b>200</b>代币</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                                <td><div class="pad1">
-                                    <i class="bronze"></i><span>赠送积分<b>500</b>分</span>
-                                </div></td>
-                                <td><div class="pad2">
-                                    <i class="bronze"></i><span><b>2000</b>积分</span>
-                                </div></td>
-                                <td><div class="pad3">
-                                    <i class="bronze"></i><span>赠送<b>100</b>代币</span>
-                                </div></td>
+                                <td>
+                                    <div class="pad1">
+                                        <i class="bronze"></i><span>赠送积分<b>500</b>分</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad2">
+                                        <i class="bronze"></i><span><b>2000</b>积分</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pad3">
+                                        <i class="bronze"></i><span>赠送<b>100</b>代币</span>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1450,114 +1538,115 @@
 </div>
 
 <%if(isRedPacket) {%>
-<!-- 抢红包-未登录状态 -->
-<div class="redbag_pop nologin dn" id="redPacket_noLogin">
-    <div class="cont">
-        <div class="rb_top">
-            <span>马上登录金道在线教育</span>
-            <h4>抢大量<b>5</b>~<b>30</b>元微信现金红包</h4>
-        </div>
-        <a href="javascript:void(0)" class="rb_btn" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_bigmfzc', 'content_middle', 1, true]);">
-            <i class="reg">免费注册</i><b class="bg"><b></b></b>
-        </a>
-        <div class="rb_tip">
-            <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_madl', 'content_middle', 1, true]);">马上登录</a></span>
-            <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
-        </div>
-        <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
-    </div>
-</div>
-<!--抢红包-已登录状态 -->
-<div class="redbag_pop dn" id="redPacket_normal">
-    <div class="cont">
-        <div class="rb_top2">
-            <span>开抢倒计时</span>
-            <div class="timecount">
-                <span><b rp="minutesLabel"></b>分</span>
-                <span><b rp="secondsLabel"></b>秒</span>
-            </div>
-        </div>
-        <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob"><i class="">抢</i><b class="bg"><b></b></b></a>
-        <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait"><i class="wait">等待开抢</i><b class="bg"><b></b></b></a>
-        <div class="rb_tip">
-            <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
-            <div class="tspan">在线时段内每10分钟将有一大波5-30元微信现金红包来袭！<br>人人有份，即刻开抢啦！
-                <div class="dashang_rule">
-                    <a href="javascript:void(0)">活动规则<i></i></a>
-                    <div class="ds_rulecont">
-                        <div class="arr"><i></i><i class="i2"></i></div>
-                        <div class="scrollbox">
-                            <span><b>•</b>活动规则</span>
-                            <ul>
-                                <li>1.活动期间，金道在线教育课程时段内，每隔10分钟将发放一波奖金红包，所有在线教育注册客户皆可参与“夏日狂欢抢红包”活动，客户所中奖金将通过微信发放；</li>
-                                <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系在线教育助理登记验证，以发放双倍红包奖金；</li>
-                                <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                                <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户6月07日中奖，则奖金红包于6月08日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
-                                <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
-                            </ul>
-                        </div>
+    <!-- =======红包层beign======== -->
+    <div class="hongb-laybox dn">
+        <a href="javascript:void(0)" class="lay-del-btn" title="关闭"></a>
+        <i class="hongb-cout">3</i>
+        <div class="zhuanp-box" id="lotteryYuan"></div>
+        <div class="deng-box"></div>
+        <div class="jiant-box" id="lotteryBtn"></div>
+        <div class="zhuanp-infobox">
+            <div class="scrollbox mCustomScrollbar">
+                <div class="zhuanp-xinx">
+                    <h3>获奖公告</h3>
+                    <div class="bot-gdbox">
+                        <ul>
+                            <li>恭喜137***217获得200元</li>
+                            <li>恭喜138***200获得100元</li>
+                            <li>恭喜134***222获得300元</li>
+                            <li>恭喜134***222获得300元</li>
+                            <li>恭喜134***222获得300元</li>
+                            <li>恭喜134***222获得300元</li>
+                        </ul>
+                    </div>
+
+                    <h3>活动规则</h3>
+                    <div class="hd-rule-list">
+                        <h4>活动时间：</h4>
+                        <p>2017年6月12日 00:00:00至2017年6月30日 23:59:59</p>
+                        <h4>活动规则：</h4>
+                        <ol>
+                            <li>活动对象仅适用于6.12-6.30日注册直播间的用户；</li>
+                            <li>活动期间，注册直播间的客户，可获得1次抽奖机会；客户注册直播间后激活，可再获2次抽奖机会；同一客户最多有3次抽奖机会；</li>
+                            <li>同一客户（同一手机号码及同一身份ID）在活动期间最多可获得3次抽奖机会；</li>
+                            <li>活动期间，每天在线教育时间由分析师根据用户发言积极性，发言质量指定1名最佳活跃奖，奖金为100元现金红包，同一客户（同一手机号码及同一身份ID）在活动期间最多可获得活跃奖2次；</li>
+                            <li>中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                            <li>活动期间，中奖客户将于3个工作日内统一安排奖金红包的发放，如客户6月19日中奖，则奖金红包于6月22日之前统一安排发放；如遇周末或法定假期，发放奖品时间将顺延；</li>
+                            <li>奖金发放时客服将核实客户身份信息，客户激活账户的手机号码应与客户注册直播间的手机号码一致，方可领取；</li>
+                            <li>代理客户及金道员工不适用此次优惠活动；</li>
+                            <li>金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
+                        </ol>
                     </div>
                 </div>
             </div>
         </div>
-        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
+        <!-- <div class="light-shadow"><i></i></div> -->
     </div>
-</div>
-
-<!-- 抢红包-结果页-无奖 -->
-<div class="redbag_pop rb_result dn" id="redPacket_resNo">
-    <div class="cont">
-        <div class="rb_top2">
-            <span>很遗憾，此次未中奖！</span>
-            <span class="sp2"><b>10分钟</b>后又将有一大波红包来袭，再接再厉哦！</span>
-        </div>
-        <div class="qrcode-con">
-            <div class="rb_tip2">
-                <div class="tspan">欢迎扫码关注下方分析师微信，实时领取分析师交易策略！</div>
-            </div>
-            <img src="" alt="" rp="wechatImg">
-            <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
-
-        </div>
-        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
-    </div>
-</div>
-
-<!-- 抢红包-结果页-中奖！ -->
-<div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
-    <div class="cont">
-        <div class="congratulation">恭喜获得<b rp="money"></b>元微信红包
-            <p>若当天注资激活可获得翻倍红包<b rp="doubleMoney"></b>元！</p>
-        </div>
-        <div class="qrcode-con">
-            <img src="" alt="" rp="wechatImg">
-            <p class="p1">当期老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
-            <p class="p2"><b>兑奖办法：</b>请扫码关注上方分析师微信，并提供您的<span>中奖手机号码给分析师验证并领取现金红包！</span> </p>
-        </div>
-        <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
-    </div>
-</div>
-
-<!--抢红包-5秒倒计时 -->
-<div class="redbag_pop_box dn" id="redPacket_mini">
-    <div class="inner">
-        <div class="redbag_pop pop2" id="redPacket_mini2">
-            <div class="cont">
-                <div class="rb_top2">
-                    <span>开抢倒计时</span>
+    <!-- 抢红包-未登录状态 -->
+    <div class="popup_box login_hint dn" id="redPacket_noLogin">
+        <div class="cont">
+            <div class="new-hongb-con">
+                <div class="new-hongb-tt">
+                    <p>马上登录金道在线教育</p>
+                    <p class="new-hb-bm"><strong>一大波5-500元现金红包大派送</strong></p>
                 </div>
-                <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_miniRob"><i class="">抢</i><b class="bg"><b></b></b></a>
-                <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_miniWait"><i class="t5" rp="seconds"></i><b class="bg"><b></b></b></a>
-                <div class="rb_tip">
-                    <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
-                    <div class="rb_check">
-                        <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
-                        <span class="ctext">勾选后不再弹出提醒</span>
+                <div class="new-hongb-btn">
+                    <a href="javascript:void(0)" class="new-hongb-sum" id="redPacket_regBtn">先注册，再抽奖</a>
+                    <div class="new-hongb-dl">
+                        <span>已有账号，<a href="javascript:void(0)" id="redPacket_loginBtn">我要登录</a></span>
                     </div>
                 </div>
-                <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
             </div>
+            <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
         </div>
     </div>
-</div>
-<%}%>
+
+    <!-- 抽奖结果层 -->
+    <div class="new-hongb-prize dn" id="redPacket_resYes">
+        <a class="pop_close" href="javascript:void(0)" id="resultDel"><i>关闭</i></a>
+        <div class="new-hongb-jpbox">
+            <div class="new-hongb-img d n" id="prizeCon1">
+                <img src="/theme1/img/prize-im1.png" alt="5元" width="100%" />
+            </div>
+            <div class="new-hongb-img dn" id="prizeCon2">
+                <img src="/theme1/img/prize-im2.png" alt="10元" width="100%" />
+            </div>
+            <div class="new-hongb-img dn" id="prizeCon3">
+                <img src="/theme1/img/prize-im3.png" alt="50元" width="100%" />
+            </div>
+            <div class="new-hongb-img dn" id="prizeCon4">
+                <img src="/theme1/img/prize-im4.png" alt="100元" width="100%" />
+            </div>
+            <div class="new-hongb-img dn" id="prizeCon5">
+                <img src="/theme1/img/prize-im5.png" alt="200元" width="100%" />
+            </div>
+            <div class="new-hongb-img dn" id="prizeCon6">
+                <img src="/theme1/img/prize-im6.png" alt="500元" width="100%" />
+            </div>
+        </div>
+        <div class="new-hongb-title">
+            <h3>恭喜获得<span rp="money"></span>元微信红包</h3>
+            <!-- 状态1 -->
+            <div class="new-hongb-thei thei-wid d n" id="nowJoin">
+                <span>即刻参与互动，赢最佳活跃奖(100元现金红包)</span>
+            </div>
+            <!-- 状态2 -->
+            <div class="new-hongb-thei dn" id="chanceOver">
+                <span>您的抽奖机会已用完</span>
+            </div>
+            <!-- 状态3 -->
+            <div class="new-hongb-thei dn" id="onChance">
+                <span>您还有1次抽奖机会<a href="javascript:void(0)">立即抽奖</a></span>
+            </div>
+        </div>
+        <div class="new-hongb-ewm">
+            <div class="hb-ewm-img">
+                <img src="" alt="" width="100%" rp="wechatImg" />
+            </div>
+            <p>当期老师微信二维码
+                <br />微信号：<span rp="wechat"></span></p>
+        </div>
+        <p class="new-hongb-method"><span>兑奖办法：</span>请扫码关注上方分析师微信并提供<br />您的中奖手机号码给分析师验证并领取现金红包
+        </p>
+    </div>
+    <%}%>

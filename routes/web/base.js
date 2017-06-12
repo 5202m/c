@@ -477,13 +477,13 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 visitorService.saveVisitorRecord("login", vrRow);
             }
             //是否炒金培训班
-            if (snUser.groupId == config.cjTrainRoom) {
-                viewDataObj.isRedPacket = config.isRedPacket;
-            } else {
-                viewDataObj.isRedPacket = false;
-            }
+            // if (snUser.groupId == config.cjTrainRoom) {
+            //     viewDataObj.isRedPacket = config.isRedPacket;
+            // } else {
+            //     viewDataObj.isRedPacket = false;
+            // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
-            //viewDataObj.isRedPacket = config.isRedPacket;
+            viewDataObj.isRedPacket = config.isRedPacket;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
