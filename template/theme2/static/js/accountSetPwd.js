@@ -48,10 +48,10 @@ AccountPwd.setEvent = function() {
                 $('.acc-set-pad .error-bar').html('<i></i>' + (result.msg ? result.msg : "修改失败，请联系客服！")).removeClass('dn');
                 return false;
             } else {
-                Pop.msg("修改成功");
                 $('.login-panel .input-group input[type="password"]').val('');
                 $("#header").show();
                 LoginAuto.setAutoLogin(false);
+                Pop.msg("修改成功");
                 Login.load();
             }
         }, true, function(err) {});

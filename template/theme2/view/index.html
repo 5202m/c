@@ -19,16 +19,16 @@
         <script type="text/javascript" src="/base/lib/store.min.js"></script>
         <script type="text/javascript" src="/theme2/js/store.js"></script>
         <% }else{ %>
-        <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
-        <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-        <% } %>
-    <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-    <script>
-        //自动登录中...
-        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-        LoginAuto.init();
-        //自动登录完成
-    </script>
+            <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
+            <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
+            <% } %>
+                <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+                <script>
+                    //自动登录中...
+                    LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+                    LoginAuto.init();
+                    //自动登录完成
+                </script>
 </head>
 
 <body class="home">
@@ -38,16 +38,8 @@
                 <h1 class="hide-t">视频直播间</h1>
             </div>
             <%if(isRedPacket) {%>
-                <div class="header_redbag fl" id="redPacket_header">
-                    <div class="redbag_pic"></div>
-                    <div class="rb_text">
-                        <div class="timecount">
-                            <b rp="minutesLabel"></b>
-                            <span>分</span>
-                            <b rp="secondsLabel"></b>
-                            <span>秒</span>
-                        </div>
-                    </div>
+                <div class="new_redbag fl" id="redPacket_header">
+                    <img src="/theme2/img/new-redbag.png" width="100%" alt="5-500元红包大派送">
                 </div>
                 <%}%>
                     <div class="rightbar">
@@ -176,8 +168,7 @@
                 Data.userInfo.userName = '<%= userSession.userName %>';
                 Data.userInfo.email = '<%= userSession.email %>';
                 Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
-
-
+                Data.userInfo.activeTime = '<%= userSession.activeTime %>';
                 Index.init();
                 chatAnalyze.setUTM(false, $.extend({
                     operationType: 1,
@@ -198,6 +189,12 @@
                     scrollbarPosition: "outside",
                     scrollButtons: false
                 });
+
+                /** 活动规则滚动 */
+                $.mCustomScrollbar.defaults.scrollButtons.enable = true;
+                $("#content-d3").mCustomScrollbar({
+                    theme: "dark-thick"
+                });
             }
         </script>
         <% if(isDevTest) { %>
@@ -210,6 +207,7 @@
             <script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
             <script type="text/javascript" src="/base/lib/toucher.js"></script>
             <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
+            <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
             <script type="text/javascript" src="/base/util/common.js"></script>
             <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
             <script type="text/javascript" src="/theme2/js/container.js"></script>
@@ -251,7 +249,7 @@
                 $(pageFunc);
             </script>
             <% }else{ %>
-            <script type="text/javascript" src="/base/lib/basket.min.js"></script>
+                <script type="text/javascript" src="/base/lib/basket.min.js"></script>
                 <script type="text/javascript">
                     basket.version = '<%=version%>';
                     basket.require({

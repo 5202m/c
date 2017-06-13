@@ -209,8 +209,18 @@ var fileList = [
             "template\\theme2\\static\\js\\noviceGuide.js",
             "template\\theme2\\static\\js\\privateChat.js",
             "template\\theme2\\static\\js\\videoPlayer.js",
-            "template\\theme2\\static\\js\\yylive2.js"
-            ]
+            "template\\theme2\\static\\js\\yylive2.js",
+            "template\\theme2\\static\\js\\accountEmail.js",
+            "template\\theme2\\static\\js\\accountIndex.js",
+            "template\\theme2\\static\\js\\accountInfo.js",
+            "template\\theme2\\static\\js\\accountPoint.js",
+            "template\\theme2\\static\\js\\accountSetAvatar.js",
+            "template\\theme2\\static\\js\\accountSetName.js",
+            "template\\theme2\\static\\js\\accountSetNickname.js",
+            "template\\theme2\\static\\js\\accountSetPwd.js",
+            "template\\theme2\\static\\js\\accountSubscribe.js",
+            "template\\theme2\\static\\js\\accountSubscribeDetail.js"
+        ]
     },
     // PM-theme3
     {

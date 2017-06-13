@@ -69,6 +69,41 @@ var common = {
             this.trim(v) == '';
     },
     /**
+     * 日期比较大小
+     * compareDateString大于dateString，返回1； 
+     * 等于返回0； 
+     * compareDateString小于dateString，返回-1 
+     * @param dateString 日期 
+     * @param compareDateString 比较的日期 
+     */
+    dateCompare: function(dateString, compareDateString) {
+        var dateTime = new Date(Date.parse(dateString)).getTime();
+        var compareDateTime = new Date(Date.parse(compareDateString)).getTime();
+        if (compareDateTime > dateTime) {
+            return 1;
+        } else if (compareDateTime == dateTime) {
+            return 0;
+        } else {
+            return -1;
+        }
+    },
+    /** 
+     * 判断日期是否在区间内，在区间内返回true，否返回false 
+     * @param dateString 日期字符串 
+     * @param startDateString 区间开始日期字符串 
+     * @param endDateString 区间结束日期字符串 
+     * @returns {Number} 
+     */
+    isDateBetween: function(dateString, startDateString, endDateString) {
+        var flag = false;
+        var startFlag = (this.dateCompare(dateString, startDateString) < 1);
+        var endFlag = (this.dateCompare(dateString, endDateString) > -1);
+        if (startFlag && endFlag) {
+            flag = true;
+        }
+        return flag;
+    },
+    /**
      * 非空判断
      * @param obj
      * @returns {boolean}
@@ -722,7 +757,7 @@ var common = {
      * @param m
      * @returns {number}
      */
-    randomN2M: function(n, m){
+    randomN2M: function(n, m) {
         var c = m - n + 1;
         return Math.random() * c + n;
     },

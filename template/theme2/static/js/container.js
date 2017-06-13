@@ -55,7 +55,6 @@ Container.history = {
  * 返回
  */
 Container.back = function() {
-    $("#redPacket_header").hide();
     Container.go(-1);
 };
 

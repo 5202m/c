@@ -74,7 +74,7 @@ AccountAvatar.uploadAccAvatarImg = function(formData, fileObj) {
 
 AccountAvatar.setEvent = function() {
 
-    $("#accPhoto").attr('src', Data.userInfo.avatar);
+    $("#accPhoto").attr('src', Data.userInfo.avatar ? Data.userInfo.avatar : '/theme2/img/user-img.jpg');
 
     /**
      * 上传图片

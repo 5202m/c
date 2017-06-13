@@ -35,9 +35,9 @@ AccountUserName.setEvent = function() {
                 }
                 return false;
             } else {
-                Pop.msg("修改成功");
                 $("#myName").html(result.userName);
-                $('.error-bar').addClass('dn');
+                Pop.msg("修改成功");
+                AccountInfo.load();
             }
         }, true, function(err) {});
     });
