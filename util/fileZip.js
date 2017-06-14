@@ -112,7 +112,9 @@ var fileList = [
             "\\template\\base\\lib\\obsplayer\\obsplayer.min.js",
             "\\template\\base\\lib\\sewise\\sewise.player.min.js",
             "\\template\\base\\lib\\paste.min.js",
-            "\\template\\base\\lib\\jquery.face.min.js"
+            "\\template\\base\\lib\\jquery.face.min.js",
+            "\\template\\base\\lib\\jQueryRotate.2.2.js"
+
         ]
     },
     {
