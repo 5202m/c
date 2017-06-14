@@ -621,12 +621,30 @@ router.post('/login', function(req, res) {
     } else if (!isAutoLogin) {
         var thirdId = (userSession && userSession.thirdId) || null;
         if (loginType == "pwd") {
-            //账号密码登录
-            studioService.login({
-                mobilePhone: mobilePhone,
-                password: password,
-                groupType: userSession.groupType
-            }, 4, function(loginRes) {
+            async.series({
+                login: function(callback) {
+                    studioService.login({
+                        mobilePhone: mobilePhone,
+                        password: password,
+                        groupType: userSession.groupType
+                    }, 4, function(loginRes) {
+                        callback(null, loginRes);
+                    });
+                },
+                activeTime: function(callback) {
+                    //获取GTS用户激活时间
+                    apiService.getUserActiveTime(mobilePhone).then(data => {
+                        logger.info("getUserActiveTime==>SUCCESS:" + JSON.stringify(data));
+                        callback(null, data);
+                    }).catch(e => {
+                        logger.error("getUserActiveTime error:", e);
+                        callback(e, null)
+                    });
+                }
+            }, function(err, result) {
+                console.log(result);
+                let loginRes = result.login;
+                let activeTime = result.activeTime;
                 if (loginRes.isOK && constant.clientGroup.real !=
                     loginRes.userInfo.clientGroup) {
                     //real 类型客户将拆分成A和N客户
@@ -637,7 +655,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
-
+                    req.session.studioUserInfo.activeTime = activeTime || "";
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -661,7 +679,8 @@ router.post('/login', function(req, res) {
                         courseId: courseId,
                         teacherId: teacherId,
                         teacherName: teacherName,
-                        accountNo: snUser.accountNo
+                        accountNo: snUser.accountNo,
+                        activeTime: snUser.activeTime
                     };
                     visitorService.saveVisitorRecord("login", dasData);
                     if (loginRes.userInfo.clientGroup != constant.clientGroup.vip &&
@@ -718,12 +737,31 @@ router.post('/login', function(req, res) {
                             res.json(result);
                         }
                     } else {
-                        studioService.login({
-                            mobilePhone: mobilePhone,
-                            thirdId: thirdId,
-                            groupType: userSession.groupType
-                        }, 1, function(loginRes) {
+                        async.series({
+                            login: function(callback) {
+                                studioService.login({
+                                    mobilePhone: mobilePhone,
+                                    thirdId: thirdId,
+                                    groupType: userSession.groupType
+                                }, 1, function(loginRes) {
+                                    callback(null, loginRes);
+                                });
+                            },
+                            activeTime: function(callback) {
+                                //获取GTS用户激活时间
+                                apiService.getUserActiveTime(mobilePhone).then(data => {
+                                    logger.info("getUserActiveTime==>SUCCESS:" + JSON.stringify(data));
+                                    callback(null, data);
+                                }).catch(e => {
+                                    logger.error("getUserActiveTime error:", e);
+                                    callback(e, null)
+                                });
+                            }
+                        }, function(err, result) {
+                            let loginRes = result.login;
+                            let activeTime = result.activeTime;
                             if (loginRes.isOK) {
+                                req.session.studioUserInfo.activeTime = activeTime || "";
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: mobilePhone,
@@ -742,7 +780,8 @@ router.post('/login', function(req, res) {
                                     visitorId: visitorId,
                                     nickName: snUser.nickname,
                                     courseName: snUser.courseName,
-                                    accountNo: snUser.accountNo
+                                    accountNo: snUser.accountNo,
+                                    activeTime: snUser.activeTime
                                 };
                                 visitorService.saveVisitorRecord("login", dasData);
                             }
@@ -818,6 +857,7 @@ router.post('/login', function(req, res) {
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                req.session.studioUserInfo.activeTime = activeTime || "";
                                 //req.session.studioUserInfo.courseId = courseId;
                                 //req.session.studioUserInfo.courseName = courseName;
                                 res.json({ isOK: true, userInfo: req.session.studioUserInfo });
@@ -842,6 +882,7 @@ router.post('/login', function(req, res) {
                                                     req.session.studioUserInfo.roomName = roomName;
                                                     //req.session.studioUserInfo.courseId = courseId;
                                                     //req.session.studioUserInfo.courseName = courseName;
+                                                    req.session.studioUserInfo.activeTime = activeTime || "";
                                                     res.json({
                                                         isOK: true,
                                                         userInfo: req.session.studioUserInfo
@@ -880,7 +921,14 @@ router.post('/login', function(req, res) {
                                         }
                                     });
                             }
+
                         });
+
+                        studioService.login({
+                            mobilePhone: mobilePhone,
+                            thirdId: thirdId,
+                            groupType: userSession.groupType
+                        }, 1, function(loginRes) {});
                     }
                 });
         }
@@ -2132,7 +2180,7 @@ router.post('/modifyEmail', function(req, res) {
     } else if (!common.isEmail(params.email)) {
         res.json({ isOK: false, msg: '邮箱地址有误！' });
     } else if (common.isBlank(userInfo.nickname)) {
-        res.json({ isOK: false, msg: '请先设置一个好听的昵称吧！' });
+        res.json({ isOK: false, code: '102', msg: '请先设置一个好听的昵称吧！' });
     } else {
         //http:192.168.35.91:3006/studio/confirmMail?grouptype=<%= groupType %>&userid=<%= userId %>&email=<%= encodeURI(email) %>&key=<%= key %>
         var ref = req.headers.referer.indexOf('?') > -1 ?
@@ -3001,12 +3049,13 @@ router.post('/pmLogin', function(req, res) {
                             clientGroup = 'notActive';
                         }
                         saveLoginInfo(res, req, userSession, checkAResult.mobilePhone,
-                            accountNo, clientStoreId, clientGroup,
+                            accountNo, clientStoreId, clientGroup, checkAResult.activeTime,
                             function(saveResult) {
                                 saveResult.isOK = true;
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                req.session.studioUserInfo.activeTime = checkAResult.activeTime;
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
@@ -3028,7 +3077,8 @@ router.post('/pmLogin', function(req, res) {
                                     courseId: courseId,
                                     teacherId: teacherId,
                                     teacherName: teacherName,
-                                    accountNo: accountNo
+                                    accountNo: accountNo,
+                                    activeTime: snUser.activeTime
                                 };
                                 visitorService.saveVisitorRecord("login", dasData);
                                 res.json(saveResult);
@@ -3053,14 +3103,15 @@ router.post('/pmLogin', function(req, res) {
  * @param clientStoreId
  */
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
-    clientStoreId, clientGroup, callback) {
+    clientStoreId, clientGroup, activeTime, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
         ip: common.getClientIp(req),
         groupType: userSession.groupType,
         accountNo: accountNo,
         thirdId: null,
-        clientGroup: clientGroup
+        clientGroup: clientGroup,
+        activeTime: activeTime
     };
     studioService.checkMemberAndSave(userInfo, function(result, isNew) {
         req.session.studioUserInfo = {
@@ -3141,87 +3192,102 @@ router.post('/rob', function(req, res) {
     logger.info("redPacket<<rob begin！");
     //没有登录
     var userInfo = req.session.studioUserInfo;
-    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
-        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
-        return;
+    var activeTime = userInfo.activeTime;
+    var registerTime = userInfo.joinDate;
+    var beginDate = '2017-06-12 00:00:00';
+    var endDate = '2017-06-30 23:59:59';
+    var clientGroup = userInfo.clientGroup;
+    var lottryBeginDate = new Date(Date.parse(beginDate)).getTime();
+    //如果激活时间大于活动开始时间，且注册时间在活动范围内的，抽奖机会1次
+    //在活动期间内注册直播间，且账户类型为未激活,抽奖机会1次
+    if ((activeTime < lottryBeginDate || "notActive" == clientGroup) && common.isDateBetween(registerTime, beginDate, endDate)) {
+        clientGroup = "register";
     }
-    var clientTime = req.body['t'];
-    var minutes = clientTime - new Date().getTime();
-    if (Math.abs(minutes) >= 60000) {
-        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
-        return;
-    }
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var curHours = now.getHours();
-    var curMinutes = now.getMinutes();
-    if (curHours < 10) {
-        curHours = '0' + curHours;
-    }
-    if (curMinutes < 10) {
-        curMinutes = '0' + curMinutes;
-    }
-    var curHMDate = curHours + ":" + curMinutes;
-    var pariods = constant.periods;
-    var currentPariod = 1; //默认从第一期开始
-    for (var i = 0; i < pariods.length; i++) {
-        if (curHMDate < pariods[i]) {
-            currentPariod = i + 1;
-            break;
-        }
-    }
-
     var robParams = {
-        ac_periods: "20170607",
+        ac_periods: "20170612",
         phone: userInfo.mobilePhone.replace("86-", ""),
-        nper: currentPariod
-    };
-
-    /*如果期数小于0,直接返回*/
-    if (currentPariod < 0) {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
+        userGroup: clientGroup
     }
-
-    /*如果非注册用户,直接返回*/
-    if (userInfo.clientGroup != "register") {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
-    }
-
-    cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
-        if (err) {
-            logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && 0 == currentPariod) {
-            res.json({ result: 0, money: 0, msg: "" });
-        } else if (common.isBlank(result) || result != currentPariod) {
-            var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
-            cacheClient.set("redPacket_" + robParams.phone, currentPariod);
-            cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170607/draw'), form: robParams }, function(error, response, data) {
-                var result = { result: 0, money: 0, msg: "" };
-                if (data) {
-                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
-                    try {
-                        data = JSON.parse(data);
-                        if (data.infoNo == 1) {
-                            cacheClient.set("redPacket_" + robParams.nper, true);
-                            cacheClient.expire("redPacket_" + robParams.nper, cacheTime);
-                            result.result = 0;
-                            result.money = data.infoGiftName;
-                            res.json(result);
-                            return;
-                        }
-                        result.msg = data.infoMsg;
-                    } catch (e) {}
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimple'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("redPacket<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.money = data.infoGiftName;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
                 }
-                res.json(result);
-            });
+                result.msg = data.infoMsg;
+            } catch (e) {}
+        }
+        res.json(result);
+    });
+    logger.info("redPacket<<rob end！");
+});
+
+/** 获取当前剩余抽奖机会 */
+router.post('/getLastRobChance', function(req, res) {
+    logger.info("get last redPacket chance<<begin！");
+    //没有登录
+    var userInfo = req.session.studioUserInfo;
+    var activeTime = userInfo.activeTime;
+    var registerTime = userInfo.joinDate;
+    var beginDate = '2017-06-12 00:00:00';
+    var endDate = '2017-06-30 23:59:59';
+    var clientGroup = userInfo.clientGroup;
+    var lottryBeginDate = new Date(Date.parse(beginDate)).getTime();
+    //如果激活时间大于活动开始时间，且注册时间在活动范围内的，抽奖机会1次
+    //在活动期间内注册直播间，且账户类型为未激活,抽奖机会1次
+    if ((activeTime < lottryBeginDate || "notActive" == clientGroup) && common.isDateBetween(registerTime, beginDate, endDate)) {
+        clientGroup = "register";
+    }
+    var robParams = {
+        ac_periods: "20170612",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        userGroup: clientGroup
+    };
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimpleSearch'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
+                } else if (data.infoNo == 1) {
+                    result.result = 1;
+                    result.msg = data.infoMsg;
+                }
+            } catch (e) {}
         } else {
             res.json({ result: 0, money: 0, msg: "" });
         }
+        res.json(result);
     });
-    logger.info("redPacket<<rob end！");
+    logger.info("get last redPacket chance<<end！");
 });
 
 /**
@@ -3296,7 +3362,6 @@ router.get('/getRoomOnlineList', function(req, res) {
             res.json(null);
         });
 });
-
 
 router.get('/loadMsg', function(req, res) {
     let params = req.query;

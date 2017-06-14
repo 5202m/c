@@ -14,7 +14,6 @@ AccountEmail.setEvent = function() {
 
     $('#inputEmail').val(Data.userInfo.email);
 
-
     /** 返回个人资料主页 */
     $('#email_back').bind('click', Container.back);
 
@@ -30,16 +29,13 @@ AccountEmail.setEvent = function() {
             common.getJson("/modifyEmail", { params: JSON.stringify({ email: email }) }, function(result) {
                 if (!result.isOK) {
                     Pop.msg((result.msg ? result.msg : "修改失败，请联系客服！"));
-                    if (result.msg) {
-                        $('.acc-set-pad .error-bar').html('<i></i>' + result.msg).removeClass('dn');
-                    } else {
-                        $('.acc-set-pad .error-bar').html('<i></i>修改失败，请联系客服').removeClass('dn');
+                    if (result.code == '102') {
+                        AccountNickName.load();
                     }
                     return false;
                 } else {
                     Pop.msg(result.msg);
-                    $('#saveEmail').addClass('dn');
-                    $(".error-bar").addClass('dn');
+                    AccountInfo.load();
                 }
             }, true, function(err) {});
         }

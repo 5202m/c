@@ -38,11 +38,10 @@ AccountNickName.setEvent = function() {
                     }
                 } else {
                     AccountNickName.refreshNickname(result.nickname);
-                    $('.acc-user-info').addClass('dn');
-                    $(".error-bar").addClass('dn');
                     $("#myNickname").html(result.nickname);
                     $("#nickname").text(result.nickname);
                     Pop.msg("修改成功!");
+                    AccountInfo.load();
                 }
             }, true, function(err) {});
         }

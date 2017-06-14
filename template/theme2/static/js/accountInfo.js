@@ -16,16 +16,16 @@ AccountInfo.getUserInformation = function() {
 
 AccountInfo.setEvent = function() {
     var userInfo = Data.userInfo;
-    $("#myInfoAvatar").attr('src', userInfo.avatar);
+    $("#myInfoAvatar").attr('src', userInfo.avatar ? userInfo.avatar : '/theme2/img/user-img.jpg');
     $("#myNickname").html(userInfo.nickname);
     $("#myName").html(userInfo.userName);
     $("#myEmail").html(userInfo.email);
     $("#myMobile").html(userInfo.mobilePhone);
 
-    /** 设置头像 */
-    $('#account_setAvatar').bind('click', function() {
-        AccountAvatar.load();
-    });
+    // /** 设置头像 */
+    // $('#account_setAvatar').bind('click', function() {
+    //     AccountAvatar.load();
+    // });
 
     /** 设置昵称 */
     $('#account-setNickname').bind('click', function() {

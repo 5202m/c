@@ -61,9 +61,36 @@
                         <p class="hongb-pfon">一大波<span>5-500</span>元现金红包</p>
                         <div class="gund-box">
                             <ul>
-                                <li>恭喜137***217 获得200元</li>
-                                <li>恭喜138***200 获得100元</li>
-                                <li>恭喜134***222 获得300元</li>
+                                <li>恭喜138***123获得5元</li>
+                                <li>恭喜151***105获得50元</li>
+                                <li>恭喜130***986获得10元</li>
+                                <li>恭喜152***895获得100元</li>
+                                <li>恭喜139***189获得5元</li>
+                                <li>恭喜159***778获得10元</li>
+                                <li>恭喜139***189获得5元</li>
+                                <li>恭喜159***778获得100元</li>
+                                <li>恭喜181***256获得50元</li>
+                                <li>恭喜130***986获得10元</li>
+                                <li>恭喜132***235获得50元</li>
+                                <li>恭喜139***189获得200元</li>
+                                <li>恭喜187***277获得5元</li>
+                                <li>恭喜130***986获得100元</li>
+                                <li>恭喜130***986获得500元</li>
+                                <li>恭喜182***533获得50元</li>
+                                <li>恭喜187***277获得100元</li>
+                                <li>恭喜132***499获得100元</li>
+                                <li>恭喜139***189获得50元</li>
+                                <li>恭喜188***627获得5元</li>
+                                <li>恭喜178***858获得10元</li>
+                                <li>恭喜139***918获得50元</li>
+                                <li>恭喜157***881获得100元</li>
+                                <li>恭喜152***626获得10元</li>
+                                <li>恭喜182***533获得50元</li>
+                                <li>恭喜186***057获得5元</li>
+                                <li>恭喜130***986获得100元</li>
+                                <li>恭喜182***533获得10元</li>
+                                <li>恭喜187***277获得50元</li>
+                                <li>恭喜132***499获得5元</li>
                             </ul>
                         </div>
                     </div>
@@ -171,8 +198,9 @@
                     indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
                     indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
                     indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
-                    indexJS.userInfo.createDate = '<%= userSession.joinDate %>'
-                    //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
+                    indexJS.userInfo.createDate = '<%= userSession.joinDate %>';
+                    indexJS.userInfo.activeDate = '<%= userSession.activeTime %>'
+                        //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
                     chatAnalyze.setUTM(false, $.extend({
                         operationType: 6,

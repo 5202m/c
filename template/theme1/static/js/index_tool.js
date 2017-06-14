@@ -131,7 +131,8 @@ var indexTool = {
                 $("#pop_stTime").html(time || 3);
 
                 $("#pop_simpleTip .enteritem:first a").bind("click", function() {
-                    $("#login_a").trigger("click", {
+                    $("#pop_simpleTip").hide();
+                    $("#register_a").trigger("click", {
                         closeable: false
                     });
                 });
@@ -239,17 +240,13 @@ var indexTool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000, //红包周期5分钟
-            startTime: 55740001, //15:30
-            endTime: 62940001, //17:30
-            courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
-            analysts: [
-                /* 15:30——17:30*/
-                { start: 55740001, userId: "lin_gw24k", userName: "林意轩", wechat: "lin_gw24k", wechatImg: "/theme1/img/yx_lin.png" }
-            ]
-
-            //opened: false //是否已经点击抢红包标记
-            ,lottryNum : 1 //抽奖机会次数，6月12—30号注册的用户1次机会，激活的3次机会
+            analyst: {
+                userId: "liu_gw24k",
+                userName: "刘策",
+                wechat: "liu_gw24k",
+                wechatImg: "/theme1/img/ce_liu.png"
+            },
+            opened: false //是否已经点击抢红包标记
         },
 
         /**
@@ -260,11 +257,37 @@ var indexTool = {
             this.config.init = true;
         },
 
+        setHC: function(c_name, value, expiredays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) +
+                ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+        },
+
+        getHC: function(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        },
+
         /**
          * 绑定事件
          */
         setEvent: function() {
-
+            //用户第一次访问网站默认打开抽奖卷盘
+            if (indexTool.RedPacket.getHC('visits') == "") {
+                //第一次访问
+                indexTool.RedPacket.setHC('visits', 1, 1);
+                $(".hongb-laybox").slideDown(600);
+            }
+            //红包顶部获奖名单滚动
             var $this = $(".bot-gdbox"),
                 scrollTimer;
             $this.hover(function() {
@@ -275,25 +298,45 @@ var indexTool = {
                 }, 3000);
             }).trigger("mouseout");
 
-            var $this = $(".gund-box"),
-                scrollTimer;
-            $this.hover(function() {
-                clearInterval(scrollTimer);
-            }, function() {
-                scrollTimer = setInterval(function() {
-                    indexTool.RedPacket.scrollNews($this);
-                }, 3000);
-            }).trigger("mouseout");
+
+            $(function() {
+                var $this = $(".gund-box"),
+                    scrollTimer;
+                $this.hover(function() {
+                    clearInterval(scrollTimer);
+                }, function() {
+                    scrollTimer = setInterval(function() {
+                        indexTool.RedPacket.scrollNews($this);
+                    }, 3000);
+                }).trigger("mouseout");
+            });
 
             setInterval(indexTool.RedPacket.lightSwitch, 300);
 
             //红包视图-顶部
             $("#redPacket_header,#redPacket_chat").bind("click", function() {
                 if (indexJS.userInfo.isLogin) {
-                    $(".hongb-laybox").slideDown(600);
+                    //判断用户是否满足条件,2017 年06年12日00: 00: 00 至2017年6月30日23: 59: 59 注册直播间的用户
+                    var beginDate = '2017-06-12 00:00:00';
+                    var endDate = '2017-06-30 23:59:59';
+                    if (!indexTool.RedPacket.isDateBetween(indexJS.userInfo.createDate, beginDate, endDate)) {
+                        $("#activeNoChance").show();
+                        return;
+                    } else {
+                        indexTool.RedPacket.queryLastRedPackageRob();
+                    }
                 } else {
                     indexTool.RedPacket.showPop("noLogin");
                 }
+            });
+
+            /**
+             * 即刻互动按钮
+             */
+            $("#joinChat").click(function() {
+                $("#activeNoChance").hide();
+                $(".hongb-laybox").fadeOut(600);
+                $('.main_tabnav a[t="chat"]').click();
             });
 
             //抽奖卷盘关闭
@@ -301,14 +344,28 @@ var indexTool = {
                 $(".hongb-laybox").fadeOut(600);
             });
 
+            //返回抽奖
+            $("#goRob").click(function() {
+                $("#redPacket_resYes").hide();
+                indexTool.RedPacket.queryLastRedPackageRob();
+                $(".hongb-laybox").slideDown(600);
+            });
+
             //抢红包
             $("#lotteryBtn").rotate({
                 bind: {
                     click: function() {
-                        //if (!indexTool.RedPacket.config.opened) {
-                        //    indexTool.RedPacket.config.opened = true;
-                            indexTool.RedPacket.rob();
-                        //}
+                        if (indexJS.userInfo.isLogin) {
+                            if (!indexTool.RedPacket.config.opened) {
+                                indexTool.RedPacket.config.opened = true;
+                                $(".hongb-laybox").slideDown(600);
+                                $('#prizeCon1,#prizeCon2,#prizeCon3,#prizeCon4,#prizeCon5,#prizeCon6').hide();
+                                $('#active_yes_threeChanceOver,#rigster_yes_hasNoChance,#active_yes_hasOneChance').hide();
+                                indexTool.RedPacket.rob();
+                            }
+                        } else {
+                            indexTool.RedPacket.showPop("noLogin");
+                        }
                     }
                 }
             });
@@ -332,6 +389,37 @@ var indexTool = {
                 $("#login_a").trigger("click");
             });
 
+            /**
+             * 中奖结果
+             */
+            $("#resultDel").click(function() {
+                $(this).parent().fadeOut(600);
+            });
+
+        },
+
+        /** 查询用户剩余抽奖次数 */
+        queryLastRedPackageRob: function() {
+            common.getJson("/getLastRobChance", {
+                t: indexJS.serverTime
+            }, function(data) {
+                if (data.result == 0) {
+                    $(".hongb-cout,#lastChance").html(data.residueDegree);
+                    if (data.residueDegree > 0) {
+                        $(".hongb-laybox").slideDown(600);
+                    } else {
+                        if ("active" == indexJS.userInfo.clientGroup) {
+                            $("#activeNoChance").show();
+                        } else {
+                            $("#registerChanceOver").show();
+                        }
+                    }
+                } else {
+                    //服务器时间异常，重新同步服务器时间
+                    chat.socket.emit('serverTime');
+                    box.showMsg(data.msg || "获取剩余红包次数异常!");
+                }
+            });
         },
 
         //抽奖灯光切换
@@ -342,8 +430,12 @@ var indexTool = {
         scrollNews: function(obj) {
             var $self = obj.find("ul:first");
             var lineHeight = $self.find("li:first").height();
-            $self.animate({ "margin-top": -lineHeight + "px" }, 600, function() {
-                $self.css({ "margin-top": "0px" }).find("li:first").appendTo($self);
+            $self.animate({
+                "margin-top": -lineHeight + "px"
+            }, 600, function() {
+                $self.css({
+                    "margin-top": "0px"
+                }).find("li:first").appendTo($self);
             })
         },
 
@@ -355,7 +447,15 @@ var indexTool = {
                     $item = $("#redPacket_noLogin");
                     if (!$item.is(":visible")) {
                         $('.hongb-laybox').hide();
-                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
+                        $item.css({
+                            'opacity': 0,
+                            'left': '30%',
+                            'top': '30%'
+                        }).show().animate({
+                            opacity: 1,
+                            left: '50%',
+                            top: '50%'
+                        }, 300);
                     }
                     break;
                 case "resYes":
@@ -363,141 +463,120 @@ var indexTool = {
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
                         $('.hongb-laybox').hide();
-                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
+                        $item.css('opacity', 0).show().animate({
+                            opacity: 1
+                        }, 300);
                     }
                     break;
             }
-        },
-
-        /**
-         * 定时器
-         */
-        tick: function() {
-            if (!this.config.init) {
-                return;
-            }
-            var config = this.config;
-            var time = indexJS.serverTime;
-            var today = new Date(time);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            time -= today.getTime();
-            if (indexTool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
-                if (time - config.redPacketPeriods >= config.stayTime) {
-                    config.miniClose = false;
-                    config.redPacketPeriods = 0;
-                }
-            }
-            this.isRedPacketTime(function(isOK) {
-                if (isOK) {
-
-                } else {
-
-                }
-            });
-        },
-
-        /**
-         * 初始化课程时间
-         */
-        initCourseTime: function(callback) {
-            var config = this.config;
-            if (config.courseTime == -3 || config.courseTime == -2 || (config.courseTime != -1 && config.courseTime > indexJS.serverTime)) {
-                callback(config.courseTime);
-                return;
-            }
-            config.courseTime = -3;
-            var groupId = indexJS.userInfo.groupId;
-            var groupType = indexJS.userInfo.groupType;
-
-            $.getJSON(indexJS.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
-                if (data.result == 0) {
-                    if (!data.data || data.data.length == 0) {
-                        indexTool.RedPacket.config.courseTime = -2;
-                    } else {
-                        indexTool.RedPacket.config.courseTime = data.data[0].date + 86400000 - 1;
-                    }
-                    callback(indexTool.RedPacket.config.courseTime);
-                }
-            });
-        },
-
-        /**
-         * 判断是否延迟抢红包时间
-         */
-        isStayTime: function() {
-            return indexTool.RedPacket.config.redPacketPeriods != 0;
-        },
-
-        /**
-         * 判断是否5秒倒计时时间
-         */
-        isCountDownTime: function() {
-            return indexTool.RedPacket.config.minutes == 0 && indexTool.RedPacket.config.seconds <= 5;
-        },
-
-        /**
-         * 是否红包时间
-         */
-        isRedPacketTime: function(callback) {
-            var today = new Date(indexJS.serverTime);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = indexJS.serverTime - today;
-            if (time <= this.config.startTime || time > this.config.endTime) {
-                callback(false);
-                return;
-            }
-            this.initCourseTime(function(courseTime) {
-                callback(today + 86400000 - 1 == courseTime);
-            });
         },
 
         /**
          * 抢红包
          */
         rob: function() {
-            //判断用户是否满足条件,2017年06年12日00:00:00至2017年6月30日23:59:59注册直播间的用户
-            var beginDate = '2017.06.12 00:00:00';
-            var endDate = '2017.06.30 23:59:59';
-            if(!indexTool.RedPacket.isDateBetween(indexJS.userInfo.createDate,beginDate,endDate)){
-                box.showMsg('很遗憾，您的当前账户未达到活动要求，立即参与其他活动！');
-                return;
-            } else {
-                common.getJson("/rob", { t: indexJS.serverTime }, function(data) {
-                    if (data.result == 0) {
-                        var analyst = indexTool.RedPacket.getAnalyst();
-                        if (data.money > 0) {
-                            indexTool.RedPacket.showPop("resYes", { money: data.money, wechatImg: analyst.wechatImg, wechat: analyst.wechat });
-                        } else {
-                            indexTool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
+            common.getJson("/rob", {
+                t: indexJS.serverTime
+            }, function(data) {
+                if (data.result == 0) {
+                    var analyst = indexTool.RedPacket.config.analyst;
+                    var flag, angle;
+                    if (data.money > 0) {
+                        if (data.money == 5) {
+                            flag = 1;
+                            angle = 92;
+                        } else if (data.money == 10) {
+                            flag = 2;
+                            angle = 212;
+                        } else if (data.money == 50) {
+                            flag = 3;
+                            angle = 332;
+                        } else if (data.money == 100) {
+                            flag = 4;
+                            angle = 152;
+                        } else if (data.money == 200) {
+                            flag = 5;
+                            angle = 272;
+                        } else if (data.money == 500) {
+                            flag = 6;
+                            angle = 32;
                         }
+                        var lastNum = data.residueDegree;
+                        var activeTime = indexJS.userInfo.activeDate;
+                        var registerTime = indexJS.userInfo.createDate;
+                        var beginDate = '2017-06-13 00:00:00';
+                        var endDate = '2017-06-13 23:59:59';
+                        var lottryBeginDate = new Date(Date.parse(beginDate)).getTime();
+                        //如果激活时间大于活动开始时间，且注册时间在活动范围内的，抽奖机会1次
+                        if (activeTime < lottryBeginDate && indexTool.RedPacket.isDateBetween(registerTime, beginDate, endDate)) {
+                            lastNum = 0;
+                        }
+                        indexTool.RedPacket.rotateFunc(flag, angle, data.money, analyst, lastNum);
                     } else {
-                        //服务器时间异常，重新同步服务器时间
-                        chat.socket.emit('serverTime');
-                        box.showMsg(data.msg || "红包信息异常!");
+                        if ("register" == indexJS.userInfo.clientGroup) {
+                            $("#rigster_yes_hasNoChance").show();
+                        } else {
+                            $("#active_yes_threeChanceOver").show();
+                        }
                     }
-                });
-            }
+                } else {
+                    //服务器时间异常，重新同步服务器时间
+                    chat.socket.emit('serverTime');
+                    box.showMsg(data.msg || "红包信息异常!");
+                }
+            });
         },
 
         /**
-         * 获取分析是信息
+         * 转盘转动
+         * @param awards
+         * @param angle
+         * @param text
+         * @param analyst
+         * @param lastNum
          */
-        getAnalyst: function() {
-            var today = new Date(indexJS.serverTime);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = indexJS.serverTime - today;
-            var analysts = indexTool.RedPacket.config.analysts;
-            var analystTmp = null;
-            for (var i = analysts.length - 1; i >= 0; i--) {
-                analystTmp = analysts[i];
-                if (analystTmp.start <= time) {
-                    break;
+        rotateFunc: function(awards, angle, text, analyst, lastNum) { //awards:奖项，angle:奖项对应的角度
+            $('#lotteryYuan').stopRotate();
+            $("#lotteryYuan").rotate({
+                angle: 0,
+                duration: 5000,
+                animateTo: angle + 1440, //angle是图片上各奖项对应的角度，1440是我要让指针旋转4圈。所以最后的结束的角度就是这样子^^
+                callback: function() {
+                    indexTool.RedPacket.config.opened = false;
+                    if (5 == text) {
+                        $("#prizeCon1").show();
+                    } else if (10 == text) {
+                        $("#prizeCon2").show();
+                    } else if (50 == text) {
+                        $("#prizeCon3").show();
+                    } else if (100 == text) {
+                        $("#prizeCon4").show();
+                    } else if (200 == text) {
+                        $("#prizeCon5").show();
+                    } else if (500 == text) {
+                        $("#prizeCon6").show();
+                    }
+                    if ("register" == indexJS.userInfo.clientGroup) {
+                        $("#rigster_yes_hasNoChance").show();
+                    } else {
+                        if (lastNum == 0) {
+                            $("#active_yes_threeChanceOver").show();
+                        } else {
+                            $("#lastChance").html(lastNum);
+                            $("#active_yes_hasOneChance").show();
+                        }
+                    }
+                    $(".hongb-laybox").fadeOut(600);
+                    indexTool.RedPacket.showPop("resYes", {
+                        money: text,
+                        wechatImg: analyst.wechatImg,
+                        wechat: analyst.wechat
+                    });
                 }
-            }
-            return analystTmp;
-        },
 
-         /**
+            });
+        },
+        /**
          * 日期比较大小
          * compareDateString大于dateString，返回1； 
          * 等于返回0； 
@@ -531,6 +610,6 @@ var indexTool = {
                 flag = true;
             }
             return flag;
-        }
+        },
     }
 };

@@ -201,7 +201,7 @@ AccountSubscribeDetail.setSubscribeEvent = function() {
             common.isValid(params.noticeType) &&
             $.inArray('email', params.noticeType.split(',')) > -1) {
             Pop.msg('请先绑定邮箱！');
-            $('#infotab a[t="accountInfo"]').click();
+            AccountEmail.load();
         } else if (common.isBlank(params.id) && common.isBlank(params.analyst)) {
             Pop.msg('请选择订阅老师！');
         } else if (common.isBlank(params.id) && common.isBlank(params.noticeType)) {

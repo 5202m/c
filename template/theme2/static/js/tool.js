@@ -295,6 +295,7 @@ var Tool = {
             }
         });
     },
+
     /**
      * 红包活动
      */
@@ -302,27 +303,13 @@ var Tool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            cycleTime: 300000, //红包周期5分钟
-            stayTime: 5000, //红包停留时间5秒
-            startTime: 55740001, //15:30
-            endTime: 62940001, //17:30
-            courseTime: -1, //课程时间 -3正在请求课程接口 -2没有课程、-1未初始化、其他当前课程或者最近课程安排所在日期的最后1毫秒
-            analysts: [
-                /* 15:30——17:30*/
-                { start: 55740001, userId:"lin_gw24k", userName:"林意轩",  wechat:"lin_gw24k", wechatImg:"/theme2/img/yx_lin.png"}
-            ],
-
-            redPacketPopFlag: true, //红包弹出标记
-            miniClose: false, //mini窗关闭标识，手动关闭后，当次不再弹出
-            opened: false, //是否已经点击抢红包标记
-
-            times: 0, //次数
-            minutes: 0, //分钟数
-            seconds: 0, //秒数
-            timesLabel: "--", //次数
-            minutesLabel: "--", //分钟数
-            secondsLabel: "--", //秒数
-            redPacketPeriods: 0 //红包期数，为0时表示非抢红包时间，其他为红包的期数
+            analyst: {
+                userId: "liu_gw24k",
+                userName: "刘策",
+                wechat: "liu_gw24k",
+                wechatImg: "/theme2/img/ce_liu.png"
+            },
+            opened: false //是否已经点击抢红包标记
         },
 
         /**
@@ -331,41 +318,159 @@ var Tool = {
         init: function(userInfo, apiUrl) {
             this.config.userInfo = userInfo;
             this.config.apiUrl = apiUrl;
-            this.config.redPacketPopFlag = Store.store("redPacketPopFlag") !== false;
             this.setEvent();
             this.config.init = true;
         },
 
+        setHC: function(c_name, value, expiredays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) +
+                ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+        },
+
+        getHC: function(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        },
         /**
          * 绑定事件
          */
         setEvent: function() {
 
-            //红包视图-顶部
-            $("#redPacket_header").bind("view", function() {
-                var config = Tool.RedPacket.config;
-                $(this).find("[rp]").each(function() {
-                    $(this).text(config[$(this).attr("rp")]);
-                });
+            //用户第一次访问网站默认打开抽奖卷盘
+            if (Tool.RedPacket.getHC('visits') == "") {
+                //第一次访问
+                Tool.RedPacket.setHC('visits', 1, 1);
+                $(".hongb-laybox").slideDown(600);
+            }
+
+            //抽奖灯光切换
+            function lightSwitch() {
+                $('.deng-box').toggleClass('deng-box2');
+            };
+
+            //转盘灯光定时转动
+            setInterval(lightSwitch, 300);
+
+            //活动规则层打开
+            $(".rule-mfon").click(function() {
+                $(".shadow").show();
+                $(".zhuan-rule-con").slideDown();
             });
 
-            //红包视图-右侧小窗
-            $("#redPacket_mini").bind("view", function() {
-                var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getCurrentPariod();
-                $("#redPacket_mini [rp='timesLabel']").text(currentPariod);
-                if (Tool.RedPacket.isStayTime()) {
-                    $("#redPacket_miniWait").hide();
-                    $("#redPacket_miniRob").show();
-                } else if (Tool.RedPacket.isCountDownTime()) {
-                    $("#redPacket_mini [rp='seconds']").attr("class", "t" + config.seconds).text(config.seconds);
-                    $("#redPacket_miniWait").show();
-                    $("#redPacket_miniRob").hide();
+            //活动规则层关闭
+            $("#closeRule").click(function() {
+                $(".shadow").hide();
+                $(".zhuan-rule-con").fadeOut(600);
+            });
+
+            //关闭提示框
+            $("#closeNoLogin,#closeActiveNoChance,#closeRegisterChanceOver,#closeRedPacket_resYes").click(function() {
+                $(".shadow").hide();
+                $(this).parent().slideUp();
+            });
+
+            //登录
+            $("#redPacket_loginBtn").bind("click", function() {
+                $(".shadow").hide();
+                $("#redPacket_noLogin").hide();
+                $(".hongb-laybox").fadeOut(600);
+                Login.load();
+            })
+
+            //抽奖灯光无缝滚动
+            function scrollNews(obj) {
+                var $self = obj.find("ul:first");
+                var lineHeight = $self.find("li:first").height();
+                $self.animate({
+                    "margin-top": -lineHeight + "px"
+                }, 600, function() {
+                    $self.css({
+                        "margin-top": "0px"
+                    }).find("li:first").appendTo($self);
+                })
+            }
+            var lineHeight = $(".comment-box li").height();
+            $(".comment-gdbox").css("height", lineHeight);
+
+            //获奖名单滚动
+            var $this = $(".bot-gdbox"),
+                scrollTimer;
+            $this.hover(function() {
+                clearInterval(scrollTimer);
+            }, function() {
+                scrollTimer = setInterval(function() {
+                    scrollNews($this);
+                }, 3000);
+            }).trigger("mouseout");
+
+
+            //抽奖卷盘关闭
+            $(".lay-del-btn").click(function() {
+                $(".hongb-laybox").fadeOut(600);
+            });
+
+            //参与互动
+            $("#joinChat").click(function() {
+                $("#activeNoChance").hide();
+                $(".shadow").hide();
+                $(".hongb-laybox").fadeOut(600);
+                $('#roomList a[gi="studio_teach"]').click();
+            });
+
+            //转盘弹出
+            $("#redPacket_header").bind("click", function() {
+                if (Data.userInfo.isLogin) {
+                    //判断用户是否满足条件, 2017 年06年12日00: 00: 00 至2017年6月30日23: 59: 59 注册直播间的用户
+                    var beginDate = '2017-06-12 00:00:00';
+                    var endDate = '2017-06-30 23:59:59';
+                    if (!Tool.RedPacket.isDateBetween(Data.userInfo.createDate, beginDate, endDate)) {
+                        $(".shadow").show();
+                        $("#activeNoChance").show();
+                        return;
+                    } else {
+                        Tool.RedPacket.queryLastRedPackageRob();
+                    }
                 } else {
-                    //未中奖结果
-                    var analyst = Tool.RedPacket.getAnalyst();
-                    Tool.RedPacket.showPop("resNo", { wechat: analyst.wechat, wechatImg: analyst.wechatImg });
+                    $(".shadow").show();
+                    Tool.RedPacket.showPop('noLogin');
                 }
+            });
+
+            //抽奖
+            $("#lotteryBtn").rotate({
+                bind: {
+                    click: function() {
+                        if (Data.userInfo.isLogin) {
+                            if (!Tool.RedPacket.config.opened) {
+                                Tool.RedPacket.config.opened = true;
+                                $(".hongb-laybox").slideDown(600);
+                                $('#prizeCon1,#prizeCon2,#prizeCon3,#prizeCon4,#prizeCon5,#prizeCon6').hide();
+                                $('#active_yes_threeChanceOver,#rigster_yes_hasNoChance,#active_yes_hasOneChance').hide();
+                                Tool.RedPacket.rob();
+                            }
+                        } else {
+                            Tool.RedPacket.showPop('noLogin');
+                        }
+                    }
+                }
+            });
+
+            //返回抽奖
+            $("#back_rob").click(function() {
+                $(".shadow").hide();
+                $("#redPacket_resYes").hide();
+                Tool.RedPacket.queryLastRedPackageRob();
+                $(".hongb-laybox").slideDown(600);
             });
 
             //红包视图-中奖页（{money:Number, wechatImg:String}）
@@ -373,7 +478,6 @@ var Tool = {
                 $("#redPacket_resYes [rp='money']").html(data.money);
                 $("#redPacket_resYes [rp='wechat']").html(data.wechat);
                 $("#redPacket_resYes [rp='wechatImg']").attr("src", data.wechatImg);
-                $("#redPacket_resYes [rp='doubleMoney']").html(data.money * 2);
             });
 
             //红包视图-未中奖页（{wechatImg:String}）
@@ -382,130 +486,96 @@ var Tool = {
                 $("#redPacket_resNo [rp='wechatImg']").attr("src", data.wechatImg);
             });
 
-            //红包视图-主界面
-            $("#redPacket_normal").bind("view", function() {
-                var config = Tool.RedPacket.config;
-                var currentPariod = Tool.RedPacket.getCurrentPariod();
-                $("#timesLabel").text(currentPariod);
-                $(this).find("[rp]").each(function() {
-                    $(this).text(config[$(this).attr("rp")]);
-                });
-                if (Tool.RedPacket.isStayTime()) {
-                    $("#redPacket_wait").hide();
-                    $("#redPacket_rob").show();
-                } else {
-                    $("#redPacket_wait").show();
-                    $("#redPacket_rob").hide();
-                }
-            });
-
-            //下次不再提示
-            $("#redPacket_popFlag").bind("click", function() {
-                var config = Tool.RedPacket.config;
-                var loc_popFlag = !$(this).prop("checked");
-                if (config.redPacketPopFlag != loc_popFlag) {
-                    config.redPacketPopFlag = loc_popFlag;
-                    Store.store("redPacketPopFlag", loc_popFlag);
-                }
-            });
-
             //关闭
             $('.redbag_pop .pop_close a').click(function() {
-                // studioMbPop.onHideTrigger();
                 if ($(this).parent().parent().parent().hasClass('pop2')) {
-                    $(this).parent().parent().parent().animate({ opacity: 0, bottom: 0 }, 300, function() {
+                    $(this).parent().parent().parent().animate({
+                        opacity: 0,
+                        bottom: 0
+                    }, 300, function() {
                         $(this).hide()
                     });
                 } else {
-                    $(this).parent().parent().parent().animate({ opacity: 0, top: '30%' }, 300, function() {
+                    $(this).parent().parent().parent().animate({
+                        opacity: 0,
+                        top: '30%'
+                    }, 300, function() {
                         $(this).hide()
                     });
                 }
             });
+        },
 
-            //关闭-mini窗
-            $("#redPacket_mini .pop_close a").bind("click", function() {
-                Tool.RedPacket.config.miniClose = true;
-            });
-
-            //关闭-normal窗
-            $("#redPacket_normal .pop_close a").bind("click", function() {
-                if (!Tool.RedPacket.config.miniClose && (Tool.RedPacket.isStayTime() || Tool.RedPacket.isCountDownTime())) {
-                    Tool.RedPacket.config.miniClose = true;
-                }
-            });
-
-            //抢红包打开
-            $('#redPacket_header').bind("click", function() {
-                var config = Tool.RedPacket.config;
-                if (!config.redPacketPopFlag) {
-                    config.redPacketPopFlag = true;
-                    $("#redPacket_popFlag").prop("checked", false);
-                    Store.store("redPacketPopFlag", true);
-                }
-                if (config.userInfo.isLogin) {
-                    Tool.RedPacket.showPop("normal");
+        /** 查询用户剩余抽奖次数 */
+        queryLastRedPackageRob: function() {
+            common.getJson("/getLastRobChance", {
+                t: Data.serverTime
+            }, function(data) {
+                if (data.result == 0) {
+                    $(".hongb-cout").html(data.residueDegree);
+                    if (data.residueDegree > 0) {
+                        $(".hongb-laybox").slideDown(600);
+                    } else {
+                        if ("active" == Data.userInfo.clientGroup) {
+                            $(".shadow").show();
+                            $("#activeNoChance").show();
+                        } else {
+                            $(".shadow").show();
+                            $("#registerChanceOver").show();
+                        }
+                    }
                 } else {
-                    Tool.RedPacket.showPop("noLogin");
+                    //服务器时间异常，重新同步服务器时间
+                    chat.socket.emit('serverTime');
+                    Pop.msg(data.msg || "获取剩余红包次数异常!");
                 }
             });
-
-            //抢红包
-            $("#redPacket_rob,#redPacket_miniRob").bind("click", function() {
-                if (!Tool.RedPacket.config.opened) {
-                    Tool.RedPacket.config.opened = true;
-                    Tool.RedPacket.rob();
-                }
-            });
-
         },
 
         /**
-         * 获取当前红包期数
-         * @returns {number}
+         * 抽奖转动
          */
-        getCurrentPariod: function() {
-            var now = new Date();
-            var curHours = now.getHours();
-            var curMinutes = now.getMinutes();
-            if (curHours < 10) {
-                curHours = '0' + curHours;
-            }
-            if (curMinutes < 10) {
-                curMinutes = '0' + curMinutes;
-            }
-            var curHMDate = curHours + ":" + curMinutes;
-            var redPacketPeriods = 0;
-            try {
-                redPacketPeriods = Data.redPacketLastPeriods.split(',');
-            } catch (e) {
-
-            }
-            var currentPariod = 1;
-            for (var i = 0; i < redPacketPeriods.length; i++) {
-                if (curHMDate < redPacketPeriods[i]) {
-                    currentPariod = i + 1;
-                    break;
+        rotateFunc: function(awards, angle, text, analyst, lastNum) { //awards:奖项，angle:奖项对应的角度
+            $('#lotteryYuan').stopRotate();
+            $("#lotteryYuan").rotate({
+                angle: 0,
+                duration: 5000,
+                animateTo: angle + 1440, //angle是图片上各奖项对应的角度，1440是我要让指针旋转4圈。所以最后的结束的角度就是这样子^^
+                callback: function() {
+                    Tool.RedPacket.config.opened = false;
+                    if (5 == text) {
+                        $("#prizeCon1").show();
+                    } else if (10 == text) {
+                        $("#prizeCon2").show();
+                    } else if (50 == text) {
+                        $("#prizeCon3").show();
+                    } else if (100 == text) {
+                        $("#prizeCon4").show();
+                    } else if (200 == text) {
+                        $("#prizeCon5").show();
+                    } else if (500 == text) {
+                        $("#prizeCon6").show();
+                    }
+                    if ("active" == Data.userInfo.clientGroup) {
+                        if (lastNum == 0) {
+                            $("#active_yes_threeChanceOver").show();
+                        } else {
+                            $("#lastChance").html(lastNum);
+                            $("#active_yes_hasOneChance").show();
+                        }
+                    } else {
+                        $("#rigster_yes_hasNoChance").show();
+                    }
+                    $(".hongb-laybox").fadeOut(600);
+                    Tool.RedPacket.showPop("resYes", {
+                        money: text,
+                        wechatImg: analyst.wechatImg,
+                        wechat: analyst.wechat
+                    });
                 }
-            }
-            return currentPariod;
-        },
 
-        /**显示视图*/
-        view: function() {
-            var config = Tool.RedPacket.config;
-            $("#redPacket_header").trigger("view");
-            if ($("#redPacket_normal").is(":visible")) {
-                $("#redPacket_normal").trigger("view");
-            } else if ($("#redPacket_mini").is(":visible")) {
-                $("#redPacket_mini").trigger("view");
-            } else if (config.redPacketPopFlag && (Tool.RedPacket.isStayTime() || Tool.RedPacket.isCountDownTime())) {
-                if (!config.miniClose && Tool.RedPacket.config.userInfo.isLogin) {
-                    Tool.RedPacket.showPop("mini");
-                }
-            }
+            });
         },
-
         /**显示弹窗*/
         showPop: function(type, arg) {
             var $item = null;
@@ -513,36 +583,15 @@ var Tool = {
                 case "noLogin":
                     $item = $("#redPacket_noLogin");
                     if (!$item.is(":visible")) {
-                        $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
-                    }
-                    break;
-
-                case "mini":
-                    $item = $('#redPacket_mini');
-                    if (!$item.is(":visible")) {
-                        $item.trigger("view");
-                        $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.show();
-                        $('#redPacket_mini2').css({ 'opacity': 0, 'top': '-10%' }).show().animate({ opacity: 1, top: 0 }, 300);
-                    }
-                    break;
-
-                case "normal":
-                    $item = $('#redPacket_normal');
-                    if (!$item.is(":visible")) {
-                        $item.trigger("view");
-                        $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css({ 'opacity': 0, 'left': '30%', 'top': '30%' }).show().animate({ opacity: 1, left: '50%', top: '50%' }, 300);
-                    }
-                    break;
-
-                case "resNo":
-                    $item = $('#redPacket_resNo');
-                    if (!$item.is(":visible")) {
-                        $item.trigger("view", arg);
-                        $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
+                        $item.css({
+                            'opacity': 0,
+                            'left': '30%',
+                            'top': '30%'
+                        }).show().animate({
+                            opacity: 1,
+                            left: '50%',
+                            top: '50%'
+                        }, 300);
                     }
                     break;
 
@@ -550,167 +599,106 @@ var Tool = {
                     $item = $('#redPacket_resYes');
                     if (!$item.is(":visible")) {
                         $item.trigger("view", arg);
-                        $('.redbag_pop_box,.redbag_pop').hide();
-                        $item.css('opacity', 0).show().animate({ opacity: 1 }, 300);
+                        $item.css('opacity', 0).show().animate({
+                            opacity: 1
+                        }, 300);
                     }
                     break;
             }
-        },
-
-        /**
-         * 隐藏所有红包弹窗
-         */
-        hideAllPop: function() {
-            $('.redbag_pop').hide();
-        },
-
-        /**
-         * 定时器
-         */
-        tick: function() {
-            if (!this.config.init) {
-                return;
-            }
-            var config = this.config;
-            var time = Data.serverTime;
-            var today = new Date(time);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            time -= today.getTime();
-            if (Tool.RedPacket.isStayTime()) { //当前是红包时间，延迟5秒不倒计时
-                if (time - config.redPacketPeriods >= config.stayTime) {
-                    config.miniClose = false;
-                    config.redPacketPeriods = 0;
-                }
-            }
-            this.isRedPacketTime(function(isOK) {
-                if (isOK) {
-                    var currentPariod = Tool.RedPacket.getCurrentPariod();
-                    config.timesLabel = currentPariod;
-                    var countDown = config.cycleTime - ((time - config.startTime) % config.cycleTime);
-                    config.minutes = Math.floor(countDown / 60000);
-                    config.seconds = Math.floor(countDown % 60000 / 1000);
-                    if (config.minutes == 0 && config.seconds == 0) {
-                        //抢红包开始，记录红包期数
-                        config.redPacketPeriods = time;
-                        config.minutes = Math.floor(config.cycleTime / 60000);
-                        config.seconds = Math.floor(config.cycleTime % 60000 / 1000);
-                    }
-                    config.minutesLabel = (config.minutes < 10 ? "0" : "") + config.minutes;
-                    config.secondsLabel = (config.seconds < 10 ? "0" : "") + config.seconds;
-                } else {
-                    config.times = 0;
-                    config.timesLabel = "--";
-                    config.minutes = -1;
-                    config.minutesLabel = "--";
-                    config.seconds = -1;
-                    config.secondsLabel = "--";
-                    config.redPacketPeriods = 0;
-                }
-                Tool.RedPacket.view();
-            });
-        },
-
-        /**
-         * 初始化课程时间
-         */
-        initCourseTime: function(callback) {
-            var config = this.config;
-            if (config.courseTime == -3 || config.courseTime == -2 || (config.courseTime != -1 && config.courseTime > Data.serverTime)) {
-                callback(config.courseTime);
-                return;
-            }
-            config.courseTime = -3;
-
-            var groupId = config.userInfo.groupId;
-            var groupType = config.userInfo.groupType;
-
-            $.getJSON(config.apiUrl + '/common/getCourse', { 'flag': 'D', 'groupId': groupId, 'groupType': groupType }, function(data) {
-                if (data.result == 0) {
-                    if (!data.data || data.data.length == 0) {
-                        Tool.RedPacket.config.courseTime = -2;
-                    } else {
-                        Tool.RedPacket.config.courseTime = data.data[0].date + 86400000 - 1;
-                    }
-                    callback(Tool.RedPacket.config.courseTime);
-                }
-            });
-        },
-
-        /**
-         * 判断是都延迟抢红包时间
-         */
-        isStayTime: function() {
-            return Tool.RedPacket.config.redPacketPeriods != 0;
-        },
-
-        /**
-         * 判断是否5秒倒计时时间
-         */
-        isCountDownTime: function() {
-            return Tool.RedPacket.config.minutes == 0 && Tool.RedPacket.config.seconds <= 5;
-        },
-
-        /**
-         * 是否红包时间
-         */
-        isRedPacketTime: function(callback) {
-            var today = new Date(Data.serverTime);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Data.serverTime - today;
-            if (time <= this.config.startTime || time > this.config.endTime) {
-                callback(false);
-                return;
-            }
-            this.initCourseTime(function(courseTime) {
-                callback(today + 86400000 - 1 == courseTime);
-            });
         },
 
         /**
          * 抢红包
          */
         rob: function() {
-            var config = Tool.RedPacket.config;
-            if (!config.userInfo.isLogin) {
-                this.showPop("noLogin");
-            } else if (config.redPacketPeriods == 0) {
-                Pop.msg("红包已过期!");
-            } else {
-                Util.postJson("/rob", { t: Data.serverTime }, function(data) {
-                    if (data.result == 0) {
-                        Tool.RedPacket.config.redPacketPeriods = 0;
-                        var analyst = Tool.RedPacket.getAnalyst();
-                        if (data.money > 0) {
-                            Tool.RedPacket.showPop("resYes", { money: data.money, wechatImg: analyst.wechatImg, wechat: analyst.wechat });
-                        } else {
-                            Tool.RedPacket.showPop("resNo", { wechatImg: analyst.wechatImg, wechat: analyst.wechat });
+            Util.postJson("/rob", {
+                t: Data.serverTime
+            }, function(data) {
+                if (data.result == 0) {
+                    var analyst = Tool.RedPacket.config.analyst;
+                    var flag, angle;
+                    if (data.money > 0) {
+                        if (data.money == 5) {
+                            flag = 1;
+                            angle = 92;
+                        } else if (data.money == 10) {
+                            flag = 2;
+                            angle = 212;
+                        } else if (data.money == 50) {
+                            flag = 3;
+                            angle = 332;
+                        } else if (data.money == 100) {
+                            flag = 4;
+                            angle = 152;
+                        } else if (data.money == 200) {
+                            flag = 5;
+                            angle = 272;
+                        } else if (data.money == 500) {
+                            flag = 6;
+                            angle = 32;
                         }
+                        var lastNum = data.residueDegree;
+                        var activeTime = Data.userInfo.activeTime;
+                        var registerTime = Data.userInfo.createDate;
+                        var beginDate = '2017-06-13 00:00:00';
+                        var endDate = '2017-06-13 23:59:59';
+                        var lottryBeginDate = new Date(Date.parse(beginDate)).getTime();
+                        //如果激活时间大于活动开始时间，且注册时间在活动范围内的，抽奖机会1次
+                        if (activeTime < lottryBeginDate && Tool.RedPacket.isDateBetween(registerTime, beginDate, endDate)) {
+                            lastNum = 0;
+                        }
+                        Tool.RedPacket.rotateFunc(flag, angle, data.money, analyst, lastNum);
                     } else {
-                        //服务器时间异常，重新同步服务器时间
-                        chat.socket.emit('serverTime');
-                        box.showMsg(data.msg || "红包信息异常!");
+                        if ("active" == Data.userInfo.clientGroup) {
+                            $(".shadow").hide();
+                            $("#activeNoChance").show();
+                        } else {
+                            $(".shadow").hide();
+                            $("#registerChanceOver").show();
+                        }
                     }
-                    Tool.RedPacket.config.opened = false;
-                });
-            }
+                } else {
+                    //服务器时间异常，重新同步服务器时间
+                    chat.socket.emit('serverTime');
+                    Pop.msg(data.msg || "红包信息异常!");
+                }
+            });
         },
 
         /**
-         * 获取分析是信息
+         * 日期比较大小
+         * compareDateString大于dateString，返回1； 
+         * 等于返回0； 
+         * compareDateString小于dateString，返回-1 
+         * @param dateString 日期 
+         * @param compareDateString 比较的日期 
          */
-        getAnalyst: function() {
-            var today = new Date(Tool.serverTime);
-            today = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            var time = Tool.serverTime - today;
-            var analysts = Tool.RedPacket.config.analysts;
-            var analystTmp = null;
-            for (var i = analysts.length - 1; i >= 0; i--) {
-                analystTmp = analysts[i];
-                if (analystTmp.start <= time) {
-                    break;
-                }
+        dateCompare: function(dateString, compareDateString) {
+            var dateTime = new Date(Date.parse(dateString)).getTime();
+            var compareDateTime = new Date(Date.parse(compareDateString)).getTime();
+            if (compareDateTime > dateTime) {
+                return 1;
+            } else if (compareDateTime == dateTime) {
+                return 0;
+            } else {
+                return -1;
             }
-            return analystTmp;
+        },
+        /** 
+         * 判断日期是否在区间内，在区间内返回true，否返回false 
+         * @param dateString 日期字符串 
+         * @param startDateString 区间开始日期字符串 
+         * @param endDateString 区间结束日期字符串 
+         * @returns {Number} 
+         */
+        isDateBetween: function(dateString, startDateString, endDateString) {
+            var flag = false;
+            var startFlag = (Tool.RedPacket.dateCompare(dateString, startDateString) < 1);
+            var endFlag = (Tool.RedPacket.dateCompare(dateString, endDateString) > -1);
+            if (startFlag && endFlag) {
+                flag = true;
+            }
+            return flag;
         }
     }
 };

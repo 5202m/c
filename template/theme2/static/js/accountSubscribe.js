@@ -24,8 +24,6 @@ AccountSubscribe.setEvent = function() {
     });
 };
 
-
-
 AccountSubscribe.getSubscribeType = function() {
     common.getJson('/getSubscribeType', { params: JSON.stringify({ groupType: Data.userInfo.groupType }) }, function(data) {
         if (data != null) {
@@ -59,7 +57,7 @@ AccountSubscribe.formatHtml = function(region) {
     switch (region) {
         case 'subscribeType':
             formatHtmlArr.push(' <div class="cen-st-litem cen-item-line" t="{1}"> ');
-            formatHtmlArr.push('    <a href="javascript:void(0);" id="{1}" class="subType"> ' );
+            formatHtmlArr.push('    <a href="javascript:void(0);" id="{1}" class="subType"> ');
             formatHtmlArr.push('    {0} ');
             formatHtmlArr.push('    <p class="acc-item-rst"><span>未订阅</span><i class="i-arrow-down"></i></p> ');
             formatHtmlArr.push('    </a>');

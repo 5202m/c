@@ -23,7 +23,7 @@ AccountIndex.getUserPoint = function() {
 AccountIndex.setEvent = function() {
 
     $("#nickname").text(Data.userInfo.nickname);
-    $("#myAvatar").attr('src', Data.userInfo.avatar);
+    $("#myAvatar").attr('src', Data.userInfo.avatar ? Data.userInfo.avatar : '/theme2/img/user-img.jpg');
 
     var userLevel = AccountIndex.getUserLevelShortName(Data.userInfo.clientGroup);
     $("#myLevel").text(userLevel);
