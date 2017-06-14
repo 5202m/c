@@ -207,7 +207,7 @@ var chatPride = {
                             if (common.isBlank(row.description)) {
                                 hideDesc = ' style="display:none;"';
                             }
-                            tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+                            tradeStrategySupportHtml.push(tradeStrategySupport.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc, row.drag2));
                             //var tradeStrategySupportDivHtml = [];
                             //$.each(row, function (j, r) {
                             //tradeStrategySupportDivHtml.push(tradeStrategySupportDiv.formatStr((j + 1), r.support_level, r.drag_level, ''));
@@ -441,7 +441,7 @@ var chatPride = {
                         hideDesc = ' style="display:none;"';
                     }
                     //tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, (row.longshort == 'long' ? '看涨' : '看跌'), row.point, row.profit, row.loss, ''));
-                    tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+                    tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc, row.drag2));
                 });
             } else {
                 $.each(remarkArr, function(i, row) {
@@ -449,7 +449,7 @@ var chatPride = {
                     if (common.isBlank(row.description)) {
                         hideDesc = ' style="display:none;"';
                     }
-                    tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], '***', '***', '***', '***', 'dim', hideDesc));
+                    tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], '***', '***', '***', '***', 'dim', hideDesc,row.drag2));
                 });
             }
             var contentHtml = articleDetail.content || '';
@@ -592,7 +592,7 @@ var chatPride = {
                 if (common.isBlank(row.description)) {
                     hideDesc = ' style="display:none;"';
                 }
-                tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc));
+                tradeStrategyHdDetailHtml.push(tradeStrategyHdDetail.formatStr(row.name, upOrDown[row.upordown], row.open, row.profit, row.loss, row.description, '', hideDesc, row.drag2));
             });
             dom.parent().children('table').remove()
             dom.after(tradeStrategyHdDetailHtml.join(''));
@@ -687,11 +687,12 @@ var chatPride = {
                 formatHtmlArr.push('<div class="hdbox2 clearfix">');
                 formatHtmlArr.push('    <table width="100%" border="0" cellspacing="0" cellpadding="0">');
                 formatHtmlArr.push('        <tr>');
-                formatHtmlArr.push('            <th>品种</th>');
-                formatHtmlArr.push('            <th width="21%">方向</th>');
-                formatHtmlArr.push('            <th width="21%">进场点位</th>');
-                formatHtmlArr.push('            <th width="21%">止盈</th>');
-                formatHtmlArr.push('            <th width="21%">止损</th>');
+                formatHtmlArr.push('            <th width="20%">产品</th>');
+                formatHtmlArr.push('            <th width="15%">方向</th>');
+                formatHtmlArr.push('            <th width="15%">第一支撑位</th>');
+                formatHtmlArr.push('            <th width="15%">第二支撑位</th>');
+                formatHtmlArr.push('            <th width="15%">第一阻力</th>');
+                formatHtmlArr.push('            <th width="15%">第二阻力</th>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr>');
                 formatHtmlArr.push('            <td>{0}</td>'); //品种
@@ -699,6 +700,7 @@ var chatPride = {
                 formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+                formatHtmlArr.push('            <td><span class="{6}">{8}</span></td>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr{7}>');
                 formatHtmlArr.push('            <td colspan="5" class="explain">说明：<span class="{6}">{5}</span></td>');
@@ -751,11 +753,12 @@ var chatPride = {
                 formatHtmlArr.push('<table width="100%" border="0" cellspacing="0" cellpadding="0">');
                 formatHtmlArr.push('    <tbody>');
                 formatHtmlArr.push('        <tr>');
-                formatHtmlArr.push('            <th>品种</th>');
-                formatHtmlArr.push('            <th width="21%">方向</th>');
-                formatHtmlArr.push('            <th width="21%">进场点位</th>');
-                formatHtmlArr.push('            <th width="21%">止盈</th>');
-                formatHtmlArr.push('            <th width="21%">止损</th>');
+                formatHtmlArr.push('            <th width="20%">产品</th>');
+                formatHtmlArr.push('            <th width="15%">方向</th>');
+                formatHtmlArr.push('            <th width="15%">第一支撑位</th>');
+                formatHtmlArr.push('            <th width="15%">第二支撑位</th>');
+                formatHtmlArr.push('            <th width="15%">第一阻力</th>');
+                formatHtmlArr.push('            <th width="15%">第二阻力</th>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr>');
                 formatHtmlArr.push('            <td>{0}</td>');
@@ -763,6 +766,7 @@ var chatPride = {
                 formatHtmlArr.push('            <td><span class="{6}">{2}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{3}</span></td>');
                 formatHtmlArr.push('            <td><span class="{6}">{4}</span></td>');
+                formatHtmlArr.push('            <td><span class="{6}">{8}</span></td>');
                 formatHtmlArr.push('        </tr>');
                 formatHtmlArr.push('        <tr{7}>');
                 formatHtmlArr.push('            <td colspan="5" class="explain">说明：<span class="{6}">{5}</span></td>');

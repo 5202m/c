@@ -188,7 +188,7 @@ var pmApiService = {
         var keys = ["GW", "MT4", "MT5", "ONESTOP"];
         request.post({ url: (config.goldApiUrl + '/account/login'), form: submitInfo },
             function(error, response, data) {
-                //logger.info("tmpData:"+data);
+                // logger.info("tmpData:" + data);
                 var callData = null;
                 if (!error && common.isValid(data)) {
                     try {
@@ -211,7 +211,8 @@ var pmApiService = {
                                         //只获取手机号码
                                         callData = {
                                             mobilePhone: phone,
-                                            clientGroup: result.accountStatus
+                                            clientGroup: result.accountStatus,
+                                            joinDate: result.createDate ? new Date(result.createDate.time) : ''
                                         };
                                     }
                                 }
@@ -232,6 +233,58 @@ var pmApiService = {
                 }
                 callback(callData);
             });
+    },
+    /**
+     * 获取客户激活时间
+     */
+    getUserActiveTime: function(mobile) {
+        let deferred = new common.Deferred();
+        request.post({
+            url: (config.goldApiUrl + '/account/getCustomerInfoByMobileNo'),
+            form: { mobileNo: '86-' + mobile }
+
+        }, function(error, response, tmpData) {
+            //logger.info("getUserActiveTime->error:"+error+";tmpData:"+tmpData);
+            var callData = null;
+            if (error) {
+                logger.error("getUserActiveTime->error" + error);
+            }
+            var allData = null;
+            if (!error && common.isValid(tmpData)) {
+                try {
+                    allData = JSON.parse(tmpData);
+                    logger.info("getUserActiveTime" + allData);
+                } catch (e) {
+                    logger.error("getUserActiveTime[" +
+                        mobile + "]->error:" + e);
+                    deferred.reject(e);
+                    return;
+                }
+                var result = allData.result,
+                    row = null,
+                    activeTimeArr = [];
+
+                if (allData && allData.code == 'SUCCESS' &&
+                    result != null) {
+                    for (var i = 0, lenI = result ? result.length : 0; i < lenI; i++) {
+                        if (result[i].accountStatus == 'A') {
+                            activeTimeArr.push(result[i].activateTime.time);
+                        }
+                    }
+                    if (activeTimeArr.length > 0) {
+                        activeTimeArr = activeTimeArr.sort(function(a, b) { return b - a });
+                    }
+                } else {
+                    callData = null;
+                }
+            } else {
+                logger.error("getUserActiveTime[" +
+                    mobile + "]->error:" + error);
+                deferred.reject(error);
+            }
+            deferred.resolve(callData);
+        });
+        return deferred.promise;
     }
 };
 

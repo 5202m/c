@@ -888,7 +888,7 @@ var chat = {
                 mainDiv += '<a href="javascript:void(0);" class="d1" t="0"><b></b><span>@TA</span></a>';
                 cnt++;
             }
-            if (gIdDom.attr("aw") == "true" && common.containSplitStr(gIdDom.attr("awr"), userType)) {
+            if (gIdDom.attr("aw") == "true" && common.containSplitStr(gIdDom.attr("awr"), userType) && userType != 1) {
                 mainDiv += '<a href="javascript:void(0);"' + (cnt == 0 ? ' class="d1"' : "") + ' t="1"><b></b><span>私聊</span></a>';
                 cnt++;
             }
@@ -1388,7 +1388,7 @@ var chat = {
             return;
         }
         $(".right_row .main_tabnav a[t='chat'] .dialognum span").text(parseInt(num));
-        $(".userListOnline").text(parseInt(num));
+        //$(".userListOnline").text(parseInt(num));
 
     },
     /**
@@ -1459,7 +1459,7 @@ var chat = {
             data = common.sortOnlineUserList(data, indexJS.userInfo.userId);
             //如客户数小于200，则追加额外游客数
             var onLineNum = dataLength;
-            if ($("#roomInfoId").attr("av") == "true") {
+/*            if ($("#roomInfoId").attr("av") == "true") {
                 var randId = 0,
                     size = 0;
                 if (dataLength > 100) {
@@ -1472,12 +1472,12 @@ var chat = {
                     data.push({ userId: ("visitor_" + randId), clientGroup: 'visitor', nickname: ('游客_' + randId), sequence: 15, userType: -1 });
                 }
                 onLineNum = onLineNum + size;
-            }
+            }*/
             var row = null;
             var userArr = [];
             for (var i in data) {
 
-                userArr.push(chat.getOnlineUserDom(data[i]).dom); //设置在线用户
+                //userArr.push(chat.getOnlineUserDom(data[i]).dom); //设置在线用户
                 row = data[i];
                 chat.setOnlineUser(row); //设置在线用户
                 if (row.userType == 3 && $('.mult_dialog a[uid=' + row.userId + ']').length > 0) {
@@ -1486,9 +1486,13 @@ var chat = {
                     chat.contactAnalystEvent(row);
                 }
             }
-            $('#userListIdNew').html(userArr.join(""));
+            /*$('#userListIdNew').html(userArr.join(""));
+            onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;*/
             indexJS.setListScroll(".otheruser .scrollbox");
-            onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;
+            var $_room = $('#roomList_panel .on');
+            var room = {isOpen : $_room.attr('sp'), allowVisitor : $_room.attr('av'), roomType : $_room.attr('rt'),
+                name : $_room.children('span').children('b').text() };
+            onLineNum = indexJS.calculateRoomOnlineNum(room,onLineNum);
             chat.setOnlineNum(onLineNum); //设置在线人数
         });
         //断开连接

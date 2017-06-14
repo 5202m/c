@@ -11,13 +11,14 @@ var Index = {
         this.setEvent();
         this.verifyTrainRoom();
 
-        if (Util.isNotBlank(Data.userInfo.groupId)) {
-            Room.load();
-        } else {
-            Rooms.load();
-        }
+        /*        if (Util.isNotBlank(Data.userInfo.groupId)) {
+                    Room.load();
+                } else {
+                    Rooms.load();
+                }*/
+        Rooms.load();
         Pop.signIn.init();
-        Tool.RedPacket.init(Data.userInfo,Data.apiUrl);
+        Tool.RedPacket.init(Data.userInfo, Data.apiUrl);
     },
     verifyTrainRoom: function() {
         if (Util.isNotEmpty(Data.userInfo.intentionalRoomId) && Data.userInfo.groupId !== Data.userInfo.intentionalRoomId) { //房间没权限进入，因此利用此操作触发相应的提示
@@ -34,7 +35,7 @@ var Index = {
         Index.serverTimeTickId = window.setInterval(function() {
             Data.serverTime += 1000;
             Tool.courseTick.tick();
-            Tool.RedPacket.tick();
+            //Tool.RedPacket.tick();
         }, 1000); //每秒一次
     },
 
@@ -53,7 +54,7 @@ var Index = {
         $("#header_ui").bind("click", function() {
             if (Data.userInfo && Data.userInfo.isLogin) {
                 //已登录，显示用户信息
-                //studioMbPop.popBox("person");
+                AccountIndex.load();
             } else {
                 Login.load();
             }

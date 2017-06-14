@@ -77,7 +77,7 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .mod_main .main_tabnav a.on{ color: #fff; }
 .mod_main .main_tabnav a i{ background: #ba954a }
 .mod_main .main_tabnav a .ibox{ border-color: #1d4774 }
-.mod_main .main_tabnav a:hover .hoverbox{ border-color: #2b5e93; background: #306aa6
+.mod_main .main_tabnav a:hover .hoverbox{ border-color: #2b5e93; background: #306aa6 
 }
 .mod_main .main_tabnav a.on:hover .hoverbox{ border: 0 }
 .mod_main .main_tabnav a.on:hover{ line-height: 40px; }
@@ -188,8 +188,12 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .newbie_guide .h_menu1,.newbie_guide .myaidbox,.newbie_guide .contactbar,.newbie_guide .sub-tabnav{ background: #21507f;}
 .newbie_guide .input_box .input_area .ctextarea{ color: #b4c6da; }
 
+.risktip{ color: #597fa4 }
+.risktip i{ background-position: -170px -330px }
+
 /*培训班广告*/
 .train_ad a{ background-image: url(../img/darkblue/train_ad0330.png); }
+
 
 /*redbag201703*/
 /*.header_redbag{ background-image: url(../img/darkblue/pinkbg1.jpg); }

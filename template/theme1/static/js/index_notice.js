@@ -54,7 +54,7 @@ var noticeJS = {
         });
         //通知信息 5星等级数据 及 点评数据
         this.socket.on('financeData', function(result) {
-            if (!result || !result.finance || (result.finance.importanceLevel < 4 || !result.review)) { //非4 5星 非评论数据不显示
+            if (!result || !result.finance || !result.review) { //非4 5星 非评论数据不显示
                 return;
             }
             var comments = result.review,
@@ -116,8 +116,8 @@ var noticeJS = {
                 html.push('        </tr>');
                 html.push('        <tr>');
                 html.push('            <td>');
-                html.push('                <span class="ca_value">前值：<b>{6}</b></span>');
-                html.push('                <span class="ca_value">预期值：<b>{7}</b></span>');
+                html.push('                <span class="ca_value">前值：<b>{7}</b></span>');
+                html.push('                <span class="ca_value">预期值：<b>{6}</b></span>');
                 html.push('                <span class="ca_value">实际值：<b>{8}</b></span>');
                 html.push('            </td>');
                 html.push('        </tr>');
@@ -148,8 +148,8 @@ var noticeJS = {
                 html.push('            </tr>');
                 html.push('            <tr>');
                 html.push('                <td>');
-                html.push('                    <span class="ca_value">前值：<b>{7}</b></span>');
-                html.push('                    <span class="ca_value">预期值：<b>{8}</b></span>');
+                html.push('                    <span class="ca_value">前值：<b>{8}</b></span>');
+                html.push('                    <span class="ca_value">预期值：<b>{7}</b></span>');
                 html.push('                    <span class="ca_value">实际值：<b>{9}</b></span>');
                 html.push('                </td>');
                 html.push('            </tr>');

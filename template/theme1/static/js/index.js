@@ -288,8 +288,8 @@ var indexJS = {
                 $(this).addClass("on");
                 $('.live_preview .tabcont .main_tab[t=' + $(this).attr("t") + ']').addClass("on");
             });
-            $('.live_preview .tabcont').css('height', '200px');
-            indexJS.setListScroll('.live_preview .tabcont');
+            $('.live_preview .live_prevlist').css('height', '250px');
+            indexJS.setListScroll('.live_preview .live_prevlist');
 
             //晒单墙顶部tab切换
             $(".sd_king .rank_tabnav a").click(function() {
@@ -352,7 +352,7 @@ var indexJS = {
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            indexTool.RedPacket.tick();
+            // indexTool.RedPacket.tick();
         }, 1000); //每秒一次
     },
     /**
@@ -536,9 +536,9 @@ var indexJS = {
         switch (indexJS.onlineCsStatus) {
             case 0:
                 indexJS.onlineCsStatus = 1;
-                var url = protocol+"//jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
+                var url = protocol + "//jms.phgsa.cn/chat.php?pid=PM01&key=a0lNfonaN5frC3xpOIu2";
                 if (common.isLocalHref()) {
-                    url = protocol+"//csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
+                    url = protocol + "//csuat.phgsa.cn:9045/chat.php?pid=T002&key=Z6KMb9YOBciw2jbvvfSr";
                 }
                 var csScriptUrl = url +
                     '&tln=' + indexJS.userInfo.userId +
@@ -699,5 +699,32 @@ var indexJS = {
                 });
             }
         });
+    },
+    /**
+     * 直播间在线人数计算(产品给出的计算公式)
+     * @param room
+     * @param size
+     */
+    calculateRoomOnlineNum: function(room, size) {
+
+        if (room && room.isOpen && room.allowVisitor) {
+            var currentHour = new Date(indexJS.serverTime).getHours(),
+                minuts = new Date(indexJS.serverTime).getMinutes(),
+                currentS = currentHour * 60 * 60 + minuts * 60;
+            room.id = indexJS.userInfo.groupId
+            if (room.roomType === 'vip') { //vip房间
+                size = (currentHour >= 20 && currentHour < 22) ? (size * 16) + 300 : 0;
+            } else if (room.roomType === 'simple' || (room.roomType === 'normal' && (room.id === 'studio_3' || room.id === 'studio_teach'))) { //新手房间与交流大厅0830-2330
+                var beginTime = 8 * 60 * 60 + 30 * 60,
+                    endTime = 23 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? (size * 16) + 200 : (size * 5) + 10;
+            } else if (room.roomType === 'normal' && room.id !== 'studio_3' && room.id !== 'studio_teach') { //分析专场 15:30-17:30
+                var beginTime = 15 * 60 * 60 + 30 * 60,
+                    endTime = 17 * 60 * 60 + 30 * 60;
+                size = (beginTime < currentS && endTime > currentS) ? (size * 12) + 200 : 0;
+            }
+        }
+
+        return size;
     }
 };

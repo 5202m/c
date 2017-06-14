@@ -6,9 +6,9 @@ var Room = new Container({
     panel: $("#page_room"),
     url: "/theme2/template/room.html",
     wechatCode: null,
-    isNoviceRoom : false,
-    timeNum : -1,//定时器序号
+    isNoviceRoom: false,
     onLoad: function() {
+        Util.loadStyles('/base/lib/lightbox/lightbox.css');
         Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();
@@ -17,7 +17,10 @@ var Room = new Container({
     },
     onShow: function() {
         Room.initPage();
-        if (Util.isAppEnv()) $('.upload-pic').parent().remove();
+        if (Util.isAppEnv()) {
+            $('.upload-pic').parent().remove();
+            $('#room_realopen').attr('href', 'https://m.24k.hk/realaccount_open.html?clientSource=app');
+        }
     },
     onHide: function() {
         Player.player.clear($("#roomVideo"));
@@ -33,7 +36,7 @@ Room.handleNoviceRoom = function() {
         $('#room_chat').trigger('click');
         $('#chat_close').hide();
         $('#chat_fullscreen').hide();
-    }else{
+    } else {
         $('#chat_close').show();
         $('#chat_close').trigger('click');
     }
@@ -61,30 +64,30 @@ Room.initPage = function() {
                 Chat.init();
                 Room.showCourse();
                 PrivateChat.isChangeRoom = true;
-                setTimeout(function () {//进入页面不播放音频，需要用户点击才播放
-                 $('#roomAudioPlay').click();
-                 },500);
+                setTimeout(function() { //进入页面不播放音频，需要用户点击才播放
+                    $('#roomAudioPlay').click();
+                }, 500);
                 //判断当前房间是否是红包活动
-                Room.getRedPacketRoom(Room.currGroupId);
+                // Room.getRedPacketRoom(Room.currGroupId);
             }
             Room.watchRemind(room);
         }
     });
 };
 
-/**
- * 判断是否红包活动培训班
- */
-Room.getRedPacketRoom = function(currentRoomId) {
-    $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
-        if (data.isOK) {
-            $("#redPacket_header").show();
-        } else {
-            $('.redbag_pop').hide()
-            $("#redPacket_header").hide();
-        }
-    });
-};
+// /**
+//  * 判断是否红包活动培训班
+//  */
+// Room.getRedPacketRoom = function(currentRoomId) {
+//     $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
+//         if (data.isOK) {
+//             $("#redPacket_header").show();
+//         } else {
+//             $('.redbag_pop').hide()
+//             $("#redPacket_header").hide();
+//         }
+//     });
+// };
 
 /**
  * 游客累计观看提醒
@@ -100,7 +103,8 @@ Room.watchRemind = function(room) {
             if (Store.store("simpleTip")) {
                 Room.showUnLoginWatchTip(true, lgt, lgtTips);
             } else {
-                Room.timeNum = window.setTimeout(function() {
+                Login.groupId = Room.currGroupId;
+                window.setTimeout(function() {
                     Store.store("simpleTip", true);
                     Room.showUnLoginWatchTip(true, lgt, lgtTips);
                 }, lgt * 60 * 1000);
@@ -159,7 +163,7 @@ Room.setEvent = function() {
         $("#room_foot").hide();
         $("#room_talk").show();
         //判断当前视频/音频是否在播放
-        if($('#chat_player').height() === 0 && !Room.isNoviceRoom){
+        if ($('#chat_player').height() === 0 && !Room.isNoviceRoom) {
             $('#room_header').hide();
             $('#page_room section').removeClass('mt84').addClass('mt40');
             $('#chat_fullscreen').hide();
@@ -212,6 +216,7 @@ Room.setEvent = function() {
         if (Data.userInfo.isLogin) {
             ClassNote.viewData($(this));
         } else {
+            Login.groupId = Room.currGroupId;
             Login.load();
         }
     });
@@ -449,5 +454,10 @@ Room.showCourse = function() {
  */
 Room.toRefreshView = function(groupId) {
     Data.userInfo.groupId = groupId;
+    if (Login.groupId) {
+        Login.groupId = null;
+        location.reload();
+        return;
+    }
     Room.load();
 };

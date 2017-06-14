@@ -2,8 +2,11 @@
 const Deferred = require("../util/common").Deferred;
 const request = require('request');
 const config = require('../resources/config'); // 引入config
+const APIAuth = require('../util/APIAuth');
 const logger = require('../resources/logConf').getLogger("liveRoomAPIService");
 const baseUrl = config.apiUrl;
+
+let apiAuth = new APIAuth(config.apiAuth.appId, config.apiAuth.appSecret);
 
 /**
  * 在请求路径后面添加公司代码
@@ -11,7 +14,7 @@ const baseUrl = config.apiUrl;
  * @returns string
  */
 let addCompanyIdToPath = path => {
-    let companIdParam = "companyId=" + config.companyId;
+    let companIdParam = `companyId=${config.companyId}`;
     let params = path.split("?")[1];
     path += params ? "&" + companIdParam : "?" + companIdParam;
     return path;
@@ -23,8 +26,24 @@ let addCompanyIdToPath = path => {
  */
 let addCompanyIdToBody = body => {
     body.companyId = config.companyId;
+    body.systemCategory = config.companyId;
     return body;
 }
+
+let addAccessToken = headers => {
+    let deferred = new Deferred();
+    headers = headers ? headers : {};
+    apiAuth.getToken()
+        .then(token => {
+            headers['apptoken'] = token;
+            headers['appsecret'] = config.apiAuth.appSecret;
+            deferred.resolve(headers);
+        })
+        .catch(e => {
+            deferred.reject(e);
+        });
+    return deferred.promise;
+};
 
 /**
  * 统一处理GET和POST返回结果的方法
@@ -37,11 +56,11 @@ let responseHandler = (deferred, callback) => {
      * 处理正常数据的方法(result == 0)
      * @param {Object} result
      */
-    let done = (result) => {
+    let done = (result, rawData) => {
         if (callback) {
-            callback(result);
+            callback(result, rawData);
         }
-        deferred.resolve(result);
+        deferred.resolve(result, rawData);
     };
     /**
      * 处理上游的异常数据(result != 0)
@@ -69,22 +88,17 @@ let responseHandler = (deferred, callback) => {
             if (dataObj["errcode"] && dataObj["errcode"] != 0) {
                 failure(dataObj);
             } else {
-                done(dataObj.data);
+                done(dataObj.data, dataObj);
             }
             return;
         }
-        done(dataObj);
+        done(dataObj, dataObj);
     };
     /**
      * 处理失败请求的方法, 通常由于系统报错产生的异常.
      * @param err 需要处理的异常错误
      */
-    handler.failure = err => {
-        if (callback) {
-            callback(false);
-        }
-        deferred.reject(err);
-    };
+    handler.failure = failure;
     return handler;
 };
 
@@ -94,14 +108,25 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Getting data from liveRoom API with path: " + path);
         path = addCompanyIdToPath(path);
-        request(baseUrl + path, (err, res, data) => {
-            if (err) {
-                logger.error("Get " + path.split("?")[0] + ">>>error:" + err);
-                handler.failure(err);
-            } else {
-                handler.success(data);
-            }
-        });
+        addAccessToken()
+            .then(headers => {
+                let options = {
+                    url: baseUrl + path,
+                    headers: headers
+                };
+                request(options, (err, res, data) => {
+                    if (err) {
+                        logger.error("Get " + path.split("?")[0] + ">>>error:" + err);
+                        handler.failure(err);
+                    } else {
+                        handler.success(data);
+                    }
+                });
+            })
+            .catch(e => {
+                logger.error("addAccessToken faile ", e);
+                handler.failure(e);
+            });
         return deferred.promise;
     },
     post: (path, data, callback) => {
@@ -109,19 +134,28 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Posting data to liveRoom API with path: " + path);
         data = addCompanyIdToBody(data);
-        request.post({
-            url: baseUrl + path,
-            body: data,
-            headers: { "Connection": "close" },
-            json: true
-        }, (err, res, data) => {
-            if (err) {
-                logger.error("Post " + path + ">>>error:" + err);
-                handler.failure(err);
-            } else {
-                handler.success(data);
-            }
-        });
+        addAccessToken({ "Connection": "close" })
+            .then(headers => {
+                let options = {
+                    url: baseUrl + path,
+                    body: data,
+                    json: true,
+                    headers: headers
+                };
+                request.post(options, (err, res, data) => {
+                    if (err) {
+                        logger.error("Post " + path + ">>>error:" + err);
+                        handler.failure(err);
+                    } else {
+                        handler.success(data);
+                    }
+                });
+            })
+            .catch(e => {
+                logger.error("addAccessToken faile ", e);
+                handler.failure(e);
+            });
+
         return deferred.promise;
     }
 };

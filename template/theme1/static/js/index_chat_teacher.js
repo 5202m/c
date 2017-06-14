@@ -424,7 +424,7 @@ var chatTeacher = {
                 trainHtml.push('<div class="headimg"><img src="' + row.defaultAnalyst.avatar + '" alt=""></div>');
                 trainHtml.push('<div class="train_name">' + row.name + '</span></div>');
                 trainHtml.push('<p>' + remark + '</p>');
-                trainHtml.push('<a href="' + feature.handler + '"' + feature.handleTarget + clk + ' class="trainbtn ' + feature.h + '" userno="' + row.defaultAnalyst.userNo + '" cgs= "' + row.clientGroup + '" rid="' + row._id + '" updateTrain="updateTrain">' + feature.handleTxt + '(' + feature.clientSize + ')' + '</a>');
+                trainHtml.push('<a href="' + feature.handler + '"' + feature.handleTarget + clk + ' class="trainbtn ' + feature.h + '" userno="' + row.defaultAnalyst.userNo + '" cgs= "' + row.clientGroup + '" rid="' + row._id + '" updateTrain="updateTrain">' + feature.handleTxt + (!isNaN(feature.clientSize)?'(' + feature.clientSize + ')':'') + '</a>');
                 trainHtml.push('</div></li>');
             });
             if (trAndClNum) {

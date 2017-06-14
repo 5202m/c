@@ -8,9 +8,9 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>视频直播间 - 金道贵金属打造在线贵金属实盘直播室，掘金之旅在此起航！</title>
-    <meta content="实盘直播,贵金属实盘直播室,金道贵金属实盘直播,金道贵金属" name="keywords">
-    <meta content="金道贵金属打造在线贵金属实盘直播室，金道研究院名家观点即时播报，让您的掘金之旅在此起航！携手金道，生金有道！" name="description">
+    <title>金道在线教育 - 金道贵金属打造的投资者在线教育频道，掘金之旅在此起航！</title>
+    <meta content="金道在线教育,金道贵金属" name="keywords">
+    <meta content="金道贵金属打造在线教育频道，金道研究院名家观点即时播报，名家在线指导教学，让您的掘金之旅在此起航！携手金道，生金有道！" name="description">
     <link href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="/base/lib/jqueryUI/jquery-ui.min.css" type="text/css" rel="stylesheet" />
     <link href="/base/lib/lightbox/lightbox.css" type="text/css" rel="stylesheet" />
@@ -18,34 +18,35 @@
     <link href="/base/lib/face/face.css" type="text/css" rel="stylesheet" />
     <link href="/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
     <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
-    <!--[if lt IE 9]>
+    <%if(isRedPacket) {%>
+        <link href="/theme1/css/redbag201705.css" rel="stylesheet" type="text/css">
+        <%}%>
+            <!--[if lt IE 9]>
     <link href="/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
-    <!--<%if(isRedPacket) {%>-->
-    <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
-    <!--<%}%>-->
+    
     <![endif]-->
-    <!--[if lt IE 7]>
+            <!--[if lt IE 7]>
     <html class="lt-ie9 lt-ie8 lt-ie7">
     <![endif]-->
-    <!--[if IE 7]>
+            <!--[if IE 7]>
     <html class="lt-ie9 lt-ie8">
     <![endif]-->
-    <!--[if IE 8]>
+            <!--[if IE 8]>
     <html xmlns:ng="http://angularjs.org" class="lt-ie9">
     <![endif]-->
-    <!--[if gt IE 9]>
+            <!--[if gt IE 9]>
     <!-->
-    <html class="">
-    <!--<![endif]-->
-    <script type="text/javascript" src="/base/lib/store.min.js"></script>
-    <!-- 自动登录 begin -->
-    <script type="text/javascript" src="/theme1/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-    <script src="http://static.geetest.com/static/tools/gt.js"></script>
-    <script>
-        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-        LoginAuto.init();
-    </script>
-    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+            <html class="">
+            <!--<![endif]-->
+            <script type="text/javascript" src="/base/lib/store.min.js"></script>
+            <!-- 自动登录 begin -->
+            <script type="text/javascript" src="/theme1/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+            <script src="http://static.geetest.com/static/tools/gt.js"></script>
+            <script>
+                LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+                LoginAuto.init();
+            </script>
+            <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
 </head>
 
 <body class="">
@@ -56,19 +57,47 @@
             <%if(isRedPacket) {%>
                 <div class="header_redbag fl" id="redPacket_header">
                     <div class="redbag_pic"></div>
-                    <div class="rb_text">
-                        <div class="te1">第<b rp="timesLabel"></b>波微信红包</div>
-                        <div class="timecount">
-                            <b rp="minutesLabel"></b>
-                            <span>分</span>
-                            <b rp="secondsLabel"></b>
-                            <span>秒</span>
+                    <div class="hongb-act">
+                        <p class="hongb-pfon">一大波<span>5-500</span>元现金红包</p>
+                        <div class="gund-box">
+                            <ul>
+                                <li>恭喜138***123获得5元</li>
+                                <li>恭喜151***105获得50元</li>
+                                <li>恭喜130***986获得10元</li>
+                                <li>恭喜152***895获得100元</li>
+                                <li>恭喜139***189获得5元</li>
+                                <li>恭喜159***778获得10元</li>
+                                <li>恭喜139***189获得5元</li>
+                                <li>恭喜159***778获得100元</li>
+                                <li>恭喜181***256获得50元</li>
+                                <li>恭喜130***986获得10元</li>
+                                <li>恭喜132***235获得50元</li>
+                                <li>恭喜139***189获得200元</li>
+                                <li>恭喜187***277获得5元</li>
+                                <li>恭喜130***986获得100元</li>
+                                <li>恭喜130***986获得500元</li>
+                                <li>恭喜182***533获得50元</li>
+                                <li>恭喜187***277获得100元</li>
+                                <li>恭喜132***499获得100元</li>
+                                <li>恭喜139***189获得50元</li>
+                                <li>恭喜188***627获得5元</li>
+                                <li>恭喜178***858获得10元</li>
+                                <li>恭喜139***918获得50元</li>
+                                <li>恭喜157***881获得100元</li>
+                                <li>恭喜152***626获得10元</li>
+                                <li>恭喜182***533获得50元</li>
+                                <li>恭喜186***057获得5元</li>
+                                <li>恭喜130***986获得100元</li>
+                                <li>恭喜182***533获得10元</li>
+                                <li>恭喜187***277获得50元</li>
+                                <li>恭喜132***499获得5元</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="train_ad fl">
+                <!--<div class="train_ad fl">
                     <a href="http://www.24k.hk/lp_v182_201704pxb.html" target="_blank"></a>
-                </div>
+                </div>-->
                 <%} else{ %>
                     <div class="header_ad fl">
                         <a href="http://www.24k.hk/special/analyst.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
@@ -82,10 +111,10 @@
                         <div class="header-right fr clearfix">
                             <div class="h_menu1">
                                 <%if(userSession.isLogin){%>
-                                    <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道直播间</span>
+                                    <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道在线教育</span>
                                     <a href="javascript:void(0)" id="logout" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_zhuxiao', 'content_top', 1, true]);">注销</a>
                                     <%} else {%>
-                                        <span class="welcome">嗨！欢迎进入金道直播间</span>
+                                        <span class="welcome">嗨！欢迎进入金道在线教育</span>
                                         <a href="javascript:void(0)" id="login_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_login', 'content_top', 1, true]);">登录</a>
                                         <a href="javascript:void(0)" id="register_a" class="topbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_register', 'content_top', 1, true]);">免费注册</a>
                                         <%}%>
@@ -132,7 +161,7 @@
                                 <span>|</span>
                                 <a href="http://www.24k.hk/special/analyst.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_analystLP', 'content_top', 1, true]);">分析师专栏</a>
                                 <span>|</span>
-                                <a href="http://www.24k.hk/lp_v144_studio.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_studioLP', 'content_top', 1, true]);">关于直播</a>
+                                <a href="http://www.24k.hk/lp_v144_studio.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_studioLP', 'content_top', 1, true]);">关于在线教育</a>
                                 <span>|</span>
                                 <a href="javascript:void(0);" id="qqcs" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_QQcs', 'content_top', 1, true]);">QQ客服</a>
                             </div>
@@ -169,12 +198,14 @@
                     indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
                     indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
                     indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
+                    indexJS.userInfo.createDate = '<%= userSession.joinDate %>';
+                    //indexJS.userInfo.activeDate = '<%= userSession.activeTime %>'
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
                     chatAnalyze.setUTM(false, $.extend({
                         operationType: 6,
-                        userTel: '<%= userSession.mobilePhone %>' ,
-                        roomName:$('#roomInfoId').text(),
+                        userTel: '<%= userSession.mobilePhone %>',
+                        roomName: $('#roomInfoId').text(),
                         requestParams: chatAnalyze.hrefSplit()
                     }, indexJS.userInfo));
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
@@ -183,12 +214,23 @@
                         scrollbarPosition: "outside",
                         scrollButtons: false
                     });
+                    // $.getJSON("/getToken").done(function(result) {
+                    //     if (result.isOK) {
+                    //         $.ajaxSetup({
+                    //             headers: {
+                    //                 "access_token": result.token || "",
+                    //                 "access_secret": result.secret || ""
+                    //             }
+                    //         });
+                    //     }
+                    // });
                 }
             </script>
             <%if(isDevTest) {%>
                 <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
                 <script type="text/javascript" src="/base/lib/socket.io.js"></script>
                 <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+                <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
                 <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
                 <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
                 <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>

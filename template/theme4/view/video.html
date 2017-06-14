@@ -188,7 +188,7 @@
                     return;
                 }
                 var netConnectionUrl = null;
-                if(url.indexOf("sz") != -1){
+                if(url.indexOf("sz6") != -1){
                     netConnectionUrl = "rtmps://5748416443938.streamlock.net/live";
                 }else{
                     netConnectionUrl = "rtmps://57721dbe47de5.streamlock.net/live";
@@ -242,6 +242,8 @@
              */
             clear : function($panel){
                 $panel.empty();
+                this.videoData($panel, "currVideoUrl", "");
+                this.videoData($panel, "currVideoTitle", "");
             },
 
             /**

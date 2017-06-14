@@ -29,6 +29,7 @@ var clientTrainService = require('../../service/clientTrainService'); //引入ch
 var zxFinanceService = require('../../service/zxFinanceService.js');
 var activityService = require("../../service/activityService");
 var cacheClient = require('../../cache/cacheClient');
+const APIAuth = require('../../util/APIAuth');
 var Geetest = require('geetest');
 var geetest = {};
 for (var i in config.geetest) {
@@ -203,7 +204,7 @@ router.get('/', function(req, res) {
             });
         return;
     } else if (chatUser && chatUser.isLogin) {
-        clientGroup = chatUser.clientGroup;
+        clientGroup = chatUser.clientGroup || constant.clientGroup.register;
     } else {
         if (!chatUser) {
             chatUser = {};
@@ -288,9 +289,11 @@ router.get('/', function(req, res) {
 //转到页面
 function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
     res) {
-    studioService.getIndexLoadData(chatUser, groupId, true,
-        (!isMobile || (isMobile && common.isValid(groupId))), chatUser.isLogin,
-        function(data) {
+    let isGetSyllabus = (!isMobile || (isMobile && common.isValid(groupId)));
+    studioService.getIndexLoadData(
+            chatUser, groupId, true,
+            isGetSyllabus, chatUser.isLogin)
+        .then(data => {
             if (chatUser.isLogin) {
                 //每次刷新，从后台数据库重新获取最新客户信息后更新session，应用于升级和修改昵称等
                 for (var key in data.memberInfo) {
@@ -306,7 +309,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 apiUrl: common.formatHostUrl(req.hostname, config.apiUrl),
                 filePath: common.formatHostUrl(req.hostname, config.filesDomain),
                 web24kPath: config.web24kPath,
-                mobile24kPath: config.mobile24kPath
+                mobile24kPath: config.mobile24kPath,
+                dasUrl: config.dasUrl
             }; //输出参数
             chatUser.groupId = groupId;
             viewDataObj.theme = options.theme || "";
@@ -323,7 +327,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 userType: chatUser.userType,
                 platform: options && options.platform,
                 intentionalRoomId: chatUser.intentionalRoomId,
-                sid: req.sessionID
+                sid: req.sessionID,
+                createDate: chatUser.joinDate
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -473,16 +478,17 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 visitorService.saveVisitorRecord("login", vrRow);
             }
             //是否炒金培训班
-            if (snUser.groupId == config.cjTrainRoom) {
-                viewDataObj.isRedPacket = config.isRedPacket;
-            } else {
-                viewDataObj.isRedPacket = false;
-            }
+            // if (snUser.groupId == config.cjTrainRoom) {
+            //     viewDataObj.isRedPacket = config.isRedPacket;
+            // } else {
+            //     viewDataObj.isRedPacket = false;
+            // }
+            viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
+            viewDataObj.isRedPacket = config.isRedPacket;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
-            if (!isMobile && fromPlatform == config.studioThirdUsed.webui &&
-                chatUser.groupType != constant.fromPlatform.studio) {
+            if (!isMobile && fromPlatform == config.studioThirdUsed.gts2webui) {
                 res.render(
                     common.renderPath(req, constant.tempPlatform.webui, "room"),
                     viewDataObj);
@@ -560,8 +566,13 @@ router.get('/getMobileVerifyCode', function(req, res) {
     } else {
         baseApiService.getMobileVerifyCode(mobilePhone, useType, ip,
             function(result) {
-                delete result["data"];
-                res.json(result);
+                if (typeof result == "string") {
+                    res.json({ result: 0 });
+                } else {
+                    delete result.data;
+                    res.json(result);
+                }
+
             });
     }
 });
@@ -611,7 +622,6 @@ router.post('/login', function(req, res) {
     } else if (!isAutoLogin) {
         var thirdId = (userSession && userSession.thirdId) || null;
         if (loginType == "pwd") {
-            //账号密码登录
             studioService.login({
                 mobilePhone: mobilePhone,
                 password: password,
@@ -627,7 +637,6 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
-
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -695,9 +704,9 @@ router.post('/login', function(req, res) {
             baseApiService.checkMobileVerifyCode(mobilePhone,
                 userSession.groupType + "_login", verifyCode,
                 function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
+                    if (chkCodeRes !== true) {
+                        if (chkCodeRes.errcode &&
+                            (chkCodeRes.errcode === "1006" || chkCodeRes.errcode === "1007")) {
                             result.error = {
                                 'errcode': chkCodeRes.errcode,
                                 'errmsg': chkCodeRes.errmsg
@@ -720,7 +729,7 @@ router.post('/login', function(req, res) {
                                     cookieId: cookieId,
                                     clientGroup: snUser.clientGroup,
                                     roomName: snUser.roomName || roomName,
-                                    roomId: snUser.groupId  || roomId,
+                                    roomId: snUser.groupId || roomId,
                                     platform: '',
                                     userAgent: req.headers['user-agent'],
                                     sessionId: req.sessionID,
@@ -747,6 +756,7 @@ router.post('/login', function(req, res) {
                                             accountNo: accountNo,
                                             thirdId: null
                                         };
+                                        userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                         studioService.studioRegister(userInfo, clientGroup,
                                             function(result) {
                                                 if (result && result.isOK) {
@@ -758,11 +768,12 @@ router.post('/login', function(req, res) {
                                                         clientStoreId: clientStoreId,
                                                         firstLogin: true,
                                                         isLogin: true,
-                                                        mobilePhone: result.mobilePhone,
+                                                        mobilePhone: mobilePhone,
                                                         userId: result.userId,
                                                         groupId: result.groupId,
-                                                        clientGroup: result.clientGroup,
-                                                        nickname: result.nickname
+                                                        clientGroup: clientGroup,
+                                                        nickname: result.nickname,
+                                                        joinDate: new Date()
                                                     };
                                                     result.userInfo = req.session.studioUserInfo;
                                                     delete result.groupId;
@@ -844,6 +855,7 @@ router.post('/login', function(req, res) {
                                                 accountNo: accountNo,
                                                 thirdId: thirdId
                                             };
+                                            userInfo.item = 'register_reg'; //使用手机号加验证码登录时，如没有注册过直播间，则是新的注册用户，需要添加积分
                                             studioService.studioRegister(userInfo, clientGroup,
                                                 function(result) {
                                                     if (result.isOK) {
@@ -868,7 +880,14 @@ router.post('/login', function(req, res) {
                                         }
                                     });
                             }
+
                         });
+
+                        studioService.login({
+                            mobilePhone: mobilePhone,
+                            thirdId: thirdId,
+                            groupType: userSession.groupType
+                        }, 1, function(loginRes) {});
                     }
                 });
         }
@@ -1035,9 +1054,10 @@ router.get('/getArticleList', function(req, res) {
         callTradeIsNotAuth = req.query['callTradeIsNotAuth'] || 0;
         strategyIsNotAuth = req.query['strategyIsNotAuth'] || 0;
     }
-    baseApiService.getArticleList(params, function(data) {
+    baseApiService.getArticleList(params, function(pureData, rawData) {
+        let data = rawData;
         if (data) {
-            data = JSON.parse(data);
+            data = typeof data === "string" ? JSON.parse(data) : data;
             if (params.code == 'class_note') {
                 var dataList = data.data,
                     row = null;
@@ -1055,6 +1075,7 @@ router.get('/getArticleList', function(req, res) {
                                     remarkRow.open = '****';
                                     remarkRow.profit = '****';
                                     remarkRow.loss = '****';
+                                    remarkRow.drag2 = '****';
                                     remarkRow.description = '****';
                                 }
                                 /*if (detailInfo.tag == 'trading_strategy' && strategyIsNotAuth == 1) {
@@ -1089,7 +1110,12 @@ router.get('/getArticleInfo', function(req, res) {
     var params = {};
     params.id = req.query["id"];
     baseApiService.getArticleInfo(params, function(data) {
-        res.json(data ? JSON.parse(data) : null);
+        if (data && typeof data === "string") {
+            data = JSON.parse(data);
+        } else {
+            data = data || null;
+        }
+        res.json(data);
     });
 });
 
@@ -1292,17 +1318,9 @@ router.post('/reg', function(req, res) {
     } else {
         //手机号+验证码登陆
         baseApiService.checkMobileVerifyCode(params.mobilePhone,
-            userSession.groupType + "_reg", params.verifyCode,
-            function(chkCodeRes) {
-                if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                    if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                        "1007") {
-                        res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                    } else {
-                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                    }
-                    return;
-                } else {
+                userSession.groupType + "_reg", params.verifyCode)
+            .then((chkCodeRes) => {
+                if (chkCodeRes === true) {
                     //验证码通过校验
                     studioService.checkClientGroup(params.mobilePhone, null,
                         common.getTempPlatformKey(userSession.groupType),
@@ -1369,7 +1387,17 @@ router.post('/reg', function(req, res) {
                                     res.json(result);
                                 });
                         });
+                } else {
+                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                 }
+            }).catch(chkCodeRes => {
+                if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
+                    "1007") {
+                    res.json({ isOK: false, msg: chkCodeRes.errmsg });
+                } else {
+                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+                }
+                return;
             });
     }
 });
@@ -1631,9 +1659,9 @@ router.post('/setUserPraise', function(req, res) {
                                 params.opUser = userInfo.userId;
                                 params.opIp = common.getClientIp(req);
                                 params.remark = "每日点赞";
-                                chatPointsService.add(params, function(result) {
+                                chatPointsService.add(params).then((result) => {
                                     logger.debug("点赞添加积分成功!", result);
-                                }).then(e => {
+                                }).catch(e => {
                                     logger.error("点赞添加积分失败!", e);
                                 });
                             }
@@ -1646,7 +1674,7 @@ router.post('/setUserPraise', function(req, res) {
 
 /**
  * 设置点赞
- */
+ 
 router.post('/setUserPraise', function(req, res) {
     var clientId = req.body.clientId,
         praiseId = req.body.praiseId;
@@ -1684,7 +1712,7 @@ router.post('/setUserPraise', function(req, res) {
                 res.json({ isOK: isOK });
             });
     }
-});
+});*/
 
 /**
  * 房间对应的课程数据包括房间对应的在线人数
@@ -2032,18 +2060,18 @@ router.post('/setTradePraise', function(req, res) {
     if (common.isBlank(params.clientId) || common.isBlank(params.praiseId)) {
         res.json({ isOK: false });
     } else {
-        var fromPlatform = getGroupType(req);
-        baseApiService.checkChatPraise(params.clientId, params.praiseId,
+        params.fromPlatform = getGroupType(req);
+        /*baseApiService.checkChatPraise(params.clientId, params.praiseId,
             fromPlatform,
             function(isOK) {
-                if (isOK) {
-                    showTradeService.setShowTradePraise(params, function(result) {
-                        res.json(result);
-                    });
-                } else {
+                if (isOK) {*/
+        showTradeService.setShowTradePraise(params, function(result) {
+            res.json(result);
+        });
+        /*} else {
                     res.json({ isOK: isOK });
                 }
-            });
+            });*/
     }
 });
 
@@ -2116,7 +2144,7 @@ router.post('/modifyEmail', function(req, res) {
     } else if (!common.isEmail(params.email)) {
         res.json({ isOK: false, msg: '邮箱地址有误！' });
     } else if (common.isBlank(userInfo.nickname)) {
-        res.json({ isOK: false, msg: '请先设置一个好听的昵称吧！' });
+        res.json({ isOK: false, code: '102', msg: '请先设置一个好听的昵称吧！' });
     } else {
         //http:192.168.35.91:3006/studio/confirmMail?grouptype=<%= groupType %>&userid=<%= userId %>&email=<%= encodeURI(email) %>&key=<%= key %>
         var ref = req.headers.referer.indexOf('?') > -1 ?
@@ -2454,9 +2482,9 @@ router.post('/addClientTrain', function(req, res) {
     } else {
         params.nickname = userInfo.nickname;
         clientTrainService.addClientTrain(params, userInfo, function(result) {
-            if(result) {
+            if (result) {
                 res.json(result);
-            }else{
+            } else {
                 res.json(errorMessage.code_4020);
             }
         });
@@ -2958,7 +2986,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
@@ -2985,12 +3013,13 @@ router.post('/pmLogin', function(req, res) {
                             clientGroup = 'notActive';
                         }
                         saveLoginInfo(res, req, userSession, checkAResult.mobilePhone,
-                            accountNo, clientStoreId, clientGroup,
+                            accountNo, clientStoreId, clientGroup, checkAResult.joinDate,
                             function(saveResult) {
                                 saveResult.isOK = true;
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                req.session.studioUserInfo.joinDate = checkAResult.joinDate;
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
@@ -3012,7 +3041,8 @@ router.post('/pmLogin', function(req, res) {
                                     courseId: courseId,
                                     teacherId: teacherId,
                                     teacherName: teacherName,
-                                    accountNo: accountNo
+                                    accountNo: accountNo,
+                                    joinDate: snUser.joinDate
                                 };
                                 visitorService.saveVisitorRecord("login", dasData);
                                 res.json(saveResult);
@@ -3037,14 +3067,15 @@ router.post('/pmLogin', function(req, res) {
  * @param clientStoreId
  */
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
-    clientStoreId, clientGroup, callback) {
+    clientStoreId, clientGroup, joinDate, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
         ip: common.getClientIp(req),
         groupType: userSession.groupType,
         accountNo: accountNo,
         thirdId: null,
-        clientGroup: clientGroup
+        clientGroup: clientGroup,
+        joinDate: joinDate
     };
     studioService.checkMemberAndSave(userInfo, function(result, isNew) {
         req.session.studioUserInfo = {
@@ -3058,7 +3089,8 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             clientGroup: userInfo.clientGroup || result.userInfo.clientGroup,
             nickname: userInfo.nickname || result.userInfo.nickname,
             avatar: userInfo.avatar,
-            defTemplate: userInfo.defTemplate
+            defTemplate: userInfo.defTemplate,
+            joinDate: userInfo.joinDate
         };
         let snUser = req.session.studioUserInfo;
         result.userInfo = {
@@ -3075,7 +3107,8 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             firstLogin: true,
             cookieId: snUser.cookieId,
             visitorId: snUser.visitorId,
-            roomName: ""
+            roomName: "",
+            joinDate: snUser.joinDate
         };
         callback(result);
         if (isNew) {
@@ -3121,89 +3154,89 @@ router.get("/geetest/register", function(req, res) {
     });
 });
 
+/**
+ * 抢红包
+ */
 router.post('/rob', function(req, res) {
-    //没有登录
+    logger.info("redPacket<<rob begin！");
     var userInfo = req.session.studioUserInfo;
-    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
-        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
-        return;
-    }
-    var clientTime = req.body['t'];
-    var minutes = clientTime - new Date().getTime();
-    if (Math.abs(minutes) >= 60000) {
-        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
-        return;
-    }
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var curHours = now.getHours();
-    var curMinutes = now.getMinutes();
-    if (curHours < 10) {
-        curHours = '0' + curHours;
-    }
-    if (curMinutes < 10) {
-        curMinutes = '0' + curMinutes;
-    }
-    var curHMDate = curHours + ":" + curMinutes;
-    var pariods = constant.periods;
-    var currentPariod = 1; //默认从第一期开始
-    for (var i = 0; i < pariods.length; i++) {
-        if (curHMDate < pariods[i]) {
-            currentPariod = i + 1;
-            break;
-        }
-    }
-
+    var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
     var robParams = {
-        ac_periods: "20170401",
+        ac_periods: "20170612",
         phone: userInfo.mobilePhone.replace("86-", ""),
-        nper: currentPariod
-    };
-
-    /*如果期数小于0,直接返回*/
-    if (currentPariod < 0) {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
+        userGroup: userInfo.clientGroup,
+        time: registerTime
     }
-
-    /*如果真实客户,直接返回*/
-    if (userInfo.clientGroup == "active") {
-        res.json({ result: 0, money: 0, msg: "" });
-        return;
-    }
-
-    cacheClient.get("redPacket_" + robParams.phone, function(err, result) {
-        if (err) {
-            logger.error("redPacket get cache fail:" + err);
-        } else if (result != true && 0 == currentPariod) {
-            res.json({ result: 0, money: 0, msg: "" });
-        } else if (common.isBlank(result) || result != currentPariod) {
-            var cacheTime = Math.floor((today + 86400000 - now.getTime()) / 1000);
-            cacheClient.set("redPacket_" + robParams.phone, currentPariod);
-            cacheClient.expire("redPacket_" + robParams.phone, cacheTime);
-            request.post({ url: (config.pmOAPath + '/lottery/activity20170401/draw'), form: robParams }, function(error, response, data) {
-                var result = { result: 0, money: 0, msg: "" };
-                if (data) {
-                    logger.info("redPacket<<rob :", robParams.phone, robParams.nper, data);
-                    try {
-                        data = JSON.parse(data);
-                        if (data.infoNo == 1) {
-                            cacheClient.set("redPacket_" + robParams.nper, true);
-                            cacheClient.expire("redPacket_" + robParams.nper, cacheTime);
-                            result.result = 0;
-                            result.money = data.infoGiftName;
-                            res.json(result);
-                            return;
-                        }
-                        result.msg = data.infoMsg;
-                    } catch (e) {}
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimple'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("redPacket<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.money = data.infoGiftName;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
                 }
-                res.json(result);
-            });
+                result.msg = data.infoMsg;
+            } catch (e) {}
+        }
+        res.json(result);
+    });
+    logger.info("redPacket<<rob end！");
+});
+
+/** 获取当前剩余抽奖机会 */
+router.post('/getLastRobChance', function(req, res) {
+    logger.info("get last redPacket chance<<begin！");
+    var userInfo = req.session.studioUserInfo;
+    var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
+    var robParams = {
+        ac_periods: "20170612",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        userGroup: userInfo.clientGroup,
+        time: registerTime
+    };
+    request.post({
+        url: (config.pmOAPath + '/lottery/activity20170612/drawSimpleSearch'),
+        form: robParams
+    }, function(error, response, data) {
+        var result = {
+            result: 0,
+            money: 0,
+            msg: "",
+            residueDegree: 0
+        };
+        if (data) {
+            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            try {
+                data = JSON.parse(data);
+                if (data.infoNo == 1) {
+                    result.result = 0;
+                    result.residueDegree = data.lastNum;
+                    res.json(result);
+                    return;
+                } else if (data.infoNo == 1002) {
+                    result.result = 1;
+                    result.msg = data.infoMsg;
+                }
+            } catch (e) {}
         } else {
             res.json({ result: 0, money: 0, msg: "" });
         }
+        res.json(result);
     });
+    logger.info("get last redPacket chance<<end！");
 });
 
 /**
@@ -3268,5 +3301,37 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
         }
     });
 });
+router.get('/getRoomOnlineList', function(req, res) {
+    let params = req.query;
+    chatService.getRoomOnlineList(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("getRoomOnlineList Error:", e);
+            res.json(null);
+        });
+});
+
+router.get('/loadMsg', function(req, res) {
+    let params = req.query;
+    messageService.loadMsg(params)
+        .then(data => {
+            res.json(data);
+        }).catch(e => {
+            logger.error("loadMsg Error:", e);
+            res.json(null);
+        });
+});
+
+let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSecret);
+router.get('/getToken', (req, res) => {
+    apiAuth.getToken()
+        .then(token => {
+            res.json({ isOK: true, token: token, secret: config.apiAuthForWeb.appSecret });
+        }).catch(e => {
+            logger.error(e);
+            res.json({ isOK: false, msg: '参数错误' });
+        });
+})
 
 module.exports = router;

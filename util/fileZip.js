@@ -112,7 +112,9 @@ var fileList = [
             "\\template\\base\\lib\\obsplayer\\obsplayer.min.js",
             "\\template\\base\\lib\\sewise\\sewise.player.min.js",
             "\\template\\base\\lib\\paste.min.js",
-            "\\template\\base\\lib\\jquery.face.min.js"
+            "\\template\\base\\lib\\jquery.face.min.js",
+            "\\template\\base\\lib\\jQueryRotate.2.2.js"
+
         ]
     },
     {
@@ -146,7 +148,9 @@ var fileList = [
         "out": "template\\theme2\\static\\css\\index.min.css",
         "in": [
             "\\template\\theme2\\static\\css\\index.css",
-            "\\template\\theme2\\static\\css\\guide.css"
+            "\\template\\theme2\\static\\css\\guide.css",
+            "\\template\\base\\lib\\swipe\\swiper.min.css",
+            "\\template\\base\\lib\\mScroll\\jquery.mCustomScrollbar.min.css"
         ]
     },
     {
@@ -164,7 +168,17 @@ var fileList = [
             "template\\base\\lib\\lazyload\\img.lazyload.js",
             "template\\base\\lib\\toucher.js",
             "template\\base\\lib\\websocket.min.js",
-            "template\\base\\lib\\iphone-inline-video.browser.js"
+            "template\\base\\lib\\iphone-inline-video.browser.js",
+            "template\\base\\lib\\mScroll\\jquery.mCustomScrollbar.concat.min.js"
+        ]
+    },
+    {
+        "out": "template\\theme2\\static\\js\\top.min.js",
+        "marge": true,
+        "in": [
+               "template\\base\\lib\\lazyload\\lazyload.min.js",
+                "template\\base\\lib\\store.min.js",
+               "template\\theme2\\static\\js\\store.js"
         ]
     },
     {
@@ -197,8 +211,18 @@ var fileList = [
             "template\\theme2\\static\\js\\noviceGuide.js",
             "template\\theme2\\static\\js\\privateChat.js",
             "template\\theme2\\static\\js\\videoPlayer.js",
-            "template\\theme2\\static\\js\\yylive2.js"
-            ]
+            "template\\theme2\\static\\js\\yylive2.js",
+            "template\\theme2\\static\\js\\accountEmail.js",
+            "template\\theme2\\static\\js\\accountIndex.js",
+            "template\\theme2\\static\\js\\accountInfo.js",
+            "template\\theme2\\static\\js\\accountPoint.js",
+            "template\\theme2\\static\\js\\accountSetAvatar.js",
+            "template\\theme2\\static\\js\\accountSetName.js",
+            "template\\theme2\\static\\js\\accountSetNickname.js",
+            "template\\theme2\\static\\js\\accountSetPwd.js",
+            "template\\theme2\\static\\js\\accountSubscribe.js",
+            "template\\theme2\\static\\js\\accountSubscribeDetail.js"
+        ]
     },
     // PM-theme3
     {
@@ -260,7 +284,8 @@ var fileList = [
         "out": "\\template\\admin\\static\\js\\room.min.js",
         "marge": false,
         "in": ["\\template\\admin\\static\\js\\room.js",
-            "\\template\\base\\util\\chatAnalyze.js"
+            "\\template\\base\\util\\chatAnalyze.js",
+            "\\template\\admin\\static\\js\\notice.js"
         ]
     },
 
