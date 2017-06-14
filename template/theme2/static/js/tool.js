@@ -436,7 +436,7 @@ var Tool = {
                     if (!Tool.RedPacket.isDateBetween(Data.userInfo.createDate, beginDate, endDate)) {
                         $(".shadow").show();
                         $("#activeNoChance").show();
-                        return;
+                        return false;
                     } else {
                         Tool.RedPacket.queryLastRedPackageRob();
                     }
@@ -637,17 +637,7 @@ var Tool = {
                             flag = 6;
                             angle = 32;
                         }
-                        var lastNum = data.residueDegree;
-                        var activeTime = Data.userInfo.activeTime;
-                        var registerTime = Data.userInfo.createDate;
-                        var beginDate = '2017-06-13 00:00:00';
-                        var endDate = '2017-06-13 23:59:59';
-                        var lottryBeginDate = new Date(Date.parse(beginDate)).getTime();
-                        //如果激活时间大于活动开始时间，且注册时间在活动范围内的，抽奖机会1次
-                        if (activeTime < lottryBeginDate && Tool.RedPacket.isDateBetween(registerTime, beginDate, endDate)) {
-                            lastNum = 0;
-                        }
-                        Tool.RedPacket.rotateFunc(flag, angle, data.money, analyst, lastNum);
+                        Tool.RedPacket.rotateFunc(flag, angle, data.money, analyst, data.residueDegree);
                     } else {
                         if ("active" == Data.userInfo.clientGroup) {
                             $(".shadow").hide();

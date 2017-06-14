@@ -212,7 +212,7 @@ var pmApiService = {
                                         callData = {
                                             mobilePhone: phone,
                                             clientGroup: result.accountStatus,
-                                            activeTime: result.activateTime ? result.activateTime.time : ''
+                                            joinDate: result.createDate ? new Date(result.createDate.time) : ''
                                         };
                                     }
                                 }
@@ -273,8 +273,6 @@ var pmApiService = {
                     }
                     if (activeTimeArr.length > 0) {
                         activeTimeArr = activeTimeArr.sort(function(a, b) { return b - a });
-                        console.log(activeTimeArr);
-                        callData = activeTimeArr[0] || '';
                     }
                 } else {
                     callData = null;

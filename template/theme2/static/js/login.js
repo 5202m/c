@@ -302,11 +302,10 @@ Login.doLogin = function() {
             } else if (Util.isBlank(params.pwd)) {
                 $('.error-bar').removeClass('dn').find('.tips-txt').text('请输入密码！');
                 return false;
+            } else if (Util.isBlank(params.verMalCode)) {
+                $('.error-bar').removeClass('dn').find('.tips-txt').text('请输入验证码！');
+                return false;
             }
-            // else if (Util.isBlank(params.verMalCode)) {
-            //     $('.error-bar').removeClass('dn').find('.tips-txt').text('请输入验证码！');
-            //     return false;
-            // }
         }
         $('.error-bar').addClass('dn');
         Util.postJson(url, params, function(result) {
