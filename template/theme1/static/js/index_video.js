@@ -169,6 +169,31 @@ var videos = {
         },
 
         /**
+         * 使用腾讯云直播
+         * @param $panel
+         * @param url
+         * @param title
+         * @param autostart
+         */
+        playByQCloud: function($panel, url, title, autostart){
+            var option = {
+                "live_url" : "http://2157.liveplay.myqcloud.com/2157_358535a.m3u8",
+                //"live_url2" : "http://2000.liveplay.myqcloud.com/live/2000_2a1.flv",
+                "width" : '100%',
+                "height" : '100%',
+                "cache_time" : 0.5
+                //...可选填其他属性
+            };
+
+            var player = new qcVideo.Player($panel, option);
+            if(autostart) {
+                player.play();
+            }else{
+                player.pause()
+            }
+        },
+
+        /**
          * 清空播放器
          */
         clear: function($panel) {
@@ -200,6 +225,8 @@ var videos = {
                     this.playByEmbed($panel, url, title, true);
                 } else if (/rtmp/.test(url)) {
                     obsPlayer.init(url, 'videoPlayerPanel', true);
+                } else if (/\.m3u8/.test(url)){
+                    this.playByQCloud($panel.attr('id'), url, title, true);
                 } else {
                     this.playBySewise($panel, url, title, true);
                 }
