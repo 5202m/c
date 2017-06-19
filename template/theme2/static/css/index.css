@@ -5992,7 +5992,7 @@ article.content_w.bgeee {
     }
     .rightbar .loginbtn,
     .rightbar .home {
-        max-width: 50px;
+        max-width: 43px;
         font-size: 13px
     }
 }
@@ -8763,6 +8763,7 @@ article.accUserCenter {
         font-size: 15px
     }
     .new-hongb-prize {
+        margin-top: -350px;
         transform: scale(0.74);
         -webkit-transform: scale(0.74)
     }
@@ -8770,6 +8771,12 @@ article.accUserCenter {
         bottom: -51px;
         transform: scale(1.2);
         -webkit-transform: scale(1.2)
+    }
+    .zhuan-rule-con {
+        margin-top: -180px
+    }
+    .zhuan-rulist {
+        height: 240px
     }
 }
 
@@ -8803,12 +8810,6 @@ article.accUserCenter {
         bottom: -184px;
         transform: scale(0.54);
         -webkit-transform: scale(0.54)
-    }
-    .zhuan-rule-con {
-        margin-top: -180px
-    }
-    .zhuan-rulist {
-        height: 300px
     }
     .new-hongb-con .new-hongb-tt .new-hb-bm {
         font-size: 17px
