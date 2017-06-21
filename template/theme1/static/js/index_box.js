@@ -278,11 +278,9 @@ var box = {
                 $('#acclogtip').html('<i></i>请输入交易账号').show();
             } else if (common.isBlank($('#loginForm [name="pwd"]').val())) {
                 $('#acclogtip').html('<i></i>请输入密码').show();
-            }
-            // else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
-            //     $('#acclogtip').html('<i></i>请输入验证码').show();
-            // } 
-            else {
+            } else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
+                $('#acclogtip').html('<i></i>请输入验证码').show();
+            } else {
                 $(this).prop('disabled', true);
                 var _this = this;
                 $('#formBtnLoad').show();
@@ -314,7 +312,7 @@ var box = {
                             indexJS.toRefreshView();
                         }
                     }
-                  //  chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                    //  chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
                 }, true, function(err) {
                     $(_this).prop('disabled', false);
                     $('#formBtnLoad').hide();
@@ -446,7 +444,7 @@ var box = {
                     $("#regLpBtn").attr("href", "http://www.24k.hk/activity/studioLottery/index.html?userId=" + result.userId + "#ba");
                     $(".register_result").show();
                 }
-               // chatAnalyze.setUTM(false, $.extend({operationType:3,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                // chatAnalyze.setUTM(false, $.extend({operationType:3,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#popBoxRegister .img-loading').hide();
@@ -558,7 +556,7 @@ var box = {
                         indexJS.toRefreshView();
                     }
                 }
-               //chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                //chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#formBtnLoad').hide();
