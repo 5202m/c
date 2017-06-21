@@ -3178,7 +3178,7 @@ router.post('/rob', function(req, res) {
             residueDegree: 0
         };
         if (data) {
-            logger.info("redPacket<<rob :", robParams.phone, data);
+            logger.info("redPacket<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1) {
@@ -3193,12 +3193,11 @@ router.post('/rob', function(req, res) {
         }
         res.json(result);
     });
-    logger.info("redPacket<<rob end！");
 });
 
 /** 获取当前剩余抽奖机会 */
 router.post('/getLastRobChance', function(req, res) {
-    logger.info("get last redPacket chance<<begin！");
+    logger.info("get redPacket chance<<begin！");
     var userInfo = req.session.studioUserInfo;
     var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
     var robParams = {
@@ -3218,7 +3217,7 @@ router.post('/getLastRobChance', function(req, res) {
             residueDegree: 0
         };
         if (data) {
-            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            logger.info("get redPacket chance<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1) {
@@ -3236,7 +3235,6 @@ router.post('/getLastRobChance', function(req, res) {
         }
         res.json(result);
     });
-    logger.info("get last redPacket chance<<end！");
 });
 
 /**
