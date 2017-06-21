@@ -344,7 +344,7 @@ Login.doLogin = function() {
                 } else {
                     Container.back();
                 }
-
+                chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#room_roomName').text()}, Data.userInfo,Tool.courseTick));
             }
         }, true, function() {
             Login.resetFormInput();

@@ -202,12 +202,12 @@
                     //indexJS.userInfo.activeDate = '<%= userSession.activeTime %>'
                     //chatAnalyze.setUTM(true,$.extend({userTel:'<%= userSession.mobilePhone %>'}, indexJS.userInfo));
                     indexJS.init(); //初始化
-                    chatAnalyze.setUTM(false, $.extend({
+                    /*chatAnalyze.setUTM(false, $.extend({
                         operationType: 6,
                         userTel: '<%= userSession.mobilePhone %>',
                         roomName: $('#roomInfoId').text(),
                         requestParams: chatAnalyze.hrefSplit()
-                    }, indexJS.userInfo));
+                    }, indexJS.userInfo));*/
                     indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
                     $(".dashang_rule .scrollbox").mCustomScrollbar({
                         theme: "light-thick",
@@ -224,6 +224,13 @@
                     //         });
                     //     }
                     // });
+                }
+                window.onunload  = function() {
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 6,
+                        userTel: '<%= userSession.mobilePhone %>',
+                        roomName:$("#roomInfoId").text()
+                    }, indexJS.userInfo));
                 }
             </script>
             <%if(isDevTest) {%>
@@ -242,6 +249,7 @@
                 <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
                 <script type="text/javascript" src="/base/lib/newquote.js"></script>
                 <script type="text/javascript" src="/base/util/common.js"></script>
+                <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
                 <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
                 <script type="text/javascript" src="/theme1/js/index.js"></script>
                 <script type="text/javascript" src="/theme1/js/index_box.js"></script>

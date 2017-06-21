@@ -52,6 +52,7 @@ AccountInfo.setEvent = function() {
     $('#account-logout').bind('click', function() {
         LoginAuto.setAutoLogin(false);
         window.location.href = "/logout";
+        chatAnalyze.setUTM(false, $.extend({operationType:5,roomName:$('#room_roomName').text()}, Data.userInfo,Tool.courseTick.course));
     })
 
     //返回个人主页
