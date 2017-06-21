@@ -479,7 +479,6 @@ var Chat = {
 
             //清空输入框
             $("#chat_cont").html("").trigger("input");//清空内容
-            console.log(Data.userInfo);
             chatAnalyze.setUTM(false, $.extend({operationType:2,roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
         });
     },
