@@ -328,7 +328,9 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 platform: options && options.platform,
                 intentionalRoomId: chatUser.intentionalRoomId,
                 sid: req.sessionID,
-                createDate: chatUser.joinDate
+                createDate: chatUser.joinDate,
+                mobile: chatUser.mobilePhone,
+                accountNo: chatUser.accountNo
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -637,6 +639,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
+                    req.session.studioUserInfo.mobile = mobilePhone;
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -2986,7 +2989,8 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
+    }
+   else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
             userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
@@ -3019,7 +3023,11 @@ router.post('/pmLogin', function(req, res) {
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
+                                saveResult.userInfo.accountNo = accountNo;
                                 req.session.studioUserInfo.joinDate = checkAResult.joinDate;
+                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
+                                req.session.studioUserInfo.accountNo = accountNo;
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,

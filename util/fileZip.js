@@ -121,6 +121,7 @@ var fileList = [
         "out": "\\template\\theme1\\static\\js\\index.min.js",
         "marge": false,
         "in": ["\\template\\base\\util\\common.js",
+            "\\template\\base\\util\\gwanalysis.js",
             "\\template\\base\\util\\chatAnalyze.js",
             "\\template\\theme1\\static\\js\\index.js",
             "\\template\\theme1\\static\\js\\index_box.js",
@@ -186,6 +187,7 @@ var fileList = [
         "marge": false,
         "in": [
             "template\\base\\util\\common.js",
+            "template\\base\\util\\gwanalysis.js",
             "template\\base\\util\\chatAnalyze.js",
             "template\\theme2\\static\\js\\container.js",
             "template\\theme2\\static\\js\\pop.js",
@@ -250,7 +252,8 @@ var fileList = [
     {
         "out": "\\template\\theme4\\static\\js\\room.min.js",
         "marge": false,
-        "in": ["\\template\\base\\util\\chatAnalyze.js",
+        "in": ["\\template\\base\\util\\gwanalysis.js",
+            "\\template\\base\\util\\chatAnalyze.js",
             "\\template\\base\\util\\common.js",
             "\\template\\theme4\\static\\js\\room.js"
         ]
@@ -284,6 +287,7 @@ var fileList = [
         "out": "\\template\\admin\\static\\js\\room.min.js",
         "marge": false,
         "in": ["\\template\\admin\\static\\js\\room.js",
+            "\\template\\base\\util\\gwanalysis.js",
             "\\template\\base\\util\\chatAnalyze.js",
             "\\template\\admin\\static\\js\\notice.js"
         ]

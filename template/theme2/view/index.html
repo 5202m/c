@@ -172,7 +172,7 @@
                 chatAnalyze.setUTM(false, $.extend({
                     operationType: 1,
                     userTel: '<%= userSession.mobilePhone %>',
-                    requestParams: ""
+                    roomName:$('#room_roomName').text()
                 }, Data.userInfo));
 
                 lightbox.option({
@@ -195,6 +195,13 @@
                     theme: "dark-thick"
                 });
             }
+            window.onunload  = function() {
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 6,
+                    userTel: '<%= userSession.mobilePhone %>',
+                    roomName:$('#room_roomName').text()
+                }, Data.userInfo));
+            }
         </script>
         <% if(isDevTest) { %>
             <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
@@ -208,6 +215,7 @@
             <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
             <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
             <script type="text/javascript" src="/base/util/common.js"></script>
+            <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
             <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
             <script type="text/javascript" src="/theme2/js/container.js"></script>
             <script type="text/javascript" src="/theme2/js/pop.js"></script>
