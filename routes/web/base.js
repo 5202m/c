@@ -772,7 +772,7 @@ router.post('/login', function(req, res) {
                                                         groupId: result.groupId,
                                                         clientGroup: clientGroup,
                                                         nickname: result.nickname,
-                                                        joinDate: new Date()
+                                                        joinDate: result.joinDate
                                                     };
                                                     result.userInfo = req.session.studioUserInfo;
                                                     delete result.groupId;
