@@ -1449,9 +1449,9 @@ var chat = {
                 console.log("ok");
             });
             $(".img-loading[pf=chatMessage]").show();
+
             chatAnalyze.setUTM(false, $.extend({
-                operationType: 1,
-                roomName:$('#roomInfoId').text(),
+                operationType: 1,roomName:postData.roomName
             }, indexJS.userInfo, indexJS.courseTick.course));
         });
         //进入聊天室加载的在线用户
@@ -1498,6 +1498,9 @@ var chat = {
         //断开连接
         this.socket.on('disconnect', function(e) {
             console.log('disconnect');
+      /*      chatAnalyze.setUTM(false, $.extend({
+                operationType: 6,roomName:$("#roomInfoId").text()
+            }, indexJS.userInfo, indexJS.courseTick.course));*/
         });
         //出现异常
         this.socket.on("error", function(e) {

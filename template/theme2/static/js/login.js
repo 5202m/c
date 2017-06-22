@@ -334,6 +334,7 @@ Login.doLogin = function() {
                 Data.userInfo.visitorId = result.userInfo.visitorId;
                 Data.userInfo.createDate = result.userInfo.joinDate;
                 Data.userInfo.userType = 0;
+                Data.userInfo.accountNo = result.userInfo.accountNo;
                 LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
                 var key = 'storeInfos_' + Data.userInfo.groupType,
                     keyVal = Store.store(key);
@@ -344,7 +345,8 @@ Login.doLogin = function() {
                 } else {
                     Container.back();
                 }
-
+                Data.userInfo.userTel = params.mobilePhone || result.userInfo.mobilePhone;
+                chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#room_roomName').text(),userTel:params.mobilePhone}, Data.userInfo,Tool.courseTick.course));
             }
         }, true, function() {
             Login.resetFormInput();

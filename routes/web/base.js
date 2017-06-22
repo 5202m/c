@@ -328,7 +328,9 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 platform: options && options.platform,
                 intentionalRoomId: chatUser.intentionalRoomId,
                 sid: req.sessionID,
-                createDate: chatUser.joinDate
+                createDate: chatUser.joinDate,
+                mobile: chatUser.mobilePhone,
+                accountNo: chatUser.accountNo
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -637,6 +639,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
+                    req.session.studioUserInfo.mobile = mobilePhone;
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -2981,8 +2984,8 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
+    }
+   else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
@@ -3014,7 +3017,11 @@ router.post('/pmLogin', function(req, res) {
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
+                                saveResult.userInfo.accountNo = accountNo;
                                 req.session.studioUserInfo.joinDate = checkAResult.joinDate;
+                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
+                                req.session.studioUserInfo.accountNo = accountNo;
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
@@ -3173,7 +3180,7 @@ router.post('/rob', function(req, res) {
             residueDegree: 0
         };
         if (data) {
-            logger.info("redPacket<<rob :", robParams.phone, data);
+            logger.info("redPacket<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1) {
@@ -3188,12 +3195,11 @@ router.post('/rob', function(req, res) {
         }
         res.json(result);
     });
-    logger.info("redPacket<<rob end！");
 });
 
 /** 获取当前剩余抽奖机会 */
 router.post('/getLastRobChance', function(req, res) {
-    logger.info("get last redPacket chance<<begin！");
+    logger.info("get redPacket chance<<begin！");
     var userInfo = req.session.studioUserInfo;
     var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
     var robParams = {
@@ -3213,7 +3219,7 @@ router.post('/getLastRobChance', function(req, res) {
             residueDegree: 0
         };
         if (data) {
-            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            logger.info("get redPacket chance<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1) {
@@ -3231,7 +3237,6 @@ router.post('/getLastRobChance', function(req, res) {
         }
         res.json(result);
     });
-    logger.info("get last redPacket chance<<end！");
 });
 
 /**
