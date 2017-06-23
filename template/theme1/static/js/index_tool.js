@@ -309,17 +309,8 @@ var indexTool = {
 
             $("#redPacket_header,#redPacket_chat").bind("click", function() {
                 if (indexJS.userInfo.isLogin) {
-                    /**
-                     * 判断用户注册直播间日期是否在活动区间内，在区间内获取抽奖次数，否返回没有
-                     */
-                    var beginDate = '2017-06-12 00:00:00';
-                    var endDate = '2017-06-30 23:59:59';
-                    if (!indexTool.RedPacket.isDateBetween(indexJS.userInfo.createDate, beginDate, endDate)) {
-                        $("#activeNoChance").show();
-                        return;
-                    } else {
-                        indexTool.RedPacket.queryLastRedPackageRob();
-                    }
+                    console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", new Date(indexJS.userInfo.createDate));
+                    indexTool.RedPacket.queryLastRedPackageRob();
                 } else {
                     indexTool.RedPacket.showPop("noLogin");
                 }

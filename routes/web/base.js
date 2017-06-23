@@ -776,7 +776,7 @@ router.post('/login', function(req, res) {
                                                         groupId: result.groupId,
                                                         clientGroup: clientGroup,
                                                         nickname: result.nickname,
-                                                        joinDate: new Date()
+                                                        joinDate: result.joinDate
                                                     };
                                                     result.userInfo = req.session.studioUserInfo;
                                                     delete result.groupId;
@@ -3016,17 +3016,13 @@ router.post('/pmLogin', function(req, res) {
                             clientGroup = 'notActive';
                         }
                         saveLoginInfo(res, req, userSession, checkAResult.mobilePhone,
-                            accountNo, clientStoreId, clientGroup, checkAResult.joinDate,
+                            accountNo, clientStoreId, clientGroup,
                             function(saveResult) {
                                 saveResult.isOK = true;
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
-                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
-                                saveResult.userInfo.accountNo = accountNo;
-                                req.session.studioUserInfo.joinDate = checkAResult.joinDate;
-                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
-                                req.session.studioUserInfo.accountNo = accountNo;
+                                req.session.studioUserInfo.joinDate = saveResult.joinDate;
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
@@ -3074,15 +3070,14 @@ router.post('/pmLogin', function(req, res) {
  * @param clientStoreId
  */
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
-    clientStoreId, clientGroup, joinDate, callback) {
+    clientStoreId, clientGroup, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
         ip: common.getClientIp(req),
         groupType: userSession.groupType,
         accountNo: accountNo,
         thirdId: null,
-        clientGroup: clientGroup,
-        joinDate: joinDate
+        clientGroup: clientGroup
     };
     studioService.checkMemberAndSave(userInfo, function(result, isNew) {
         req.session.studioUserInfo = {
@@ -3097,7 +3092,7 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             nickname: userInfo.nickname || result.userInfo.nickname,
             avatar: userInfo.avatar,
             defTemplate: userInfo.defTemplate,
-            joinDate: userInfo.joinDate
+            joinDate: result.joinDate
         };
         let snUser = req.session.studioUserInfo;
         result.userInfo = {
