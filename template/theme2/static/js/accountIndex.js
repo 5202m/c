@@ -7,6 +7,7 @@ var AccountIndex = new Container({
     },
     onShow: function() {
         $("#header").hide();
+        Room.isRoom = false;
         AccountIndex.getUserPoint();
     }
 });
