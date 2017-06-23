@@ -430,16 +430,8 @@ var Tool = {
             //转盘弹出
             $("#redPacket_header").bind("click", function() {
                 if (Data.userInfo.isLogin) {
-                    //判断用户是否满足条件, 2017 年06年12日00: 00: 00 至2017年6月30日23: 59: 59 注册直播间的用户
-                    var beginDate = '2017-06-12 00:00:00';
-                    var endDate = '2017-06-30 23:59:59';
-                    if (!Tool.RedPacket.isDateBetween(Data.userInfo.createDate, beginDate, endDate)) {
-                        $(".shadow").show();
-                        $("#activeNoChance").show();
-                        return false;
-                    } else {
-                        Tool.RedPacket.queryLastRedPackageRob();
-                    }
+                    console.log("click redPacket_header==>mobileAndCreateDate:", Data.userInfo.mobilePhone, ",", new Date(Data.userInfo.createDate));
+                    Tool.RedPacket.queryLastRedPackageRob();
                 } else {
                     $(".shadow").show();
                     Tool.RedPacket.showPop('noLogin');
