@@ -4,9 +4,7 @@ var AccountEmail = new Container({
     onLoad: function() {
         AccountEmail.setEvent();
     },
-    onShow: function() {
-
-    }
+    onShow: function() {}
 });
 
 
@@ -14,8 +12,14 @@ AccountEmail.setEvent = function() {
 
     $('#inputEmail').val(Data.userInfo.email);
 
+
     /** 返回个人资料主页 */
-    $('#email_back').bind('click', Container.back);
+    $('#email_back').bind('click',function(){
+        if (true == Room.isRoom_email) {
+            $("#header").show();
+        }
+        Container.back();
+    });
 
     $('#saveEmail').click(function() {
         var email = $('#inputEmail').val();
@@ -35,7 +39,13 @@ AccountEmail.setEvent = function() {
                     return false;
                 } else {
                     Pop.msg(result.msg);
-                    AccountInfo.load();
+                    var isRoom = Room.isRoom_email;
+                    if (true == isRoom) {
+                        $("#header").show();
+                        Container.back();
+                    }else{
+                        AccountInfo.load();
+                    }
                 }
             }, true, function(err) {});
         }
