@@ -211,7 +211,6 @@ var chatAnalyze = {
             var isLocal = this.isLocalHref();
             chatAnalyze.utmStore.userId = chatAnalyze.getUTMCookie();//用户id
             chatAnalyze.utmStore.userType = chatAnalyze.getClientGroup(data.clientGroup);
-            console.log("data:"+data.clientGroup+";.operationType:"+data.operationType+";data.accountNo:"+data.accountNo);
             chatAnalyze.utmStore.businessPlatform = chatAnalyze.getGroupType(data.groupType);
             chatAnalyze.utmStore.roomId = data.groupId;//房间编号
             chatAnalyze.utmStore.userTel = typeof(data.userTel)!="undefined"?data.userTel:data.mobile;
@@ -322,13 +321,11 @@ var chatAnalyze = {
                  */
                 gaData = chatAnalyze.dealGaNew(gacookiesTrack);
                 var obj = JSON.parse(gaData);
-                console.log("====dd==="+gaData);
                 chatAnalyze.utmStore.utmctr = obj.utmctr || "(direct)";
                 chatAnalyze.utmStore.utmccn = obj.utmccn || "(direct)";
                 chatAnalyze.utmStore.utmcct = obj.utmcct || "";
                 chatAnalyze.utmStore.utmcmd = obj.utmcmd || "(none)";
                 chatAnalyze.utmStore.utmcsr = obj.utmcsr || "(direct)";
-                console.log("tracker2:"+obj.utmcsr+";sessionId"+_options.sessionId);
             }
 
             /**
@@ -356,7 +353,7 @@ var chatAnalyze = {
             //session->
             _maq.push(['_setSessionId',sessionId]);
             //事业部-->
-            _maq.push(['_setBusinessPlatform', '1']);
+            _maq.push(['_setBusinessPlatform', '2']);
             //用户唯一标识（有状态）-->
             _maq.push(['_setUserId', nowCval]);
             //平台版本-->
@@ -419,7 +416,6 @@ var chatAnalyze = {
         try {
             if (href.indexOf("?") != -1) {
                 hrefSplit = href.split("?")[1];
-                console.log("href=" + href + ";hrefSplit=" + hrefSplit);
             }
         } catch (e) {
             console.log("send hrefSplit fail!" + e);
