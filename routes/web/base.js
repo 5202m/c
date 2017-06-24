@@ -575,7 +575,7 @@ router.get('/getMobileVerifyCode', function(req, res) {
                     res.json(result);
                 }
 
-            });
+            }).catch(logger.error.bind(logger));
     }
 });
 /**
@@ -892,7 +892,7 @@ router.post('/login', function(req, res) {
                             groupType: userSession.groupType
                         }, 1, function(loginRes) {});
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         //userId自动登录
@@ -1451,15 +1451,15 @@ router.post('/resetPwd', function(req, res) {
             res.json({ isOK: false, msg: '手机验证码不能为空！' });
         } else {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
-                userSession.groupType + "_resetPWD", params.verifyCode,
-                function(chkCodeRes) {
+                    userSession.groupType + "_resetPWD", params.verifyCode)
+                .then((chkCodeRes) => {
                     if (chkCodeRes !== true) {
                         res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
                         res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 3) {
         if (!userSession) {
@@ -2984,8 +2984,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }
-   else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){

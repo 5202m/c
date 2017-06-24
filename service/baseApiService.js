@@ -116,9 +116,9 @@ var baseApiService = {
             useType: useType,
             deviceKey: ip
         };
-        liveRoomAPIService.post(path, data).then((result) => {
+        liveRoomAPIService.post(path, data, (result, rawResult) => {
             if (callback) {
-                callback(result);
+                callback(rawResult);
             }
             deferred.resolve(result);
         }).catch((e) => {
@@ -146,9 +146,9 @@ var baseApiService = {
             useType: useType,
             authCode: verifyCode
         };
-        liveRoomAPIService.post(path, data).then((result) => {
+        liveRoomAPIService.post(path, data, (result, rawResult) => {
             if (callback) {
-                callback(result);
+                callback(rawResult);
             }
             deferred.resolve(result);
         }).catch((e) => {
