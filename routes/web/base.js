@@ -707,7 +707,7 @@ router.post('/login', function(req, res) {
             baseApiService.checkMobileVerifyCode(mobilePhone,
                 userSession.groupType + "_login", verifyCode,
                 function(chkCodeRes) {
-                    if (chkCodeRes !== true) {
+                    if (chkCodeRes.data !== true) {
                         if (chkCodeRes.errcode &&
                             (chkCodeRes.errcode === "1006" || chkCodeRes.errcode === "1007")) {
                             result.error = {
@@ -2989,8 +2989,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    }
-   else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
