@@ -1,12 +1,10 @@
 var AccountNickName = new Container({
     panel: $("#account_setNickname"),
     url: "/theme2/template/account-set-nickname.html",
-    onLoad: function() {
+    onLoad: function(param) {
         AccountNickName.setEvent();
     },
-    onShow: function() {
-
-    }
+    onShow: function() {}
 });
 
 
@@ -15,7 +13,12 @@ AccountNickName.setEvent = function() {
     $("#inputNickname").val(Data.userInfo.nickname);
 
     /** 返回个人资料主页 */
-    $('#nickname_back').bind('click', Container.back);
+    $('#nickname_back').bind('click',function(){
+        if (true == Room.isRoom) {
+            $("#header").show();
+        }
+        Container.back();
+    });
 
     /**
      * 提交设置
@@ -41,7 +44,11 @@ AccountNickName.setEvent = function() {
                     $("#myNickname").html(result.nickname);
                     $("#nickname").text(result.nickname);
                     Pop.msg("修改成功!");
-                    AccountInfo.load();
+                    var isRoom = Room.isRoom;
+                    if (true == isRoom) {
+                        $("#header").show();
+                    }
+                    Container.back();
                 }
             }, true, function(err) {});
         }
