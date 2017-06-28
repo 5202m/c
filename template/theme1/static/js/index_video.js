@@ -176,21 +176,34 @@ var videos = {
          * @param autostart
          */
         playByQCloud: function($panel, url, title, autostart){
-            var option = {
-                "live_url" : "http://2157.liveplay.myqcloud.com/2157_358535a.m3u8",
-                //"live_url2" : "http://2000.liveplay.myqcloud.com/live/2000_2a1.flv",
-                "width" : '100%',
-                "height" : '100%',
-                "cache_time" : 0.5
-                //...可选填其他属性
-            };
+            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
+            //LazyLoad.js(['//qzonestyle.gtimg.cn/open/qcloud/video/live/h5/live_connect.js'], function() {
+                var options = {
+                    "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+                    //"coverpic" : "http://www.test.com/myimage.jpg",
+                    "width" :  '100%',//视频的显示宽度，请尽量使用视频分辨率宽度
+                    "height" : '100%'//视频的显示高度，请尽量使用视频分辨率高度
+                };
+                if (/\.m3u8/.test(url)){
+                    options.m3u8 = url;
+                }else{
+                    options.flv = url;
+                }
+                var player =  new TcPlayer($panel, options);
+                /*var option = {
+                    "live_url": url,
+                    "width": '100%',
+                    "height": '100%',
+                    "cache_time": 0.5
+                };
 
-            var player = new qcVideo.Player($panel, option);
-            if(autostart) {
-                player.play();
-            }else{
-                player.pause()
-            }
+                var player = new qcVideo.Player($panel, option);
+                if (autostart) {
+                    player.play();
+                } else {
+                    player.pause();
+                }*/
+            });
         },
 
         /**
@@ -224,9 +237,11 @@ var videos = {
                 } else if (/\.swf/.test(url)) {
                     this.playByEmbed($panel, url, title, true);
                 } else if (/rtmp/.test(url)) {
-                    obsPlayer.init(url, 'videoPlayerPanel', true);
-                } else if (/\.m3u8/.test(url)){
-                    this.playByQCloud($panel.attr('id'), url, title, true);
+                    if (/\.myqcloud\./.test(url)){
+                        this.playByQCloud($panel.attr('id'), url, title, true);
+                    } else {
+                        obsPlayer.init(url, 'videoPlayerPanel', true);
+                    }
                 } else {
                     this.playBySewise($panel, url, title, true);
                 }

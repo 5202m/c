@@ -44,7 +44,7 @@ var config = {
     //apiUrl: 'http://127.0.0.1:3000/api', //pmApi地址
     apiAuth: {
         appId: "chatPlatform",
-        appSecret: "d5a20003"
+        appSecret: "3b970000"
     },
     apiAuthForWeb: {
         appId: "chatPlatform_web",

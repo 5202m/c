@@ -1224,15 +1224,46 @@ var studioChatMb={
 
                 this.videoData($panel, "currVideoUrl", url);
                 this.videoData($panel, "currVideoTitle", title);
-                if(/type=blws/.test(url)){
-                    this.playByBLWS($panel, url, title, false);
-                }else if(/rtmps/.test(url)){
-                    this.playByFlow($panel, url, title, true);
-                }else if(/.mp4/i.test(url)){
-                    this.playBySewise($panel, url, title, true);
-                }else{
-                    this.playByEmbed($panel, url, title, true);
+                if(/\.myqcloud\./.test(url)){
+                    this.playByQCloud($panel.attr('id'), url, title, true)
+                }else {
+                    if (/type=blws/.test(url)) {
+                        this.playByBLWS($panel, url, title, false);
+                    } else if (/rtmps/.test(url)) {
+                        this.playByFlow($panel, url, title, true);
+                    } else if (/.mp4/i.test(url)) {
+                        this.playBySewise($panel, url, title, true);
+                    } else {
+                        this.playByEmbed($panel, url, title, true);
+                    }
                 }
+            },
+
+            /**
+             * 使用腾讯云直播
+             * @param $panel
+             * @param url
+             * @param title
+             * @param autostart
+             */
+            playByQCloud: function($panel, url, title, autostart){
+                LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
+                    var player = new TcPlayer($panel, {
+                        "m3u8": url, //请替换成实际可用的播放地址
+                        "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+                        //"coverpic" : "http://www.test.com/myimage.jpg",
+                        "width" :  '100%',//视频的显示宽度，请尽量使用视频分辨率宽度
+                        "height" : '100%'//视频的显示高度，请尽量使用视频分辨率高度
+                    });
+                    $("#roomAudioPlay, #roomAudioCtrl .voice_wave").unbind('click');
+                    $("#roomAudioPlay, #roomAudioCtrl .voice_wave").bind("click", function(){
+                        if($("#roomAudioCtrl").is(".stopped")){
+                            player.play();
+                        }else{
+                            player.pause();
+                        }
+                    });
+                });
             }
         }
     },

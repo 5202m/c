@@ -3,11 +3,12 @@
  * 直播间手机版房间内页 -- 播放器
  * @author Dick.guo
  */
-var Player = {
+var MbPlayer = {
     /** 状态 */
     type : "text", //'text'-文字直播，'video'-视频直播，'audio'-音频直播
     isFlashSupport : false,
     isAutoplay : false,
+    isQCloud: false,
 
     /**
      * 初始化
@@ -29,19 +30,19 @@ var Player = {
     startPlay : function(){
         Data.getSyllabusPlan(function(course){
             if(!course||course.isNext||course.courseType==2||course.courseType==0){
-                Player.change("text");
+                MbPlayer.change("text");
             }else{
                 var links = Data.getVideoUrl(course);
                 var url = "";
-                if(Player.type == "text"){
-                    Player.change("audio"); //默认音频直播
+                if(MbPlayer.type == "text"){
+                    MbPlayer.change("audio"); //默认音频直播
                 }
-                if(Player.type == "audio"){
+                if(MbPlayer.type == "audio"){
                     url = links.audio;
-                    Player.playAudio(true, url, course.title);
-                }else if(Player.type == "video"){
+                    MbPlayer.playAudio(true, url, course.title);
+                }else if(MbPlayer.type == "video"){
                     url = links.mobile;
-                    Player.play(url, course.title);
+                    MbPlayer.play(url, course.title);
                 }
             }
             Room.showLecturer(course && course.lecturerId);
@@ -62,11 +63,14 @@ var Player = {
         this.player.videoData($panel, "currVideoTitle", title);
 
         if(/type=blws/.test(url)){
-            this.player.playByBLWS($panel, url, title, Player.isAutoplay);
-        }else if(Player.isFlashSupport){
-            this.player.playBySewise($panel, url, title, Player.isAutoplay);
+            this.player.playByBLWS($panel, url, title, MbPlayer.isAutoplay);
+        }else if(MbPlayer.isFlashSupport){
+            this.player.playBySewise($panel, url, title, MbPlayer.isAutoplay);
+        }else if(/\.myqcloud\./.test(url)){
+            MbPlayer.isQCloud = true;
+            this.player.playByQCloud($panel.attr('id'), url, title, MbPlayer.isAutoplay)
         }else{
-            this.player.playByVideo($panel, url, title, Player.isAutoplay);
+            this.player.playByVideo($panel, url, title, MbPlayer.isAutoplay);
         }
     },
 
@@ -89,12 +93,16 @@ var Player = {
             }
             $('#roomAudioCtrl').removeClass("stopped");
             $('#roomAudioImg').attr("imgIdx", imgIdx).attr('src','/theme2/img/wave' + imgIdx + '.gif');
-            this.player.doPlay($("#roomVideo"));
+            if(!/\.myqcloud\./.test(url)) {
+                this.player.doPlay($("#roomVideo"));
+            }
         }else{
             imgIdx = $('#roomAudioImg').attr("imgIdx") || imgIdx;
             $('#roomAudioImg').attr('src','/theme2/img/wave' + imgIdx + '.jpg');
             $('#roomAudioCtrl').addClass("stopped");
-            this.player.doPause($("#roomVideo"));
+            if(!/\.myqcloud\./.test(url)) {
+                this.player.doPause($("#roomVideo"));
+            }
         }
     },
 
@@ -119,7 +127,9 @@ var Player = {
         var playerCtrl = $("#room_playerCtrl");
         var playerCtrlTxt = $("#room_playerCtrlTxt");
         if(this.type == "video" || this.type == "audio"){
-            this.player.clear(videoPanel);
+            if(!MbPlayer.isQCloud) {
+                this.player.clear(videoPanel);
+            }
         }
         if(type == "text"){
             playerCtrl.hide();
@@ -145,18 +155,22 @@ var Player = {
     setEvent : function(){
         //声音直播开始 暂停
         $("#roomAudioPlay, #roomAudioCtrl .voice_wave").bind("click", function(){
-            Player.playAudio($("#roomAudioCtrl").is(".stopped"));
+            MbPlayer.playAudio($("#roomAudioCtrl").is(".stopped"));
         });
 
         //视频直播 声音直播切换
         $("#room_playerCtrl").bind("click", function(){
             var isAudio = $(this).is(".switch-video");
             if(isAudio){
-                Player.change("video");
-                Player.startPlay();
+                MbPlayer.change("video");
+                if(!MbPlayer.isQCloud) {
+                    MbPlayer.startPlay();
+                }
             }else{
-                Player.change("audio");
-                Player.startPlay();
+                MbPlayer.change("audio");
+                if(!MbPlayer.isQCloud) {
+                    MbPlayer.startPlay();
+                }
             }
         });
 
@@ -339,6 +353,33 @@ var Player = {
          */
         doPause : function($panel){
             $panel.find("video").trigger("pause");
+        },
+
+        /**
+         * 使用腾讯云直播
+         * @param $panel
+         * @param url
+         * @param title
+         * @param autostart
+         */
+        playByQCloud: function($panel, url, title, autostart){
+            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
+            var player = new TcPlayer($panel, {
+                "m3u8": url, //请替换成实际可用的播放地址
+                "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+                //"coverpic" : "http://www.test.com/myimage.jpg",
+                "width" :  '100%',//视频的显示宽度，请尽量使用视频分辨率宽度
+                "height" : '100%'//视频的显示高度，请尽量使用视频分辨率高度
+            });
+                $("#roomAudioPlay, #roomAudioCtrl .voice_wave").unbind('click');
+                $("#roomAudioPlay, #roomAudioCtrl .voice_wave").bind("click", function(){
+                    if($("#roomAudioCtrl").is(".stopped")){
+                        player.play();
+                    }else{
+                        player.pause();
+                    }
+                });
+            });
         }
     }
 };

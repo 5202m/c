@@ -128,7 +128,7 @@ var Chat = {
         $("#chat_fullscreen").bind("click", function(){
             Chat.fullscreen = !Chat.fullscreen;
             if(Chat.fullscreen){
-                if(Player.type != "text"){
+                if(MbPlayer.type != "text"){
                     $("#chat_player").slideUp(300);
                     setTimeout(function(){
                         $('#room_header').hide();
@@ -143,7 +143,7 @@ var Chat = {
                     Chat.setTalkScroll();
                 }
             }else{
-                if(Player.type != "text"){
+                if(MbPlayer.type != "text"){
                     $("#chat_player").slideDown(300);
                     setTimeout(function(){
                         $('#room_header').show();
