@@ -322,8 +322,10 @@ var Chat = {
                     return false;
                 }
                 if (Data.userInfo.isSetName === false) {
-                    //TODO 弹出设置昵称//studioMbPop.popBox("set", {studioChatObj : studioChatMb});
-                    Pop.msg("请到电脑端设置昵称");
+                    Pop.msg("设置昵称才可以发言喔");
+                    $("#header").hide();
+                    Room.isRoom = true;
+                    AccountNickName.load();
                     return false;
                 }
             });
@@ -456,8 +458,10 @@ var Chat = {
                 return;
             }
             if(Data.userInfo.isSetName === false){
-                //设置昵称
-                Pop.msg("请到电脑端设置昵称");
+                Pop.msg("设置昵称才可以发言喔");
+                $("#header").hide();
+                Room.isRoom = true;
+                AccountNickName.load();
                 return;
             }
             var toUser = Chat.getToUser();
