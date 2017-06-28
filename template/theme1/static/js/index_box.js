@@ -279,9 +279,9 @@ var box = {
             } else if (common.isBlank($('#loginForm [name="pwd"]').val())) {
                 $('#acclogtip').html('<i></i>请输入密码').show();
             }
-            // else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
-            //     $('#acclogtip').html('<i></i>请输入验证码').show();
-            // } 
+            else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
+                 $('#acclogtip').html('<i></i>请输入验证码').show();
+            }
             else {
                 $(this).prop('disabled', true);
                 var _this = this;
@@ -309,10 +309,16 @@ var box = {
                         LoginAuto.setAutoLogin($("#acAutoLogin").prop("checked"));
                         indexJS.userInfo.clientGroup = result.userInfo.clientGroup;
                         try{
-                            chatAnalyze.setUTM(false, $.extend({operationType:4,userTel:result.userInfo.mobilePhone,accountNo:result.userInfo.accountNo,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                            if(typeof(result.isNewMember)!="undefined" && result.isNewMember){
+                                chatAnalyze.setUTM(false, $.extend({operationType:3,userTel:result.userInfo.mobilePhone,accountNo:result.userInfo.accountNo,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                            }else{
+                                chatAnalyze.setUTM(false, $.extend({operationType:4,userTel:result.userInfo.mobilePhone,accountNo:result.userInfo.accountNo,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                            }
+
+
                         }
                         catch(e){
-                            console.log("Set fxlogin UTM fail!"+e);
+                            console.log("Set pmlogin UTM fail!"+e);
                         }
 
                         if (box.toRoomId) {
@@ -453,7 +459,15 @@ var box = {
                     $("#regLpBtn").attr("href", "http://www.24k.hk/activity/studioLottery/index.html?userId=" + result.userId + "#ba");
                     $(".register_result").show();
                     indexJS.userInfo.clientGroup = "register";
-                    chatAnalyze.setUTM(false, $.extend({operationType:3,userTel:$('#popBoxRegister form [name="mobilePhone"]').val(),roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({operationType:3,userTel:$('#popBoxRegister form [name="mobilePhone"]').val(),roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                    }
+                    catch(e){
+                        console.log("Set pmregister UTM fail!"+e);
+                    }
+
+
                 }
             }, true, function(err) {
                 $(_this).prop('disabled', false);
@@ -478,7 +492,15 @@ var box = {
             window.location.href = "/logout?platform=" + indexJS.fromPlatform + '&cookieId=' + chatAnalyze.getUTMCookie() + '&roomName=' + $('#roomInfoId').text() +
                 '&courseName=' + indexJS.courseTick.course.courseName + '&courseId=' + indexJS.courseTick.course.courseId || '' + '&teacherId=' + indexJS.courseTick.course.lecturerId || '' +
                 '&teacherName=' + indexJS.courseTick.course.lecturer || '';
-            chatAnalyze.setUTM(false, $.extend({operationType:5}, indexJS.userInfo, indexJS.courseTick.course));
+
+            try{
+                chatAnalyze.setUTM(false, $.extend({operationType:5}, indexJS.userInfo, indexJS.courseTick.course));
+            }
+            catch(e){
+                console.log("Set logout UTM fail!"+e);
+            }
+
+
         });
         //验证码事件
         $('#loginForm .rbtn,#popBoxPassword2 .rbtn,#popBoxRegister .rbtn').click(function() {
@@ -563,6 +585,7 @@ var box = {
                     indexJS.userInfo.clientGroup = result.userInfo.clientGroup;
                     indexJS.userInfo.nickname = result.userInfo.nickname;
                     indexJS.userInfo.accountNo = result.userInfo.accountNo;
+                    console.log(result.userInfo);
                     try{
                         chatAnalyze.setUTM(false, $.extend({operationType:4,userTel:$('#loginForm [name="mobilePhone"]').val(),roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
                     }
