@@ -399,6 +399,7 @@ var chatAnalyze = {
             _maq.push(['_setTradingAccount',_options.tradingAccount || ""]);
             _maq.push(['_setVideoId',_options.videoId || ""]);
             _maq.push(['_setVideoName',_options.videoName || ""]);
+            _maq.push(['_setUserSource',_options.userSource || ""]);
             console.log("========="+_maq);
             setGWAnalysisParams(_maq);
         }

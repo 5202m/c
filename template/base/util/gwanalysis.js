@@ -152,7 +152,7 @@ function setGWAnalysisParams(_maq){
                 case '_setTeacherName':
                     params.teacherName = _maq[i][1];
                     break;
-                case '_setOperateentrance':
+                case '_setOperateEntrance':
                     params.operateEntrance = _maq[i][1];
                     break;
                 case '_setUserType':

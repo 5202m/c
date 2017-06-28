@@ -379,7 +379,15 @@ var studioChatMb={
                         $(this).addClass("on");
                     }
                     studioChatMb.video.player.play($(this).attr("vUrl"), $(this).text());
-                    chatAnalyze.setUTM(false,$.extend({operationType:7,videoId:$(this).attr("id"),videoName:$(this).text(),roomName:$('#currStudioInfo').attr('rn')}, studioChatMb.userInfo, studioChatMb.courseTick.course));//统计教学视频点击数
+                    try{
+                        chatAnalyze.setUTM(false,$.extend({operationType:7,videoId:$(this).attr("id"),videoName:$(this).text(),roomName:$('#currStudioInfo').attr('rn')}, studioChatMb.userInfo, studioChatMb.courseTick.course));//统计教学视频点击数
+
+                    }
+                    catch(e){
+                        console.log("Set VEDIO UTM fail!"+e);
+                    }
+
+
                 });
             }
             studioChatMb.video.start();

@@ -324,7 +324,15 @@ var studioMbLogin = {
                         LoginAuto.setAutoLogin($("#loginForm_al").prop("checked"));
                         studioMbPop.reload();
                     }
-                    chatAnalyze.setUTM(false, $.extend({operationType:4}, studioMbPop.userInfo, studioChatMb.courseTick.course));
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({operationType:4}, studioMbPop.userInfo, studioChatMb.courseTick.course));
+
+                    }
+                    catch(e){
+                        console.log("Set admin UTM fail!"+e);
+                    }
+
+
                 }
             },true,function(){
                 studioMbLogin.resetFormInput();
@@ -602,7 +610,14 @@ var studioMbReg = {
                 }else{
                     studioMbPop.showMessage("注册成功");
                     studioMbPop.popShow($("#reg1Pop"));
-                    chatAnalyze.setUTM(false, $.extend({operationType:3}, studioMbPop.userInfo, studioMbPop.courseTick.course));
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({operationType:3}, studioMbPop.userInfo, studioMbPop.courseTick.course));
+                    }
+                    catch(e){
+                        console.log("Set mbregister UTM fail!"+e);
+                    }
+
+
                 }
             },true,function(){
                 studioMbPop.loadingBlock($("#setPop"), true);
