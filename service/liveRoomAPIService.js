@@ -108,6 +108,7 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Getting data from liveRoom API with path: " + path);
         path = addCompanyIdToPath(path);
+		path = encodeURI(path);
         addAccessToken()
             .then(headers => {
                 let options = {
