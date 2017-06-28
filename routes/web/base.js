@@ -1440,7 +1440,7 @@ router.post('/resetPwd', function(req, res) {
                         }
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 2) {
         if (!userSession || common.isBlank(userSession.groupType)) {
@@ -1484,7 +1484,7 @@ router.post('/resetPwd', function(req, res) {
                         result.msg = result.error.errmsg;
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         res.json({ isOK: false, msg: '参数错误！' });
