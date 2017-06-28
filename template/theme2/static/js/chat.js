@@ -479,7 +479,12 @@ var Chat = {
 
             //清空输入框
             $("#chat_cont").html("").trigger("input");//清空内容
-            chatAnalyze.setUTM(false, $.extend({operationType:2,roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            try{
+                chatAnalyze.setUTM(false, $.extend({operationType:2,roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            }
+            catch(e){
+                console.log("Set pubicchat UTM fail!"+e);
+            }
         });
     },
 
@@ -1350,7 +1355,13 @@ var Chat = {
             $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
                 console.log("send WHmessage ok!");
             });
-            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            try{
+                chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            }
+            catch(e){
+                console.log("Set privatechat UTM fail!"+e);
+            }
+
         },
 
         /**

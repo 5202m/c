@@ -43,7 +43,7 @@
                 </div>
                 <%}%>
                     <div class="rightbar">
-                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
+                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
                         <a id="header_ui" href="javascript:void(0)" class="loginbtn">
                             <%= userSession.isLogin ? userSession.nickname : '登录' %>
                         </a>
@@ -170,11 +170,19 @@
                 Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
                 Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
                 Index.init();
-                chatAnalyze.setUTM(false, $.extend({
-                    operationType: 1,
-                    userTel: '<%= userSession.mobilePhone %>',
-                    roomName:$('#room_roomName').text()
-                }, Data.userInfo));
+
+                try{
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 1,
+                        userTel: '<%= userSession.mobilePhone %>',
+                        roomName:$('#room_roomName').text()
+                    }, Data.userInfo));
+                }
+                catch(e){
+                    console.log("Set onunload UTM fail!"+e);
+                }
+
+
 
                 lightbox.option({
                     'resizeDuration': 200,
