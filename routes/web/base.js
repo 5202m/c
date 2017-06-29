@@ -3016,7 +3016,12 @@ router.post('/pmLogin', function(req, res) {
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
+                                saveResult.userInfo.accountNo = accountNo;
                                 req.session.studioUserInfo.joinDate = saveResult.joinDate;
+                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
+                                req.session.studioUserInfo.accountNo = accountNo;
+
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
