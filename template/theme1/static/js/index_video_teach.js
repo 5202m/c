@@ -73,7 +73,13 @@ var videosTeach = {
                         }
                     });
                     indexJS.setListScroll('#teachVideoPanel .scrollbox'); //设置滚动
-                    chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+                    }
+                    catch(e){
+                        console.log("Set video UTM fail!"+e);
+                    }
+
                 });
                 if (typeof callback === "function") {
                     callback();

@@ -43,6 +43,7 @@ AccountNickName.setEvent = function() {
                     AccountNickName.refreshNickname(result.nickname);
                     $("#myNickname").html(result.nickname);
                     $("#nickname").text(result.nickname);
+                    Data.userInfo.isSetName = true;
                     Pop.msg("修改成功!");
                     var isRoom = Room.isRoom;
                     if (true == isRoom) {

@@ -309,7 +309,7 @@ var indexTool = {
 
             $("#redPacket_header,#redPacket_chat").bind("click", function() {
                 if (indexJS.userInfo.isLogin) {
-                    console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", new Date(indexJS.userInfo.createDate));
+                    console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", indexJS.userInfo.createDate);
                     indexTool.RedPacket.queryLastRedPackageRob();
                 } else {
                     indexTool.RedPacket.showPop("noLogin");

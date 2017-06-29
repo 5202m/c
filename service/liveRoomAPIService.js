@@ -108,6 +108,7 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Getting data from liveRoom API with path: " + path);
         path = addCompanyIdToPath(path);
+		path = encodeURI(path);
         addAccessToken()
             .then(headers => {
                 let options = {
@@ -132,7 +133,7 @@ module.exports = {
     post: (path, data, callback) => {
         let deferred = new Deferred();
         let handler = responseHandler(deferred, callback);
-        logger.debug("Posting data to liveRoom API with path: " + path);
+        logger.debug("Posting data to liveRoom API with path: ", path, JSON.stringify(data));
         data = addCompanyIdToBody(data);
         addAccessToken({ "Connection": "close" })
             .then(headers => {

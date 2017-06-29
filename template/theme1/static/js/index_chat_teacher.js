@@ -380,7 +380,14 @@ var chatTeacher = {
                         var vTitle = $(this).attr("title");
                         videos.player.play($(this).attr("vurl"), vTitle);
                         var vdId = $(this).attr("articleId");
-                        chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+                        try{
+                            chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+                        }
+                        catch(e){
+                            console.log("Set pmlogin UTM fail!"+e);
+                        }
+
+
                     });
                     //教学视频播放
                     $('.main_tab .teacherlist .teacherbox .tebox_teachVideo ul li a').click(function() {
@@ -394,7 +401,15 @@ var chatTeacher = {
                         var vTitle = $(this).attr("title");
                         videos.player.play($(this).attr("vurl"), vTitle);
                         var vdId = $(this).attr("articleId");
-                        chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+                        try{
+                            chatAnalyze.setUTM(false, $.extend({ operationType: 7, videoId: vdId, videoName: vTitle, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计教学视频点击数
+
+                        }
+                        catch(e){
+                            console.log("Set pmlogin UTM fail!"+e);
+                        }
+
+
                     });
                 }
             });

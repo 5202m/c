@@ -327,7 +327,9 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 platform: options && options.platform,
                 intentionalRoomId: chatUser.intentionalRoomId,
                 sid: req.sessionID,
-                createDate: chatUser.joinDate
+                createDate: chatUser.joinDate,
+                mobile: chatUser.mobilePhone,
+                accountNo: chatUser.accountNo
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -572,7 +574,7 @@ router.get('/getMobileVerifyCode', function(req, res) {
                     res.json(result);
                 }
 
-            });
+            }).catch(logger.error.bind(logger));
     }
 });
 /**
@@ -636,6 +638,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
+                    req.session.studioUserInfo.mobile = mobilePhone;
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -703,7 +706,7 @@ router.post('/login', function(req, res) {
             baseApiService.checkMobileVerifyCode(mobilePhone,
                 userSession.groupType + "_login", verifyCode,
                 function(chkCodeRes) {
-                    if (chkCodeRes !== true) {
+                    if (chkCodeRes.data !== true) {
                         if (chkCodeRes.errcode &&
                             (chkCodeRes.errcode === "1006" || chkCodeRes.errcode === "1007")) {
                             result.error = {
@@ -888,7 +891,7 @@ router.post('/login', function(req, res) {
                             groupType: userSession.groupType
                         }, 1, function(loginRes) {});
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         //userId自动登录
@@ -1436,7 +1439,7 @@ router.post('/resetPwd', function(req, res) {
                         }
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 2) {
         if (!userSession || common.isBlank(userSession.groupType)) {
@@ -1447,20 +1450,15 @@ router.post('/resetPwd', function(req, res) {
             res.json({ isOK: false, msg: '手机验证码不能为空！' });
         } else {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
-                userSession.groupType + "_resetPWD", params.verifyCode,
-                function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
-                            res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                        } else {
-                            res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                        }
+                    userSession.groupType + "_resetPWD", params.verifyCode)
+                .then((chkCodeRes) => {
+                    if (chkCodeRes !== true) {
+                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
                         res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 3) {
         if (!userSession) {
@@ -1485,7 +1483,7 @@ router.post('/resetPwd', function(req, res) {
                         result.msg = result.error.errmsg;
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         res.json({ isOK: false, msg: '参数错误！' });
@@ -2985,8 +2983,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
@@ -3018,7 +3015,12 @@ router.post('/pmLogin', function(req, res) {
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
+                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
+                                saveResult.userInfo.accountNo = accountNo;
                                 req.session.studioUserInfo.joinDate = saveResult.joinDate;
+                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
+                                req.session.studioUserInfo.accountNo = accountNo;
+
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,

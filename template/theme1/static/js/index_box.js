@@ -278,9 +278,11 @@ var box = {
                 $('#acclogtip').html('<i></i>请输入交易账号').show();
             } else if (common.isBlank($('#loginForm [name="pwd"]').val())) {
                 $('#acclogtip').html('<i></i>请输入密码').show();
-            } else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
-                $('#acclogtip').html('<i></i>请输入验证码').show();
-            } else {
+            }
+            else if (common.isBlank($('#loginForm [name="verMalCode"]').val())) {
+                 $('#acclogtip').html('<i></i>请输入验证码').show();
+            }
+            else {
                 $(this).prop('disabled', true);
                 var _this = this;
                 $('#formBtnLoad').show();
@@ -306,13 +308,26 @@ var box = {
                         $(".blackbg,#loginBox").hide();
                         LoginAuto.setAutoLogin($("#acAutoLogin").prop("checked"));
                         indexJS.userInfo.clientGroup = result.userInfo.clientGroup;
+                        try{
+                            if(typeof(result.isNewMember)!="undefined" && result.isNewMember){
+                                chatAnalyze.setUTM(false, $.extend({operationType:3,userTel:result.userInfo.mobilePhone,accountNo:result.userInfo.accountNo,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                            }else{
+                                chatAnalyze.setUTM(false, $.extend({operationType:4,userTel:result.userInfo.mobilePhone,accountNo:result.userInfo.accountNo,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                            }
+
+
+                        }
+                        catch(e){
+                            console.log("Set pmlogin UTM fail!"+e);
+                        }
+
                         if (box.toRoomId) {
                             videosTrain.changeRoomOrSignup(box.toRoomId);
                         } else {
                             indexJS.toRefreshView();
                         }
                     }
-                    //  chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                  //  chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
                 }, true, function(err) {
                     $(_this).prop('disabled', false);
                     $('#formBtnLoad').hide();
@@ -443,8 +458,17 @@ var box = {
                     $(".blackbg,#popBoxRegister").hide();
                     $("#regLpBtn").attr("href", "http://www.24k.hk/activity/studioLottery/index.html?userId=" + result.userId + "#ba");
                     $(".register_result").show();
+                    indexJS.userInfo.clientGroup = "register";
+
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({operationType:3,userTel:$('#popBoxRegister form [name="mobilePhone"]').val(),roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                    }
+                    catch(e){
+                        console.log("Set pmregister UTM fail!"+e);
+                    }
+
+
                 }
-                // chatAnalyze.setUTM(false, $.extend({operationType:3,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#popBoxRegister .img-loading').hide();
@@ -468,6 +492,15 @@ var box = {
             window.location.href = "/logout?platform=" + indexJS.fromPlatform + '&cookieId=' + chatAnalyze.getUTMCookie() + '&roomName=' + $('#roomInfoId').text() +
                 '&courseName=' + indexJS.courseTick.course.courseName + '&courseId=' + indexJS.courseTick.course.courseId || '' + '&teacherId=' + indexJS.courseTick.course.lecturerId || '' +
                 '&teacherName=' + indexJS.courseTick.course.lecturer || '';
+
+            try{
+                chatAnalyze.setUTM(false, $.extend({operationType:5}, indexJS.userInfo, indexJS.courseTick.course));
+            }
+            catch(e){
+                console.log("Set logout UTM fail!"+e);
+            }
+
+
         });
         //验证码事件
         $('#loginForm .rbtn,#popBoxPassword2 .rbtn,#popBoxRegister .rbtn').click(function() {
@@ -550,13 +583,23 @@ var box = {
                     $(".blackbg,#loginBox").hide();
                     LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
                     indexJS.userInfo.clientGroup = result.userInfo.clientGroup;
+                    indexJS.userInfo.nickname = result.userInfo.nickname;
+                    indexJS.userInfo.accountNo = result.userInfo.accountNo;
+                    console.log(result.userInfo);
+                    try{
+                        chatAnalyze.setUTM(false, $.extend({operationType:4,userTel:$('#loginForm [name="mobilePhone"]').val(),roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+                    }
+                    catch(e){
+                        console.log("Set login UTM fail!"+e);
+                    }
+
                     if (box.toRoomId) {
                         videosTrain.changeRoomOrSignup(box.toRoomId);
                     } else {
                         indexJS.toRefreshView();
                     }
                 }
-                //chatAnalyze.setUTM(false, $.extend({operationType:4,roomName:$('#roomInfoId').text()}, indexJS.userInfo, indexJS.courseTick.course));
+
             }, true, function(err) {
                 $(_this).prop('disabled', false);
                 $('#formBtnLoad').hide();

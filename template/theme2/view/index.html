@@ -43,7 +43,7 @@
                 </div>
                 <%}%>
                     <div class="rightbar">
-                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" class="qq"><i></i></a>
+                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
                         <a id="header_ui" href="javascript:void(0)" class="loginbtn">
                             <%= userSession.isLogin ? userSession.nickname : '登录' %>
                         </a>
@@ -168,12 +168,21 @@
                 Data.userInfo.userName = '<%= userSession.userName %>';
                 Data.userInfo.email = '<%= userSession.email %>';
                 Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
+                Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
                 Index.init();
-                chatAnalyze.setUTM(false, $.extend({
-                    operationType: 1,
-                    userTel: '<%= userSession.mobilePhone %>',
-                    requestParams: ""
-                }, Data.userInfo));
+
+                try{
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 1,
+                        userTel: '<%= userSession.mobilePhone %>',
+                        roomName:$('#room_roomName').text()
+                    }, Data.userInfo));
+                }
+                catch(e){
+                    console.log("Set onunload UTM fail!"+e);
+                }
+
+
 
                 lightbox.option({
                     'resizeDuration': 200,
@@ -195,6 +204,13 @@
                     theme: "dark-thick"
                 });
             }
+            window.onunload  = function() {
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 6,
+                    userTel: '<%= userSession.mobilePhone %>',
+                    roomName:$('#room_roomName').text()
+                }, Data.userInfo));
+            }
         </script>
         <% if(isDevTest) { %>
             <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
@@ -208,6 +224,7 @@
             <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
             <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
             <script type="text/javascript" src="/base/util/common.js"></script>
+            <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
             <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
             <script type="text/javascript" src="/theme2/js/container.js"></script>
             <script type="text/javascript" src="/theme2/js/pop.js"></script>

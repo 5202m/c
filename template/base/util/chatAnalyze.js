@@ -61,33 +61,39 @@ var chatAnalyze = {
     dasUrl: "",
     requestParamsCookie: 'requestParamsCookie',
     utmStore: { //utm 数据统计全局数据
-        userIp: '',
-        storeKey: 'GWAFLGPHONECOOIKETRACK', //userId key
-        userId: '', //用户id
-        roomId: '', //房间编号
-        userTel: '',
-        userType: '',
-        userName: '',
-        roomName: '',
-        userSource: 'web',
-        useEquipment: '',
-        tradingAccount: '',
-        tradingPlatform: '',
-        platformType: 0,
-        businessPlatform: '',
-        operateEntrance: '',
-        operationType: 2,
-        touristId: '',
-        sessionId: '',
-        nickName: '',
-        email: '',
-        videoId: '',
-        videoName: '',
-        courseId: '',
-        courseName: '',
-        teacherId: '',
-        teacherName: '',
-        requestParams: ''
+        userIp:'',
+        storeKey:'GWAFLGPHONECOOIKETRACK',//userId key
+        userId:'',//用户id
+        roomId:'',//房间编号
+        userTel:'',
+        userType:'',
+        userName:'',
+        roomName:'',
+        userSource:'web',
+        useEquipment:'',
+        tradingAccount:'',
+        tradingPlatform:'',
+        platformType:0,
+        businessPlatform:'',
+        operateEntrance:'',
+        operationType:2,
+        touristId:'',
+        sessionId:'',
+        nickName:'',
+        email:'',
+        videoId:'',
+        videoName:'',
+        courseId:'',
+        courseName:'',
+        teacherId:'',
+        teacherName:'',
+        requestParams:'',
+        deviceId:'',
+        utmctr:'',
+        utmccn:'',
+        utmcct:'',
+        utmcmd:'',
+        utmcsr:''
 
     },
     /**
@@ -145,7 +151,7 @@ var chatAnalyze = {
         try {
             var ga = document.createElement('script');
             ga.type = 'text/javascript';
-            ga.async = true;
+            ga.async = false;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(ga, s);
@@ -202,66 +208,41 @@ var chatAnalyze = {
     setUTM: function(init, data) {
 
         try {
-            //this.getIp();
-            /*if(init){
-                this.utmStore.roomId=data.groupId;
-                this.utmStore.userId=data.userId;
-                this.utmStore.userTel=data.userTel;
-                this.utmStore.clientGroup=data.clientGroup;
-                this.utmStore.groupType=data.groupType;
-                $(window).unload(function(){
-                    chatAnalyze.utmStore.onlineETM=new Date().getTime();
-                    chatAnalyze.sendUTM(null);
-                    window.event.returnValue=true;
-                });
-            }else{*/
             var isLocal = this.isLocalHref();
-            chatAnalyze.utmStore.userId = chatAnalyze.getUTMCookie(); //用户id
+            chatAnalyze.utmStore.userId = chatAnalyze.getUTMCookie();//用户id
             chatAnalyze.utmStore.userType = chatAnalyze.getClientGroup(data.clientGroup);
             chatAnalyze.utmStore.businessPlatform = chatAnalyze.getGroupType(data.groupType);
-            chatAnalyze.utmStore.roomId = data.groupId; //房间编号
-            chatAnalyze.utmStore.userTel = data.mobile;
+            chatAnalyze.utmStore.roomId = data.groupId;//房间编号
+            chatAnalyze.utmStore.userTel = typeof(data.userTel)!="undefined"?data.userTel:data.mobile;
             chatAnalyze.utmStore.userName = data.userName;
             chatAnalyze.utmStore.roomName = data.roomName;
-            chatAnalyze.utmStore.platformType = common.isMobile(navigator.userAgent) ? 1 : 0;
+            chatAnalyze.utmStore.platformType = common.isMobile(navigator.userAgent)?1:0;
             chatAnalyze.utmStore.touristId = data.visitorId;
             chatAnalyze.utmStore.sessionId = data.sid;
             chatAnalyze.utmStore.nickName = data.nickname;
             chatAnalyze.utmStore.email = data.email;
             chatAnalyze.utmStore.useEquipment = navigator.userAgent;
-            chatAnalyze.utmStore.operateEntrance = common.isBlank(common.getUrlParam('platform')) ? 'web' : common.getUrlParam('platform');
-            chatAnalyze.utmStore.courseId = data.courseId || '';
+            chatAnalyze.utmStore.operateEntrance = common.isBlank(common.getUrlParam('platform'))?'web':common.getUrlParam('platform');
+            chatAnalyze.utmStore.courseId = data.courseId||'';
             chatAnalyze.utmStore.courseName = data.courseName;
-            chatAnalyze.utmStore.teacherId = data.lecturerId || '';
-            chatAnalyze.utmStore.teacherName = data.lecturer || '';
-          //  chatAnalyze.utmStore.requestParams = data.requestParams || '';
+            chatAnalyze.utmStore.teacherId = data.lecturerId||'';
+            chatAnalyze.utmStore.teacherName = data.lecturer||'';
             chatAnalyze.utmStore.requestParams = '';
-            if (isLocal) {
+            if(isLocal) {
                 chatAnalyze.utmStore.userIp = data.ip;
             }
             chatAnalyze.utmStore.operationType = data.operationType;
-            chatAnalyze.utmStore.tradingAccount = data.accountNo || '';
-            if (data) {
-                if (data.operationType == 7) {
+            chatAnalyze.utmStore.tradingAccount = data.accountNo||'';
+            if(data) {
+                if(data.operationType==7) {
                     chatAnalyze.utmStore.videoId = data.videoId;
                     chatAnalyze.utmStore.videoName = data.videoName;
                 }
             }
             data = chatAnalyze.utmStore;
-            if (common.isValid(data.sessionId) && common.isValid(data.userId) && (common.isValid(data.touristId) || common.isValid(data.userTel)) && /*(*/ common.isValid(data.operationType) /*|| $.inArray(data.userType, [7,8,9])>-1)*/ ) {
-                if (isLocal) {
-                    console.log("into utm--");
-                    chatAnalyze.getIp(function() {
-                        chatAnalyze.utmAjax(data, true);
-                    });
-                } else {
-                    data = chatAnalyze.utmStore;
-                    chatAnalyze.getIp(function() {
-                        chatAnalyze.utmAjax(data, true)
-                    });
-                }
+            if(common.isValid(data.sessionId) && common.isValid(data.userId) && (common.isValid(data.touristId) || common.isValid(data.userTel)) && /*(*/common.isValid(data.operationType) /*|| $.inArray(data.userType, [7,8,9])>-1)*/){
+                chatAnalyze.utmAjax(data, true);
             }
-            /* }*/
         } catch (e) {
             console.log("Set UTM fail!" + e);
         }
@@ -271,64 +252,159 @@ var chatAnalyze = {
      * @param url
      * @param sendData
      */
-    utmAjax: function(sendData) {
-        var url = chatAnalyze.getDasURL();
-        $.post(url, { data: JSON.stringify(sendData), callback: '?' });
+    utmAjax:function(sendData){
+        this.getGacookiesTrack(sendData);
+
     },
     /**
-     * 发送utm数据
+     * 处理ga字符串，返回解析后的数字
+     * @param gaStr
      */
-    sendUTM: function(data) {
+    dealGaNew:function(gaStr){
+        var _c_json='{';
         try {
-            if (!store.enabled) { // for more information, please refer to https://github.com/marcuswestin/store.js/
-                console.log('Local storage is not supported by your browser.');
-                return;
-            }
-            var tmpData = chatAnalyze.utmStore;
-            if (!tmpData.roomId || !tmpData.groupType) {
-                return;
-            }
-            if (!tmpData.userTel && !tmpData.userId) {
-                var st = store.get('storeInfos_' + tmpData.groupType);
-                if (!st) {
-                    return;
+            gaStr = gaStr.substring(gaStr.indexOf("utmcsr"),gaStr.length);
+            var _c_length = gaStr.split("\|").length;
+            for(i=0;i<_c_length;i++){
+                var _temp = gaStr.split("\|")[i];
+                var _temp_index = _temp.split("=")[0];
+                var _tempCsr = _temp.split("=")[1];
+                if (_temp_index == "utmcsr" && _tempCsr =="") {
+                    _tempCsr = "not set";
                 }
-                tmpData.userId = st.userId;
-            }
-            var bPlatform = tmpData.groupType.indexOf('fx') != -1 ? 1 : 2;
-            var userId = this.getUTMCookie();
-           // var hrefSplit = this.hrefSplit();
-            var hrefSplit = "";
-            var sendData = {
-                userId: userId,
-                customerType: tmpData.clientGroup,
-                ip: tmpData.ip,
-                businessPlatform: bPlatform,
-                platformType: (common.isMobile() ? 1 : 0),
-                roomId: tmpData.roomId,
-                requestParams: hrefSplit
-            };
-            if (tmpData.userTel) {
-                sendData.operationTel = tmpData.userTel;
-            } else {
-                sendData.visitorId = tmpData.userId;
-            }
-            if (data && data.courseId) {
-                sendData.courseId = data.courseId;
-                this.utmAjax(sendData, true);
-            } else {
-                sendData.startDateTime = tmpData.onlineSTM;
-                sendData.endDateTime = tmpData.onlineETM;
-                sendData.speakCount = tmpData.speakCount;
-                sendData.operationType = 6;
-                if (navigator.sendBeacon) {
-                    navigator.sendBeacon(chatAnalyze.getDasURL() + "Close", JSON.stringify(sendData));
-                } else {
-                    this.utmAjax(sendData, false);
+                if (_temp_index == "utmcmd" && _tempCsr =="") {
+                    _tempCsr = "not set";
+                }
+                _c_json=_c_json+'"'+_temp_index+'":'+'"'+_tempCsr+'"';
+                if(i!=_c_length-1){
+                    _c_json+=","
                 }
             }
+
         } catch (e) {
-            console.log("send UTM fail!" + e);
+            _c_json = "}";
+        }
+
+        return _c_json+"}";
+    },
+    /**
+     * 设置GA cookie值并录入值
+     * behaviorType 行为类型 访问(1)、咨询(2)
+     * advisoryType 咨询类型 qq或者live800 1表示qq 2表示live800
+     */
+    getGacookiesTrack:function(options){
+        try{
+            var _options=options || {};
+            var nowCval=_options.userId;
+            var explorer = window.navigator.userAgent;
+            var deviceId = _options.deviceId || "";
+            var tracker ="";
+            /**
+             * ga追踪异常继续执行
+             */
+            try{
+                tracker = _gat._getTrackerByName();
+            }catch(e){
+
+            }
+            var linkerUrl = "";
+            var gacookiesTrack = "";
+            var gaData = "";
+            if(!common.isBlank(tracker)){
+                linkerUrl =tracker._getLinkerUrl('https://funds.gwfx.com/LoginForex');
+                linkerUrl= linkerUrl.substring(linkerUrl.indexOf("?"),linkerUrl.length);
+                linkerUrl=linkerUrl.substring(linkerUrl.indexOf("__utmz"));
+                linkerUrl=linkerUrl.substring(0,linkerUrl.indexOf("&"));
+                gacookiesTrack = linkerUrl;
+                /**
+                 *解析ga代码
+                 */
+                gaData = chatAnalyze.dealGaNew(gacookiesTrack);
+                var obj = JSON.parse(gaData);
+                chatAnalyze.utmStore.utmctr = obj.utmctr || "(direct)";
+                chatAnalyze.utmStore.utmccn = obj.utmccn || "(direct)";
+                chatAnalyze.utmStore.utmcct = obj.utmcct || "";
+                chatAnalyze.utmStore.utmcmd = obj.utmcmd || "(none)";
+                chatAnalyze.utmStore.utmcsr = obj.utmcsr || "(direct)";
+            }
+
+            /**
+             *操作类型 1：上线 、2：公聊 、3：注册、4：登录、5:退出 、6:下线、7:视频 8：私聊
+             */
+            var operationType = _options.operationType;
+
+
+            var userType = _options.userType || "";
+
+            //获取ip和sessionId
+            var sessionId = _options.sessionId;
+            var data = null;
+            //标识是手机还是pc访问，0和空代表pc访问，1代表手机访问（默认为0）
+            var platformType = _options.platformType;
+            var myDate = new Date();
+            var referrer = document.referrer;
+            var browser = navigator.userAgent || "";
+            var _maq = _maq || [];
+            var eventCategory = _options.eventCategory || "";
+            var eventAction = _options.eventAction || "";
+            var eventLabel = _options.eventLabel || "";
+
+            var href = chatAnalyze.localHref || "";
+            //session->
+            _maq.push(['_setSessionId',sessionId]);
+            //事业部-->
+            _maq.push(['_setBusinessPlatform', '2']);
+            //用户唯一标识（有状态）-->
+            _maq.push(['_setUserId', nowCval]);
+            //平台版本-->
+            _maq.push(['_setPlatformVersion', 'V2.1.1']);
+            //用户标识-->
+            _maq.push(['_setDeviceId', deviceId]);
+            //事件类型-->
+            _maq.push(['_setOperationType', operationType]);
+            //业务平台-->
+            _maq.push(['_setPlatformName', 'PM直播间']);
+            _maq.push(['_setPlatformType', platformType]);
+            _maq.push(['_setlogType', '2']);
+            _maq.push(['_setUrl',href]);
+            _maq.push(['_setBrowser',browser]);
+            _maq.push(['_setPrevUrl',referrer]);
+            _maq.push(['_setUtmctr',_options.utmctr]);
+            _maq.push(['_setUtmccn',_options.utmccn]);
+            _maq.push(['_setUtmcct',_options.utmcct]);
+            _maq.push(['_setUtmcmd',_options.utmcmd]);
+            _maq.push(['_setUtmcsr',_options.utmcsr]);
+            _maq.push(['_setUtmctr2',_options.utmctr2 || "(direct)"]);
+            _maq.push(['_setUtmccn2',_options.utmccn2 || "(direct)"]);
+            _maq.push(['_setUtmcct2',_options.utmcct2 || ""]);
+            _maq.push(['_setUtmcmd2',_options.utmcmd2 || "(none)"]);
+            _maq.push(['_setUtmcsr2',_options.utmcsr2 || "(direct)"]);
+            _maq.push(['_setEventCategory',eventCategory]);
+            _maq.push(['_setEventAction',eventAction]);
+            _maq.push(['_setEventLabel',eventLabel]);
+            _maq.push(['_setUserType',userType]);
+            _maq.push(['_setUserTel',_options.userTel || ""]);
+            _maq.push(['_setRoomId',_options.roomId || ""]);
+            _maq.push(['_setUserName',_options.userName || ""]);
+            _maq.push(['_setRoomName',_options.roomName || ""]);
+            _maq.push(['_setUserType',_options.userType || ""]);
+            _maq.push(['_setTouristId',_options.touristId || ""]);
+            _maq.push(['_setNickName',_options.nickName || ""]);
+            _maq.push(['_setEmail',_options.email || ""]);
+            _maq.push(['_setOperateEntrance',_options.operateEntrance || ""]);
+            _maq.push(['_setCourseName',_options.courseName || ""]);
+            _maq.push(['_setCourseId',_options.courseId || ""]);
+            _maq.push(['_setTeacherId',_options.teacherId || ""]);
+            _maq.push(['_setTeacherName',_options.teacherName || ""]);
+            _maq.push(['_setTradingAccount',_options.tradingAccount || ""]);
+            _maq.push(['_setVideoId',_options.videoId || ""]);
+            _maq.push(['_setVideoName',_options.videoName || ""]);
+            _maq.push(['_setUserSource',_options.userSource || ""]);
+            console.log("========="+_maq);
+            setGWAnalysisParams(_maq);
+        }
+        catch(e){
+
         }
     },
     /**
@@ -341,7 +417,6 @@ var chatAnalyze = {
         try {
             if (href.indexOf("?") != -1) {
                 hrefSplit = href.split("?")[1];
-                console.log("href=" + href + ";hrefSplit=" + hrefSplit);
             }
         } catch (e) {
             console.log("send hrefSplit fail!" + e);
