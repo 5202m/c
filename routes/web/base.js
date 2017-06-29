@@ -575,7 +575,7 @@ router.get('/getMobileVerifyCode', function(req, res) {
                     res.json(result);
                 }
 
-            });
+            }).catch(logger.error.bind(logger));
     }
 });
 /**
@@ -892,7 +892,7 @@ router.post('/login', function(req, res) {
                             groupType: userSession.groupType
                         }, 1, function(loginRes) {});
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         //userId自动登录
@@ -1440,7 +1440,7 @@ router.post('/resetPwd', function(req, res) {
                         }
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 2) {
         if (!userSession || common.isBlank(userSession.groupType)) {
@@ -1451,20 +1451,15 @@ router.post('/resetPwd', function(req, res) {
             res.json({ isOK: false, msg: '手机验证码不能为空！' });
         } else {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
-                userSession.groupType + "_resetPWD", params.verifyCode,
-                function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
-                            res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                        } else {
-                            res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                        }
+                    userSession.groupType + "_resetPWD", params.verifyCode)
+                .then((chkCodeRes) => {
+                    if (chkCodeRes !== true) {
+                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
                         res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 3) {
         if (!userSession) {
@@ -1489,7 +1484,7 @@ router.post('/resetPwd', function(req, res) {
                         result.msg = result.error.errmsg;
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         res.json({ isOK: false, msg: '参数错误！' });
