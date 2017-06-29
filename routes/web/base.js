@@ -203,6 +203,89 @@ router.get('/', function(req, res) {
                 }
             });
         return;
+    }else if (appToken && options.platform && options.platform == 'appgts2') {//gts2单点登录
+        targetGType = getGroupType(req, false);
+        let params = {
+            clientId: config.appAutoLogin.clientId,
+            token: appToken,
+            remoteIp: common.getClientIp(req),
+            timestamp: common.formatDate(new Date(), 'yyyyMMddHHmmssSSS')
+        }
+        params.sign = common.getMD5(
+            'clientId=' + params.clientId + '&token=' + appToken + '&remoteIp=' +
+            params.remoteIp + '&timestamp=' + params.timestamp + '&key=' +
+            config.appAutoLogin.rgsKey);
+        request.post({ url: config.appAutoLogin.rgsUrl, form: params },
+            function(error, response, tmpData) {
+                if (error) {
+                    logger.error("rgs validate->error" + error);
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+                logger.info("rgs validate==>SUCCESS" + JSON.stringify(tmpData));
+                tmpData = typeof tmpData == 'string' ? JSON.parse(tmpData) : tmpData;
+                if (tmpData && tmpData.code == 'success') {
+                    try {
+                        let gtsId = tmpData.result;
+                        var userPhone = null;
+                        var accountNo = null;
+                        //获取GST2客户资料
+                        apiService.getUserMobile(params, gtsId).then(data => {
+                            logger.info("getUserMobile==>SUCCESS" + JSON.stringify(data));
+                            userPhone = data.mobilePhone;
+                            var accList = data.accountInfoList;
+                            var clientGroupTmp = constant.clientGroup.register;
+                            if (accList && accList.length > 0) {
+                                clientGroupTmp = constant.clientGroup.notActive;
+                                for (var k in accList) {
+                                    acc = accList[k];
+                                    accountNo = acc.accountNo;
+                                    if (acc.activateTime) {
+                                        clientGroupTmp = constant.clientGroup.active;
+                                        break;
+                                    }
+                                }
+                            }
+                            var userInfo = {
+                                mobilePhone: userPhone,
+                                ip: params.remoteIp,
+                                groupType: targetGType,
+                                accountNo: accountNo,
+                                clientGroup: clientGroupTmp
+                            };
+                            studioService.checkMemberAndSave(userInfo, function(result) {
+                                logger.info("checkMemberAndSave==>SUCCESS" + JSON.stringify(result));
+                                studioService.login({ userId: result.userId, groupType: targetGType }, 2, function(loginRes) {
+                                    if (loginRes.isOK) {
+                                        logger.info("auto login==>SUCCESS" + JSON.stringify(loginRes));
+                                        loginRes.userInfo.isLogin = true;
+                                        req.session.studioUserInfo = loginRes.userInfo;
+                                        req.session.studioUserInfo.clientGroup = loginRes.userInfo.clientGroup;
+                                        req.session.studioUserInfo.firstLogin = true;
+                                    } else {
+                                        logger.info("auto login==>fail" + JSON.stringify(loginRes));
+                                        req.session.studioUserInfo = {
+                                            isLogin: false,
+                                            clientGroup: constant.clientGroup.visitor,
+                                            userType: constant.roleUserType.visitor,
+                                            mobilePhone: null,
+                                            userId: result.userId
+                                        };
+                                    }
+                                    logger.info("req.session.studioUserInfo:" + JSON.stringify(loginRes));
+                                    res.redirect('/');
+                                    return;
+                                });
+                            });
+                        });
+                    } catch (e) {
+                        logger.error("rgs validate->error" + e);
+                        res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                    }
+                } else {
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+            });
+        return;
     } else if (chatUser && chatUser.isLogin) {
         clientGroup = chatUser.clientGroup || constant.clientGroup.register;
     } else {
@@ -288,11 +371,11 @@ router.get('/', function(req, res) {
 
 //转到页面
 function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
-    res) {
+                      res) {
     let isGetSyllabus = (!isMobile || (isMobile && common.isValid(groupId)));
     studioService.getIndexLoadData(
-            chatUser, groupId, true,
-            isGetSyllabus, chatUser.isLogin)
+        chatUser, groupId, true,
+        isGetSyllabus, chatUser.isLogin)
         .then(data => {
             if (chatUser.isLogin) {
                 //每次刷新，从后台数据库重新获取最新客户信息后更新session，应用于升级和修改昵称等
@@ -495,7 +578,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 return;
             }
             var isThirdUsed = fromPlatform && common.containSplitStr(
-                config.studioThirdUsed.platfrom, fromPlatform);
+                    config.studioThirdUsed.platfrom, fromPlatform);
             if (isMobile) {
                 /*if(groupId){
                  res.render(common.renderPath(req,constant.tempPlatform.mb,"room"),viewDataObj);
@@ -1066,7 +1149,7 @@ router.get('/getArticleList', function(req, res) {
                     var detailInfo = row.detailList && row.detailList[0];
                     if (!common.containSplitStr(ids, row._id)) {
                         if ((detailInfo.tag == 'shout_single' || detailInfo.tag ==
-                                'trading_strategy' || detailInfo.tag == 'resting_order')) {
+                            'trading_strategy' || detailInfo.tag == 'resting_order')) {
                             var remark = JSON.parse(detailInfo.remark),
                                 remarkRow = null;
                             for (var j in remark) {
@@ -1269,7 +1352,7 @@ router.post('/modifyName', function(req, res) {
         res.json({ isOK: false, msg: '昵称不能为空！' });
     } else {
         userService.modifyNickname(userInfo.mobilePhone, getGroupType(req),
-                nickname)
+            nickname)
             .then(result => {
                 if (result.isOK) {
                     req.session.studioUserInfo.nickname = nickname;
@@ -1318,7 +1401,7 @@ router.post('/reg', function(req, res) {
     } else {
         //手机号+验证码登陆
         baseApiService.checkMobileVerifyCode(params.mobilePhone,
-                userSession.groupType + "_reg", params.verifyCode)
+            userSession.groupType + "_reg", params.verifyCode)
             .then((chkCodeRes) => {
                 if (chkCodeRes === true) {
                     //验证码通过校验
@@ -1364,7 +1447,7 @@ router.post('/reg', function(req, res) {
                                             clientGroup: userInfo.clientGroup,
                                             ip: userInfo.ip,
                                             nickName: (userSessionInfo.nickname ||
-                                                params.nickname),
+                                            params.nickname),
                                             platform: params.platform || '',
                                             userAgent: req.headers["user-agent"],
                                             groupType: userInfo.groupType,
@@ -1391,14 +1474,14 @@ router.post('/reg', function(req, res) {
                     res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                 }
             }).catch(chkCodeRes => {
-                if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                    "1007") {
-                    res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                } else {
-                    res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                }
-                return;
-            });
+            if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
+                "1007") {
+                res.json({ isOK: false, msg: chkCodeRes.errmsg });
+            } else {
+                res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
+            }
+            return;
+        });
     }
 });
 
@@ -1674,8 +1757,8 @@ router.post('/setUserPraise', function(req, res) {
 
 /**
  * 设置点赞
- 
-router.post('/setUserPraise', function(req, res) {
+
+ router.post('/setUserPraise', function(req, res) {
     var clientId = req.body.clientId,
         praiseId = req.body.praiseId;
     if (common.isBlank(clientId) || common.isBlank(praiseId)) {
@@ -2062,16 +2145,16 @@ router.post('/setTradePraise', function(req, res) {
     } else {
         params.fromPlatform = getGroupType(req);
         /*baseApiService.checkChatPraise(params.clientId, params.praiseId,
-            fromPlatform,
-            function(isOK) {
-                if (isOK) {*/
+         fromPlatform,
+         function(isOK) {
+         if (isOK) {*/
         showTradeService.setShowTradePraise(params, function(result) {
             res.json(result);
         });
         /*} else {
-                    res.json({ isOK: isOK });
-                }
-            });*/
+         res.json({ isOK: isOK });
+         }
+         });*/
     }
 });
 
@@ -2724,7 +2807,7 @@ router.post('/getRoomList', function(req, res) {
     let chatUser = req.session.studioUserInfo,
         isMobile = common.isMobile(req),
         clientGroup = chatUser && chatUser.isLogin ? chatUser.clientGroup :
-        constant.clientGroup.visitor,
+            constant.clientGroup.visitor,
         isVisitor = (constant.clientGroup.visitor == clientGroup);
     let viewDataObj = {},
         newStudioList = [],
@@ -2807,7 +2890,7 @@ router.post('/getRoomList', function(req, res) {
                         } else if (ruleRow.type == 'login_time_set') {
                             if (rowTmp.isCurr) {
                                 var periodDate = common.isBlank(
-                                        ruleRow.periodDate) ? "" :
+                                    ruleRow.periodDate) ? "" :
                                     JSON.parse(ruleRow.periodDate);
                                 viewDataObj.lgBoxTipInfo = JSON.stringify({
                                     type: ruleRow.type,
@@ -2840,7 +2923,7 @@ router.post('/getRoomList', function(req, res) {
                             viewDataObj.syllabusData = JSON.stringify({
                                 courseType: syResult.courseType,
                                 studioLink: (common.isBlank(
-                                        syResult.studioLink) ? "" :
+                                    syResult.studioLink) ? "" :
                                     JSON.parse(syResult.studioLink)),
                                 courses: (common.isBlank(syResult.courses) ?
                                     "" :
@@ -2987,7 +3070,7 @@ router.post('/pmLogin', function(req, res) {
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
     } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
+        userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
@@ -3067,7 +3150,7 @@ router.post('/pmLogin', function(req, res) {
  * @param clientStoreId
  */
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
-    clientStoreId, clientGroup, joinDate, callback) {
+                       clientStoreId, clientGroup, joinDate, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
         ip: common.getClientIp(req),
@@ -3307,9 +3390,9 @@ router.get('/getRoomOnlineList', function(req, res) {
         .then(data => {
             res.json(data);
         }).catch(e => {
-            logger.error("getRoomOnlineList Error:", e);
-            res.json(null);
-        });
+        logger.error("getRoomOnlineList Error:", e);
+        res.json(null);
+    });
 });
 
 router.get('/loadMsg', function(req, res) {
@@ -3318,9 +3401,9 @@ router.get('/loadMsg', function(req, res) {
         .then(data => {
             res.json(data);
         }).catch(e => {
-            logger.error("loadMsg Error:", e);
-            res.json(null);
-        });
+        logger.error("loadMsg Error:", e);
+        res.json(null);
+    });
 });
 
 let apiAuth = new APIAuth(config.apiAuthForWeb.appId, config.apiAuthForWeb.appSecret);
@@ -3329,9 +3412,9 @@ router.get('/getToken', (req, res) => {
         .then(token => {
             res.json({ isOK: true, token: token, secret: config.apiAuthForWeb.appSecret });
         }).catch(e => {
-            logger.error(e);
-            res.json({ isOK: false, msg: '参数错误' });
-        });
+        logger.error(e);
+        res.json({ isOK: false, msg: '参数错误' });
+    });
 })
 
 module.exports = router;
