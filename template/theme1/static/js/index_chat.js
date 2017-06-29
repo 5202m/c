@@ -1083,7 +1083,13 @@ var chat = {
         });
         chat.setWhContent(sendObj, true, false); //直接把数据填入内容栏
         txtObj.html(""); //清空内容
-        chatAnalyze.setUTM(false, $.extend({ operationType: 8, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+        try{
+            chatAnalyze.setUTM(false, $.extend({ operationType: 8, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+        }
+        catch(e){
+            console.log("Set pmlogin UTM fail!"+e);
+        }
+
     },
     /**
      * 设置私聊访客
