@@ -486,6 +486,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
             viewDataObj.isRedPacket = config.isRedPacket;
+            viewDataObj.isShowTrade = config.isShowTrade;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();

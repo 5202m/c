@@ -60,7 +60,8 @@ ShowTrade.setShowTradeList = function(){
             row.praise||0,
             row._id,
             row.user.avatar,
-            row.tradeImg
+            row.tradeImg,
+            (row.isAccord == 1) ? '<span class="starIcon"></span>' :　"&nbsp;"
         ));
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');
