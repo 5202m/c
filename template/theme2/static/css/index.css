@@ -3498,6 +3498,14 @@ article.content_w.bgeee {
     vertical-align: bottom
 }
 
+.sdan-con .item-con .starIcon {
+    float: right;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    background: url(../img/img_css.png) no-repeat -87px -501px;
+}
+
 .sdan-con .item-con .c-time {
     color: #9898a1;
     font-size: 12px
