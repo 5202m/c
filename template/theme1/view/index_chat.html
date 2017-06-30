@@ -39,13 +39,15 @@
                 <div class="livebrief_list">
                     <div class="scrollbox">
                         <div id="textlivePanel">
-                            <div class="advertise-cbox">
-                                <a href="javascript:void(0)" id="redPacket_chat"><img src="/theme1/img/new-red-im.jpg" width="100%" alt="一大波5-500元红包大派送" /></a>
-                            </div>
-                            <div class="livebrief" id="financeDataAndReview">
-                                <div class="calendabox financeData"></div>
-                                <div class="calendabox comment"></div>
-                            </div>
+                            <%if(isRedPacket) {%>
+                                <div class="advertise-cbox">
+                                    <a href="javascript:void(0)" id="redPacket_chat"><img src="/theme1/img/new-red-im.jpg" width="100%" alt="一大波5-500元红包大派送" /></a>
+                                </div>
+                                <%}%>
+                                    <div class="livebrief" id="financeDataAndReview">
+                                        <div class="calendabox financeData"></div>
+                                        <div class="calendabox comment"></div>
+                                    </div>
                         </div>
                         <a id="textliveMore" href="javascript:void(0);" class="morebtn" style="">加载更多</a>
                     </div>
