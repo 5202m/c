@@ -320,6 +320,9 @@ var Tool = {
             this.config.apiUrl = apiUrl;
             this.setEvent();
             this.config.init = true;
+            setTimeout(function () {
+                $(".shaidan-conbox .del-btn").trigger('click');
+            },5000);
         },
 
         setHC: function(c_name, value, expiredays) {
@@ -496,6 +499,32 @@ var Tool = {
                     });
                 }
             });
+
+            //晒单活动事件
+            $(".rule-btn").click(function(){
+                $(".shaidan-rule-con").slideDown();
+            });
+            $(".shaidan-rule-con .del-btn").click(function(){
+                $(".shaidan-rule-con").slideUp();
+            });
+            $(".shaidan-conbox .del-btn").click(function(){
+                $(".shadow").hide();
+                $(".shaidan-conbox").slideUp();
+            });
+            $('.shaidan-ban .shaidan-btn').on('click',function () {
+                $(".shaidan-conbox .del-btn").trigger('click');
+                if(Data.userInfo.isLogin) {
+                    ShowTradeAdd.load();
+                }else{
+                    Data.isToShowTrade = true;
+                    Login.load();
+                }
+            });
+            $('#showTradeDiv').on('click',function () {
+                $(".shaidan-conbox").slideDown();
+                $('.shadow').show();
+            });
+
         },
 
         /** 查询用户剩余抽奖次数 */

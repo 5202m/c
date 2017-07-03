@@ -342,6 +342,8 @@ Login.doLogin = function() {
                 Store.store(key, keyVal);
                 if (Login.groupId) {
                     Trains.changeRoom(Login.groupId);
+                }else if(Data.isToShowTrade){
+                    ShowTradeAdd.load();
                 } else {
                     Container.back();
                 }

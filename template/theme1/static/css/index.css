@@ -1836,3 +1836,5 @@ body{ background:#dadfe6;font-family:'Microsoft YaHei','Microsoft JhengHei','Sim
     50%{ color: #2587cb }
     100%{ color: #bb8f32 }
 }
+
+.sd_list .starIcon{ float: right; display: inline-block; margin: 4px 0 -28px; width: 17px; height: 17px; background: url(../img/icons.png) no-repeat 0 -353px; }

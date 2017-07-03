@@ -21,8 +21,7 @@ var visitorService = require('../../service/visitorService'); //引入visitorSer
 var logger = require('../../resources/logConf').getLogger('base'); //引入log4js
 var chatPraiseService = require('../../service/chatPraiseService'); //引入chatPraiseService
 var showTradeService = require('../../service/showTradeService'); //引入chatPraiseService
-var chatSubscribeTypeService = require(
-    '../../service/chatSubscribeTypeService'); //引入chatSubscribeTypeService
+var chatSubscribeTypeService = require('../../service/chatSubscribeTypeService'); //引入chatSubscribeTypeService
 var chatSubscribeService = require('../../service/chatSubscribeService'); //引入chatSubscribeService
 var chatPointsService = require('../../service/chatPointsService'); //引入chatPointsService
 var clientTrainService = require('../../service/clientTrainService'); //引入chatTeacherService
@@ -487,6 +486,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
             viewDataObj.isRedPacket = config.isRedPacket;
+            viewDataObj.isShowTrade = config.isShowTrade;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();

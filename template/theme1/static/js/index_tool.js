@@ -252,6 +252,9 @@ var indexTool = {
         init: function() {
             this.setEvent();
             this.config.init = true;
+            setTimeout(function () {
+                $(".shaidan-conbox .del-btn").trigger('click');
+            },5000);
         },
 
         setHC: function(c_name, value, expiredays) {
@@ -307,13 +310,15 @@ var indexTool = {
 
             setInterval(indexTool.RedPacket.lightSwitch, 300);
 
-            $("#redPacket_header,#redPacket_chat").bind("click", function() {
-                if (indexJS.userInfo.isLogin) {
+            $("#redPacket_header,#redPacket_chat,#showTrade_header").bind("click", function() {
+/*                if (indexJS.userInfo.isLogin) {
                     console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", indexJS.userInfo.createDate);
                     indexTool.RedPacket.queryLastRedPackageRob();
                 } else {
                     indexTool.RedPacket.showPop("noLogin");
-                }
+                }*/
+                $(".shaidan-conbox").slideDown();
+                $('.blackbg').show();
             });
 
             /**
@@ -374,6 +379,23 @@ var indexTool = {
              */
             $("#resultDel").click(function() {
                 $(this).parent().fadeOut(600);
+            });
+
+            //晒单活动事件
+            //关闭事件
+            $(".shaidan-conbox .del-btn").click(function(){
+                $(".blackbg").hide();
+                $(".shaidan-conbox").slideUp();
+            });
+            //晒单事件
+            $('.shaidan-ban .shaidan-btn').bind('click',function () {
+                $(".shaidan-conbox .del-btn").trigger('click');
+                if(indexJS.userInfo.isLogin){
+                    $('#wantShowTrade').trigger('click');
+                }else{
+                    $('#login_a').trigger('click');
+                }
+
             });
 
         },

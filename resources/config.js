@@ -35,7 +35,8 @@ var config = {
         }
     }, //UTM系统信息
     isDevTest: true, //是否开发或测试环境
-    isRedPacket: true, //是否红包活动
+    isRedPacket: false, //是否红包活动
+    isShowTrade : true,//晒单活动
     cjTrainRoom: 'studio_57', //炒金培训班放间
     sessionConfig: { key: 'connect.sid', secret: 'pm@chat' }, //session 对应key,secret
     redisUrlObj: { host: '192.168.35.81', port: 6379 }, //链接redis缓存客户端连接

@@ -8822,3 +8822,150 @@ article.accUserCenter {
         -webkit-transform: scale(0.60)
     }
 }
+
+/* 晒单层 */
+.shaidan-rule-con{position:fixed;left:50%;top:50%;margin:-215px 0 0 -320px;width:640px;background:#fff;color:#666;border-radius:4px;z-index:102}
+.shaidan-conbox{position:fixed;left:50%;top:50%;margin:-300px 0 0 -288px;width:620px;z-index:101;font-family:"微軟正黑體"}
+.shaidan-ban{position:relative;height:320px;text-align:center;background:url(../img/redbag201706/shaid0630.png) no-repeat center top;z-index:2}
+.shaidan-ban .shaidan-btn{position:absolute;left:50%;bottom:-37px;margin-left:-152px;display:block;width:230px;height:74px;background:url(../img/redbag201706/shaidan-btn.png) no-repeat;font-size:0}
+.shadan-cbox{position:relative;left:21px;width:511px;height:240px;padding-top:50px;background:#fff;z-index:1}
+.shadan-item{padding:15px 5px}
+.shadan-prize{text-align:center;font-size:0}
+.shadan-prize li{position:relative;display:inline-block;*display:inline;*zoom:1;width:113px;padding:4px;border:solid #DCDCDC 1px}
+.shadan-pbord{padding:12px 10px 6px;border:solid #CAAC50 1px}
+.shadan-jiang{position:relative;position:absolute;top:-13px;left:50%;margin-left:-46px;width:92px;height:26px;line-height:26px;font-size:16px;color:#fff;font-weight:bold;background:#C3A139;font-style:normal;border-radius:30px}
+.jiang-f2{background:#868686}
+.jiang-f3{background:#8F5F3F}
+.hguang{position:absolute;left:-16px;top:-14px;line-height:0;display:block;width:40px;height:30px;background:url(../img/redbag201706/guan.png) no-repeat}
+
+.shadan-im{height:40px;background:url(../img/redbag201706/money.png) no-repeat center top}
+.shadan-i1{background-position:center -40px}
+.shadan-i2{background-position:center -80px}
+.shadan-i3{background-position:center -120px}
+.shadan-qian p{font-size:16px;color:#8f5f3f;font-weight:bold;line-height:1.2}
+.shadan-prize li:first-child .shadan-qian p{color:#c3a139}
+.shadan-prize li:nth-child(2) .shadan-qian p{color:#868686}
+.shadan-list{margin-top:6px;font-size:15px;padding-top:6px;border-top:solid #ccc 1px;line-height:1.2}
+
+.rule-cbox{margin-top:15px;padding-right:15px}
+.rule-btn{margin:0 auto;display:block;width:140px;line-height:36px;background:#A3A3A3;border-radius:30px;color:#fff;text-align:center;font-size:18px}
+
+.rull-hei{padding:28px 0 0 0}
+.hd-rule-list{height:284px}
+.hd-rule-list li{font-size:14px;line-height:1.6;text-align:justify}
+.del-btn{position:absolute;right:95px;top:30px;display:block;width:36px;height:36px;background:url(../img/redbag201706/del.png) no-repeat}
+.shaidan-rule-con .del-btn{right:10px;top:10px;background-image:url(../img/redbag201706/del2.png);background-size:30px auto}
+.shaidan-rule-con .zhuan-cen-rd .lay-h-fon span{color:#d23a3a}
+
+@media(max-width:641px){
+    .zhuan-rule-con,.shaidan-rule-con{width:94%;margin-left:-47%}
+    .zhuan-rulist{font-size:13px}
+    .hongb-laybox{bottom:-136px;transform:scale(0.66);-webkit-transform:scale(0.66)}
+    .hongb-cout{top:72px}
+    .new-hongb-con .new-hong-siz{font-size:15px}
+
+    .new-hongb-prize{margin-top:-350px;transform:scale(0.74);-webkit-transform:scale(0.74)}
+    .new-hongb-prize .zhuan-del-btn{bottom:-51px;transform:scale(1.2);-webkit-transform:scale(1.2)}
+    .zhuan-rule-con,.shaidan-rule-con{margin-top:-180px}
+    .zhuan-rulist{height:240px}
+
+    .shaidan-conbox{transform:scale(0.65);-webkit-transform:scale(0.65)}
+}
+
+@media(max-width:399px){
+    .popup_box{width:94%;margin-left:-47%}
+    .new-hongb-con{padding:40px 26px}
+    .new-hongb-con .new-hongb-tt .new-hb-sm{font-size:18px}
+    .hongb-laybox{bottom:-153px;transform:scale(0.62);-webkit-transform:scale(0.62)}
+
+    .new-hongb-prize{transform:scale(0.72);-webkit-transform:scale(0.72)}
+
+    .shaidan-conbox{transform:scale(0.62);-webkit-transform:scale(0.62)}
+}
+@media(max-width:359px){
+    .new-hongb-con{padding:40px 20px}
+    .hongb-laybox{bottom:-184px;transform:scale(0.54);-webkit-transform:scale(0.54)}
+
+
+    .new-hongb-con .new-hongb-tt .new-hb-bm{font-size:17px}
+    .new-hongb-con .new-hongb-tt .new-hb-mm{font-size:19px}
+
+    .new-hongb-prize{transform:scale(0.60);-webkit-transform:scale(0.60)}
+
+    .shaidan-conbox{transform:scale(0.52);-webkit-transform:scale(0.52)}
+}
+
+
+/* 晒单层 */
+.shaidan-rule-con{position:fixed;left:50%;top:50%;margin:-215px 0 0 -320px;width:640px;background:#fff;color:#666;border-radius:4px;z-index:102}
+.shaidan-conbox{position:fixed;left:50%;top:50%;margin:-350px 0 0 -288px;width:620px;z-index:101;font-family:"微軟正黑體"}
+.shaidan-ban{position:relative;height:320px;text-align:center;background:url(../img/redbag201706/shaid0630.png) no-repeat center top;z-index:2}
+.shaidan-ban .shaidan-btn{position:absolute;left:50%;bottom:-37px;margin-left:-152px;display:block;width:230px;height:74px;background:url(../img/redbag201706/shaidan-btn.png) no-repeat;font-size:0}
+.shadan-cbox{position:relative;left:21px;width:511px;height:334px;padding-top:45px;background:#fff;z-index:1}
+.shadan-item{padding:15px 5px}
+.shadan-prize{text-align:center;font-size:0}
+.shadan-prize li{position:relative;display:inline-block;*display:inline;*zoom:1;width:113px;padding:4px;border:solid #DCDCDC 1px}
+.shadan-pbord{padding:12px 10px 6px;border:solid #CAAC50 1px}
+.shadan-jiang{position:relative;position:absolute;top:-13px;left:50%;margin-left:-46px;width:92px;height:26px;line-height:26px;font-size:16px;color:#fff;font-weight:bold;background:#C3A139;font-style:normal;border-radius:30px}
+.jiang-f2{background:#868686}
+.jiang-f3{background:#8F5F3F}
+.hguang{position:absolute;left:-16px;top:-14px;line-height:0;display:block;width:40px;height:30px;background:url(../img/redbag201706/guan.png) no-repeat}
+.shadan-im{height:80px;background:url(../img/redbag201706/money.png) no-repeat center top}
+.shadan-i1{background-position:center -80px}
+.shadan-i2{background-position:center -160px}
+.shadan-i3{background-position:center -240px}
+.shadan-qian p{font-size:16px;color:#8f5f3f;font-weight:bold;line-height:1.2;white-space:nowrap;letter-spacing:-0.1em}
+.shadan-prize li:first-child .shadan-qian p{color:#c3a139}
+.shadan-prize li:nth-child(2) .shadan-qian p{color:#868686}
+.shadan-list{margin-top:6px;font-size:15px;padding-top:6px;border-top:solid #ccc 1px;line-height:1.2}
+.tishi-text{padding:0 15px 15px;font-size:14px}
+.tishi-text span{color:#c8310c}
+.rule-cbox{margin-top:15px;padding-right:15px}
+.rule-btn{margin:0 auto;display:block;width:140px;line-height:36px;background:#A3A3A3;border-radius:30px;color:#fff;text-align:center;font-size:18px}
+.rull-hei{padding:28px 15px 0 0}
+.hd-rule-list{height:284px}
+.hd-rule-list li{font-size:14px;line-height:1.6;text-align:justify}
+.del-btn{position:absolute;right:95px;top:30px;display:block;width:36px;height:36px;background:url(../img/redbag201706/del.png) no-repeat}
+.shaidan-rule-con .del-btn{right:10px;top:10px;background-image:url(../img/redbag201706/del2.png);background-size:30px auto}
+.shaidan-rule-con .zhuan-cen-rd .lay-h-fon span{color:#d23a3a}
+.mCS-dark-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{background:#ddd}
+
+@media(max-width:641px){
+    .zhuan-rule-con,.shaidan-rule-con{width:94%;margin-left:-47%}
+    .zhuan-rulist{font-size:13px}
+    .hongb-laybox{bottom:-136px;transform:scale(0.66);-webkit-transform:scale(0.66)}
+    .hongb-cout{top:72px}
+    .new-hongb-con .new-hong-siz{font-size:15px}
+
+    .new-hongb-prize{margin-top:-350px;transform:scale(0.74);-webkit-transform:scale(0.74)}
+    .new-hongb-prize .zhuan-del-btn{bottom:-51px;transform:scale(1.2);-webkit-transform:scale(1.2)}
+    .zhuan-rule-con,.shaidan-rule-con{margin-top:-180px}
+    .zhuan-rulist{height:240px}
+
+    .shaidan-conbox{transform:scale(0.65);-webkit-transform:scale(0.65)}
+}
+
+@media(max-width:399px){
+    .popup_box{width:94%;margin-left:-47%}
+    .new-hongb-con{padding:40px 26px}
+    .new-hongb-con .new-hongb-tt .new-hb-sm{font-size:18px}
+    .hongb-laybox{bottom:-153px;transform:scale(0.62);-webkit-transform:scale(0.62)}
+
+    .new-hongb-prize{transform:scale(0.72);-webkit-transform:scale(0.72)}
+
+    .shaidan-conbox{transform:scale(0.62);-webkit-transform:scale(0.62)}
+}
+@media(max-width:359px){
+    .new-hongb-con{padding:40px 20px}
+    .hongb-laybox{bottom:-184px;transform:scale(0.54);-webkit-transform:scale(0.54)}
+
+
+    .new-hongb-con .new-hongb-tt .new-hb-bm{font-size:17px}
+    .new-hongb-con .new-hongb-tt .new-hb-mm{font-size:19px}
+
+    .new-hongb-prize{transform:scale(0.60);-webkit-transform:scale(0.60)}
+
+    .shaidan-conbox{transform:scale(0.52);-webkit-transform:scale(0.52)}
+}
+
+
