@@ -57,10 +57,13 @@ var constant = {
     },
     gwApiInvoker: { //公司内存restful接口对应的invoker
         fx_website: { key: 'fx_website', value: '2ac168bbb45d396a3315d95aa4215191' }, //外汇
-        fx_website_demo: {
-            key: 'fx_website_demo',
-            value: '06639931e8e5f56c3572956f014882ba'
-        }, //外汇
+        pm_website: { key: 'pm_website', value: '591f9b6af9aa13b690ac1085920b7af7' }, // PM
+        fx_website_demo: { key: 'fx_website_demo', value: '06639931e8e5f56c3572956f014882ba'}, //外汇
+        pm_website_demo: { key: 'pm_website_demo', value: '6482f582bcfcf03acc6388db7e8b6256'}, //PM
+    },
+    companyId:{
+      fw:1,
+      pm:3
     },
     chatGrout: {
         dict_chat_group_type: 'chat_group_type' //组类别

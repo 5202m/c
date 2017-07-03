@@ -44,7 +44,7 @@
             <script type="text/javascript" src="/base/lib/store.min.js"></script>
             <!-- 自动登录 begin -->
             <script type="text/javascript" src="/theme1/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-            <script src="http://static.geetest.com/static/tools/gt.js"></script>
+            <script src="//static.geetest.com/static/tools/gt.js"></script>
             <script>
                 LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
                 LoginAuto.init();

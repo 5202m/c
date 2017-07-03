@@ -21,6 +21,7 @@ var visitorService = require('../../service/visitorService'); //引入visitorSer
 var logger = require('../../resources/logConf').getLogger('base'); //引入log4js
 var chatPraiseService = require('../../service/chatPraiseService'); //引入chatPraiseService
 var showTradeService = require('../../service/showTradeService'); //引入chatPraiseService
+
 var chatSubscribeTypeService = require('../../service/chatSubscribeTypeService'); //引入chatSubscribeTypeService
 var chatSubscribeService = require('../../service/chatSubscribeService'); //引入chatSubscribeService
 var chatPointsService = require('../../service/chatPointsService'); //引入chatPointsService
@@ -193,6 +194,89 @@ router.get('/', function(req, res) {
                                             });
                                     });
                             });
+                    } catch (e) {
+                        logger.error("rgs validate->error" + e);
+                        res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                    }
+                } else {
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+            });
+        return;
+    }else if (appToken && options.platform && options.platform == 'appgts2') {//gts2单点登录
+        targetGType = getGroupType(req, false);
+        let params = {
+            clientId: config.appAutoLogin.clientId,
+            token: appToken,
+            remoteIp: common.getClientIp(req),
+            timestamp: common.formatDate(new Date(), 'yyyyMMddHHmmssSSS')
+        }
+        params.sign = common.getMD5(
+            'clientId=' + params.clientId + '&token=' + appToken + '&remoteIp=' +
+            params.remoteIp + '&timestamp=' + params.timestamp + '&key=' +
+            config.appAutoLogin.rgsKey);
+        request.post({ url: config.appAutoLogin.rgsUrl, form: params },
+            function(error, response, tmpData) {
+                if (error) {
+                    logger.error("rgs validate->error" + error);
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+                logger.info("rgs validate==>SUCCESS" + JSON.stringify(tmpData));
+                tmpData = typeof tmpData == 'string' ? JSON.parse(tmpData) : tmpData;
+                if (tmpData && tmpData.code == 'success') {
+                    try {
+                        let gtsId = tmpData.result;
+                        var userPhone = null;
+                        var accountNo = null;
+                        //获取GST2客户资料
+                        apiService.getUserMobile(params, gtsId).then(data => {
+                            logger.info("getUserMobile==>SUCCESS" + JSON.stringify(data));
+                            userPhone = data.mobilePhone;
+                            var accList = data.accountInfoList;
+                            var clientGroupTmp = constant.clientGroup.register;
+                            if (accList && accList.length > 0) {
+                                clientGroupTmp = constant.clientGroup.notActive;
+                                for (var k in accList) {
+                                    acc = accList[k];
+                                    accountNo = acc.accountNo;
+                                    if (acc.activateTime) {
+                                        clientGroupTmp = constant.clientGroup.active;
+                                        break;
+                                    }
+                                }
+                            }
+                            var userInfo = {
+                                mobilePhone: userPhone,
+                                ip: params.remoteIp,
+                                groupType: targetGType,
+                                accountNo: accountNo,
+                                clientGroup: clientGroupTmp
+                            };
+                            studioService.checkMemberAndSave(userInfo, function(result) {
+                                logger.info("checkMemberAndSave==>SUCCESS" + JSON.stringify(result));
+                                studioService.login({ userId: result.userId, groupType: targetGType }, 2, function(loginRes) {
+                                    if (loginRes.isOK) {
+                                        logger.info("auto login==>SUCCESS" + JSON.stringify(loginRes));
+                                        loginRes.userInfo.isLogin = true;
+                                        req.session.studioUserInfo = loginRes.userInfo;
+                                        req.session.studioUserInfo.clientGroup = loginRes.userInfo.clientGroup;
+                                        req.session.studioUserInfo.firstLogin = true;
+                                    } else {
+                                        logger.info("auto login==>fail" + JSON.stringify(loginRes));
+                                        req.session.studioUserInfo = {
+                                            isLogin: false,
+                                            clientGroup: constant.clientGroup.visitor,
+                                            userType: constant.roleUserType.visitor,
+                                            mobilePhone: null,
+                                            userId: result.userId
+                                        };
+                                    }
+                                    logger.info("req.session.studioUserInfo:" + JSON.stringify(loginRes));
+                                    res.redirect('/');
+                                    return;
+                                });
+                            });
+                        });
                     } catch (e) {
                         logger.error("rgs validate->error" + e);
                         res.redirect(getGroupType(req, true) + getRredirctUrl(req));
@@ -574,7 +658,6 @@ router.get('/getMobileVerifyCode', function(req, res) {
                     delete result.data;
                     res.json(result);
                 }
-
             }).catch(logger.error.bind(logger));
     }
 });
