@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'redbag-figure';
     src: url('../font/din1451m-webfont.eot') format('eot'),
-    url('../font/din1451m-webfont.woff') format('woff'),
-    url('../font/din1451m-webfont.ttf') format('ttf');
+         url('../font/din1451m-webfont.woff') format('woff'),
+         url('../font/din1451m-webfont.ttf') format('ttf');
     font-weight: normal;
     font-style: normal;
 }
@@ -93,23 +93,23 @@
 
 @keyframes btnscale
 {
-    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
 }
 
 @-webkit-keyframes btnscale
 {
-    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
 }
 
 @-moz-keyframes btnscale
 {
-    0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-    50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-    100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
+100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
 }
 
 
@@ -232,20 +232,20 @@
 .new-hongb-method{margin:30px auto 0;width:340px;font-size:16px;color:#ffe2b1;font-weight:bold;text-align:center}
 .new-hongb-method span{color:#ffc86c}
 @keyframes cj{
-    0%{-moz-transform:translate(0px, 0)}
-    100%{transform:translate(0px,320px)}
+	0%{-moz-transform:translate(0px, 0)}
+	100%{transform:translate(0px,320px)}
 }
 @-webkit-keyframes cj{
-    0%{-webkit-transform:translate(0px,0)}
-    100%{-webkit-transform:translate(0px,320px)}
+	0%{-webkit-transform:translate(0px,0)}
+	100%{-webkit-transform:translate(0px,320px)}
 }
 @-moz-keyframes cj{
-    0%{-moz-transform:translate(0px,0)}
-    100%{-moz-transform:translate(0px,320px)}
+	0%{-moz-transform:translate(0px,0)}
+	100%{-moz-transform:translate(0px,320px)}
 }
 @-ms-keyframes cj{
-    0%{-webkit-transform:translate(0px,0)}
-    100%{-ms-transform:translate(0px,160px)}
+	0%{-webkit-transform:translate(0px,0)}
+	100%{-ms-transform:translate(0px,160px)}
 }
 .advertise-cbox{margin:0 auto 18px;max-width:728px;line-height:0}
 
@@ -281,22 +281,25 @@
 .hd-rule-list{height:60px}
 .hd-rule-list li{font-size:13px;line-height:1.4;text-align:justify}
 .del-btn{position:absolute;right:90px;top:26px;display:block;width:36px;height:36px;background:url(../img/redbag201706/del.png) no-repeat}
+@media(max-height:800px){
+	.shaidan-conbox{transform:scale(0.8);-moz-transform:scale(0.8);-ms-transform:scale(0.8);-webkit-transform:scale(0.8)}
+}
 
 
 @media(max-width: 1300px){
-    .train_ad{ padding-left: 15px; }
-    .header_redbag{ margin-left: 20px;}
+	.train_ad{ padding-left: 15px; }
+	.header_redbag{ margin-left: 20px;}
 }
 
 @media(max-width: 1260px){
-    .train_ad{ display: none; }
-    .box-header h1{ width: 150px; background-size: 100% auto }
-    .header_redbag{ margin-left: 10px; margin-top: 12px; }
-    .header_redbag .redbag_pic{ width: 40px; height: 49px; }
-    .header_redbag .rb_text{ padding-left: 35px; margin-top: 1px; }
-    .header_redbag .rb_text .timecount{ padding: 0 5px }
-    .header_redbag .timecount b{ font-size: 32px; min-width: 35px }
-    .header_redbag .rb_text .te1{padding: 0 5px; background-size: 80px auto; min-width: 80px; background-position: 5px 10px; font-size: 13px; line-height: 24px; }
+	.train_ad{ display: none; }
+	.box-header h1{ width: 150px; background-size: 100% auto }
+	.header_redbag{ margin-left: 10px; margin-top: 12px; }
+	.header_redbag .redbag_pic{ width: 40px; height: 49px; }
+	.header_redbag .rb_text{ padding-left: 35px; margin-top: 1px; }
+	.header_redbag .rb_text .timecount{ padding: 0 5px }
+	.header_redbag .timecount b{ font-size: 32px; min-width: 35px }
+	.header_redbag .rb_text .te1{padding: 0 5px; background-size: 80px auto; min-width: 80px; background-position: 5px 10px; font-size: 13px; line-height: 24px; }
 }
 
 
