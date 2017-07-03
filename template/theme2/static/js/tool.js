@@ -320,6 +320,9 @@ var Tool = {
             this.config.apiUrl = apiUrl;
             this.setEvent();
             this.config.init = true;
+            setTimeout(function () {
+                $(".shaidan-conbox .del-btn").trigger('click');
+            },5000);
         },
 
         setHC: function(c_name, value, expiredays) {
