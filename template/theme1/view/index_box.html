@@ -1037,10 +1037,13 @@
         <div class="pop_tit"><span><i class="fr"></i></span>您已经观看了<em id="pop_stTime" style="font-style: normal;">3</em>分钟，赶紧登录继续观看<span><i></i></span></div>
         <div class="hall_select">
             <div class="enteritem">
-                <!--<a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])"><i></i><span>分析师在线直播，登录收听</span></a>
-                <a href="javascript:void(0)" class="entbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])">登录继续听直播</a>-->
-                <a href="javascript:void(0)" class="ico zhuc-login-bor"><i></i><span>5-500元现金红包，100%有奖</span></a>
-                <a href="javascript:void(0)" class="entbtn zhuc-login-fon">注册领现金红包</a>
+                <%if(isRedPacket) {%>
+                    <a href="javascript:void(0)" class="ico zhuc-login-bor"><i></i><span>5-500元现金红包，100%有奖</span></a>
+                    <a href="javascript:void(0)" class="entbtn zhuc-login-fon">注册领现金红包</a>
+                    <%} else{ %>
+                        <a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])"><i></i><span>分析师实时解盘，登录收听</span></a>
+                        <a href="javascript:void(0)" class="entbtn" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_logintingZB', 'content_middle',1,true])">登录继续听课程</a>
+                        <%}%>
             </div>
             <div class="enteritem newbie">
                 <a href="javascript:void(0)" class="ico" onclick="_gaq.push(['_trackEvent', 'pmchat_studio','xsq_mianlogin', 'content_middle',1,true])"><i></i><span>新手教学专区，手把手学操作</span></a>
@@ -1689,83 +1692,83 @@
     </div>
     <%}%>
 
-<%if(isShowTrade) {%>
-<!-- 晒单层 -->
-<div class="shaidan-conbox">
-    <div class="shaidan-ban">
-        <a href="javascript://" class="del-btn"></a>
-        <a href="javascript:void(0)" class="shaidan-btn">马上晒单</a>
-    </div>
-    <div class="shadan-cbox">
-        <p class="tishi-text">活动期间，客户于交易平台平仓后，在实时解盘晒单抢楼，即可获得拍立得相机等丰富好礼，<span class="red">10000</span>元奖品等你来拿！</p>
-        <div class="shadan-item">
-            <div class="shadan-prize">
-                <ul>
-                    <li>
-                        <div class="shadan-pbord">
-                            <i class="shadan-jiang">一等奖<s class="hguang"></s></i>
-                            <div class="shadan-qian">
-                                <div class="shadan-im"></div>
-                                <p class="prize-f-fon1">1499元<br>拍立得相机</p>
-                            </div>
-                            <p class="shadan-list">第<span>168</span>楼<br>晒单用户获得</p>
+        <%if(isShowTrade) {%>
+            <!-- 晒单层 -->
+            <div class="shaidan-conbox">
+                <div class="shaidan-ban">
+                    <a href="javascript://" class="del-btn"></a>
+                    <a href="javascript:void(0)" class="shaidan-btn">马上晒单</a>
+                </div>
+                <div class="shadan-cbox">
+                    <p class="tishi-text">活动期间，客户于交易平台平仓后，在实时解盘晒单抢楼，即可获得拍立得相机等丰富好礼，<span class="red">10000</span>元奖品等你来拿！</p>
+                    <div class="shadan-item">
+                        <div class="shadan-prize">
+                            <ul>
+                                <li>
+                                    <div class="shadan-pbord">
+                                        <i class="shadan-jiang">一等奖<s class="hguang"></s></i>
+                                        <div class="shadan-qian">
+                                            <div class="shadan-im"></div>
+                                            <p class="prize-f-fon1">1499元<br>拍立得相机</p>
+                                        </div>
+                                        <p class="shadan-list">第<span>168</span>楼<br>晒单用户获得</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="shadan-pbord">
+                                        <i class="shadan-jiang jiang-f2">二等奖</i>
+                                        <div class="shadan-qian">
+                                            <div class="shadan-im shadan-i1"></div>
+                                            <p class="prize-f-fon2">100元<br>中石化加油卡</p>
+                                        </div>
+                                        <p class="shadan-list">第<span>88</span>楼<br>晒单用户获得</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="shadan-pbord">
+                                        <i class="shadan-jiang jiang-f3">三等奖</i>
+                                        <div class="shadan-qian">
+                                            <div class="shadan-im shadan-i2"></div>
+                                            <p>30元<br>手机充值卡</p>
+                                        </div>
+                                        <p class="shadan-list">第<span>18</span>楼<br>晒单用户获得</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="shadan-pbord">
+                                        <i class="shadan-jiang jiang-f3">四等奖</i>
+                                        <div class="shadan-qian shadan-i3">
+                                            <div class="shadan-im shadan-i3"></div>
+                                            <p>5元<br>微信红包</p>
+                                        </div>
+                                        <p class="shadan-list">楼数逢尾数6<br>晒单用户获得</p>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                    </li>
-                    <li>
-                        <div class="shadan-pbord">
-                            <i class="shadan-jiang jiang-f2">二等奖</i>
-                            <div class="shadan-qian">
-                                <div class="shadan-im shadan-i1"></div>
-                                <p class="prize-f-fon2">100元<br>中石化加油卡</p>
+                        <div class="rule-cbox">
+                            <h3><span>活动条款</span></h3>
+                            <div class="rull-hei">
+                                <div class="hd-rule-list mCustomScrollbar">
+                                    <ol>
+                                        <li>活动时间：2017年7月3日-2017年7月16日<br />第一期活动：参与晒单的有效订单平仓时间：7月3日06:00:00-7月8日04:44:59<br />有效晒单时间：7月3日06:00:00-7月9日23:59:59<br />第二期活动：参与晒单的有效订单平仓时间：7月10日06:00:00-7月15日04:44:59<br />有效晒单时间：　7月10日06:00:00-7月16日23:59:59</li>
+                                        <li>客户参与活动的晒单必须是在活动期间内交易平仓的订单，且每次晒单的平仓订单笔数≥2笔，且每次平仓后第一次晒单，视为有效晒单；客户同一平仓订单第二次及以上晒单或同一晒单多次刷屏，视为无效晒单，只记录客户该笔单的第一次晒单；</li>
+                                        <li>晒单楼数依次从距离活动结束时间最近的晒单开始计数，例如：第一期活动结束时间为7月9日23:59:59，客户若在7月9日23:59:59晒单成功，此客户晒单为第1楼，以此类推；</li>
+                                        <li>同一客户（同一手机号码及同一身份ID）每期有1次获奖机会；在活动期间（2期）同一客户最多2次获奖机会；若同一个用户在同一期活动中第二次获奖，则该用户第一次获奖有效，第二次获奖则视为无效，此次中奖名单将顺延至下一楼，如活动第一期，1等奖第168楼晒单客户与3等奖第18楼为同一客户，则1等奖中奖客户顺延至169楼（即第169楼获得1等奖）；</li>
+                                        <li>获奖的客户名单统一在金道贵金属实时解盘banner和金道贵金属APP推送消息中公布；</li>
+                                        <li>第一期获奖名单公布时间为7月12日10：00；第二期获奖名单公布时间为7月19日10：00；</li>
+                                        <li>实物奖品随机发放，奖品颜色不能更换，奖品寄出时间以快递揽件为准，实物奖的售后服务由其特约维修商承担；</li>
+                                        <li>现金奖励以及电子卡奖励，将统一在7月28日之前发放完毕，实物奖统一在7月31日前发放完毕；</li>
+                                        <li>金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
+                                    </ol>
+                                </div>
                             </div>
-                            <p class="shadan-list">第<span>88</span>楼<br>晒单用户获得</p>
                         </div>
-                    </li>
-                    <li>
-                        <div class="shadan-pbord">
-                            <i class="shadan-jiang jiang-f3">三等奖</i>
-                            <div class="shadan-qian">
-                                <div class="shadan-im shadan-i2"></div>
-                                <p>30元<br>手机充值卡</p>
-                            </div>
-                            <p class="shadan-list">第<span>18</span>楼<br>晒单用户获得</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="shadan-pbord">
-                            <i class="shadan-jiang jiang-f3">四等奖</i>
-                            <div class="shadan-qian shadan-i3">
-                                <div class="shadan-im shadan-i3"></div>
-                                <p>5元<br>微信红包</p>
-                            </div>
-                            <p class="shadan-list">楼数逢尾数6<br>晒单用户获得</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="rule-cbox">
-                <h3><span>活动条款</span></h3>
-                <div class="rull-hei">
-                    <div class="hd-rule-list mCustomScrollbar">
-                        <ol>
-                            <li>活动时间：2017年7月3日-2017年7月16日<br />第一期活动：参与晒单的有效订单平仓时间：7月3日06:00:00-7月8日04:44:59<br />有效晒单时间：7月3日06:00:00-7月9日23:59:59<br />第二期活动：参与晒单的有效订单平仓时间：7月10日06:00:00-7月15日04:44:59<br />有效晒单时间：　7月10日06:00:00-7月16日23:59:59</li>
-                            <li>客户参与活动的晒单必须是在活动期间内交易平仓的订单，且每次晒单的平仓订单笔数≥2笔，且每次平仓后第一次晒单，视为有效晒单；客户同一平仓订单第二次及以上晒单或同一晒单多次刷屏，视为无效晒单，只记录客户该笔单的第一次晒单；</li>
-                            <li>晒单楼数依次从距离活动结束时间最近的晒单开始计数，例如：第一期活动结束时间为7月9日23:59:59，客户若在7月9日23:59:59晒单成功，此客户晒单为第1楼，以此类推；</li>
-                            <li>同一客户（同一手机号码及同一身份ID）每期有1次获奖机会；在活动期间（2期）同一客户最多2次获奖机会；若同一个用户在同一期活动中第二次获奖，则该用户第一次获奖有效，第二次获奖则视为无效，此次中奖名单将顺延至下一楼，如活动第一期，1等奖第168楼晒单客户与3等奖第18楼为同一客户，则1等奖中奖客户顺延至169楼（即第169楼获得1等奖）；</li>
-                            <li>获奖的客户名单统一在金道贵金属实时解盘banner和金道贵金属APP推送消息中公布；</li>
-                            <li>第一期获奖名单公布时间为7月12日10：00；第二期获奖名单公布时间为7月19日10：00；</li>
-                            <li>实物奖品随机发放，奖品颜色不能更换，奖品寄出时间以快递揽件为准，实物奖的售后服务由其特约维修商承担；</li>
-                            <li>现金奖励以及电子卡奖励，将统一在7月28日之前发放完毕，实物奖统一在7月31日前发放完毕；</li>
-                            <li>金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
-                        </ol>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
 
 
 
-<%}%>
+            <%}%>

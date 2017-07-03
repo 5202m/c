@@ -130,7 +130,7 @@ var indexTool = {
 
                 $("#pop_simpleTip .enteritem:first a").bind("click", function() {
                     $("#pop_simpleTip").hide();
-                    $("#register_a").trigger("click", {
+                    $("#login_a").trigger("click", {
                         closeable: false
                     });
                 });
@@ -252,9 +252,9 @@ var indexTool = {
         init: function() {
             this.setEvent();
             this.config.init = true;
-            setTimeout(function () {
+            setTimeout(function() {
                 $(".shaidan-conbox .del-btn").trigger('click');
-            },5000);
+            }, 5000);
         },
 
         setHC: function(c_name, value, expiredays) {
@@ -311,12 +311,12 @@ var indexTool = {
             setInterval(indexTool.RedPacket.lightSwitch, 300);
 
             $("#redPacket_header,#redPacket_chat,#showTrade_header").bind("click", function() {
-/*                if (indexJS.userInfo.isLogin) {
-                    console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", indexJS.userInfo.createDate);
-                    indexTool.RedPacket.queryLastRedPackageRob();
-                } else {
-                    indexTool.RedPacket.showPop("noLogin");
-                }*/
+                /*                if (indexJS.userInfo.isLogin) {
+                                    console.log("click redPacket_header==>mobileAndCreateDate:", indexJS.userInfo.mobilePhone, ",", indexJS.userInfo.createDate);
+                                    indexTool.RedPacket.queryLastRedPackageRob();
+                                } else {
+                                    indexTool.RedPacket.showPop("noLogin");
+                                }*/
                 $(".shaidan-conbox").slideDown();
                 $('.blackbg').show();
             });
@@ -383,16 +383,16 @@ var indexTool = {
 
             //晒单活动事件
             //关闭事件
-            $(".shaidan-conbox .del-btn").click(function(){
+            $(".shaidan-conbox .del-btn").click(function() {
                 $(".blackbg").hide();
                 $(".shaidan-conbox").slideUp();
             });
             //晒单事件
-            $('.shaidan-ban .shaidan-btn').bind('click',function () {
+            $('.shaidan-ban .shaidan-btn').bind('click', function() {
                 $(".shaidan-conbox .del-btn").trigger('click');
-                if(indexJS.userInfo.isLogin){
+                if (indexJS.userInfo.isLogin) {
                     $('#wantShowTrade').trigger('click');
-                }else{
+                } else {
                     $('#login_a').trigger('click');
                 }
 
