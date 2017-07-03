@@ -963,6 +963,37 @@ var common = {
         return d.getFullYear() + '-' + m + '-' + d.getDate();
     },
     /**
+     * 获取视频链接
+     * @param syllabusPlan
+     * @returns {{pc: string, mobile: string, audio: string, oneTV: string, https: string}}
+     */
+    getVideoUrl: function(syllabusPlan) {
+        var result = { pc: "", mobile: "", audio: "", oneTV: "", https: "" },
+            linkTmp = null;
+        for (var i = 0, lenI = syllabusPlan.liveLink ? syllabusPlan.liveLink.length : syllabusPlan.liveLink; i < lenI; i++) {
+            linkTmp = syllabusPlan.liveLink[i];
+            switch (linkTmp.code) {
+                case "1":
+                    result.pc = linkTmp.url || "";
+                    break;
+
+                case "2":
+                    result.oneTV = linkTmp.url || "";
+                    break;
+
+                case "3":
+                    result.mobile = linkTmp.url || "";
+                    result.https = result.mobile.replace(/^http:/, "rtmps:").replace(/\/index\.m3u8$/, "");
+                    break;
+
+                case "4":
+                    result.audio = linkTmp.url || "";
+                    break;
+            }
+        }
+        return result;
+    },
+    /**
      * 是否本地访问
      * @returns {boolean}
      */
