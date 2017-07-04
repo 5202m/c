@@ -726,5 +726,20 @@ var indexJS = {
         }
 
         return size;
+    },
+
+    //判断用户是否头一次登陆晒单活动
+    getShowPrideActivityFlag : function (visitorId) {
+        if (common.isValid(visitorId)) {
+            $.post('/isShowTradeActivityFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
+                if (data) {
+                    if(!data.data){
+                        $(".shaidan-conbox .del-btn").trigger('click');
+                    }else{
+                        $('#showTrade_header').trigger('click');
+                    }
+                }
+            });
+        }
     }
 };

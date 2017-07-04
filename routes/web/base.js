@@ -3383,6 +3383,39 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
         }
     });
 });
+//redis存储201707晒单活动用户第一次登陆
+router.post('/isShowTradeActivityFirstLogin', function(req, res) {
+    let params = req.body['data'];
+    if (common.isBlank(params)) {
+        res.json({ isOK: false, msg: '参数错误' });
+        return;
+    }
+    if (typeof params == 'string') {
+        try {
+            params = JSON.parse(params);
+        } catch (e) {
+            res.json(null);
+            return;
+        }
+    }
+    let userNo = params.userNo;
+    let key = "showTradeActivity_" + userNo;
+    cacheClient.get(key, function(err, result) {
+
+        if (err || !result) {
+            if(new Date().getTime() > new Date('2017-07-17').getTime()){
+                res.json({ data: false });
+                return;
+            }
+            cacheClient.set(key, true);
+            var ttlTime = parseInt((new Date('2017-07-17').getTime() - new Date().getTime()) / 1000);
+            cacheClient.expire(key, ttlTime);
+            res.json({ data: true });
+        } else {
+            res.json({ data: false });
+        }
+    });
+});
 router.get('/getRoomOnlineList', function(req, res) {
     let params = req.query;
     chatService.getRoomOnlineList(params)

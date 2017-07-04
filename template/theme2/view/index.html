@@ -208,6 +208,7 @@
                 $("#content-d3").mCustomScrollbar({
                     theme: "dark-thick"
                 });
+                Tool.getShowPrideActivityFlag(Data.userInfo.userId || Data.userInfo.visitorId);
             }
             window.onunload  = function() {
                 chatAnalyze.setUTM(false, $.extend({
