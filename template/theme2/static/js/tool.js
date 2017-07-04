@@ -295,7 +295,20 @@ var Tool = {
             }
         });
     },
-
+    //判断用户是否头一次登陆晒单活动
+    getShowPrideActivityFlag : function (visitorId) {
+        if (Util.isNotBlank(visitorId)) {
+            Util.postJson('/isShowTradeActivityFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
+                if (data) {
+                    if(!data.data){
+                        $(".shaidan-conbox .del-btn").trigger('click');
+                    }else{
+                        $('#showTradeDiv').trigger('click');
+                    }
+                }
+            });
+        }
+    },
     /**
      * 红包活动
      */
@@ -320,7 +333,7 @@ var Tool = {
             this.config.apiUrl = apiUrl;
             this.setEvent();
             this.config.init = true;
-            setTimeout(function () {
+            Data.showTradeActivityFlag = setTimeout(function () {
                 $(".shaidan-conbox .del-btn").trigger('click');
             },5000);
         },
@@ -521,6 +534,7 @@ var Tool = {
                 }
             });
             $('#showTradeDiv').on('click',function () {
+                clearTimeout(Data.showTradeActivityFlag);
                 $(".shaidan-conbox").slideDown();
                 $('.shadow').show();
             });
