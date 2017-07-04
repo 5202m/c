@@ -333,7 +333,7 @@ var Tool = {
             this.config.apiUrl = apiUrl;
             this.setEvent();
             this.config.init = true;
-            setTimeout(function () {
+            Data.showTradeActivityFlag = setTimeout(function () {
                 $(".shaidan-conbox .del-btn").trigger('click');
             },5000);
         },
@@ -534,6 +534,7 @@ var Tool = {
                 }
             });
             $('#showTradeDiv').on('click',function () {
+                clearTimeout(Data.showTradeActivityFlag);
                 $(".shaidan-conbox").slideDown();
                 $('.shadow').show();
             });

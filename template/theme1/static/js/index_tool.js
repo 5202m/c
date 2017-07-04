@@ -252,7 +252,7 @@ var indexTool = {
         init: function() {
             this.setEvent();
             this.config.init = true;
-            setTimeout(function() {
+            indexJS.showTradeActivityFlag = setTimeout(function() {
                 $(".shaidan-conbox .del-btn").trigger('click');
             }, 5000);
         },
@@ -317,6 +317,7 @@ var indexTool = {
                                 } else {
                                     indexTool.RedPacket.showPop("noLogin");
                                 }*/
+                clearTimeout(indexJS.showTradeActivityFlag);
                 $(".shaidan-conbox").slideDown();
                 $('.blackbg').show();
             });
