@@ -177,7 +177,6 @@ var videos = {
          */
         playByQCloud: function($panel, url, title, autostart){
             LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
-            //LazyLoad.js(['//qzonestyle.gtimg.cn/open/qcloud/video/live/h5/live_connect.js'], function() {
                 var options = {
                     "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
                     //"coverpic" : "http://www.test.com/myimage.jpg",
@@ -190,19 +189,6 @@ var videos = {
                     options.flv = url;
                 }
                 var player =  new TcPlayer($panel, options);
-                /*var option = {
-                    "live_url": url,
-                    "width": '100%',
-                    "height": '100%',
-                    "cache_time": 0.5
-                };
-
-                var player = new qcVideo.Player($panel, option);
-                if (autostart) {
-                    player.play();
-                } else {
-                    player.pause();
-                }*/
             });
         },
 
@@ -229,21 +215,21 @@ var videos = {
                 this.videoData($panel, "currVideoUrl", url);
                 this.videoData($panel, "currVideoTitle", title);
 
-                if (/\.html/.test(url)) {
-                    this.playByIframe($panel, url, title, true);
-                } else if (/type=blws/.test(url)) {
-                    var videoUrl = $("#teachVideoPanel .numbox .c_num a").filter(".activity_video").attr("vurl");
-                    this.playByBLWS($panel, url, title, (videoUrl && videoUrl == url) ? true : false);
-                } else if (/\.swf/.test(url)) {
-                    this.playByEmbed($panel, url, title, true);
-                } else if (/rtmp/.test(url)) {
-                    if (/\.myqcloud\./.test(url)){
-                        this.playByQCloud($panel.attr('id'), url, title, true);
-                    } else {
-                        obsPlayer.init(url, 'videoPlayerPanel', true);
-                    }
+                if (/\.myqcloud\./.test(url)){
+                    this.playByQCloud($panel.attr('id'), url, title, true);
                 } else {
-                    this.playBySewise($panel, url, title, true);
+                    if (/\.html/.test(url)) {
+                        this.playByIframe($panel, url, title, true);
+                    } else if (/type=blws/.test(url)) {
+                        var videoUrl = $("#teachVideoPanel .numbox .c_num a").filter(".activity_video").attr("vurl");
+                        this.playByBLWS($panel, url, title, (videoUrl && videoUrl == url) ? true : false);
+                    } else if (/\.swf/.test(url)) {
+                        this.playByEmbed($panel, url, title, true);
+                    } else if (/rtmp/.test(url)) {
+                        obsPlayer.init(url, 'videoPlayerPanel', true);
+                    } else {
+                        this.playBySewise($panel, url, title, true);
+                    }
                 }
                 videos.setStudioInfo(false);
             }

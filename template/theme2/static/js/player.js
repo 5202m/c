@@ -3,7 +3,7 @@
  * 直播间手机版房间内页 -- 播放器
  * @author Dick.guo
  */
-var MbPlayer = {
+var Player = {
     /** 状态 */
     type : "text", //'text'-文字直播，'video'-视频直播，'audio'-音频直播
     isFlashSupport : false,
@@ -30,19 +30,19 @@ var MbPlayer = {
     startPlay : function(){
         Data.getSyllabusPlan(function(course){
             if(!course||course.isNext||course.courseType==2||course.courseType==0){
-                MbPlayer.change("text");
+                Player.change("text");
             }else{
                 var links = Data.getVideoUrl(course);
                 var url = "";
-                if(MbPlayer.type == "text"){
-                    MbPlayer.change("audio"); //默认音频直播
+                if(Player.type == "text"){
+                    Player.change("audio"); //默认音频直播
                 }
-                if(MbPlayer.type == "audio"){
+                if(Player.type == "audio"){
                     url = links.audio;
-                    MbPlayer.playAudio(true, url, course.title);
-                }else if(MbPlayer.type == "video"){
+                    Player.playAudio(true, url, course.title);
+                }else if(Player.type == "video"){
                     url = links.mobile;
-                    MbPlayer.play(url, course.title);
+                    Player.play(url, course.title);
                 }
             }
             Room.showLecturer(course && course.lecturerId);
@@ -63,14 +63,14 @@ var MbPlayer = {
         this.player.videoData($panel, "currVideoTitle", title);
 
         if(/type=blws/.test(url)){
-            this.player.playByBLWS($panel, url, title, MbPlayer.isAutoplay);
-        }else if(MbPlayer.isFlashSupport){
-            this.player.playBySewise($panel, url, title, MbPlayer.isAutoplay);
+            this.player.playByBLWS($panel, url, title, Player.isAutoplay);
+        }else if(Player.isFlashSupport){
+            this.player.playBySewise($panel, url, title, Player.isAutoplay);
         }else if(/\.myqcloud\./.test(url)){
-            MbPlayer.isQCloud = true;
-            this.player.playByQCloud($panel.attr('id'), url, title, MbPlayer.isAutoplay)
+            Player.isQCloud = true;
+            this.player.playByQCloud($panel.attr('id'), url, title, Player.isAutoplay);
         }else{
-            this.player.playByVideo($panel, url, title, MbPlayer.isAutoplay);
+            this.player.playByVideo($panel, url, title, Player.isAutoplay);
         }
     },
 
@@ -127,7 +127,7 @@ var MbPlayer = {
         var playerCtrl = $("#room_playerCtrl");
         var playerCtrlTxt = $("#room_playerCtrlTxt");
         if(this.type == "video" || this.type == "audio"){
-            if(!MbPlayer.isQCloud) {
+            if(!Player.isQCloud) {
                 this.player.clear(videoPanel);
             }
         }
@@ -155,21 +155,21 @@ var MbPlayer = {
     setEvent : function(){
         //声音直播开始 暂停
         $("#roomAudioPlay, #roomAudioCtrl .voice_wave").bind("click", function(){
-            MbPlayer.playAudio($("#roomAudioCtrl").is(".stopped"));
+            Player.playAudio($("#roomAudioCtrl").is(".stopped"));
         });
 
         //视频直播 声音直播切换
         $("#room_playerCtrl").bind("click", function(){
             var isAudio = $(this).is(".switch-video");
             if(isAudio){
-                MbPlayer.change("video");
-                if(!MbPlayer.isQCloud) {
-                    MbPlayer.startPlay();
+                Player.change("video");
+                if(!Player.isQCloud) {
+                    Player.startPlay();
                 }
             }else{
-                MbPlayer.change("audio");
-                if(!MbPlayer.isQCloud) {
-                    MbPlayer.startPlay();
+                Player.change("audio");
+                if(!Player.isQCloud) {
+                    Player.startPlay();
                 }
             }
         });
@@ -364,20 +364,13 @@ var MbPlayer = {
          */
         playByQCloud: function($panel, url, title, autostart){
             LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
-            var player = new TcPlayer($panel, {
-                "m3u8": url, //请替换成实际可用的播放地址
-                "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
-                //"coverpic" : "http://www.test.com/myimage.jpg",
-                "width" :  '100%',//视频的显示宽度，请尽量使用视频分辨率宽度
-                "height" : '100%'//视频的显示高度，请尽量使用视频分辨率高度
-            });
-                $("#roomAudioPlay, #roomAudioCtrl .voice_wave").unbind('click');
-                $("#roomAudioPlay, #roomAudioCtrl .voice_wave").bind("click", function(){
-                    if($("#roomAudioCtrl").is(".stopped")){
-                        player.play();
-                    }else{
-                        player.pause();
-                    }
+                var player = new TcPlayer($panel, {
+                    "m3u8": url,
+                    "autoplay" : autostart,
+                    "live" : true,
+                    "x5_player" : true,
+                    "width" :  '100%',
+                    "height" : '100%'
                 });
             });
         }

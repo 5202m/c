@@ -9,7 +9,7 @@ var Room = new Container({
     isNoviceRoom: false,
     onLoad: function() {
         Util.loadStyles('/base/lib/lightbox/lightbox.css');
-        MbPlayer.init();
+        Player.init();
         Room.setEvent();
         Tool.getAllMarketPrice.init();
         Chat.setEvent();
@@ -23,7 +23,7 @@ var Room = new Container({
         }
     },
     onHide: function() {
-        MbPlayer.player.clear($("#roomVideo"));
+        Player.player.clear($("#roomVideo"));
     }
 });
 
@@ -60,7 +60,7 @@ Room.initPage = function() {
                 Room.currGroupId = room.id;
                 $("#room_roomName").html(room.name);
                 Room.loadRoomClassNote();
-                MbPlayer.startPlay();
+                Player.startPlay();
                 Chat.init();
                 Room.showCourse();
                 PrivateChat.isChangeRoom = true;
@@ -146,7 +146,7 @@ Room.setEvent = function() {
         if (Chat.socket) {
             Chat.socket.disconnect();
             Chat.socket = null;
-            MbPlayer.player.clear($("#roomVideo"));
+            Player.player.clear($("#roomVideo"));
             Room.currGroupId = null;
             $('#chat_msg,#classNote_panel').empty();
         }

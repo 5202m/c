@@ -21,8 +21,8 @@ VideoPlay.setEvent = function(){
     $('#videoPlay_back').bind('click',function () {
         //退出停止播放
         $('#videoPlay').html('');
-        MbPlayer.player.videoData($('#videoPlay'),'currVideoTitle','');
-        MbPlayer.player.videoData($('#videoPlay'),'currVideoUrl','');
+        Player.player.videoData($('#videoPlay'),'currVideoTitle','');
+        Player.player.videoData($('#videoPlay'),'currVideoUrl','');
         Container.back();
     });
 };
@@ -32,5 +32,5 @@ VideoPlay.setEvent = function(){
  */
 VideoPlay.playVideo = function () {
     $('#videoPlay_title').text(VideoPlay.videoTitle);
-    MbPlayer.play(VideoPlay.videoUrl, VideoPlay.videoTitle,$('#videoPlay'));
+    Player.play(VideoPlay.videoUrl, VideoPlay.videoTitle,$('#videoPlay'));
 };
