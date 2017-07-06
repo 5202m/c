@@ -256,7 +256,8 @@ var fileList = [
         "in": ["\\template\\base\\util\\gwanalysis.js",
             "\\template\\base\\util\\chatAnalyze.js",
             "\\template\\base\\util\\common.js",
-            "\\template\\theme4\\static\\js\\room.js"
+            "\\template\\theme4\\static\\js\\room.js",
+            "\\template\\base\\lib\\obsplayer\\obsplayer.min.js"
         ]
     },
     {

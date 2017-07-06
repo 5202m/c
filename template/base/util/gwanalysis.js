@@ -202,5 +202,5 @@ function setGWAnalysisParams(_maq){
     if(hrefs.indexOf("chat.gwfx.com")!=-1 ||  hrefs.indexOf("pmchat.24k.hk")!=-1){
         urls = pro+ "//datac.gwghk.com";
     }
-    img.src = urls+'/1.gif?' + args + '&';
+    img.src = urls+'/1.gif?' + args + '&dates='+new Date().getTime()+ '&';
 }
