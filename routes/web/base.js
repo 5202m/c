@@ -203,7 +203,7 @@ router.get('/', function(req, res) {
                 }
             });
         return;
-    }else if (appToken && options.platform && options.platform == 'appgts2') {//gts2单点登录
+    } else if (appToken && options.platform && options.platform == 'appgts2') { //gts2单点登录
         targetGType = getGroupType(req, false);
         let params = {
             clientId: config.appAutoLogin.clientId,
@@ -1432,7 +1432,7 @@ router.post('/reg', function(req, res) {
                                             firstLogin: true,
                                             isLogin: true,
                                             mobilePhone: userInfo.mobilePhone,
-                                            userId: userInfo.userId,
+                                            userId: result.userId,
                                             defGroupId: userInfo.defGroupId,
                                             clientGroup: userInfo.clientGroup,
                                             nickname: userInfo.nickname,
@@ -3403,7 +3403,7 @@ router.post('/isShowTradeActivityFirstLogin', function(req, res) {
     cacheClient.get(key, function(err, result) {
 
         if (err || !result) {
-            if(new Date().getTime() > new Date('2017-07-17').getTime()){
+            if (new Date().getTime() > new Date('2017-07-17').getTime()) {
                 res.json({ data: false });
                 return;
             }
