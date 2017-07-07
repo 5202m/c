@@ -3,7 +3,6 @@ var util = require('util');
 var common = require('../util/common'); //引入公共的js
 var config = require('../resources/config'); //引入config
 var logger = require('../resources/logConf').getLogger('pmApiService');
-var constant = require('../constant/constant');
 
 var getValidPhoneNumber = function(num) {
     var phone = num;
@@ -17,42 +16,6 @@ var getValidPhoneNumber = function(num) {
  * create by alan.wu
  */
 var pmApiService = {
-    /**
-     * 提取PM GTS2接口的签名
-     * @param data
-     */
-    getApiSignature: function(data) {
-        var invokerVal = '';
-        if (data["_principal_"]) {
-            var pl = data["_principal_"];
-            if (typeof pl != "object") {
-                pl = JSON.parse(pl);
-            }
-            if (!pl.invoker || !constant.gwApiInvoker.hasOwnProperty(pl.invoker)) {
-                return null;
-            }
-            invokerVal = constant.gwApiInvoker[pl.invoker].value;
-        }
-        var names = [];
-        for (var name in data) {
-            if (name == '_signature_') {
-                continue;
-            } else {
-                names.push(name);
-            }
-        }
-        names.sort();
-        var str = '',
-            value = '';
-        for (var i = 0; i < names.length; i++) {
-            value = data[names[i]];
-            value = (value == null) ? "" : (typeof value == "object" ? JSON.stringify(value) : value);
-            str += value + '&';
-        }
-        str += invokerVal;
-        return common.getMD5(str);
-    },
-
     /**
      * 黄金接口
      * 通过账号与手机号检查用户是否A客户
@@ -212,72 +175,11 @@ var pmApiService = {
         }).form(emailData);
     },
     /**
-     *  根据交易账号密码登录(先验证gts2 登录报错再验证gts)
+     * 根据交易账号密码登录
      * @param params
      * @param callback
      */
-    checkAccountLogin:function (params, callback) {
-        var isTrue = false;
-        var platform = 'GTS2';
-        var submitInfo = {
-            customerNumber: params.loginname,
-            password: params.password,
-            platform: platform,
-            args: '[]',
-            _principal_: { loginName: params.loginname, remoteIpAddress: params.ip, invoker: constant.gwApiInvoker.pm_website.key, companyId: constant.companyId.pm }
-        };
-        var sg = this.getApiSignature(submitInfo);
-        if (!sg) {
-            callback(isTrue);
-            return;
-        }
-        submitInfo["_signature_"] = sg;
-        submitInfo['_principal_'] = JSON.stringify(submitInfo['_principal_']);
-        console.log(submitInfo);
-        request.post({
-                url: (config.gwfxGTS2ApiUrl + '/account/liveChatVerify'),
-                form: submitInfo
-            },
-            function(error, response, data) {
-                logger.info("tmpData:" + data);
-                var callData = null;
-                if (!error && common.isValid(data)) {
-                    var allData = null;
-                    try {
-                        allData = JSON.parse(data);
-                    } catch (e) {
-                        logger.error("checkAccountLogin by GTS2Api[" + params.loginname + "]->error:" + e);
-                        callback(null);
-                        return;
-                    }
-                    var result = allData.result,
-                        row = null;
-                    if (allData && allData.code == 'SUCCESS' &&
-                        result != null && result.code == 'OK' &&
-                        (row = result.result) != null) {
-                        var phoneNumber = getValidPhoneNumber(result.context.MOBILE_PHONE_NO);
-
-                        callData = phoneNumber ? {
-                            mobilePhone: phoneNumber,
-                            clientGroup: result.context.ACCOUNT_STATUS
-                        } : null;
-                    } else {
-                        callData = null;
-                    }
-                } else {
-                    logger.error("checkAccountLogin by GTS2Api[" + params.loginname + "]->error:" + error);
-                    pmApiService.gTSAccountLogin(params,callback);
-                }
-                callback(callData);
-            });
-    },
-
-    /**
-     * 根据gts交易账号密码登录
-     * @param params
-     * @param callback
-     */
-    gTSAccountLogin: function(params, callback) {
+    checkAccountLogin: function(params, callback) {
         var submitInfo = {
             loginname: params.loginname,
             password: params.password,
@@ -383,55 +285,7 @@ var pmApiService = {
             deferred.resolve(callData);
         });
         return deferred.promise;
-    },
-
-    /**
-     * 获取app客户资料
-     */
-    getUserMobile: function(params, account) {
-        let deferred = new common.Deferred();
-        var submitInfo = {
-            gts2CustomerId: account,
-            args: '[]',
-            _principal_: { loginName: account, remoteIpAddress: params.remoteIp, invoker: constant.gwApiInvoker.pm_website.key, companyId: constant.companyId.pm }
-        };
-        var sg = pmApiService.getApiSignature(submitInfo);
-        submitInfo["_signature_"] = sg;
-        submitInfo['_principal_'] = JSON.stringify(submitInfo['_principal_']);
-        request.post({
-                url: (config.gwfxGTS2ApiUrl + '/account/getCustomerByCustomerId'),
-                form: submitInfo
-            },
-            function(error, response, data) {
-                var callData = null;
-                if (!error && common.isValid(data)) {
-                    var allData = null;
-                    try {
-                        allData = JSON.parse(data);
-                    } catch (e) {
-                        logger.error("get getUserInfo[" +
-                            params.account + "]->error:" + e);
-                        deferred.reject(e);
-                        return;
-                    }
-                    var result = allData.result,
-                        row = null;
-                    if (allData && allData.code == 'SUCCESS' &&
-                        result != null) {
-                        callData =result;
-                    } else {
-                        callData = null;
-                    }
-                } else {
-                    logger.error("getUserInfo[" +
-                        params.account + "]->error:" + error);
-                    deferred.reject(error);
-                }
-                deferred.resolve(callData);
-            });
-        return deferred.promise;
     }
-
 };
 
 //导出服务类
