@@ -372,6 +372,8 @@ var Player = {
                     "width" :  '100%',
                     "height" : '100%'
                 });
+                $('.vcp-playtoggle').css({'background-repeat': 'no-repeat','background-position-x': '50%'});
+                $('.vcp-fullscreen-toggle').hide();
             });
         }
     }
