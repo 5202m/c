@@ -31,6 +31,12 @@
                 </script>
 </head>
 
+<!--  问卷调查浮动层  -->
+<div class="wenjuan-float-con">
+    <a href="https://wj.qq.com/s/1455171/df3c/" target="_blank" class="wenjuan-adimg">有奖问答，最受欢迎分析师评选</a>
+    <a href="javascript://" class="wenjuan-del-btn"></a>
+</div>
+
 <body class="home">
     <header id="header">
         <section class="content_w clearfix">
@@ -41,25 +47,25 @@
                 <div class="new_redbag fl" id="redPacket_header">
                     <img src="/theme2/img/new-redbag.png" width="100%" alt="5-500元红包大派送">
                 </div>
-            <%}%>
-            <%if(isShowTrade) {%>
-            <div class="new_redbag fl" id="showTradeDiv">
-                <img src="/theme2/img/showTrade.jpg" width="100%" alt="晒单赢奖品">
-            </div>
-            <%}%>
-                    <div class="rightbar">
-                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
-                        <a id="header_ui" href="javascript:void(0)" class="loginbtn">
-                            <%= userSession.isLogin ? userSession.nickname : '登录' %>
-                        </a>
-                        <!--<%if(userSession.isLogin){%>
+                <%}%>
+                    <%if(isShowTrade) {%>
+                        <div class="new_redbag fl" id="showTradeDiv">
+                            <img src="/theme2/img/showTrade.jpg" width="100%" alt="晒单赢奖品">
+                        </div>
+                        <%}%>
+                            <div class="rightbar">
+                                <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
+                                <a id="header_ui" href="javascript:void(0)" class="loginbtn">
+                                    <%= userSession.isLogin ? userSession.nickname : '登录' %>
+                                </a>
+                                <!--<%if(userSession.isLogin){%>
                             <a href="javascript:void(0);" class="loginbtn">
                                 <%= userSession.nickname || "匿名_xxx" %>
                             </a>
                             <%} else {%>
                                 <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
                                 <%}%>-->
-                    </div>
+                            </div>
         </section>
     </header>
     <article class="content_w bgf2f2f2 dn" id="page_rooms">
@@ -176,15 +182,14 @@
                 Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
                 Index.init();
 
-                try{
+                try {
                     chatAnalyze.setUTM(false, $.extend({
                         operationType: 1,
                         userTel: '<%= userSession.mobilePhone %>',
-                        roomName:$('#room_roomName').text()
+                        roomName: $('#room_roomName').text()
                     }, Data.userInfo));
-                }
-                catch(e){
-                    console.log("Set onunload UTM fail!"+e);
+                } catch (e) {
+                    console.log("Set onunload UTM fail!" + e);
                 }
 
 
@@ -209,12 +214,20 @@
                     theme: "dark-thick"
                 });
                 Tool.getShowPrideActivityFlag(Data.userInfo.userId || Data.userInfo.visitorId);
+
+                //分析师评选
+                $(".wenjuan-del-btn").click(function() {
+                    $(this).parent().animate({
+                        opacitt: '0',
+                        bottom: '-94'
+                    });
+                })
             }
-            window.onunload  = function() {
+            window.onunload = function() {
                 chatAnalyze.setUTM(false, $.extend({
                     operationType: 6,
                     userTel: '<%= userSession.mobilePhone %>',
-                    roomName:$('#room_roomName').text()
+                    roomName: $('#room_roomName').text()
                 }, Data.userInfo));
             }
         </script>

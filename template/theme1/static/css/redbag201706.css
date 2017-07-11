@@ -251,7 +251,7 @@
 
 
 /* 晒单层 */
-.header_showTrade_ad a{ display: block; width: 320px; height:50px; margin: 10px 0px 10px 0px;background: url(../img/headShowTrade.gif) 0 center no-repeat; }
+.header_showTrade_ad a{ display: block; width: 320px; height:50px; margin: 10px 0px 10px 0px;background: url(http://pmchat.24k.hk/theme1/img/headShowTrade.gif) 0 center no-repeat; }
 .shaidan-conbox{position:fixed;left:50%;top:50%;margin:-386px 0 0 -301px;width:620px;z-index:101;font-family:"微軟正黑體"}
 .shaidan-ban{position:relative;height:320px;text-align:center;background:url(../img/redbag201706/shaid0630.png) no-repeat center top;z-index:2}
 .shaidan-ban .shaidan-btn{position:absolute;left:50%;bottom:-37px;margin-left:-152px;display:block;width:230px;height:74px;background:url(../img/redbag201706/shaidan-btn.png) no-repeat;font-size:0}
@@ -281,6 +281,13 @@
 .hd-rule-list{height:60px}
 .hd-rule-list li{font-size:13px;line-height:1.4;text-align:justify}
 .del-btn{position:absolute;right:90px;top:26px;display:block;width:36px;height:36px;background:url(../img/redbag201706/del.png) no-repeat}
+
+/* 问卷广告位 by terry 2017.7.11 */
+.header-right{position:relative}
+.wenjuan-adbox{position:absolute;left:-223px;top:50%;margin-top:-35px;line-height:0}
+.wenjuan-adbox a{display:block;width:200px;height:70px;background:url(../img/wenjuan-icon1.gif) no-repeat;font-size:0}
+
+
 @media(max-height:800px){
 	.shaidan-conbox{transform:scale(0.8);-moz-transform:scale(0.8);-ms-transform:scale(0.8);-webkit-transform:scale(0.8)}
 }
@@ -289,6 +296,9 @@
 @media(max-width: 1300px){
 	.train_ad{ padding-left: 15px; }
 	.header_redbag{ margin-left: 20px;}
+}
+@media(max-width: 1279px){
+	.wenjuan-adbox{display:none}
 }
 
 @media(max-width: 1260px){
