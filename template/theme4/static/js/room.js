@@ -1247,8 +1247,10 @@ var studioChatMb={
              * @param autostart
              */
             playByQCloud: function($panel, url, title, autostart){
-                LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
-                    var player = new TcPlayer($panel, {
+                LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
+                    var player = new TcPlayer($panel,{
+                        "volume": 1,
+                        "controls": "system",
                         "m3u8": url,
                         "autoplay" : autostart,
                         "live" : true,
@@ -1256,6 +1258,8 @@ var studioChatMb={
                         "width" :  '100%',
                         "height" : '100%'
                     });
+                    $('.vcp-playtoggle').css({'background-repeat': 'no-repeat','background-position-x': '50%'});
+                    $('.vcp-fullscreen-toggle').hide();
                 });
             }
         }

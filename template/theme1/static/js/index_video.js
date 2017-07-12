@@ -176,12 +176,12 @@ var videos = {
          * @param autostart
          */
         playByQCloud: function($panel, url, title, autostart){
-            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
+            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
                 var options = {
-                    "autoplay" : autostart,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
-                    //"coverpic" : "http://www.test.com/myimage.jpg",
-                    "width" :  '100%',//视频的显示宽度，请尽量使用视频分辨率宽度
-                    "height" : '100%'//视频的显示高度，请尽量使用视频分辨率高度
+                    "volume":1,
+                    "autoplay" : autostart,
+                    "width" :  '100%',
+                    "height" : '100%'
                 };
                 if (/\.m3u8/.test(url)){
                     options.m3u8 = url;

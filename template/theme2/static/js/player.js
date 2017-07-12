@@ -61,16 +61,17 @@ var Player = {
         }
         this.player.videoData($panel, "currVideoUrl", url);
         this.player.videoData($panel, "currVideoTitle", title);
-
-        if(/type=blws/.test(url)){
-            this.player.playByBLWS($panel, url, title, Player.isAutoplay);
-        }else if(Player.isFlashSupport){
-            this.player.playBySewise($panel, url, title, Player.isAutoplay);
-        }else if(/\.myqcloud\./.test(url)){
+        if(/\.myqcloud\./.test(url)){
             Player.isQCloud = true;
             this.player.playByQCloud($panel.attr('id'), url, title, Player.isAutoplay);
-        }else{
-            this.player.playByVideo($panel, url, title, Player.isAutoplay);
+        } else {
+            if (/type=blws/.test(url)) {
+                this.player.playByBLWS($panel, url, title, Player.isAutoplay);
+            } else if (Player.isFlashSupport) {
+                this.player.playBySewise($panel, url, title, Player.isAutoplay);
+            } else {
+                this.player.playByVideo($panel, url, title, Player.isAutoplay);
+            }
         }
     },
 
@@ -363,12 +364,15 @@ var Player = {
          * @param autostart
          */
         playByQCloud: function($panel, url, title, autostart){
-            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js'], function() {
-                var player = new TcPlayer($panel, {
+            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
+                var player = new TcPlayer($panel,{
+                    "volume": 1,
+                    "controls": "system",
                     "m3u8": url,
                     "autoplay" : autostart,
                     "live" : true,
                     "x5_player" : true,
+                    "x5_fullscreen": "true",
                     "width" :  '100%',
                     "height" : '100%'
                 });
