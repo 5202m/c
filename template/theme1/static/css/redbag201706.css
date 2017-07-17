@@ -1,315 +1,1675 @@
 @font-face {
     font-family: 'redbag-figure';
-    src: url('../font/din1451m-webfont.eot') format('eot'),
-         url('../font/din1451m-webfont.woff') format('woff'),
-         url('../font/din1451m-webfont.ttf') format('ttf');
+    src: url('../font/din1451m-webfont.eot') format('eot'), url('../font/din1451m-webfont.woff') format('woff'), url('../font/din1451m-webfont.ttf') format('ttf');
     font-weight: normal;
     font-style: normal;
 }
 
+
 /* 抢红包活动 */
+
+
 /*.header_redbag{ display: inline-block; *display: inline; *zoom: 1; vertical-align: top; margin: 9px 0 0 30px; position: relative; cursor: pointer; }
 .header_redbag .redbag_pic{ width: 44px; height: 53px; background: url(../img/redbag.png) 0 0 no-repeat; background-size: 100% auto; position: absolute; left: 0; z-index: 3; margin-left: -5px;  }*/
-.header_redbag .rb_text{ display: inline-block; *display: inline; *zoom: 1; vertical-align: top; height: 45px; background: #fff0d7; border: 1px solid #ffdea8; border-radius: 3px;  z-index: 1; padding-left: 38px;white-space: nowrap; font-size: 0; margin-top: 3px; }
-.header_redbag .rb_text .te1{ display: inline-block; *display: inline; *zoom: 1; padding: 0 10px; vertical-align: top; text-align: left; background: url(../img/redbag_text.jpg) 10px bottom no-repeat; color: #e1514b; font-size: 14px; line-height: 20px; height: 45px; white-space: nowrap; min-width: 105px; border-right: 1px solid #ffdea8; letter-spacing: 1px }
-.header_redbag .te1 b{ font-size: 18px; font-weight: normal; font-family: 'redbag-figure','Futura Lt BT'; }
-.header_redbag .rb_text .timecount{ display: inline-block; *display: inline; *zoom: 1; padding: 0 10px; vertical-align: top; white-space: nowrap; }
-.header_redbag .timecount span{ color: #858585; font-size: 12px; vertical-align: bottom; line-height: 40px;}
-.header_redbag .timecount b{ color: #e74341; font-size: 40px; font-family: 'redbag-figure'; font-weight: normal; vertical-align: bottom; line-height: 50px;  padding: 0 2px; display: inline-block;*display: inline;*zoom: 1; min-width: 42px; text-align: center; }
 
-.redbag_pop{ position: absolute; left: 30%; top: 30%; margin: -190px 0 0 -301px; width: 602px; height: 410px; background: url(../img/redbag_pop2.png) center no-repeat; z-index: 90; opacity: 0;}
-.redbag_pop.nologin{height: 380px; background-image: url(../img/redbag_pop.png); }
-.redbag_pop .cont{ margin: 10px; position: relative; }
-.redbag_pop .rb_top { text-align: center; padding-top: 50px; }
-.redbag_pop .rb_top span{ color: #ffe2b1; font-size: 20px; letter-spacing: 8px; padding-left: 8px; display: block; background: url(../img/rbpop_t.png) center 5px no-repeat; }
-.redbag_pop .rb_top h4{ color: #feeac8; font-size: 29px; line-height: 50px; padding-top: 15px; margin-bottom: 10px;}
-.redbag_pop .rb_top b{font-family: 'redbag-figure'; font-size: 36px; vertical-align: middle; padding: 0 1px; font-weight: normal; }
-.redbag_pop .rb_tip{ color: #f9c59c; font-size: 16px; text-align: center; padding-top: 15px; }
-.redbag_pop .rb_tip a{ color: #fff9ef; }
-.redbag_pop .rb_tip .t2{ padding-left: 10px; }
-.redbag_pop .rb_btn{ display: block; width: 100px; height: 100px; margin: 0 auto; font-size: 0; line-height: 0;  position: relative; padding: 10px}
-.redbag_pop .rb_btn .bg{display: block;width: 90px; height: 90px; padding: 5px; background: #f0d19f; background: rgb(242,213,164);background: -moz-linear-gradient(-45deg,  rgba(242,213,164,1) 0%, rgba(249,223,180,1) 40%, rgba(233,199,143,1) 100%);background: -webkit-linear-gradient(-45deg,  rgba(242,213,164,1) 0%,rgba(249,223,180,1) 40%,rgba(233,199,143,1) 100%);background: linear-gradient(135deg,  rgba(242,213,164,1) 0%,rgba(249,223,180,1) 40%,rgba(233,199,143,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2d5a4', endColorstr='#e9c78f',GradientType=1 ); transition: transform 0.1s ease; border-radius: 50%;  }
-.redbag_pop .rb_btn .bg b{ border: 1px solid #d0b17b; display: block; width:88px; height: 88px;border-radius: 50%; }
-.redbag_pop .rb_btn i{background: url(../img/redbag_btn.png) center -120px no-repeat; display: block; height: 60px; position: absolute; width: 100px; z-index: 2; top: 50%; left: 50%; margin-top: -30px; margin-left: -50px;  }
-.redbag_pop .rb_btn i.wait{ background-position: center -190px; }
-.redbag_pop .rb_btn i.reg{ background-position: center -260px; }
-.redbag_pop .rb_btn:hover .bg{ transform: scale(1.05); -webkit-transform: scale(1.05); -moz-transform: scale(1.05); -o-transform: scale(1.05) }
-.redbag_pop .rb_btn.wait:hover{ cursor: default; }
-.redbag_pop .rb_btn.wait:hover b{transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-.redbag_pop .pop_close i{ background-position: -65px -300px; }
-.redbag_pop .pop_close:hover{ background:none; }
-.redbag_pop .rb_top2{ text-align: center; padding-top: 35px; }
-.redbag_pop .rb_top2 > span{ font-size: 20px; color: #ffe2b1; font-weight: bold; letter-spacing: 2px; display: block; }
-.redbag_pop .timecount{ font-size: 0; text-align: center; display: inline-block; *display: inline; *zoom: 1; border-radius: 3px; overflow: hidden; margin-top: 5px; margin-bottom: 10px; }
-.redbag_pop .timecount span{ display: inline-block; *display: inline; *zoom: 1; vertical-align: top; background: #f76f65; height: 36px; font-size: 12px; color: #ffe2b1; padding: 0 4px 0 6px}
-.redbag_pop .timecount span:first-child{ margin-right: 2px; }
-.redbag_pop .timecount b{ font-size: 30px; color: #fffdf9; font-family: 'redbag-figure'; font-weight: normal; padding-right: 2px;}
-.redbag_pop .rbnum { font-size: 24px; color: #ffe2b1; line-height: 26px; letter-spacing: 1px; vertical-align: top; margin-bottom: 15px; }
-.redbag_pop .rbnum span{ display: inline-block; *display: inline; *zoom: 1; background: #f76f65; color: #fffdf9; border-radius: 3px; padding: 0 3px; font-size: 26px; font-family: 'redbag-figure'; height: 26px; vertical-align: top; line-height: 28px; letter-spacing: 0; margin: 2px 2px 0}
-.redbag_pop .rb_tip .tspan{ font-size: 14px; line-height: 22px; padding-top: 13px; }
-.redbag_pop.rb_result{ background-image: url(../img/redbag_pop3.png);height: 459px; margin-top: -270px; left: 50%; top: 50%;}
-.rb_result > .cont,.rb_result2 > .cont{ height: 439px; }
-.rb_result .pop_close,.rb_result2 .pop_close{ top: 77px; }
-.rb_result .rb_top2{ padding-top: 62px; }
-.rb_result .rb_top2 > span{ color: #fff0d7; font-size: 26px; letter-spacing: 1px}
-.rb_result .rb_top2 > span.sp2{ color: #f9c59c; font-size: 16px; font-weight: normal; padding-top: 5px;}
-.rb_result .rb_top2 > span.sp2 b{ color: #fff0d7; }
-.redbag_pop .rb_tip2{ padding-top: 50px; text-align: center; }
-.redbag_pop .rb_tip2 .tspan{ font-size: 16px; line-height: 27px; color: #f9c59c; }
-.redbag_pop .rb_tip2 .tspan b{ color: #ffe2b1; }
-.redbag_pop .qrbox{ padding: 7px; position: absolute; bottom: 36px; left: 50%; width: 117px; margin-left: -65px; }
-.redbag_pop .qrbox img{ width: 117px; height: 117px; background: #feeac8; display: block; }
-.redbag_pop.rb_result2{ background-image: url(../img/redbag_pop4.png);height: 459px;margin-top: -270px;left: 50%; top: 50%;}
-.rb_result2 .congratulation{ font-size: 0; line-height: 0; height: 110px; padding-top: 51px; vertical-align: top; }
-.rb_result2 .congratulation b{ font-size: 45px; font-family: 'redbag-figure'; color: #d7483f; display: inline;line-height: 100%; vertical-align: middle; padding: 0 0 0 2px; letter-spacing: 2px}
-.redbag_pop.rb_result2 .rb_tip2{ padding-top: 15px; }
-.redbag_pop.rb_result2 .rb_tip2 strong{ color: #ffc86c; }
-
-.redbag_pop_box{ position: absolute; width: 40%; right: 0; height: 251px; margin-top: -125px; top: 50%; }
-.redbag_pop.pop2{ background-image: url(../img/redbag_pop5.png);height: 251px; width: 396px; margin: 0 0 0 -198px; top: -10%;left: 50%; }
-.redbag_pop.pop2 .cont{ margin: 8px }
-.redbag_pop.pop2 .rb_top2{ padding-top: 20px; padding-bottom: 10px; }
-.redbag_pop.pop2 .rb_top2 > span{ font-size: 16px; font-weight: normal; }
-.redbag_pop.pop2 .rb_btn{ padding: 5px;width: 80px; height: 80px; }
-.redbag_pop.pop2 .rb_btn .bg{display: block; width: 72px; height: 72px; padding: 4px}
-.redbag_pop.pop2 .rb_btn .bg b{ height: 70px; width: 70px; }
-.redbag_pop.pop2 .rb_btn i{background: url(../img/redbag_btn2.png) center -340px no-repeat; width: 80px; margin-left: -40px; height: 40px; margin-top: -20px; }
-.redbag_pop.pop2 .rb_btn i.t5{ background-position: center -290px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
-.redbag_pop.pop2 .rb_btn i.t4{ background-position: center -240px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
-.redbag_pop.pop2 .rb_btn i.t3{ background-position: center -190px;transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear; }
-.redbag_pop.pop2 .rb_btn i.t2{ background-position: center -140px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
-.redbag_pop.pop2 .rb_btn i.t1{ background-position: center -90px; transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;	-moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;}
-.redbag_pop.pop2 .rbnum{ font-size: 22px; margin-bottom: 0; }
-.redbag_pop.pop2 .rbnum span{ font-size: 20px; height: 23px; line-height: 25px;}
-.rb_check{ padding-top: 10px; }
-.rb_checkbox{ display: inline-block;*display: inline;*zoom: 1; vertical-align: top;position: relative; width: 16px;height: 16px; cursor: pointer; }
-.rb_checkbox label{width: 14px;height: 14px; border: 1px solid #ebb285; border-radius: 2px; position: absolute; left: 0;top: 0; z-index: 2; background: none;cursor: pointer;}
-.rb_checkbox label:hover{ border-color: #eb9b5e }
-.rb_checkbox input[type=checkbox]{visibility: hidden;}
-.rb_checkbox input[type=checkbox]:checked + label > i{display: block;width: 100%;height: 14px;background-position: -85px -280px}
-.rb_check .ctext{ vertical-align: top; font-size: 14px; color: #f9c59c; line-height: 16px;  }
-.redbag_pop .rb_btn.ani .bg{ -webkit-animation: btnscale 0.7s ease-in-out infinite both;-o-animation: btnscale 0.7s ease-in-out infinite both;animation: btnscale 0.7s ease-in-out infinite both; }
-.redbag_pop .rb_btn.ani:hover .bg{ animation: none;transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1) }
-
-@keyframes btnscale
-{
-0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+.header_redbag .rb_text {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    height: 45px;
+    background: #fff0d7;
+    border: 1px solid #ffdea8;
+    border-radius: 3px;
+    z-index: 1;
+    padding-left: 38px;
+    white-space: nowrap;
+    font-size: 0;
+    margin-top: 3px;
 }
 
-@-webkit-keyframes btnscale
-{
-0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+.header_redbag .rb_text .te1 {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    padding: 0 10px;
+    vertical-align: top;
+    text-align: left;
+    background: url(../img/redbag_text.jpg) 10px bottom no-repeat;
+    color: #e1514b;
+    font-size: 14px;
+    line-height: 20px;
+    height: 45px;
+    white-space: nowrap;
+    min-width: 105px;
+    border-right: 1px solid #ffdea8;
+    letter-spacing: 1px
 }
 
-@-moz-keyframes btnscale
-{
-0% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
-50% {transform: scale(1.1); -webkit-transform: scale(1.1); -moz-transform: scale(1.1); -o-transform: scale(1.1)}
-100% {transform: scale(1); -webkit-transform: scale(1); -moz-transform: scale(1); -o-transform: scale(1)}
+.header_redbag .te1 b {
+    font-size: 18px;
+    font-weight: normal;
+    font-family: 'redbag-figure', 'Futura Lt BT';
 }
 
+.header_redbag .rb_text .timecount {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    padding: 0 10px;
+    vertical-align: top;
+    white-space: nowrap;
+}
 
-.redbag_pop .al-l{text-align: left;padding: 0 42px;font-size: 14px;line-height: 22px;}
-.redbag_pop .rb_tip{position: relative;}
-.redbag_pop .rb_tip .tip-btn{text-decoration:none;padding:0 10px;position:absolute;right:42px;bottom:0;font-size: 20px;color: #ffe2b1;font-weight: 700;border: 2px solid #ffe2b1;border-radius: 5px;line-height: 32px;}
-.redbag_pop .rb_tip .tip-btn b{margin:0 25px;}
-.redbag_pop .rb_tip .tip-btn span{font-family:黑体;}
+.header_redbag .timecount span {
+    color: #858585;
+    font-size: 12px;
+    vertical-align: bottom;
+    line-height: 40px;
+}
 
-.redbag_pop.rb_result2{background-image: url(../img/redbag_pop4-v2.png);height: 540px;margin-top: -270px;}
-.rb_result2 .congratulation{font-size: 36px;color: #b28a35;text-align: center;padding-top: 61px;font-weight: 700;}
-.rb_result2 .congratulation p{font-size: 20px;padding-top: 10px;}
-.rb_result2 .congratulation p b{font-size: 24px;}
-.rb_result2 .qrcode-con{padding: 50px;text-align: center;}
-.rb_result2 .qrcode-con .p1{font-size: 14px;color: #f7a382;line-height: 24px;}
-.rb_result2 .qrcode-con .p1 span{display: block;}
-.rb_result2 .qrcode-con .p1 span b{color:#ffe2b1;font-weight: 100;}
-.rb_result2 .qrcode-con .p2{font-size: 18px;color: #ffe2b1;line-height: 30px;font-weight: 700;margin-top:15px;}
-.rb_result2 .qrcode-con .p2 span{display: block;}
-.rb_result2 .qrcode-con .p2 b{color:#ffc86c;}
+.header_redbag .timecount b {
+    color: #e74341;
+    font-size: 40px;
+    font-family: 'redbag-figure';
+    font-weight: normal;
+    vertical-align: bottom;
+    line-height: 50px;
+    padding: 0 2px;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    min-width: 42px;
+    text-align: center;
+}
 
-.redbag_pop.rb_result{background-image: url(../img/redbag_pop3-v2.png);height: 518px;margin-top: -259px;}
-.rb_result .rb_top2{padding-top: 52px;}
-.rb_result .qrcode-con{padding:70px 50px 0;text-align: center;}
-.rb_result .qrcode-con .rb_tip2{padding-top: 20px;padding-bottom: 25px;}
-.rb_result .qrcode-con .p1{font-size: 14px;color: #f7a382;line-height: 24px;}
-.rb_result .qrcode-con .p1 span{display: block;}
-.rb_result .qrcode-con .p1 span b{color:#ffe2b1;font-weight: 100;}
-.rb_result .qrcode-con .p2{font-size: 18px;color: #ffe2b1;line-height: 30px;font-weight: 700;margin-top:15px;}
-.rb_result .qrcode-con .p2 span{display: block;}
-.rb_result .qrcode-con .p2 b{color:#ffc86c;}
+.redbag_pop {
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    margin: -190px 0 0 -301px;
+    width: 602px;
+    height: 410px;
+    background: url(../img/redbag_pop2.png) center no-repeat;
+    z-index: 90;
+    opacity: 0;
+}
 
+.redbag_pop.nologin {
+    height: 380px;
+    background-image: url(../img/redbag_pop.png);
+}
 
-.dashang_rule{ display: inline-block;*display: inline;*zoom: 1; position: relative; }
-.dashang_rule .ds_rulecont{ display: none; position: absolute; width: 360px; background: rgba(255,255,255,.9); box-shadow: 0 0 10px rgba(0,0,0,.2);  right: 0; margin-right: -65px; bottom: 30px; z-index: 10; border-radius: 3px; text-align: left; }
-.dashang_rule >a{ color: #fff; font-size: 14px; cursor: pointer; display: inline-block;*display: inline;*zoom: 1; }
-.dashang_rule >a i{ display: inline-block;*display: inline;*zoom: 1; width: 16px; height: 16px; vertical-align: top; background-position: -130px -330px; margin: 3px 0 0 8px }
-.dashang_rule >a:hover{ text-decoration: none; }
-.dashang_rule >a:hover + .ds_rulecont{ display: block; }
-.ds_rulecont p{ padding: 10px 20px; font-size: 14px; color: #4d4d4d; line-height: 24px; }
-.ds_rulecont .arr i{ display: block; width: 0; height: 0; border-style: solid; border-width: 6px; border-color: transparent transparent #eae4d8; position: absolute; top: -12px; right: 40px; }
-.ds_rulecont .arr i.i2{ border-color: transparent transparent #fff; top: -10px; }
-.redbag_pop .ds_rulecont .scrollbox{ margin: 10px 25px 10px 15px; color: #4d4d4d; font-size: 14px; line-height: 24px; height: 282px }
-.ds_rulecont span{ font-size: 16px; font-weight: bold; }
-.ds_rulecont span b{ color: #d44543; padding-right: 8px; font-size: 18px; }
-.ds_rulecont li{ padding-left: 15px; }
-.redbag_pop .dashang_rule:hover .ds_rulecont{ display: block; }
-.redbag_pop .ds_rulecont .arr{ position: absolute; bottom: -30px; width: 100%; height: 30px; }
-.redbag_pop .ds_rulecont .arr i{ right: 31%; margin-right: -6px; top: 0; border-color: #b63d35 transparent transparent }
-.redbag_pop .ds_rulecont .arr i.i2{ top: -2px; border-color: #fff transparent transparent }
-.ds_rulecont .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ background: #ec908b; }
+.redbag_pop .cont {
+    margin: 10px;
+    position: relative;
+}
+
+.redbag_pop .rb_top {
+    text-align: center;
+    padding-top: 50px;
+}
+
+.redbag_pop .rb_top span {
+    color: #ffe2b1;
+    font-size: 20px;
+    letter-spacing: 8px;
+    padding-left: 8px;
+    display: block;
+    background: url(../img/rbpop_t.png) center 5px no-repeat;
+}
+
+.redbag_pop .rb_top h4 {
+    color: #feeac8;
+    font-size: 29px;
+    line-height: 50px;
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+.redbag_pop .rb_top b {
+    font-family: 'redbag-figure';
+    font-size: 36px;
+    vertical-align: middle;
+    padding: 0 1px;
+    font-weight: normal;
+}
+
+.redbag_pop .rb_tip {
+    color: #f9c59c;
+    font-size: 16px;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.redbag_pop .rb_tip a {
+    color: #fff9ef;
+}
+
+.redbag_pop .rb_tip .t2 {
+    padding-left: 10px;
+}
+
+.redbag_pop .rb_btn {
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    font-size: 0;
+    line-height: 0;
+    position: relative;
+    padding: 10px
+}
+
+.redbag_pop .rb_btn .bg {
+    display: block;
+    width: 90px;
+    height: 90px;
+    padding: 5px;
+    background: #f0d19f;
+    background: rgb(242, 213, 164);
+    background: -moz-linear-gradient(-45deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    background: -webkit-linear-gradient(-45deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    background: linear-gradient(135deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#f2d5a4', endColorstr='#e9c78f', GradientType=1);
+    transition: transform 0.1s ease;
+    border-radius: 50%;
+}
+
+.redbag_pop .rb_btn .bg b {
+    border: 1px solid #d0b17b;
+    display: block;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+}
+
+.redbag_pop .rb_btn i {
+    background: url(../img/redbag_btn.png) center -120px no-repeat;
+    display: block;
+    height: 60px;
+    position: absolute;
+    width: 100px;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -50px;
+}
+
+.redbag_pop .rb_btn i.wait {
+    background-position: center -190px;
+}
+
+.redbag_pop .rb_btn i.reg {
+    background-position: center -260px;
+}
+
+.redbag_pop .rb_btn:hover .bg {
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05)
+}
+
+.redbag_pop .rb_btn.wait:hover {
+    cursor: default;
+}
+
+.redbag_pop .rb_btn.wait:hover b {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1)
+}
+
+.redbag_pop .pop_close i {
+    background-position: -65px -300px;
+}
+
+.redbag_pop .pop_close:hover {
+    background: none;
+}
+
+.redbag_pop .rb_top2 {
+    text-align: center;
+    padding-top: 35px;
+}
+
+.redbag_pop .rb_top2>span {
+    font-size: 20px;
+    color: #ffe2b1;
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: block;
+}
+
+.redbag_pop .timecount {
+    font-size: 0;
+    text-align: center;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.redbag_pop .timecount span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    background: #f76f65;
+    height: 36px;
+    font-size: 12px;
+    color: #ffe2b1;
+    padding: 0 4px 0 6px
+}
+
+.redbag_pop .timecount span:first-child {
+    margin-right: 2px;
+}
+
+.redbag_pop .timecount b {
+    font-size: 30px;
+    color: #fffdf9;
+    font-family: 'redbag-figure';
+    font-weight: normal;
+    padding-right: 2px;
+}
+
+.redbag_pop .rbnum {
+    font-size: 24px;
+    color: #ffe2b1;
+    line-height: 26px;
+    letter-spacing: 1px;
+    vertical-align: top;
+    margin-bottom: 15px;
+}
+
+.redbag_pop .rbnum span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    background: #f76f65;
+    color: #fffdf9;
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: 26px;
+    font-family: 'redbag-figure';
+    height: 26px;
+    vertical-align: top;
+    line-height: 28px;
+    letter-spacing: 0;
+    margin: 2px 2px 0
+}
+
+.redbag_pop .rb_tip .tspan {
+    font-size: 14px;
+    line-height: 22px;
+    padding-top: 13px;
+}
+
+.redbag_pop.rb_result {
+    background-image: url(../img/redbag_pop3.png);
+    height: 459px;
+    margin-top: -270px;
+    left: 50%;
+    top: 50%;
+}
+
+.rb_result>.cont,
+.rb_result2>.cont {
+    height: 439px;
+}
+
+.rb_result .pop_close,
+.rb_result2 .pop_close {
+    top: 77px;
+}
+
+.rb_result .rb_top2 {
+    padding-top: 62px;
+}
+
+.rb_result .rb_top2>span {
+    color: #fff0d7;
+    font-size: 26px;
+    letter-spacing: 1px
+}
+
+.rb_result .rb_top2>span.sp2 {
+    color: #f9c59c;
+    font-size: 16px;
+    font-weight: normal;
+    padding-top: 5px;
+}
+
+.rb_result .rb_top2>span.sp2 b {
+    color: #fff0d7;
+}
+
+.redbag_pop .rb_tip2 {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.redbag_pop .rb_tip2 .tspan {
+    font-size: 16px;
+    line-height: 27px;
+    color: #f9c59c;
+}
+
+.redbag_pop .rb_tip2 .tspan b {
+    color: #ffe2b1;
+}
+
+.redbag_pop .qrbox {
+    padding: 7px;
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    width: 117px;
+    margin-left: -65px;
+}
+
+.redbag_pop .qrbox img {
+    width: 117px;
+    height: 117px;
+    background: #feeac8;
+    display: block;
+}
+
+.redbag_pop.rb_result2 {
+    background-image: url(../img/redbag_pop4.png);
+    height: 459px;
+    margin-top: -270px;
+    left: 50%;
+    top: 50%;
+}
+
+.rb_result2 .congratulation {
+    font-size: 0;
+    line-height: 0;
+    height: 110px;
+    padding-top: 51px;
+    vertical-align: top;
+}
+
+.rb_result2 .congratulation b {
+    font-size: 45px;
+    font-family: 'redbag-figure';
+    color: #d7483f;
+    display: inline;
+    line-height: 100%;
+    vertical-align: middle;
+    padding: 0 0 0 2px;
+    letter-spacing: 2px
+}
+
+.redbag_pop.rb_result2 .rb_tip2 {
+    padding-top: 15px;
+}
+
+.redbag_pop.rb_result2 .rb_tip2 strong {
+    color: #ffc86c;
+}
+
+.redbag_pop_box {
+    position: absolute;
+    width: 40%;
+    right: 0;
+    height: 251px;
+    margin-top: -125px;
+    top: 50%;
+}
+
+.redbag_pop.pop2 {
+    background-image: url(../img/redbag_pop5.png);
+    height: 251px;
+    width: 396px;
+    margin: 0 0 0 -198px;
+    top: -10%;
+    left: 50%;
+}
+
+.redbag_pop.pop2 .cont {
+    margin: 8px
+}
+
+.redbag_pop.pop2 .rb_top2 {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.redbag_pop.pop2 .rb_top2>span {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.redbag_pop.pop2 .rb_btn {
+    padding: 5px;
+    width: 80px;
+    height: 80px;
+}
+
+.redbag_pop.pop2 .rb_btn .bg {
+    display: block;
+    width: 72px;
+    height: 72px;
+    padding: 4px
+}
+
+.redbag_pop.pop2 .rb_btn .bg b {
+    height: 70px;
+    width: 70px;
+}
+
+.redbag_pop.pop2 .rb_btn i {
+    background: url(../img/redbag_btn2.png) center -340px no-repeat;
+    width: 80px;
+    margin-left: -40px;
+    height: 40px;
+    margin-top: -20px;
+}
+
+.redbag_pop.pop2 .rb_btn i.t5 {
+    background-position: center -290px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t4 {
+    background-position: center -240px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t3 {
+    background-position: center -190px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t2 {
+    background-position: center -140px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t1 {
+    background-position: center -90px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rbnum {
+    font-size: 22px;
+    margin-bottom: 0;
+}
+
+.redbag_pop.pop2 .rbnum span {
+    font-size: 20px;
+    height: 23px;
+    line-height: 25px;
+}
+
+.rb_check {
+    padding-top: 10px;
+}
+
+.rb_checkbox {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.rb_checkbox label {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ebb285;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: none;
+    cursor: pointer;
+}
+
+.rb_checkbox label:hover {
+    border-color: #eb9b5e
+}
+
+.rb_checkbox input[type=checkbox] {
+    visibility: hidden;
+}
+
+.rb_checkbox input[type=checkbox]:checked+label>i {
+    display: block;
+    width: 100%;
+    height: 14px;
+    background-position: -85px -280px
+}
+
+.rb_check .ctext {
+    vertical-align: top;
+    font-size: 14px;
+    color: #f9c59c;
+    line-height: 16px;
+}
+
+.redbag_pop .rb_btn.ani .bg {
+    -webkit-animation: btnscale 0.7s ease-in-out infinite both;
+    -o-animation: btnscale 0.7s ease-in-out infinite both;
+    animation: btnscale 0.7s ease-in-out infinite both;
+}
+
+.redbag_pop .rb_btn.ani:hover .bg {
+    animation: none;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1)
+}
+
+@keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+@-webkit-keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+@-moz-keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+.redbag_pop .al-l {
+    text-align: left;
+    padding: 0 42px;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.redbag_pop .rb_tip {
+    position: relative;
+}
+
+.redbag_pop .rb_tip .tip-btn {
+    text-decoration: none;
+    padding: 0 10px;
+    position: absolute;
+    right: 42px;
+    bottom: 0;
+    font-size: 20px;
+    color: #ffe2b1;
+    font-weight: 700;
+    border: 2px solid #ffe2b1;
+    border-radius: 5px;
+    line-height: 32px;
+}
+
+.redbag_pop .rb_tip .tip-btn b {
+    margin: 0 25px;
+}
+
+.redbag_pop .rb_tip .tip-btn span {
+    font-family: 黑体;
+}
+
+.redbag_pop.rb_result2 {
+    background-image: url(../img/redbag_pop4-v2.png);
+    height: 540px;
+    margin-top: -270px;
+}
+
+.rb_result2 .congratulation {
+    font-size: 36px;
+    color: #b28a35;
+    text-align: center;
+    padding-top: 61px;
+    font-weight: 700;
+}
+
+.rb_result2 .congratulation p {
+    font-size: 20px;
+    padding-top: 10px;
+}
+
+.rb_result2 .congratulation p b {
+    font-size: 24px;
+}
+
+.rb_result2 .qrcode-con {
+    padding: 50px;
+    text-align: center;
+}
+
+.rb_result2 .qrcode-con .p1 {
+    font-size: 14px;
+    color: #f7a382;
+    line-height: 24px;
+}
+
+.rb_result2 .qrcode-con .p1 span {
+    display: block;
+}
+
+.rb_result2 .qrcode-con .p1 span b {
+    color: #ffe2b1;
+    font-weight: 100;
+}
+
+.rb_result2 .qrcode-con .p2 {
+    font-size: 18px;
+    color: #ffe2b1;
+    line-height: 30px;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.rb_result2 .qrcode-con .p2 span {
+    display: block;
+}
+
+.rb_result2 .qrcode-con .p2 b {
+    color: #ffc86c;
+}
+
+.redbag_pop.rb_result {
+    background-image: url(../img/redbag_pop3-v2.png);
+    height: 518px;
+    margin-top: -259px;
+}
+
+.rb_result .rb_top2 {
+    padding-top: 52px;
+}
+
+.rb_result .qrcode-con {
+    padding: 70px 50px 0;
+    text-align: center;
+}
+
+.rb_result .qrcode-con .rb_tip2 {
+    padding-top: 20px;
+    padding-bottom: 25px;
+}
+
+.rb_result .qrcode-con .p1 {
+    font-size: 14px;
+    color: #f7a382;
+    line-height: 24px;
+}
+
+.rb_result .qrcode-con .p1 span {
+    display: block;
+}
+
+.rb_result .qrcode-con .p1 span b {
+    color: #ffe2b1;
+    font-weight: 100;
+}
+
+.rb_result .qrcode-con .p2 {
+    font-size: 18px;
+    color: #ffe2b1;
+    line-height: 30px;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.rb_result .qrcode-con .p2 span {
+    display: block;
+}
+
+.rb_result .qrcode-con .p2 b {
+    color: #ffc86c;
+}
+
+.dashang_rule {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    position: relative;
+}
+
+.dashang_rule .ds_rulecont {
+    display: none;
+    position: absolute;
+    width: 360px;
+    background: rgba(255, 255, 255, .9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    right: 0;
+    margin-right: -65px;
+    bottom: 30px;
+    z-index: 10;
+    border-radius: 3px;
+    text-align: left;
+}
+
+.dashang_rule>a {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+.dashang_rule>a i {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+    background-position: -130px -330px;
+    margin: 3px 0 0 8px
+}
+
+.dashang_rule>a:hover {
+    text-decoration: none;
+}
+
+.dashang_rule>a:hover+.ds_rulecont {
+    display: block;
+}
+
+.ds_rulecont p {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #4d4d4d;
+    line-height: 24px;
+}
+
+.ds_rulecont .arr i {
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px;
+    border-color: transparent transparent #eae4d8;
+    position: absolute;
+    top: -12px;
+    right: 40px;
+}
+
+.ds_rulecont .arr i.i2 {
+    border-color: transparent transparent #fff;
+    top: -10px;
+}
+
+.redbag_pop .ds_rulecont .scrollbox {
+    margin: 10px 25px 10px 15px;
+    color: #4d4d4d;
+    font-size: 14px;
+    line-height: 24px;
+    height: 282px
+}
+
+.ds_rulecont span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.ds_rulecont span b {
+    color: #d44543;
+    padding-right: 8px;
+    font-size: 18px;
+}
+
+.ds_rulecont li {
+    padding-left: 15px;
+}
+
+.redbag_pop .dashang_rule:hover .ds_rulecont {
+    display: block;
+}
+
+.redbag_pop .ds_rulecont .arr {
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    height: 30px;
+}
+
+.redbag_pop .ds_rulecont .arr i {
+    right: 31%;
+    margin-right: -6px;
+    top: 0;
+    border-color: #b63d35 transparent transparent
+}
+
+.redbag_pop .ds_rulecont .arr i.i2 {
+    top: -2px;
+    border-color: #fff transparent transparent
+}
+
+.ds_rulecont .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background: #ec908b;
+}
+
 
 /* 红包 new */
-.header_redbag{ display: inline-block;*display: inline; *zoom: 1; vertical-align: top; margin: 9px 0 0 30px; position: relative; cursor: pointer;background:#fb6655;border-radius:4px;padding-right:56px}
-.header_redbag .redbag_pic{ width: 48px; height: 56px; background: url(../img/redbag201705/chouj.gif) 0 0 no-repeat; background-size: 100% auto; position: absolute; right: 0; z-index: 3; margin-left: -5px;top:-2px}
-.header_redbag .hongb-act{padding:6px 10px 4px}
-.header_redbag .hongb-act .hongb-pfon{color:#fff;font-size:17px;font-weight:bold;line-height:1.1}
-.header_redbag .hongb-act .hongb-pfon span{position:relative;top:2px;font-family:"redbag-figure";font-size:20px;color:#fff39f}
-.header_redbag .hongb-act .gund-box{height:20px;overflow:hidden;background:url(../img/redbag201705/gund-line.png) no-repeat center}
-.header_redbag .hongb-act .gund-box li{height:20px;line-height:20px;text-align:center;color:#fef9d4;font-size:12px;letter-spacing:0.05em}
+
+.header_redbag {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    margin: 9px 0 0 30px;
+    position: relative;
+    cursor: pointer;
+    background: #fb6655;
+    border-radius: 4px;
+    padding-right: 56px
+}
+
+.header_redbag .redbag_pic {
+    width: 48px;
+    height: 56px;
+    background: url(../img/redbag201705/chouj.gif) 0 0 no-repeat;
+    background-size: 100% auto;
+    position: absolute;
+    right: 0;
+    z-index: 3;
+    margin-left: -5px;
+    top: -2px
+}
+
+.header_redbag .hongb-act {
+    padding: 6px 10px 4px
+}
+
+.header_redbag .hongb-act .hongb-pfon {
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.1
+}
+
+.header_redbag .hongb-act .hongb-pfon span {
+    position: relative;
+    top: 2px;
+    font-family: "redbag-figure";
+    font-size: 20px;
+    color: #fff39f
+}
+
+.header_redbag .hongb-act .gund-box {
+    height: 20px;
+    overflow: hidden;
+    background: url(../img/redbag201705/gund-line.png) no-repeat center
+}
+
+.header_redbag .hongb-act .gund-box li {
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #fef9d4;
+    font-size: 12px;
+    letter-spacing: 0.05em
+}
+
+
 /*.hongb-laybox .light-shadow{position:absolute;left:264px;top:300px;width:70px;height:70px;overflow:hidden;z-index:86}
 .hongb-laybox .light-shadow i{display:block;position:relative;top:-110px;width:100px;height:52px;background:url(../img/redbag201705/btn-light.png) no-repeat center;background-size:100% auto;animation:cj 3s linear infinite;-moz-animation:cj 3s linear infinite;-ms-animation:cj 3s linear infinite;-webkit-animation:cj 3s linear infinite;-ms-animation:cj 3s linear infinite}*/
-.hongb-laybox{position:fixed;bottom:0;left:50%;margin-left:-300px;width:600px;height:800px;background:url(../img/redbag201705/zhuanp-bg.png) no-repeat center;z-index:81}
-.hongb-cout{position:absolute;top:70px;width:100%;text-align:center;font-size:15px;color:#fff;font-style:normal;z-index:82}
-.zhuanp-box{position:absolute;top:72px;left:50%;margin-left:-263px;width:524px;height:524px;background:url(../img/redbag201705/zhuan.png) no-repeat center;z-index:83}
-.deng-box{position:absolute;top:72px;left:50%;margin-left:-263px;width:524px;height:524px;background:url(../img/redbag201705/deng.png) no-repeat center;z-index:23;transition:all 0.1s ease-in-out}
-.deng-box2{background:url(../img/redbag201705/deng2.png) no-repeat center}
-.jiant-box{position:absolute;top:236px;left:50%;margin-left:-98px;width:196px;height:196px;background:url(../img/redbag201705/zhen.png) no-repeat center;cursor:pointer;z-index:84}
-.lay-del-btn{position:absolute;top:120px;right:84px;width:42px;height:42px;background:url(../img/redbag201705/lay-del-btn.png) no-repeat;z-index:85}
-.zhuanp-infobox{padding-top:606px}
-.zhuanp-xinx{margin:0 auto;width:360px;overflow:hidden}
-.zhuanp-xinx h3{height:38px;line-height:34px;background:url(../img/redbag201705/tt-bg.png) no-repeat center top;font-size:20px;color:#ffe25c;text-align:center;font-weight:normal}
-.zhuanp-xinx .bot-gdbox{margin:8px 0 26px;width:460px;height:46px;overflow:hidden;font-size:0}
-.zhuanp-xinx .bot-gdbox li{display:inline-block;*display:inline;*zoom:1;width:164px;margin-right:16px;padding-right:16px;height:24px;line-height:24px;color:#feecd0;font-size:14px;vertical-align:middle;background:url(../img/redbag201705/xian.png) no-repeat right center}
-.zhuanp-xinx .hd-rule-list{font-size:14px;color:#feecd0}
 
-.hd-rule-list h4{margin-top:10px;font-size:15px}
-.hd-rule-list li{list-style:decimal;margin-left:18px}
-.zhuanp-infobox .scrollbox{margin:0 auto;width:390px;height:176px}
-.zhuanp-infobox .mCS-dark.mCSB_scrollTools .mCSB_draggerRail{background:#b52426}
-.zhuanp-infobox .mCS-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{width:8px;background-color:#D93537;border-radius:0}
-
-.enteritem .zhuc-login-fon{background:#FE7464}
-.enteritem .zhuc-login-fon:hover{background:#FE614F}
-.enteritem .zhuc-login-bor i{background:url(../img/redbag201705/chouj.gif) no-repeat center}
-.enteritem .zhuc-login-bor{border-color:#FEAFA6}
-
-
-.new-hongb-con{padding:40px 30px 40px;text-align:center}
-.new-hongb-con .new-hongb-tt{font-size:18px;color:#666;line-height:1.7}
-.new-hongb-con .new-hongb-tt .new-hb-bm{font-size:27px}
-.new-hongb-con .new-hong-siz{font-size:16px}
-.new-hongb-con .new-hongb-tt .new-hb-sm{margin-top:16px;font-size:18px;line-height:1.5}
-.new-hongb-con .new-hongb-tt .new-hb-sm span{color:#F16550}
-.new-hongb-con .new-hongb-btn{margin-top:30px}
-.new-hongb-con .new-hongb-btn .new-hongb-sum{display:inline-block;width:254px;height:58px;line-height:58px;background:#F36251;color:#fff;font-size:24px;border-radius:6px;font-weight:bold}
-.new-hongb-con .new-hongb-btn .new-hongb-sum:hover{background:#F14733;text-decoration:none}
-.new-hongb-con .new-hongb-btn .new-hongb-dl{margin:18px auto 0;width:230px;height:10px;border-bottom:solid #CFCFCF 1px}
-.new-hongb-con .new-hongb-btn .new-hongb-dl span{background:#fff;padding:0 10px;font-size:16px;color:#666}
-.new-hongb-con .new-hongb-btn .new-hongb-dl a{color:#388fc6}
-.new-hongb-con .new-hongb-tt .new-hb-mm{font-size:22px}
-.new-hongb-con .new-hongb-tis{padding:30px 74px 0;font-size:14px;color:#ae8560}
-
-.new-hongb-prize{position:fixed;left:50%;top:50%;margin:-322px 0 0 -245px;width:490px;height:644px;background:url(../img/redbag201705/prize-zj-bg.png);z-index:101}
-.new-hongb-prize .pop_close{top:190px;right:10px}
-.new-hongb-prize .pop_close:hover{background:#E85150}
-.new-hongb-jpbox{padding-top:32px;margin:0 auto;width:410px;height:160px;line-height:0}
-
-.new-hongb-title{margin:20px auto 0;text-align:center;font-size:16px;color:#ffeabf;font-weight:bold}
-.new-hongb-title h3{font-size:30px}
-.new-hongb-title h3 span{position:relative;top:3px;font-family:"redbag-figure";font-size:38px}
-.new-hongb-title .new-hongb-thei{margin:5px auto 0;width:320px;height:10px;border-bottom:solid #F15554 1px}
-.new-hongb-title .new-hongb-thei span{padding:0 10px;background:#E53E3D}
-.new-hongb-title .new-hongb-thei a{display:inline-block;margin-left:8px;width:94px;height:30px;line-height:28px;background:#FFEABF;font-size:18px;color:#e53e3d;border-radius:4px;vertical-align:middle}
-.new-hongb-title .thei-wid{width:400px}
-.new-hongb-ewm{margin-top:30px;text-align:center}
-.new-hongb-ewm .hb-ewm-img{margin:0 auto;width:131px;line-height:0}
-.new-hongb-ewm p{margin-top:5px;font-size:14px;color:#f7a382}
-.new-hongb-ewm span{color:#ffe2b1}
-.new-hongb-method{margin:30px auto 0;width:340px;font-size:16px;color:#ffe2b1;font-weight:bold;text-align:center}
-.new-hongb-method span{color:#ffc86c}
-@keyframes cj{
-	0%{-moz-transform:translate(0px, 0)}
-	100%{transform:translate(0px,320px)}
+.hongb-laybox {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    margin-left: -300px;
+    width: 600px;
+    height: 800px;
+    background: url(../img/redbag201705/zhuanp-bg.png) no-repeat center;
+    z-index: 81
 }
-@-webkit-keyframes cj{
-	0%{-webkit-transform:translate(0px,0)}
-	100%{-webkit-transform:translate(0px,320px)}
+
+.hongb-cout {
+    position: absolute;
+    top: 70px;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    color: #fff;
+    font-style: normal;
+    z-index: 82
 }
-@-moz-keyframes cj{
-	0%{-moz-transform:translate(0px,0)}
-	100%{-moz-transform:translate(0px,320px)}
+
+.zhuanp-box {
+    position: absolute;
+    top: 72px;
+    left: 50%;
+    margin-left: -263px;
+    width: 524px;
+    height: 524px;
+    background: url(../img/redbag201705/zhuan.png) no-repeat center;
+    z-index: 83
 }
-@-ms-keyframes cj{
-	0%{-webkit-transform:translate(0px,0)}
-	100%{-ms-transform:translate(0px,160px)}
+
+.deng-box {
+    position: absolute;
+    top: 72px;
+    left: 50%;
+    margin-left: -263px;
+    width: 524px;
+    height: 524px;
+    background: url(../img/redbag201705/deng.png) no-repeat center;
+    z-index: 23;
+    transition: all 0.1s ease-in-out
 }
-.advertise-cbox{margin:0 auto 18px;max-width:728px;line-height:0}
+
+.deng-box2 {
+    background: url(../img/redbag201705/deng2.png) no-repeat center
+}
+
+.jiant-box {
+    position: absolute;
+    top: 236px;
+    left: 50%;
+    margin-left: -98px;
+    width: 196px;
+    height: 196px;
+    background: url(../img/redbag201705/zhen.png) no-repeat center;
+    cursor: pointer;
+    z-index: 84
+}
+
+.lay-del-btn {
+    position: absolute;
+    top: 120px;
+    right: 84px;
+    width: 42px;
+    height: 42px;
+    background: url(../img/redbag201705/lay-del-btn.png) no-repeat;
+    z-index: 85
+}
+
+.zhuanp-infobox {
+    padding-top: 606px
+}
+
+.zhuanp-xinx {
+    margin: 0 auto;
+    width: 360px;
+    overflow: hidden
+}
+
+.zhuanp-xinx h3 {
+    height: 38px;
+    line-height: 34px;
+    background: url(../img/redbag201705/tt-bg.png) no-repeat center top;
+    font-size: 20px;
+    color: #ffe25c;
+    text-align: center;
+    font-weight: normal
+}
+
+.zhuanp-xinx .bot-gdbox {
+    margin: 8px 0 26px;
+    width: 460px;
+    height: 46px;
+    overflow: hidden;
+    font-size: 0
+}
+
+.zhuanp-xinx .bot-gdbox li {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    width: 164px;
+    margin-right: 16px;
+    padding-right: 16px;
+    height: 24px;
+    line-height: 24px;
+    color: #feecd0;
+    font-size: 14px;
+    vertical-align: middle;
+    background: url(../img/redbag201705/xian.png) no-repeat right center
+}
+
+.zhuanp-xinx .hd-rule-list {
+    font-size: 14px;
+    color: #feecd0
+}
+
+.hd-rule-list h4 {
+    margin-top: 10px;
+    font-size: 15px
+}
+
+.hd-rule-list li {
+    list-style: decimal;
+    margin-left: 18px
+}
+
+.zhuanp-infobox .scrollbox {
+    margin: 0 auto;
+    width: 390px;
+    height: 176px
+}
+
+.zhuanp-infobox .mCS-dark.mCSB_scrollTools .mCSB_draggerRail {
+    background: #b52426
+}
+
+.zhuanp-infobox .mCS-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    width: 8px;
+    background-color: #D93537;
+    border-radius: 0
+}
+
+.enteritem .zhuc-login-fon {
+    background: #FE7464
+}
+
+.enteritem .zhuc-login-fon:hover {
+    background: #FE614F
+}
+
+.enteritem .zhuc-login-bor i {
+    background: url(../img/redbag201705/chouj.gif) no-repeat center
+}
+
+.enteritem .zhuc-login-bor {
+    border-color: #FEAFA6
+}
+
+.new-hongb-con {
+    padding: 40px 30px 40px;
+    text-align: center
+}
+
+.new-hongb-con .new-hongb-tt {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.7
+}
+
+.new-hongb-con .new-hongb-tt .new-hb-bm {
+    font-size: 27px
+}
+
+.new-hongb-con .new-hong-siz {
+    font-size: 16px
+}
+
+.new-hongb-con .new-hongb-tt .new-hb-sm {
+    margin-top: 16px;
+    font-size: 18px;
+    line-height: 1.5
+}
+
+.new-hongb-con .new-hongb-tt .new-hb-sm span {
+    color: #F16550
+}
+
+.new-hongb-con .new-hongb-btn {
+    margin-top: 30px
+}
+
+.new-hongb-con .new-hongb-btn .new-hongb-sum {
+    display: inline-block;
+    width: 254px;
+    height: 58px;
+    line-height: 58px;
+    background: #F36251;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 6px;
+    font-weight: bold
+}
+
+.new-hongb-con .new-hongb-btn .new-hongb-sum:hover {
+    background: #F14733;
+    text-decoration: none
+}
+
+.new-hongb-con .new-hongb-btn .new-hongb-dl {
+    margin: 18px auto 0;
+    width: 230px;
+    height: 10px;
+    border-bottom: solid #CFCFCF 1px
+}
+
+.new-hongb-con .new-hongb-btn .new-hongb-dl span {
+    background: #fff;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #666
+}
+
+.new-hongb-con .new-hongb-btn .new-hongb-dl a {
+    color: #388fc6
+}
+
+.new-hongb-con .new-hongb-tt .new-hb-mm {
+    font-size: 22px
+}
+
+.new-hongb-con .new-hongb-tis {
+    padding: 30px 74px 0;
+    font-size: 14px;
+    color: #ae8560
+}
+
+.new-hongb-prize {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin: -322px 0 0 -245px;
+    width: 490px;
+    height: 644px;
+    background: url(../img/redbag201705/prize-zj-bg.png);
+    z-index: 101
+}
+
+.new-hongb-prize .pop_close {
+    top: 190px;
+    right: 10px
+}
+
+.new-hongb-prize .pop_close:hover {
+    background: #E85150
+}
+
+.new-hongb-jpbox {
+    padding-top: 32px;
+    margin: 0 auto;
+    width: 410px;
+    height: 160px;
+    line-height: 0
+}
+
+.new-hongb-title {
+    margin: 20px auto 0;
+    text-align: center;
+    font-size: 16px;
+    color: #ffeabf;
+    font-weight: bold
+}
+
+.new-hongb-title h3 {
+    font-size: 30px
+}
+
+.new-hongb-title h3 span {
+    position: relative;
+    top: 3px;
+    font-family: "redbag-figure";
+    font-size: 38px
+}
+
+.new-hongb-title .new-hongb-thei {
+    margin: 5px auto 0;
+    width: 320px;
+    height: 10px;
+    border-bottom: solid #F15554 1px
+}
+
+.new-hongb-title .new-hongb-thei span {
+    padding: 0 10px;
+    background: #E53E3D
+}
+
+.new-hongb-title .new-hongb-thei a {
+    display: inline-block;
+    margin-left: 8px;
+    width: 94px;
+    height: 30px;
+    line-height: 28px;
+    background: #FFEABF;
+    font-size: 18px;
+    color: #e53e3d;
+    border-radius: 4px;
+    vertical-align: middle
+}
+
+.new-hongb-title .thei-wid {
+    width: 400px
+}
+
+.new-hongb-ewm {
+    margin-top: 30px;
+    text-align: center
+}
+
+.new-hongb-ewm .hb-ewm-img {
+    margin: 0 auto;
+    width: 131px;
+    line-height: 0
+}
+
+.new-hongb-ewm p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #f7a382
+}
+
+.new-hongb-ewm span {
+    color: #ffe2b1
+}
+
+.new-hongb-method {
+    margin: 30px auto 0;
+    width: 340px;
+    font-size: 16px;
+    color: #ffe2b1;
+    font-weight: bold;
+    text-align: center
+}
+
+.new-hongb-method span {
+    color: #ffc86c
+}
+
+@keyframes cj {
+    0% {
+        -moz-transform: translate(0px, 0)
+    }
+    100% {
+        transform: translate(0px, 320px)
+    }
+}
+
+@-webkit-keyframes cj {
+    0% {
+        -webkit-transform: translate(0px, 0)
+    }
+    100% {
+        -webkit-transform: translate(0px, 320px)
+    }
+}
+
+@-moz-keyframes cj {
+    0% {
+        -moz-transform: translate(0px, 0)
+    }
+    100% {
+        -moz-transform: translate(0px, 320px)
+    }
+}
+
+@-ms-keyframes cj {
+    0% {
+        -webkit-transform: translate(0px, 0)
+    }
+    100% {
+        -ms-transform: translate(0px, 160px)
+    }
+}
+
+.advertise-cbox {
+    margin: 0 auto 18px;
+    max-width: 728px;
+    line-height: 0
+}
 
 
 /* 晒单层 */
-.header_showTrade_ad a{ display: block; width: 320px; height:50px; margin: 10px 0px 10px 0px;background: url(http://pmchat.24k.hk/theme1/img/headShowTrade.gif) 0 center no-repeat; }
-.shaidan-conbox{position:fixed;left:50%;top:50%;margin:-386px 0 0 -301px;width:620px;z-index:101;font-family:"微軟正黑體"}
-.shaidan-ban{position:relative;height:320px;text-align:center;background:url(../img/redbag201706/shaid0630.png) no-repeat center top;z-index:2}
-.shaidan-ban .shaidan-btn{position:absolute;left:50%;bottom:-37px;margin-left:-152px;display:block;width:230px;height:74px;background:url(../img/redbag201706/shaidan-btn.png) no-repeat;font-size:0}
-.shaidan-ban .shaidan-btn:hover,.del-btn:hover{opacity:0.95}
-.shadan-cbox{position:relative;left:21px;width:511px;height:410px;padding-top:42px;background:#fff;z-index:1;border-radius:0 0 5px 5px;overflow:hidden}
-.shadan-item{padding:15px 0}
-.shadan-prize{text-align:center;font-size:0}
-.shadan-prize li{position:relative;display:inline-block;*display:inline;*zoom:1;margin:0 5px;width:106px;padding:4px;border:solid #DCDCDC 1px;vertical-align:top}
-.shadan-pbord{padding:12px 6px 6px;border:solid #CAAC50 1px}
-.shadan-jiang{position:relative;position:absolute;top:-13px;left:50%;margin-left:-46px;width:92px;height:26px;line-height:26px;font-size:16px;color:#fff;font-weight:bold;background:#C3A139;font-style:normal;border-radius:30px}
-.jiang-f2{background:#868686}
-.jiang-f3{background:#8F5F3F}
-.hguang{position:absolute;left:-16px;top:-14px;line-height:0;display:block;width:40px;height:30px;background:url(../img/redbag201706/guan.png) no-repeat}
-.shadan-im{height:80px;background:url(../img/redbag201706/money.png) no-repeat center top}
-.shadan-i1{background-position:center -80px}
-.shadan-i2{background-position:center -160px}
-.shadan-i3{background-position:center -240px}
-.shadan-qian p{font-size:17px;color:#868686;font-weight:bold;letter-spacing:-0.1em;white-space:nowrap;line-height:1.2;color:#8f5f3f}
-.shadan-prize .prize-f-fon1{color:#c3a139}
-.shadan-prize .prize-f-fon2{color:#868686}
-.shadan-list{margin-top:6px;font-size:15px;padding-top:6px;border-top:solid #ccc 1px;line-height:1.2}
-.tishi-text{padding:0 15px 15px;font-size:14px}
-.rule-cbox{margin-top:25px;padding:0 15px 15px 15px}
-.rule-cbox h3{height:15px;border-bottom:solid #E4E4E4 1px;text-align:center}
-.rule-cbox h3 span{display:inline-block;width:126px;line-height:30px;background:#D3444B;color:#fff;font-size:18px;border-radius:30px;font-weight:normal}
-.rull-hei{padding:28px 15px 0 0}
-.hd-rule-list{height:60px}
-.hd-rule-list li{font-size:13px;line-height:1.4;text-align:justify}
-.del-btn{position:absolute;right:90px;top:26px;display:block;width:36px;height:36px;background:url(../img/redbag201706/del.png) no-repeat}
+
+.header_showTrade_ad a {
+    display: block;
+    width: 320px;
+    height: 50px;
+    margin: 10px 0px 10px 0px;
+    background: url(../img/redbag201706/270x49.gif) 0 center no-repeat;
+}
+
+.shaidan-conbox {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin: -386px 0 0 -301px;
+    width: 620px;
+    z-index: 101;
+    font-family: "微軟正黑體"
+}
+
+.shaidan-ban {
+    position: relative;
+    height: 320px;
+    text-align: center;
+    background: url(../img/redbag201706/shaid0630.png) no-repeat center top;
+    z-index: 2
+}
+
+.shaidan-ban .shaidan-btn {
+    position: absolute;
+    left: 50%;
+    bottom: -37px;
+    margin-left: -152px;
+    display: block;
+    width: 230px;
+    height: 74px;
+    background: url(../img/redbag201706/shaidan-btn.png) no-repeat;
+    font-size: 0
+}
+
+.shaidan-ban .shaidan-btn:hover,
+.del-btn:hover {
+    opacity: 0.95
+}
+
+.shadan-cbox {
+    position: relative;
+    left: 21px;
+    width: 511px;
+    height: 410px;
+    padding-top: 42px;
+    background: #fff;
+    z-index: 1;
+    border-radius: 0 0 5px 5px;
+    overflow: hidden
+}
+
+.shadan-item {
+    padding: 15px 0
+}
+
+.shadan-prize {
+    text-align: center;
+    font-size: 0
+}
+
+.shadan-prize li {
+    position: relative;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    margin: 0 5px;
+    width: 106px;
+    padding: 4px;
+    border: solid #DCDCDC 1px;
+    vertical-align: top
+}
+
+.shadan-pbord {
+    padding: 12px 6px 6px;
+    border: solid #CAAC50 1px
+}
+
+.shadan-jiang {
+    position: relative;
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    margin-left: -46px;
+    width: 92px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    background: #C3A139;
+    font-style: normal;
+    border-radius: 30px
+}
+
+.jiang-f2 {
+    background: #868686
+}
+
+.jiang-f3 {
+    background: #8F5F3F
+}
+
+.hguang {
+    position: absolute;
+    left: -16px;
+    top: -14px;
+    line-height: 0;
+    display: block;
+    width: 40px;
+    height: 30px;
+    background: url(../img/redbag201706/guan.png) no-repeat
+}
+
+.shadan-im {
+    height: 80px;
+    background: url(../img/redbag201706/money.png) no-repeat center top
+}
+
+.shadan-i1 {
+    background-position: center -80px
+}
+
+.shadan-i2 {
+    background-position: center -160px
+}
+
+.shadan-i3 {
+    background-position: center -240px
+}
+
+.shadan-qian p {
+    font-size: 17px;
+    color: #868686;
+    font-weight: bold;
+    letter-spacing: -0.1em;
+    white-space: nowrap;
+    line-height: 1.2;
+    color: #8f5f3f
+}
+
+.shadan-prize .prize-f-fon1 {
+    color: #c3a139
+}
+
+.shadan-prize .prize-f-fon2 {
+    color: #868686
+}
+
+.shadan-list {
+    margin-top: 6px;
+    font-size: 15px;
+    padding-top: 6px;
+    border-top: solid #ccc 1px;
+    line-height: 1.2
+}
+
+.tishi-text {
+    padding: 0 15px 15px;
+    font-size: 14px
+}
+
+.rule-cbox {
+    margin-top: 25px;
+    padding: 0 15px 15px 15px
+}
+
+.rule-cbox h3 {
+    height: 15px;
+    border-bottom: solid #E4E4E4 1px;
+    text-align: center
+}
+
+.rule-cbox h3 span {
+    display: inline-block;
+    width: 126px;
+    line-height: 30px;
+    background: #D3444B;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 30px;
+    font-weight: normal
+}
+
+.rull-hei {
+    padding: 28px 15px 0 0
+}
+
+.hd-rule-list {
+    height: 60px
+}
+
+.hd-rule-list li {
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: justify
+}
+
+.del-btn {
+    position: absolute;
+    right: 90px;
+    top: 26px;
+    display: block;
+    width: 36px;
+    height: 36px;
+    background: url(../img/redbag201706/del.png) no-repeat
+}
+
 
 /* 问卷广告位 by terry 2017.7.11 */
-.header-right{position:relative}
-.wenjuan-adbox{position:absolute;left:-223px;top:50%;margin-top:-35px;line-height:0}
-.wenjuan-adbox a{display:block;width:200px;height:70px;background:url(../img/wenjuan-icon1.gif) no-repeat;font-size:0}
 
-
-@media(max-height:800px){
-	.shaidan-conbox{transform:scale(0.8);-moz-transform:scale(0.8);-ms-transform:scale(0.8);-webkit-transform:scale(0.8)}
+.header-right {
+    position: relative
 }
 
-
-@media(max-width: 1300px){
-	.train_ad{ padding-left: 15px; }
-	.header_redbag{ margin-left: 20px;}
-}
-@media(max-width: 1279px){
-	.wenjuan-adbox{display:none}
-}
-
-@media(max-width: 1260px){
-	.train_ad{ display: none; }
-	.box-header h1{ width: 150px; background-size: 100% auto }
-	.header_redbag{ margin-left: 10px; margin-top: 12px; }
-	.header_redbag .redbag_pic{ width: 40px; height: 49px; }
-	.header_redbag .rb_text{ padding-left: 35px; margin-top: 1px; }
-	.header_redbag .rb_text .timecount{ padding: 0 5px }
-	.header_redbag .timecount b{ font-size: 32px; min-width: 35px }
-	.header_redbag .rb_text .te1{padding: 0 5px; background-size: 80px auto; min-width: 80px; background-position: 5px 10px; font-size: 13px; line-height: 24px; }
+.wenjuan-adbox {
+    position: absolute;
+    left: -223px;
+    top: 50%;
+    margin-top: -35px;
+    line-height: 0
 }
 
+.wenjuan-adbox a {
+    display: block;
+    width: 200px;
+    height: 70px;
+    background: url(../img/wenjuan-icon1.gif) no-repeat;
+    font-size: 0
+}
 
+@media(max-height:800px) {
+    .shaidan-conbox {
+        transform: scale(0.8);
+        -moz-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+        -webkit-transform: scale(0.8)
+    }
+}
+
+@media(max-width: 1300px) {
+    .train_ad {
+        padding-left: 15px;
+    }
+    .header_redbag {
+        margin-left: 20px;
+    }
+}
+
+@media(max-width: 1279px) {
+    .wenjuan-adbox {
+        display: none
+    }
+}
+
+@media(max-width: 1260px) {
+    .train_ad {
+        display: none;
+    }
+    .box-header h1 {
+        width: 150px;
+        background-size: 100% auto
+    }
+    .header_redbag {
+        margin-left: 10px;
+        margin-top: 12px;
+    }
+    .header_redbag .redbag_pic {
+        width: 40px;
+        height: 49px;
+    }
+    .header_redbag .rb_text {
+        padding-left: 35px;
+        margin-top: 1px;
+    }
+    .header_redbag .rb_text .timecount {
+        padding: 0 5px
+    }
+    .header_redbag .timecount b {
+        font-size: 32px;
+        min-width: 35px
+    }
+    .header_redbag .rb_text .te1 {
+        padding: 0 5px;
+        background-size: 80px auto;
+        min-width: 80px;
+        background-position: 5px 10px;
+        font-size: 13px;
+        line-height: 24px;
+    }
+}
