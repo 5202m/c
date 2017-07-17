@@ -176,6 +176,7 @@ var videos = {
          * @param autostart
          */
         playByQCloud: function($panel, url, title, autostart){
+            this.clear($('#'+$panel));
             LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
                 var options = {
                     "volume":1,
