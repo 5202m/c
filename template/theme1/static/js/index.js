@@ -190,11 +190,11 @@ var indexJS = {
         /**
          * 联系助理按钮事件
          */
-        if (indexJS.isNeedOnlineCS()) {
+        if (indexJS.isNeedOnlineCS() &&  indexJS.userInfo.groupId != 'studio_29') {
             indexJS.connectOnlineCs();
         }
         $('.mod_infotab .tabnav .myaid').click(function() {
-            if (indexJS.isNeedOnlineCS()) {
+            if (indexJS.isNeedOnlineCS() &&  indexJS.userInfo.groupId != 'studio_29') {
                 indexJS.connectOnlineCs();
             } else {
                 if ($(".pletter_win .mult_dialog a[utype=3]").length == 0) {
