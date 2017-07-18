@@ -55,6 +55,7 @@ Container.history = {
  * 返回
  */
 Container.back = function() {
+    $(".wenjuan-float-con").show();
     Container.go(-1);
 };
 
