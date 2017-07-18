@@ -1225,7 +1225,7 @@ var studioChatMb={
                 this.videoData($panel, "currVideoUrl", url);
                 this.videoData($panel, "currVideoTitle", title);
                 if(/\.myqcloud\./.test(url)){
-                    this.playByQCloud($panel.attr('id'), url, title, true)
+                    this.playByQCloud($panel, url, title, true)
                 }else {
                     if (/type=blws/.test(url)) {
                         this.playByBLWS($panel, url, title, false);
@@ -1247,20 +1247,19 @@ var studioChatMb={
              * @param autostart
              */
             playByQCloud: function($panel, url, title, autostart){
-                LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
-                    var player = new TcPlayer($panel,{
-                        "volume": 1,
-                        "controls": "system",
-                        "m3u8": url,
-                        "autoplay" : autostart,
-                        "live" : true,
-                        "x5_player" : true,
-                        "width" :  '100%',
-                        "height" : '100%'
-                    });
-                    $('.vcp-playtoggle').css({'background-repeat': 'no-repeat','background-position-x': '50%'});
-                    $('.vcp-fullscreen-toggle').hide();
+                this.clear($panel);
+                var player = new TcPlayer($panel.attr('id'),{
+                    "volume": 1,
+                    "controls": "system",
+                    "m3u8": url,
+                    "autoplay" : autostart,
+                    "live" : true,
+                    "x5_player" : true,
+                    "width" :  '100%',
+                    "height" : '100%'
                 });
+                $('.vcp-playtoggle').css({'background-repeat': 'no-repeat','background-position-x': '50%'});
+                $('.vcp-fullscreen-toggle').hide();
             }
         }
     },

@@ -176,21 +176,19 @@ var videos = {
          * @param autostart
          */
         playByQCloud: function($panel, url, title, autostart){
-            this.clear($('#'+$panel));
-            LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
-                var options = {
-                    "volume":1,
-                    "autoplay" : autostart,
-                    "width" :  '100%',
-                    "height" : '100%'
-                };
-                if (/\.m3u8/.test(url)){
-                    options.m3u8 = url;
-                }else{
-                    options.flv = url;
-                }
-                var player =  new TcPlayer($panel, options);
-            });
+            this.clear($panel);
+            var options = {
+                "volume":1,
+                "autoplay" : autostart,
+                "width" :  '100%',
+                "height" : '100%'
+            };
+            if (/\.m3u8/.test(url)){
+                options.m3u8 = url;
+            }else{
+                options.flv = url;
+            }
+            var player =  new TcPlayer($panel.attr('id'), options);
         },
 
         /**
@@ -217,7 +215,7 @@ var videos = {
                 this.videoData($panel, "currVideoTitle", title);
 
                 if (/\.myqcloud\./.test(url)){
-                    this.playByQCloud($panel.attr('id'), url, title, true);
+                    this.playByQCloud($panel, url, title, true);
                 } else {
                     if (/\.html/.test(url)) {
                         this.playByIframe($panel, url, title, true);
