@@ -4,24 +4,8 @@ var AccountAvatar = new Container({
     onLoad: function() {
         AccountAvatar.setEvent();
     },
-    onShow: function() {
-        //拍照
-        AccountAvatar.cameraPhoto();
-
-        //选择图库
-        AccountAvatar.choosePhoto();
-    }
+    onShow: function() {}
 });
-
-
-AccountAvatar.cameraPhoto = function() {
-
-
-}
-
-AccountAvatar.choosePhoto = function() {
-
-}
 
 /**
  * 上传头像
@@ -43,8 +27,13 @@ AccountAvatar.uploadAccAvatarImg = function(formData, fileObj) {
                 if (dataRt.result == 0) {
                     var data = dataRt.data ? dataRt.data[0] : null;
                     if (data) {
-                        var params = { item: 'register_avatar' };
-                        common.getJson("/modifyAvatar", { avatar: (data.fileDomain + data.filePath), params: JSON.stringify(params) }, function(result) {
+                        var params = {
+                            item: 'register_avatar'
+                        };
+                        common.getJson("/modifyAvatar", {
+                            avatar: (data.fileDomain + data.filePath),
+                            params: JSON.stringify(params)
+                        }, function(result) {
                             if (!result.isOK) {
                                 console.error("上传头像失败，请联系在线客服！");
                             } else {
@@ -61,6 +50,8 @@ AccountAvatar.uploadAccAvatarImg = function(formData, fileObj) {
                 } else {
                     Pop.msg("上传图片失败，请联系在线客服！");
                 }
+                $(".shadow").hide();
+                $(".loading-box").hide();
             },
             error: function(result) {
                 console.error("error:", result);
@@ -80,6 +71,8 @@ AccountAvatar.setEvent = function() {
      * 上传图片
      */
     $('#accountAvatarForm .hideCarmara').bind('change', function(e) {
+        $(".shadow").show();
+        $(".loading-box").show();
         var _this = this;
         var img = _this.files[0];
         // 判断是否图片

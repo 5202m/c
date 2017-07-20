@@ -8250,6 +8250,30 @@ article.accUserCenter {
     font-size: 16px
 }
 
+.shadow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    z-index: 199
+}
+
+.loading-box {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    margin-left: -45px;
+    width: 90px;
+    height: 75px;
+    border-radius: 4px;
+    background: #fff url(../img/loading.gif) no-repeat center;
+    background-size: 50px 50px;
+    z-index: 9999
+}
+
 .popup_box {
     border: 1px solid #dcdfe3;
     position: fixed;

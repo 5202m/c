@@ -22,10 +22,10 @@ AccountInfo.setEvent = function() {
     $("#myEmail").html(userInfo.email);
     $("#myMobile").html(userInfo.mobilePhone);
 
-    // /** 设置头像 */
-    // $('#account_setAvatar').bind('click', function() {
-    //     AccountAvatar.load();
-    // });
+    /** 设置头像 */
+    $('#account_setAvatar').bind('click', function() {
+        AccountAvatar.load();
+    });
 
     /** 设置昵称 */
     $('#account-setNickname').bind('click', function() {
@@ -52,11 +52,10 @@ AccountInfo.setEvent = function() {
     $('#account-logout').bind('click', function() {
         LoginAuto.setAutoLogin(false);
         window.location.href = "/logout";
-        try{
-            chatAnalyze.setUTM(false, $.extend({operationType:5,roomName:$('#room_roomName').text()}, Data.userInfo,Tool.courseTick.course));
-        }
-        catch(e){
-            console.log("Set LOGOUT UTM fail!"+e);
+        try {
+            chatAnalyze.setUTM(false, $.extend({ operationType: 5, roomName: $('#room_roomName').text() }, Data.userInfo, Tool.courseTick.course));
+        } catch (e) {
+            console.log("Set LOGOUT UTM fail!" + e);
         }
 
     })
