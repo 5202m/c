@@ -7978,6 +7978,7 @@ article.accUserCenter {
 .account-user-img {
     display: inline-block;
     width: 62px;
+    height: 62px;
     line-height: 0;
     vertical-align: middle;
     border-radius: 10px;

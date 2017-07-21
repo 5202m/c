@@ -77,11 +77,15 @@ AccountAvatar.setEvent = function() {
         var img = _this.files[0];
         // 判断是否图片
         if (!img) {
+            $(".shadow").hide();
+            $(".loading-box").hide();
             return false;
         }
         // 判断图片格式
         if (!(img.type.indexOf('image') == 0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name.toLowerCase()))) {
             Pop.msg('目前暂支持jpg,gif,png格式的图片！');
+            $(".shadow").hide();
+            $(".loading-box").hide();
             return false;
         }
         var fileSize = img.size;
@@ -92,6 +96,8 @@ AccountAvatar.setEvent = function() {
             return false;
         }
         if (fileSize >= 1024 * 1024 * 3) {
+            $(".shadow").hide();
+            $(".loading-box").hide();
             Pop.msg('发送的图片大小不要超过3MB.');
             return false;
         }
