@@ -1590,6 +1590,9 @@ var chat = {
                                 if (userInfoTmp.userType == 3) {
                                     $("#userListId #" + userInfoTmp.userId + ' .uname>span').addClass('csoffline');
                                 } else {
+                                    if(userInfoTmp.userId == 'superadmin'){
+                                        return;
+                                    }
                                     var onLineNum = parseInt($(".right_row .main_tabnav a[t='chat'] .dialognum span").text());
                                     $("#userListId #" + userInfoTmp.userId).remove();
                                     chat.contactAnalystEvent(userInfoTmp, true);
