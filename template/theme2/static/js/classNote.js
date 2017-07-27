@@ -547,7 +547,7 @@ ClassNote.viewData = function (dom) {
                     if (Util.isNotBlank(result.msg) && typeof result.msg.change == 'number') {
                         Pop.msg('消费' + Math.abs(result.msg.change) + '积分');
                     }
-                    ClassNote.setViewDataHtml(dom, data.data);
+                    ClassNote.setViewDataHtml(dom, data.data || data);
                     if ($.inArray(dom.attr('dataid'), storeData) < 0) {
                         storeData.push(dom.attr('dataid'));
                     }
