@@ -1503,7 +1503,7 @@ var chat = {
                 chat.setOnlineUser(row); //设置在线用户
                 if (row.userType == 3 && $('.mult_dialog a[uid=' + row.userId + ']').length > 0) {
                     $('.mult_dialog a[uid=' + row.userId + ']').attr('online', true);
-                } else if ($.inArray(row.userType, [1, 2]) > -1) {
+                } else if ($.inArray(row.userType, [1, 2]) > -1 && row.userId != 'superadmin') {
                     chat.contactAnalystEvent(row);
                 }
             }
