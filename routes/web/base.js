@@ -180,6 +180,10 @@ router.get('/', function(req, res) {
                                                     req.session.studioUserInfo = loginRes.userInfo;
                                                     req.session.studioUserInfo.clientGroup = clientGroup;
                                                     req.session.studioUserInfo.firstLogin = true;
+                                                    //是否是新注册的用户
+                                                    if(result.isNewMember){
+                                                        logger.info("------account app new register user------accountNo:"+accountNo+";clientGroup:"+loginRes.userInfo.clientGroup);
+                                                    }
                                                 } else {
                                                     req.session.studioUserInfo = {
                                                         isLogin: false,
@@ -189,7 +193,8 @@ router.get('/', function(req, res) {
                                                         userId: result.userId
                                                     };
                                                 }
-                                                res.redirect('/');
+
+                                                res.redirect('/?islogApp='+result.isNewMember);
                                                 return;
                                             });
                                     });
@@ -261,6 +266,10 @@ router.get('/', function(req, res) {
                                         req.session.studioUserInfo = loginRes.userInfo;
                                         req.session.studioUserInfo.clientGroup = loginRes.userInfo.clientGroup;
                                         req.session.studioUserInfo.firstLogin = true;
+                                        //是否是新注册的用户
+                                        if(result.isNewMember){
+                                            logger.info("------account appgts2 new register user------accountNo:"+accountNo+";clientGroup:"+loginRes.userInfo.clientGroup);
+                                        }
                                     } else {
                                         logger.info("auto login==>fail" + JSON.stringify(loginRes));
                                         req.session.studioUserInfo = {
@@ -272,7 +281,7 @@ router.get('/', function(req, res) {
                                         };
                                     }
                                     logger.info("req.session.studioUserInfo:" + JSON.stringify(loginRes));
-                                    res.redirect('/');
+                                    res.redirect('/?islogApp='+result.isNewMember);
                                     return;
                                 });
                             });
@@ -396,6 +405,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 dasUrl: config.dasUrl
             }; //输出参数
             chatUser.groupId = groupId;
+            //防止刷新页面记录app注册
+            var islogApp = req.query["islogApp"];
             viewDataObj.theme = options.theme || "";
             viewDataObj.socketUrl = JSON.stringify(
                 common.formatHostUrl(req.hostname, config.socketServerUrl));
@@ -413,7 +424,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 sid: req.sessionID,
                 createDate: chatUser.joinDate,
                 mobile: chatUser.mobilePhone,
-                accountNo: chatUser.accountNo
+                accountNo: chatUser.accountNo,
+                isNewMember:islogApp
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -3194,12 +3206,12 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             roomName: "",
             joinDate: snUser.joinDate
         };
-        callback(result);
-        if (isNew) {
-            //新注册
-            userInfo.item = "register_reg";
-            studioService.addRegisterPoint(userInfo, userInfo.clientGroup);
+        //是否是新注册的用户
+        if(result.isNewMember){
+            logger.info("------account new register user------accountNo:"+accountNo+";clientGroup:"+clientGroup);
         }
+        callback(result);
+
     });
 }
 

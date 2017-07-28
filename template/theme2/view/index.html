@@ -220,6 +220,16 @@
                         });
                         Tool.getShowPrideActivityFlag(Data.userInfo.userId || Data.userInfo.visitorId);
 
+                        try {
+
+                            var isNewMembers = Data.userInfo.isNewMember;
+                            if (isNewMembers==true || isNewMembers=="true") {
+                                chatAnalyze.setUTM(false, $.extend({ operationType: 3, userTel: Data.userInfo.mobilePhone, accountNo:Data.userInfo.accountNo, roomName: $('#room_roomName').text() }, Data.userInfo));
+                            }
+
+                        } catch (e) {
+                            console.log("Set app register UTM fail!" + e);
+                        }
                         //分析师评选
                         $(".wenjuan-del-btn").click(function() {
                             $(this).parent().animate({
