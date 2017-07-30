@@ -313,8 +313,7 @@ var Tool = {
         /**配置信息*/
         config: {
             init: false, //初始化
-            // cycleTime: 300000, //红包周期5分钟
-            cycleTime: 60000,
+            cycleTime: 300000, //红包周期5分钟
             stayTime: 5000, //红包停留时间5秒
             startTime: 30720000, //08:30
             endTime: 84600000, //23:30
