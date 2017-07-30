@@ -19,7 +19,7 @@
     <link href="/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
     <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
     <%if(isRedPacket) {%>
-        <link href="/theme1/css/redbag201705.css" rel="stylesheet" type="text/css">
+        <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
         <%}%>
             <%if(isShowTrade) {%>
                 <link href="/theme1/css/redbag201706.css" rel="stylesheet" type="text/css">
@@ -58,43 +58,17 @@
         <div class="box-header-in clearfix">
             <h1 class="fl hide-t" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_logo', 'content_top', 1, true]);">视频直播间</h1>
             <%if(isRedPacket) {%>
-                <div class="header_redbag fl" id="redPacket_header">
+                <div class="header_redbag fl" id="redPacket_header" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_banner', 'content_middle', 1, true]);">
                     <div class="redbag_pic"></div>
-                    <div class="hongb-act">
-                        <p class="hongb-pfon">一大波<span>5-500</span>元现金红包</p>
-                        <div class="gund-box">
-                            <ul>
-                                <li>恭喜138***123获得5元</li>
-                                <li>恭喜151***105获得50元</li>
-                                <li>恭喜130***986获得10元</li>
-                                <li>恭喜152***895获得100元</li>
-                                <li>恭喜139***189获得5元</li>
-                                <li>恭喜159***778获得10元</li>
-                                <li>恭喜139***189获得5元</li>
-                                <li>恭喜159***778获得100元</li>
-                                <li>恭喜181***256获得50元</li>
-                                <li>恭喜130***986获得10元</li>
-                                <li>恭喜132***235获得50元</li>
-                                <li>恭喜139***189获得200元</li>
-                                <li>恭喜187***277获得5元</li>
-                                <li>恭喜130***986获得100元</li>
-                                <li>恭喜130***986获得500元</li>
-                                <li>恭喜182***533获得50元</li>
-                                <li>恭喜187***277获得100元</li>
-                                <li>恭喜132***499获得100元</li>
-                                <li>恭喜139***189获得50元</li>
-                                <li>恭喜188***627获得5元</li>
-                                <li>恭喜178***858获得10元</li>
-                                <li>恭喜139***918获得50元</li>
-                                <li>恭喜157***881获得100元</li>
-                                <li>恭喜152***626获得10元</li>
-                                <li>恭喜182***533获得50元</li>
-                                <li>恭喜186***057获得5元</li>
-                                <li>恭喜130***986获得100元</li>
-                                <li>恭喜182***533获得10元</li>
-                                <li>恭喜187***277获得50元</li>
-                                <li>恭喜132***499获得5元</li>
-                            </ul>
+                    <div class="rb_text">
+                        <div class="te1">
+                            第<b rp="timesLabel"></b>波微信红包
+                        </div>
+                        <div class="timecount">
+                            <b rp="minutesLabel"></b>
+                            <span>分</span>
+                            <b rp="secondsLabel"></b>
+                            <span>秒</span>
                         </div>
                     </div>
                 </div>
@@ -117,7 +91,7 @@
         </div-->
                             <div class="header-right fr clearfix">
                                 <!-- 问卷广告位 -->
-                                <div class="wenjuan-adbox"><a href="https://wj.qq.com/s/1455171/df3c/" target="_blank">有奖问答，最受欢迎分析师评选</a></div>
+                                <!--<div class="wenjuan-adbox"><a href="https://wj.qq.com/s/1455171/df3c/" target="_blank">有奖问答，最受欢迎分析师评选</a></div>-->
                                 <div class="h_menu1">
                                     <%if(userSession.isLogin){%>
                                         <span class="welcome">嗨！欢迎<span><%= userSession.nickname || "匿名_xxx" %></span>进入金道实时解盘</span>
