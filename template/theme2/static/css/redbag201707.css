@@ -1,0 +1,1132 @@
+﻿/* 抢红包161223 janice */
+
+@font-face {
+    font-family: 'redbag-figure';
+    src: url('../font/din1451m-webfont.eot') format('eot'), url('../font/din1451m-webfont.woff') format('woff'), url('../font/din1451m-webfont.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.header_redbag {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    margin: 4px 0 0 15px;
+    position: relative;
+    cursor: pointer;
+    font-size: 0;
+}
+
+.header_redbag .redbag_pic {
+    width: 27px;
+    height: 32px;
+    background: url(../img/redbag.png) center no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+}
+
+.header_redbag .rb_text {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    font-size: 0;
+    background: url(../img/redbag_text.png) 5px 0 no-repeat;
+    background-size: auto 10px;
+    padding: 10px 5px 0;
+    margin-top: 2px;
+}
+
+.header_redbag .rb_text .timecount {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.header_redbag .timecount span {
+    color: #858585;
+    font-size: 10px;
+    vertical-align: bottom;
+    line-height: 18px;
+    padding: 0 2px
+}
+
+.header_redbag .timecount b {
+    color: #e74341;
+    font-size: 18px;
+    font-family: 'redbag-figure';
+    font-weight: normal;
+    vertical-align: bottom;
+    line-height: 22px;
+}
+
+.redbag_pop {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin: -215px 0 0 -160px;
+    width: 320px;
+    height: 430px;
+    background: url(../img/redbag_pop2.jpg) center no-repeat #d4463d;
+    z-index: 101;
+    /*opacity: 0;*/
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5), inset 0 0 10px rgba(142, 20, 13, .2);
+    background-size: cover;
+    border-radius: 5px;
+}
+
+.redbag_pop.nologin {
+    background-image: url(../img/redbag_pop1.jpg);
+}
+
+.redbag_pop .cont {
+    margin: 10px;
+}
+
+.redbag_pop .rb_top {
+    text-align: center;
+    padding-top: 70px;
+}
+
+.redbag_pop .rb_top span {
+    color: #ffe2b1;
+    font-size: 16px;
+    letter-spacing: 5px;
+    padding-left: 5px;
+    display: block;
+    /*background: url(../img/rbpop_t.png) center 5px no-repeat;*/
+}
+
+.redbag_pop .rb_top span i {
+    display: inline-block;
+    vertical-align: top;
+    height: 8px;
+    width: 31px;
+    background: url(../img/redbag_btn.png) center -228px no-repeat;
+    background-size: 60px auto;
+    margin: 6px 3px 0
+}
+
+.redbag_pop .rb_top span i:last-child {
+    background-position: center -240px;
+}
+
+.redbag_pop .rb_top h4 {
+    color: #feeac8;
+    font-size: 22px;
+    line-height: 40px;
+    padding-top: 15px;
+    margin-bottom: 20px;
+}
+
+.redbag_pop .rb_top b {
+    font-family: 'redbag-figure';
+    font-size: 30px;
+    vertical-align: middle;
+    padding: 0 1px;
+    font-weight: normal;
+}
+
+.redbag_pop .rb_tip {
+    color: #f9c59c;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.redbag_pop .rb_tip a {
+    color: #fff9ef;
+}
+
+.redbag_pop .rb_tip .t2 {
+    padding-left: 10px;
+}
+
+.redbag_pop .rb_btn {
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    font-size: 0;
+    line-height: 0;
+    position: relative;
+    padding: 10px
+}
+
+.redbag_pop .rb_btn .bg {
+    display: block;
+    width: 90px;
+    height: 90px;
+    padding: 5px;
+    background: #f0d19f;
+    background: rgb(242, 213, 164);
+    background: -moz-linear-gradient(-45deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    background: -webkit-linear-gradient(-45deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    background: linear-gradient(135deg, rgba(242, 213, 164, 1) 0%, rgba(249, 223, 180, 1) 40%, rgba(233, 199, 143, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#f2d5a4', endColorstr='#e9c78f', GradientType=1);
+    transition: transform 0.1s ease;
+    border-radius: 50%;
+}
+
+.redbag_pop .rb_btn .bg b {
+    border: 1px solid #d0b17b;
+    display: block;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+}
+
+.redbag_pop .rb_btn i {
+    background: url(../img/redbag_btn.png) center 0 no-repeat;
+    display: block;
+    height: 60px;
+    position: absolute;
+    width: 100px;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    margin-left: -50px;
+    background-size: 60px auto
+}
+
+.redbag_pop .rb_btn i.wait {
+    background-position: center -60px;
+}
+
+.redbag_pop .rb_btn i.reg {
+    background-position: center -120px;
+}
+
+.redbag_pop .rb_btn:hover .bg {
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05)
+}
+
+.redbag_pop .rb_btn.wait:hover {
+    cursor: default;
+}
+
+.redbag_pop .rb_btn.wait:hover b {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1)
+}
+
+.redbag_pop .pop_close {
+    display: block;
+    height: 33px;
+    width: 33px;
+    padding-top: 12px;
+    background: url(../img/redbag_btn.png) center -180px no-repeat;
+    background-size: 60px auto;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    margin-left: -17px;
+}
+
+.redbag_pop .pop_close a {
+    display: block;
+    width: 33px;
+    height: 33px;
+}
+
+.redbag_pop .rb_top2 {
+    text-align: center;
+    padding-top: 45px;
+}
+
+.redbag_pop .rb_top2>span {
+    font-size: 20px;
+    color: #ffe2b1;
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: block;
+}
+
+.redbag_pop .timecount {
+    font-size: 0;
+    text-align: center;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.redbag_pop .timecount span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: bottom;
+    background: #f76f65;
+    height: 36px;
+    font-size: 12px;
+    color: #ffe2b1;
+    padding: 0 4px 0 6px;
+    line-height: 30px;
+}
+
+.redbag_pop .timecount span:first-child {
+    margin-right: 2px;
+}
+
+.redbag_pop .timecount b {
+    font-size: 30px;
+    color: #fffdf9;
+    font-family: 'redbag-figure';
+    line-height: 40px;
+    font-weight: normal;
+    padding-right: 2px;
+    vertical-align: bottom;
+}
+
+.redbag_pop .rbnum {
+    font-size: 24px;
+    color: #ffe2b1;
+    line-height: 26px;
+    letter-spacing: 1px;
+    vertical-align: top;
+}
+
+.redbag_pop .rbnum span {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    background: #f76f65;
+    color: #fffdf9;
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: 26px;
+    font-family: 'redbag-figure';
+    height: 26px;
+    vertical-align: top;
+    line-height: 28px;
+    letter-spacing: 0;
+    margin: 2px 2px 0
+}
+
+.redbag_pop .rb_tip .tspan {
+    font-size: 14px;
+    line-height: 22px;
+    padding-top: 13px;
+}
+
+.redbag_pop.rb_result {
+    background-image: url(../img/redbag_pop3.png);
+    height: 450px;
+    margin-top: -225px;
+    left: 50%;
+    top: 50%;
+    box-shadow: none;
+    background-size: cover;
+    background-color: transparent;
+}
+
+.rb_result>.cont,
+.rb_result2>.cont {
+    height: 440px;
+}
+
+.rb_result .rb_top2 {
+    padding-top: 40px;
+}
+
+.rb_result .rb_top2>span {
+    color: #fff0d7;
+    font-size: 20px;
+    letter-spacing: 1px
+}
+
+.rb_result .rb_top2>span.sp2 {
+    color: #f9c59c;
+    font-size: 14px;
+    font-weight: normal;
+    padding-top: 5px;
+}
+
+.rb_result .rb_top2>span.sp2 b {
+    color: #fff0d7;
+}
+
+.rb_result .rb_top2>span i {
+    display: inline-block;
+    vertical-align: top;
+    height: 8px;
+    width: 31px;
+    background: url(../img/redbag_btn.png) center -228px no-repeat;
+    background-size: 60px auto;
+    margin: 10px 3px 0
+}
+
+.rb_result .rb_top2>span i:last-child {
+    background-position: center -240px;
+}
+
+.redbag_pop .rb_tip2 {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.redbag_pop .rb_tip2 .tspan {
+    font-size: 16px;
+    line-height: 27px;
+    color: #f9c59c;
+}
+
+.redbag_pop .rb_tip2 .tspan b {
+    color: #ffe2b1;
+    padding-bottom: 20px;
+    display: block;
+}
+
+.redbag_pop .qrbox {
+    padding: 5px;
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    width: 120px;
+    margin-left: -65px;
+    background: #feeac8;
+}
+
+.redbag_pop .qrbox img {
+    width: 120px;
+    height: 120px;
+    background: #feeac8;
+    display: block;
+}
+
+.redbag_pop .qr-bor i {
+    width: 10px;
+    height: 10px;
+    border-color: rgba(254, 234, 200, .2);
+    border-style: solid;
+    position: absolute;
+}
+
+.redbag_pop .qr-bor i.tl {
+    border-width: 1px 0 0 1px;
+    top: -8px;
+    left: -8px;
+}
+
+.redbag_pop .qr-bor i.tr {
+    border-width: 1px 1px 0 0;
+    top: -8px;
+    right: -8px;
+}
+
+.redbag_pop .qr-bor i.bl {
+    border-width: 0 0 1px 1px;
+    bottom: -8px;
+    left: -8px;
+}
+
+.redbag_pop .qr-bor i.br {
+    border-width: 0 1px 1px 0;
+    bottom: -8px;
+    right: -8px;
+}
+
+.redbag_pop.rb_result2 {
+    background-image: url(../img/redbag_pop4-v2.png);
+    height: 441px;
+    margin-top: -221px;
+    left: 50%;
+    top: 50%;
+    background-color: transparent;
+    background-size: cover;
+    box-shadow: none
+}
+
+.rb_result2 .congratulation {
+    font-size: 22px;
+    line-height: 26px;
+    color: #b28a35;
+    padding-top: 24px;
+    vertical-align: top;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+    padding-left: 2px;
+    font-weight: 700
+}
+
+.rb_result2 .congratulation b {
+    display: inline-block;
+    font-family: redbag-figure;
+    letter-spacing: 2px;
+    vertical-align: middle;
+    font-size: 22px;
+    color: #d7483f;
+    line-height: 100%
+}
+
+.rb_result2 .congratulation p {
+    font-size: 12px;
+    padding-top: 0;
+    letter-spacing: 0
+}
+
+.rb_result2 .congratulation p b {
+    font-size: 14px
+}
+
+.redbag_pop.rb_result2 .rb_tip2 {
+    padding-top: 30px
+}
+
+.redbag_pop.rb_result2 .rb_tip2 strong {
+    color: #ffc86c
+}
+
+.redbag_pop_box {
+    position: absolute;
+    width: 40%;
+    right: 0;
+    height: 251px;
+    margin-top: -125px;
+    top: 50%;
+}
+
+.redbag_pop.pop2 {
+    background-image: url(../img/redbag_pop5.jpg);
+    height: 230px;
+    width: 340px;
+    margin: 0px 0 0 -170px;
+    left: 50%;
+    bottom: 100px;
+    top: auto
+}
+
+.redbag_pop.pop2 .cont {
+    margin: 8px
+}
+
+.redbag_pop.pop2 .rb_tip {
+    padding-top: 10px;
+}
+
+.redbag_pop.pop2 .rb_top2 {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.redbag_pop.pop2 .rb_top2>span {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.redbag_pop.pop2 .rb_btn {
+    padding: 5px;
+    width: 70px;
+    height: 70px;
+}
+
+.redbag_pop.pop2 .rb_btn .bg {
+    display: block;
+    width: 62px;
+    height: 62px;
+    padding: 4px
+}
+
+.redbag_pop.pop2 .rb_btn .bg b {
+    height: 60px;
+    width: 60px;
+}
+
+.redbag_pop.pop2 .rb_btn i {
+    background: url(../img/redbag_btn2.png) center -180px no-repeat;
+    width: 70px;
+    margin-left: -35px;
+    height: 30px;
+    margin-top: -15px;
+    background-size: 48px auto;
+}
+
+.redbag_pop.pop2 .rb_btn i.t5 {
+    background-position: center -144px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t4 {
+    background-position: center -108px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t3 {
+    background-position: center -72px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t2 {
+    background-position: center -36px;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rb_btn i.t1 {
+    background-position: center 0;
+    transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -o-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -webkit-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+    -moz-transition: background 0.3s cubic-bezier(.17, .67, .88, 1.25), color 0.2s linear;
+}
+
+.redbag_pop.pop2 .rbnum {
+    font-size: 20px;
+}
+
+.redbag_pop.pop2 .rbnum span {
+    font-size: 20px;
+    height: 23px;
+    line-height: 25px;
+}
+
+.rb_check {
+    padding-top: 10px;
+}
+
+.rb_checkbox {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.rb_checkbox label {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ebb285;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: none;
+    cursor: pointer;
+}
+
+.rb_checkbox label:hover {
+    border-color: #eb9b5e
+}
+
+.rb_checkbox input[type=checkbox] {
+    visibility: hidden;
+}
+
+.rb_checkbox input[type=checkbox]:checked+label>i {
+    display: block;
+    width: 100%;
+    height: 14px;
+    background: url(../img/redbag_btn2.png) center -216px no-repeat;
+    background-size: 48px auto;
+}
+
+.rb_check .ctext {
+    vertical-align: top;
+    font-size: 14px;
+    color: #f9c59c;
+    line-height: 16px;
+}
+
+.redbag_pop .rb_btn.ani .bg {
+    -webkit-animation: btnscale 0.7s ease-in-out infinite both;
+    -o-animation: btnscale 0.7s ease-in-out infinite both;
+    animation: btnscale 0.7s ease-in-out infinite both;
+}
+
+.redbag_pop .rb_btn.ani:hover .bg {
+    animation: none;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1)
+}
+
+.dashang_rule {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 10px
+}
+
+.dashang_rule .ds_rulecont {
+    display: none;
+    position: absolute;
+    width: 260px;
+    background: rgba(255, 255, 255, .9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    right: 0;
+    margin-right: -12px;
+    bottom: 30px;
+    z-index: 10;
+    border-radius: 3px;
+    z-index: 1000
+}
+
+.dashang_rule>a {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block
+}
+
+.dashang_rule>a i {
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    margin-top: 4px
+}
+
+.dashang_rule>a i:after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    vertical-align: top;
+    border: 1px solid #fff;
+    border-left: 0;
+    border-bottom: 0;
+    transform: rotate(45deg);
+    margin: 3px 0 0 -2px
+}
+
+.dashang_rule>a:hover {
+    text-decoration: none
+}
+
+.dashang_rule>a:hover+.ds_rulecont {
+    display: block
+}
+
+.ds_rulecont p {
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #4d4d4d;
+    line-height: 1.6;
+    text-align: justify
+}
+
+.ds_rulecont .arr {
+    position: absolute;
+    bottom: -10px;
+    width: 100%;
+    height: 10px
+}
+
+.ds_rulecont .arr i {
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px;
+    position: absolute;
+    right: 53px;
+    margin-right: -6px;
+    top: 0;
+    border-color: #b63d35 transparent transparent
+}
+
+.ds_rulecont .arr i.i2 {
+    top: -2px;
+    border-color: #fff transparent transparent
+}
+
+.redbag_pop .ds_rulecont .scrollbox {
+    margin: 10px 15px 10px 10px;
+    color: #4d4d4d;
+    font-size: 14px;
+    line-height: 24px;
+    height: 282px;
+    text-align: left
+}
+
+.ds_rulecont span {
+    font-size: 16px;
+    font-weight: 700
+}
+
+.ds_rulecont span b {
+    color: #d44543;
+    padding-right: 8px;
+    font-size: 18px
+}
+
+.ds_rulecont li {
+    padding-left: 15px
+}
+
+.redbag_pop .dashang_rule:hover .ds_rulecont {
+    display: block
+}
+
+.ds_rulecont .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background: #ec908b
+}
+
+.ds_rulecont .mCSB_outside+.mCSB_scrollTools {
+    right: -15px
+}
+
+@keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+@-webkit-keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+@-moz-keyframes btnscale {
+    0% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+    50% {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        -moz-transform: scale(1.1);
+        -o-transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -o-transform: scale(1)
+    }
+}
+
+[class*=rb_result] .qrcode-con {
+    position: relative;
+    top: -6px;
+    text-align: center
+}
+
+[class*=rb_result] .qrcode-con .p1 {
+    font-size: 12px;
+    color: #f7a382;
+    line-height: 18px;
+    margin-top: -10px
+}
+
+[class*=rb_result] .qrcode-con .p1 span {
+    display: block
+}
+
+[class*=rb_result] .qrcode-con .p1 span b {
+    color: #ffe2b1;
+    font-weight: 100
+}
+
+[class*=rb_result] .qrcode-con .p2 {
+    font-size: 16px;
+    color: #ffe2b1;
+    line-height: 24px;
+    font-weight: 700;
+    margin-top: 25px;
+    text-align: left;
+    padding: 0 20px
+}
+
+[class*=rb_result] .qrcode-con .p2 span {
+    display: block
+}
+
+[class*=rb_result] .qrcode-con .p2 b {
+    color: #ffc86c
+}
+
+.rb_result.redbag_pop .qrcode-con .p1 {
+    position: relative
+}
+
+
+/*Responsive*/
+
+@media(max-width:376px) {
+    [class*=rb_result] .qrcode-con .p1 {
+        font-size: 11px
+    }
+    [class*=rb_result] .qrcode-con .p2 {
+        padding: 0 10px;
+        font-size: 14px;
+        line-height: 20px;
+        margin-top: 15px
+    }
+    .header_redbag {
+        margin-left: 10px;
+    }
+    .redbag_pop {
+        width: 280px;
+        margin-left: -140px;
+        height: 370px;
+        margin-top: -185px;
+    }
+    .redbag_pop .rb_top span i {
+        margin-top: 4px;
+    }
+    .redbag_pop .rb_top2 {
+        padding-top: 30px;
+    }
+    .redbag_pop .rb_top2>span {
+        font-size: 18px;
+    }
+    .redbag_pop .rb_btn {
+        width: 80px;
+        height: 80px;
+    }
+    .redbag_pop .rb_btn .bg {
+        height: 70px;
+        width: 70px;
+        padding: 5px;
+    }
+    .redbag_pop .rb_btn .bg b {
+        height: 70px;
+        width: 70px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .redbag_pop .rb_btn i {
+        width: 80px;
+        margin-left: -40px;
+        height: 50px;
+        margin-top: -25px;
+        background-size: 50px auto
+    }
+    .redbag_pop .rb_btn i.wait {
+        background-position: center -50px;
+    }
+    .redbag_pop .rb_btn i.reg {
+        background-position: center -100px;
+    }
+    .redbag_pop .rb_tip {
+        padding-top: 20px;
+        font-size: 12px;
+    }
+    .redbag_pop .rbnum {
+        font-size: 20px;
+    }
+    .redbag_pop .rbnum span {
+        font-size: 20px;
+    }
+    .redbag_pop .rb_top h4 {
+        font-size: 18px;
+    }
+    .redbag_pop .rb_top b {
+        font-size: 24px;
+    }
+    .redbag_pop .rb_top span {
+        font-size: 14px;
+    }
+    .redbag_pop .rb_top {
+        padding-top: 45px;
+    }
+    .redbag_pop.rb_result,
+    .redbag_pop.rb_result2 {
+        height: 390px;
+        margin-top: -195px;
+    }
+    .rb_result>.cont,
+    .rb_result2>.cont {
+        height: 370px;
+    }
+    .rb_result .rb_top2 {
+        padding-top: 25px;
+    }
+    .rb_result .rb_top2>span {
+        font-size: 16px;
+    }
+    .rb_result .rb_top2>span.sp2 {
+        font-size: 12px;
+    }
+    .rb_result2 .congratulation {
+        padding-top: 20px;
+        font-size: 18px;
+        line-height: 24px;
+    }
+    .redbag_pop.rb_result2 .rb_tip2 {
+        padding-top: 10px;
+    }
+    .redbag_pop .rb_tip2 .tspan {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .redbag_pop .qrbox {
+        padding: 5px;
+        bottom: 35px;
+        width: 100px;
+        margin-left: -55px;
+    }
+    .redbag_pop .qrbox img {
+        width: 100px;
+        height: 100px;
+    }
+    .redbag_pop.pop2 {
+        width: 280px;
+        margin-left: -140px;
+        height: 180px;
+    }
+    .redbag_pop.pop2 .rb_top2>span {
+        font-size: 16px;
+    }
+    .redbag_pop.pop2 .rb_btn {
+        width: 60px;
+        height: 60px;
+    }
+    .redbag_pop.pop2 .rb_btn .bg {
+        width: 50px;
+        height: 50px;
+        padding: 4px
+    }
+    .redbag_pop.pop2 .rb_btn .bg b {
+        width: 50px;
+        height: 50px;
+        box-sizing: border-box;
+    }
+    .redbag_pop.pop2 .rb_btn i {
+        width: 50px;
+        margin-left: -25px;
+        background-size: 40px auto;
+        height: 25px;
+        margin-top: -12px;
+        background-position: center -150px;
+    }
+    .redbag_pop.pop2 .rb_btn i.t5 {
+        background-position: center -120px;
+    }
+    .redbag_pop.pop2 .rb_btn i.t4 {
+        background-position: center -90px;
+    }
+    .redbag_pop.pop2 .rb_btn i.t3 {
+        background-position: center -60px;
+    }
+    .redbag_pop.pop2 .rb_btn i.t2 {
+        background-position: center -30px;
+    }
+    .redbag_pop.pop2 .rbnum {
+        font-size: 16px;
+    }
+    .redbag_pop.pop2 .rbnum span {
+        font-size: 14px;
+        line-height: 16px;
+        height: 16px;
+        margin-top: 5px;
+    }
+    .redbag_pop.pop2 .rb_tip {
+        padding-top: 5px;
+    }
+    .rb_check {
+        padding-top: 0;
+    }
+    .rb_check .ctext {
+        font-size: 12px;
+    }
+    .rb_checkbox {
+        width: 14px;
+        height: 14px;
+        top: 1px;
+    }
+    .rb_checkbox label {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media(max-width:361px) {
+    .header_redbag .redbag_pic {
+        display: none;
+    }
+    .home .header_redbag .redbag_pic {
+        width: 20px;
+        height: 28px;
+        display: inline-block;
+    }
+}
+
+@media(max-width:359px) {
+    .header_redbag {
+        margin-top: 6px;
+        margin-left: 8px;
+    }
+    .header_redbag .rb_text {
+        background-size: auto 8px;
+        padding-top: 8px;
+    }
+    .header_redbag .timecount b {
+        font-size: 14px;
+    }
+    .header_redbag .timecount span {
+        font-size: 9px;
+    }
+}

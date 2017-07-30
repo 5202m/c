@@ -9,26 +9,29 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <% if(isDevTest) { %>
-        <link rel="stylesheet" media="screen" href="/theme2/css/index.css" />
-        <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
-        <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
-        <!--<link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />-->
-        <link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
-        <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
-        <script type="text/javascript" src="/base/lib/store.min.js"></script>
-        <script type="text/javascript" src="/theme2/js/store.js"></script>
-        <% }else{ %>
-            <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
-            <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-            <% } %>
-                <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-                <script>
-                    //自动登录中...
-                    LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-                    LoginAuto.init();
-                    //自动登录完成
-                </script>
+    <%if(isRedPacket) {%>
+        <link href="/theme2/css/redbag201707.css" rel="stylesheet" type="text/css">
+        <%}%>
+            <% if(isDevTest) { %>
+                <link rel="stylesheet" media="screen" href="/theme2/css/index.css" />
+                <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
+                <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
+                <!--<link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />-->
+                <link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
+                <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+                <script type="text/javascript" src="/base/lib/store.min.js"></script>
+                <script type="text/javascript" src="/theme2/js/store.js"></script>
+                <% }else{ %>
+                    <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
+                    <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
+                    <% } %>
+                        <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+                        <script>
+                            //自动登录中...
+                            LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+                            LoginAuto.init();
+                            //自动登录完成
+                        </script>
 </head>
 
 <!--  问卷调查浮动层  -->
@@ -47,30 +50,37 @@
                         <h1 class="hide-t">视频直播间</h1>
                     </div>
                     <%if(isRedPacket) {%>
-                        <div class="new_redbag fl" id="redPacket_header">
-                            <img src="/theme2/img/new-redbag.png" width="100%" alt="5-500元红包大派送">
-                        </div>
-                        <%}%>
-                            <%if(isShowTrade) {%>
-                                <div class="new_redbag fl">
-                                    <a href="https://m.24k.hk/lp_v211_hd_201707pxbrj.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'm_studio','nowSignUp', 'content_top',1,true]);">
-                                        <img src="/theme2/img/175x60.jpg" width="100%" alt="技术指标听课送大礼">
-                                    </a>
+                        <div class="header_redbag fl" id="redPacket_header">
+                            <div class="redbag_pic"></div>
+                            <div class="rb_text">
+                                <div class="timecount">
+                                    <b rp="minutesLabel"></b>
+                                    <span>分</span>
+                                    <b rp="secondsLabel"></b>
+                                    <span>秒</span>
                                 </div>
-                                <%}%>
-                                    <div class="rightbar">
-                                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
-                                        <a id="header_ui" href="javascript:void(0)" class="loginbtn">
-                                            <%= userSession.isLogin ? userSession.nickname : '登录' %>
-                                        </a>
-                                        <!--<%if(userSession.isLogin){%>
+                            </div>
+                        </div>
+                        <%} else if(isShowTrade){ %>
+                            <div class="new_redbag fl">
+                                <a href="https://m.24k.hk/lp_v211_hd_201707pxbrj.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'm_studio','nowSignUp', 'content_top',1,true]);">
+                                    <img src="/theme2/img/175x60.jpg" width="100%" alt="技术指标听课送大礼">
+                                </a>
+                            </div>
+                            <%}%>
+                                <div class="rightbar">
+                                    <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
+                                    <a id="header_ui" href="javascript:void(0)" class="loginbtn">
+                                        <%= userSession.isLogin ? userSession.nickname : '登录' %>
+                                    </a>
+                                    <!--<%if(userSession.isLogin){%>
                             <a href="javascript:void(0);" class="loginbtn">
                                 <%= userSession.nickname || "匿名_xxx" %>
                             </a>
                             <%} else {%>
                                 <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
                                 <%}%>-->
-                                    </div>
+                                </div>
                 </section>
             </header>
             <article class="content_w bgf2f2f2 dn" id="page_rooms">
@@ -163,6 +173,10 @@
             </article>
 
             <article class="content_w accUserCenter dn" id="account_subscribeDetail">
+
+            </article>
+
+            <article class="content_w login-fix dn" id="page_register">
 
             </article>
 

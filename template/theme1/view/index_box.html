@@ -1541,154 +1541,110 @@
 </div>
 
 <%if(isRedPacket) {%>
-    <!-- =======红包层beign======== -->
-    <div class="hongb-laybox dn">
-        <a href="javascript:void(0)" class="lay-del-btn" title="关闭"></a>
-        <i class="hongb-cout">0</i>
-        <div class="zhuanp-box" id="lotteryYuan"></div>
-        <div class="deng-box"></div>
-        <div class="jiant-box" id="lotteryBtn"></div>
-        <div class="zhuanp-infobox">
-            <div class="scrollbox mCustomScrollbar">
-                <div class="zhuanp-xinx">
-                    <h3>获奖公告</h3>
-                    <div class="bot-gdbox">
-                        <ul>
-                            <li>恭喜138***123获得5元</li>
-                            <li>恭喜151***105获得50元</li>
-                            <li>恭喜130***986获得10元</li>
-                            <li>恭喜153***075获得100元</li>
-                            <li>恭喜139***189获得5元</li>
-                            <li>恭喜159***778获得10元</li>
-                            <li>恭喜187***277获得50元</li>
-                            <li>恭喜132***499获得5元</li>
-                        </ul>
-                    </div>
-
-                    <h3>活动规则</h3>
-                    <div class="hd-rule-list">
-                        <h4>活动时间：</h4>
-                        <p>2017年6月12日 00:00:00至2017年6月30日 23:59:59</p>
-                        <h4>活动规则：</h4>
-                        <ol>
-                            <li>活动对象仅适用于6.12-6.30日注册实时解盘的用户；</li>
-                            <li>活动期间，注册实时解盘的客户，可获得1次抽奖机会；客户注册实时解盘后激活，可再获2次抽奖机会；同一客户最多有3次抽奖机会；</li>
-                            <li>同一客户（同一手机号码及同一身份ID）在活动期间最多可获得3次抽奖机会；</li>
-                            <li>活动期间，每天实时解盘时间由分析师根据用户发言积极性，发言质量指定1名最佳活跃奖，奖金为100元现金红包，同一客户（同一手机号码及同一身份ID）在活动期间最多可获得活跃奖2次；</li>
-                            <li>中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
-                            <li>活动期间，中奖客户将于3个工作日内统一安排奖金红包的发放，如客户6月19日中奖，则奖金红包于6月22日之前统一安排发放；如遇周末或法定假期，发放奖品时间将顺延；</li>
-                            <li>奖金发放时客服将核实客户身份信息，客户激活账户的手机号码应与客户注册实时解盘的手机号码一致，方可领取；</li>
-                            <li>代理客户及金道员工不适用此次优惠活动；</li>
-                            <li>金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
-                        </ol>
-                    </div>
+    <div class="redbag_pop nologin dn" id="redPacket_noLogin">
+        <div class="cont">
+            <div class="rb_top">
+                <span>马上登录金道实时解盘</span>
+                <h4>抢大量<b>5</b>~<b>30</b>元微信现金红包</h4>
+            </div>
+            <a href="javascript:void(0)" class="rb_btn" id="redPacket_regBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_bigmfzc', 'content_middle', 1, true]);">
+                <i class="reg">免费注册</i><b class="bg"><b></b></b>
+            </a>
+            <div class="rb_tip">
+                <span>已有账户, <a href="javascript:void(0)" id="redPacket_loginBtn" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_madl', 'content_middle', 1, true]);">马上登录</a></span>
+                <span class="t2">没有账户? <a href="javascript:void(0)" id="redPacket_regBtn2" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_mfzc', 'content_middle', 1, true]);">免费注册</a> </span>
+            </div>
+            <a class="pop_close" href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pm_studio', 'hb_gb', 'content_middle', 1, true]);"><i>关闭</i></a>
+        </div>
+    </div>
+    <!-- 抢红包-已登录状态 -->
+    <div class="redbag_pop dn" id="redPacket_normal">
+        <div class="cont">
+            <div class="rb_top2">
+                <span>开抢倒计时</span>
+                <div class="timecount">
+                    <span><b rp="minutesLabel"></b>分</span>
+                    <span><b rp="secondsLabel"></b>秒</span>
                 </div>
             </div>
-        </div>
-        <!-- <div class="light-shadow"><i></i></div> -->
-    </div>
-    <!-- 抢红包-未登录状态 -->
-    <div class="popup_box login_hint dn" id="redPacket_noLogin">
-        <div class="cont">
-            <div class="new-hongb-con">
-                <div class="new-hongb-tt">
-                    <p>马上登录金道实时解盘</p>
-                    <p class="new-hb-bm"><strong>一大波5-500元现金红包大派送</strong></p>
-                </div>
-                <div class="new-hongb-btn">
-                    <a href="javascript:void(0)" class="new-hongb-sum" id="redPacket_regBtn">先注册，再抽奖</a>
-                    <div class="new-hongb-dl">
-                        <span>已有账号，<a href="javascript:void(0)" id="redPacket_loginBtn">我要登录</a></span>
+            <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_rob"><i class="">抢</i><b class="bg"><b></b></b></a>
+            <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_wait"><i class="wait">等待开抢</i><b class="bg"><b></b></b></a>
+            <div class="rb_tip">
+                <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
+                <div class="tspan">在线时段内每5分钟将有一大波5-30元微信现金红包来袭！<br>人人有份，即刻开抢啦！
+                    <div class="dashang_rule">
+                        <a href="javascript:void(0)">活动规则<i></i></a>
+                        <div class="ds_rulecont">
+                            <div class="arr"><i></i><i class="i2"></i></div>
+                            <div class="scrollbox">
+                                <span><b>•</b>活动规则</span>
+                                <li>1.活动期间，金道实时解盘课程时段内，每隔5分钟将发放一波奖金红包，所有实时解盘注册客户皆可参与“全民抢红包”活动，客户所中奖金将通过微信发放；</li>
+                                <li>2.活动期间，中奖客户如中奖后首次注资激活账户，则抽中的红包奖金将翻倍，客户注资成功后请联系实时解盘助理登记验证，以发放双倍红包奖金；</li>
+                                <li>3.中奖客户需要同步关注分析师微信，并提供中奖手机号码至分析师验证，以便分析师发放奖金红包；</li>
+                                <li>4.活动期间，当天中奖客户将于次日15点统一安排奖金红包的发放，如客户7月31日中奖，则奖金红包于8月1日15:00点统一安排发放；如遇周末或法定假期，则顺延至上班后第1个工作日发放。</li>
+                                <li>5.金道保留随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权。</li>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
         </div>
     </div>
-
-    <!-- 没有机会抽奖提示 -->
-    <div class="popup_box login_hint dn" id="activeNoChance">
+    <!-- 抢红包-结果页-无奖 -->
+    <div class="redbag_pop rb_result dn" id="redPacket_resNo">
         <div class="cont">
-            <div class="new-hongb-con">
-                <div class="new-hongb-tt new-hong-siz">
-                    <p>很遗憾，您当前账户没有抽奖机会</p>
-                    <p class="new-hb-sm"><strong>参与聊天室互动，赢最佳活跃奖<br /><span>（100元现金红包）</span></strong></p>
+            <div class="rb_top2">
+                <span>差一点点就中奖了！</span>
+                <span class="sp2"><b>5分钟</b>后又将有一大波红包来袭，机会多多，洗洗手再来！</span>
+            </div>
+            <div class="qrcode-con">
+                <div class="rb_tip2">
+                    <div class="tspan">扫码关注分析师发送“赚钱”，<br>领取独家投资秘籍一份！</div>
                 </div>
-                <div class="new-hongb-btn">
-                    <a href="javascript:void(0);" class="new-hongb-sum" id="joinChat">立刻参与互动</a>
-                </div>
+                <img src="" alt="" rp="wechatImg">
+                <p class="p1">老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
+
+            </div>
+            <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
+        </div>
+    </div>
+    <!-- 抢红包-结果页-中奖！ -->
+    <div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
+        <div class="cont">
+            <div class="congratulation">恭喜获得<b rp="money"></b>元微信红包
+                <p>若当天注资激活可获得翻倍红包<b rp="doubleMoney"></b>元！</p>
+            </div>
+            <div class="qrcode-con">
+                <img src="" alt="" rp="wechatImg">
+                <p class="p1">老师微信二维码 <span>微信号：<b rp="wechat"></b></span></p>
+                <p class="p2"><b>兑奖办法：</b>请扫码关注上方分析师微信，并提供您的<span>中奖手机号码给分析师验证并领取现金红包！</span> </p>
             </div>
             <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
         </div>
     </div>
 
-    <!-- 抽奖机会已用完提示 -->
-    <div class="popup_box login_hint dn" id="registerChanceOver">
-        <div class="cont">
-            <div class="new-hongb-con">
-                <div class="new-hongb-tt">
-                    <p class="new-hb-mm"><strong>抱歉，您的抽奖机会已使用完</strong></p>
-                </div>
-                <div class="new-hongb-btn">
-                    <a href="https://goldadmin.24k.hk/goldadmin/login.do" class="new-hongb-sum" target="_blank">立即激活</a>
-                    <div class="new-hongb-dl">
-                        <span>增加2次抽奖机会</span>
+    <!-- 抢红包-5秒倒计时 -->
+    <div class="redbag_pop_box dn" id="redPacket_mini">
+        <div class="inner">
+            <div class="redbag_pop pop2" id="redPacket_mini2">
+                <div class="cont">
+                    <div class="rb_top2">
+                        <span>开抢倒计时</span>
                     </div>
+                    <a href="javascript:void(0)" class="rb_btn ani" id="redPacket_miniRob"><i class="">抢</i><b class="bg"><b></b></b></a>
+                    <a href="javascript:void(0)" class="rb_btn wait" id="redPacket_miniWait"><i class="t5" rp="seconds"></i><b class="bg"><b></b></b></a>
+                    <div class="rb_tip">
+                        <div class="rbnum">第<span rp="timesLabel"></span>波微信红包</div>
+                        <div class="rb_check">
+                            <span class="rb_checkbox"><input type="checkbox" id="redPacket_popFlag"><label for="redPacket_popFlag"><i></i></label></span>
+                            <span class="ctext">勾选后不再弹出提醒</span>
+                        </div>
+                    </div>
+                    <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
                 </div>
-                <p class="new-hongb-tis">温馨提示：您激活账户后，需退出账号重新登录，方可刷新抽奖机会哦！</p>
-            </div>
-            <a class="pop_close" href="javascript:void(0)"><i>关闭</i></a>
-        </div>
-    </div>
-
-    <!-- 抽奖结果层 -->
-    <div class="new-hongb-prize dn" id="redPacket_resYes">
-        <a class="pop_close" href="javascript:void(0)" id="resultDel"><i>关闭</i></a>
-        <div class="new-hongb-jpbox">
-            <div class="new-hongb-img dn" id="prizeCon1">
-                <img src="/theme1/img/prize-im1.png" alt="5元" width="100%" />
-            </div>
-            <div class="new-hongb-img dn" id="prizeCon2">
-                <img src="/theme1/img/prize-im2.png" alt="10元" width="100%" />
-            </div>
-            <div class="new-hongb-img dn" id="prizeCon3">
-                <img src="/theme1/img/prize-im3.png" alt="50元" width="100%" />
-            </div>
-            <div class="new-hongb-img dn" id="prizeCon4">
-                <img src="/theme1/img/prize-im4.png" alt="100元" width="100%" />
-            </div>
-            <div class="new-hongb-img dn" id="prizeCon5">
-                <img src="/theme1/img/prize-im5.png" alt="200元" width="100%" />
-            </div>
-            <div class="new-hongb-img dn" id="prizeCon6">
-                <img src="/theme1/img/prize-im6.png" alt="500元" width="100%" />
             </div>
         </div>
-        <div class="new-hongb-title">
-            <h3>恭喜获得<span rp="money"></span>元微信红包</h3>
-            <!-- 状态1 -->
-            <div class="new-hongb-thei thei-wid dn" id="active_yes_threeChanceOver">
-                <span>即刻参与互动，赢最佳活跃奖(100元现金红包)</span>
-            </div>
-            <!-- 状态2 -->
-            <div class="new-hongb-thei dn" id="rigster_yes_hasNoChance" style="margin-bottom:78px">
-                <span>您的抽奖机会已用完<br>点击激活按钮，再增加2次抽奖机会</span>
-                <a href="https://goldadmin.24k.hk/goldadmin/login.do" target="_blank">立即激活</a>
-            </div>
-            <!-- 状态3 -->
-            <div class="new-hongb-thei dn" id="active_yes_hasOneChance">
-                <span>您还有<b id="lastChance"></b>次抽奖机会<a href="javascript:void(0)" id="goRob">返回抽奖</a></span>
-            </div>
-        </div>
-        <div class="new-hongb-ewm">
-            <div class="hb-ewm-img ">
-                <img src=" " alt=" " width="100% " rp="wechatImg" />
-            </div>
-            <p>当期老师微信二维码
-                <br />微信号：<span rp="wechat"></span></p>
-        </div>
-        <p class="new-hongb-method"><span>兑奖办法：</span>请扫码关注上方分析师微信并提供<br />您的中奖手机号码给分析师验证并领取现金红包
-        </p>
     </div>
     <%}%>
 

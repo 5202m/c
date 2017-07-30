@@ -569,7 +569,12 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             //     viewDataObj.isRedPacket = false;
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
-            viewDataObj.isRedPacket = config.isRedPacket;
+            //系统时间小于红包结束时间则生效,2017-08-04 23:35:00下线
+            if (new Date() < new Date("2017-08-04 23:35:00")) {
+                viewDataObj.isRedPacket = config.isRedPacket;
+            } else {
+                viewDataObj.isRedPacket = false;
+            }
             viewDataObj.isShowTrade = config.isShowTrade;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
@@ -3243,39 +3248,71 @@ router.get("/geetest/register", function(req, res) {
  */
 router.post('/rob', function(req, res) {
     logger.info("redPacket<<rob begin！");
+    //没有登录
     var userInfo = req.session.studioUserInfo;
-    var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
-    var robParams = {
-        ac_periods: "20170612",
-        phone: userInfo.mobilePhone.replace("86-", ""),
-        userGroup: userInfo.clientGroup,
-        time: registerTime
+    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
+        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
+        return;
     }
-    request.post({
-        url: (config.pmOAPath + '/lottery/activity20170612/drawSimple'),
-        form: robParams
-    }, function(error, response, data) {
-        var result = {
-            result: 0,
-            money: 0,
-            msg: "",
-            residueDegree: 0
-        };
+    var clientTime = req.body['t'];
+    var minutes = clientTime - new Date().getTime();
+    if (Math.abs(minutes) >= 60000) {
+        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
+        return;
+    }
+    var start = 30600000; //8:30
+    var cycle = 300000; //周期5分钟
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var time = now.getTime() - today;
+    //确定期数
+    var periods = parseInt((time - start) / cycle);
+    var isDepart = 0;
+    //获取整点时间
+    var temp = (time - ((time - start) % cycle));
+    var curTime = temp % 3600000;
+    if (0 == curTime) {
+        isDepart = 1;
+    }
+    var robParams = {
+        ac_periods: "20170801",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        nper: periods,
+        is_depart: isDepart
+    };
+
+    if (periods < 0) {
+        return;
+    }
+
+    /*如果整点且非未激活或者模拟用户,直接返回*/
+    if (1 == isDepart) {
+        logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
+        if (userInfo.clientGroup != "notActive" && userInfo.clientGroup != "simulate") {
+            res.json({ result: 0, money: 0, msg: "" });
+            return;
+        }
+    }
+
+    request.post({ url: (config.pmOAPath + '/lottery/activity20170801/draw'), form: robParams }, function(error, response, data) {
+        var result = { result: 0, money: 0, msg: "", code: "" };
         if (data) {
-            logger.info("redPacket<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
+            logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
             try {
                 data = JSON.parse(data);
-                if (data.infoNo == 1) {
+                if (data.infoNo == 1 && data.infoGiftNumber) {
                     result.result = 0;
                     result.money = data.infoGiftName;
-                    result.residueDegree = data.lastNum;
                     res.json(result);
                     return;
+                } else {
+                    result.result = 1;
+                    result.code = data.infoNo;
                 }
-                result.msg = data.infoMsg;
             } catch (e) {}
         }
         res.json(result);
+        logger.info("redPacket<<rob end！");
     });
 });
 

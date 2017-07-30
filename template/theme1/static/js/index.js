@@ -190,11 +190,11 @@ var indexJS = {
         /**
          * 联系助理按钮事件
          */
-        if (indexJS.isNeedOnlineCS() &&  indexJS.userInfo.groupId != 'studio_29') {
+        if (indexJS.isNeedOnlineCS() && indexJS.userInfo.groupId != 'studio_29') {
             indexJS.connectOnlineCs();
         }
         $('.mod_infotab .tabnav .myaid').click(function() {
-            if (indexJS.isNeedOnlineCS() &&  indexJS.userInfo.groupId != 'studio_29') {
+            if (indexJS.isNeedOnlineCS() && indexJS.userInfo.groupId != 'studio_29') {
                 indexJS.connectOnlineCs();
             } else {
                 if ($(".pletter_win .mult_dialog a[utype=3]").length == 0) {
@@ -352,7 +352,7 @@ var indexJS = {
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            // indexTool.RedPacket.tick();
+            indexTool.RedPacket.tick();
         }, 1000); //每秒一次
     },
     /**
@@ -729,13 +729,13 @@ var indexJS = {
     },
 
     //判断用户是否头一次登陆晒单活动
-    getShowPrideActivityFlag : function (visitorId) {
+    getShowPrideActivityFlag: function(visitorId) {
         if (common.isValid(visitorId)) {
             $.post('/isShowTradeActivityFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
                 if (data) {
-                    if(!data.data){
+                    if (!data.data) {
                         $(".shaidan-conbox .del-btn").trigger('click');
-                    }else{
+                    } else {
                         $('#showTrade_header').trigger('click');
                     }
                 }
