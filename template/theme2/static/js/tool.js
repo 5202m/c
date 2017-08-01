@@ -377,7 +377,11 @@ var Tool = {
         setEvent: function() {
             if (Tool.RedPacket.getHC('visits') == "") {
                 Tool.RedPacket.setHC('visits', 1, 1);
-                Tool.RedPacket.showPop("noLogin");
+                if (Data.userInfo.isLogin) {
+                    Tool.RedPacket.showPop("normal");
+                } else {
+                    Tool.RedPacket.showPop("noLogin");
+                }
             }
             //红包视图-顶部
             $("#redPacket_header").bind("view", function() {
