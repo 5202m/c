@@ -239,19 +239,11 @@ Register.doRegister = function() {
                 Data.userInfo.userTel = params.mobilePhone || result.userInfo.mobilePhone;
                 try {
                     Data.userInfo.clientGroup = "register";
-                    if (typeof(result.isNewMember) != "undefined" && result.isNewMember) {
-                        chatAnalyze.setUTM(false, $.extend({
-                            operationType: 3,
-                            roomName: $('#room_roomName').text(),
-                            userTel: params.mobilePhone
-                        }, Data.userInfo, Tool.courseTick.course));
-                    } else {
-                        chatAnalyze.setUTM(false, $.extend({
-                            operationType: 4,
-                            roomName: $('#room_roomName').text(),
-                            userTel: params.mobilePhone
-                        }, Data.userInfo, Tool.courseTick.course));
-                    }
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 3,
+                        roomName: $('#room_roomName').text(),
+                        userTel: params.mobilePhone
+                    }, Data.userInfo, Tool.courseTick.course));
                 } catch (e) {
                     console.log("Set mbregister UTM fail!" + e);
                 }
