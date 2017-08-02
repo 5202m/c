@@ -237,8 +237,13 @@
                         try {
 
                             var isNewMembers = Data.userInfo.isNewMember;
-                            if (isNewMembers==true || isNewMembers=="true") {
-                                chatAnalyze.setUTM(false, $.extend({ operationType: 3, userTel: Data.userInfo.mobilePhone, accountNo:Data.userInfo.accountNo, roomName: $('#room_roomName').text() }, Data.userInfo));
+                            if (isNewMembers == true || isNewMembers == "true") {
+                                chatAnalyze.setUTM(false, $.extend({
+                                    operationType: 3,
+                                    userTel: Data.userInfo.mobilePhone,
+                                    accountNo: Data.userInfo.accountNo,
+                                    roomName: $('#room_roomName').text()
+                                }, Data.userInfo));
                             }
 
                         } catch (e) {
@@ -277,6 +282,7 @@
                     <script type="text/javascript" src="/theme2/js/container.js"></script>
                     <script type="text/javascript" src="/theme2/js/pop.js"></script>
                     <script type="text/javascript" src="/theme2/js/login.js"></script>
+                    <script type="text/javascript" src="/theme2/js/register.js"></script>
                     <script type="text/javascript" src="/theme2/js/chat.js"></script>
                     <script type="text/javascript" src="/theme2/js/classNote.js"></script>
                     <script type="text/javascript" src="/theme2/js/data.js"></script>

@@ -224,7 +224,8 @@ var fileList = [
             "template\\theme2\\static\\js\\accountSetNickname.js",
             "template\\theme2\\static\\js\\accountSetPwd.js",
             "template\\theme2\\static\\js\\accountSubscribe.js",
-            "template\\theme2\\static\\js\\accountSubscribeDetail.js"
+            "template\\theme2\\static\\js\\accountSubscribeDetail.js",
+            "template\\theme2\\static\\js\\register.js"
         ]
     },
     // PM-theme3
