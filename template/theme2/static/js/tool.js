@@ -698,7 +698,7 @@ var Tool = {
                             });
                         }
                     } else {
-                        if (data.code == 1005 || data.code == 1006 || data.code == 1004) {
+                        if (data.code == 1004 || data.code == 1005 || data.code == 1006 || data.code == 1007) {
                             Tool.RedPacket.config.miniClose = true;
                             Tool.RedPacket.showPop("resNo", {
                                 wechatImg: analyst.wechatImg,
