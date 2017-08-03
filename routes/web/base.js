@@ -3320,6 +3320,7 @@ router.post('/rob', function(req, res) {
                 } else {
                     result.result = 1;
                     result.code = data.infoNo;
+                    result.msg = data.infoMsg;
                 }
             } catch (e) {}
         }
