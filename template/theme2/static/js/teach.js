@@ -29,6 +29,7 @@ Teach.setEvent = function(){
      * 文章点击事件
      */
     $('.list-item-desced.border-bt').bind('click', function(){
+        PmGaTrace.noviceTeachItemGaEvent('wz',$(this).children().children('a').text());
         var num = $(this).parent().attr("t");
         var rank = $(this).parent().parent().parent().attr("id");
         var rankNum = rank === 'primary' ? '1' :(rank === 'middle' ? '2' : '3');
@@ -51,6 +52,7 @@ Teach.setEvent = function(){
     $('section .listblock.bgfff').on('click','.list-item-desced.border-bt',function () {
         var utype = $(this).parent().attr("utype");
         if(utype === 'video'){
+            PmGaTrace.noviceTeachItemGaEvent('sp',$(this).children().children('a').text());
             VideoPlay.videoUrl = $(this).parent().attr("uurl");
             VideoPlay.videoTitle = $(this).children('.list-main').children('a').text();
             VideoPlay.load();

@@ -538,6 +538,7 @@ ClassNote.pushShoutSingleInfo = function (articleInfo) {
  * @param dom
  */
 ClassNote.viewData = function (dom) {
+    PmGaTrace.roomViewDataGaEvent($('#room_teacher').attr('userno'));
     var storeData = ClassNote.getStoreViewData() || [];
     var params = {groupType: Data.userInfo.groupType, item: dom.attr('item'), tag: 'viewdata_' + dom.attr('dataid')};
     Util.postJson('/addPointsInfo', {params: JSON.stringify(params)}, function (result) {

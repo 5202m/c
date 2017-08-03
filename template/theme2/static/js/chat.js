@@ -190,11 +190,7 @@ var Chat = {
          * 打开私聊对话页面
          */
         $("#chat_whisper").bind("click", function(){
-            //打开私聊对话页面
-/*            if(!Data.userInfo.isLogin){
-                Login.load();
-                return false;
-            }*/
+            PmGaTrace.roomPrivateChatGaEvent();
             PrivateChat.load();
         });
 
@@ -388,6 +384,7 @@ var Chat = {
 
         $('#chat_filter').bind('change',function () {
             var _value = $('#chat_filter').val(),options = ['all','analyst','me'];
+            PmGaTrace.roomNoticeMsgTypeGaEvent(_value);
             if($.inArray(_value,options) == -1){
                 var nickname = $("#chat_filter").find("option:selected").text();
                 var usertype = $("#chat_filter").find("option:selected").attr('ut');

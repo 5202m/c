@@ -154,11 +154,13 @@ Room.setEvent = function() {
 
     /** 节目列表 */
     $("#room_syllabus").bind("click", function() {
+        PmGaTrace.roomSyllabusGaEvent();
         Syllabus.load();
     });
 
     /** 聊天室 */
     $("#room_chat").bind("click", function() {
+        PmGaTrace.roomChatGaEvent();
         $("#room_classnote").hide();
         $("#room_foot").hide();
         $("#room_talk").show();
@@ -177,6 +179,7 @@ Room.setEvent = function() {
     });
 
     $("#room_teacher,#pride_teacher").bind("click", function() {
+        PmGaTrace.roomTeacherGaEvent();
         $(this).next('.teacher-ops').toggle();
     });
     /** 老师简介 */
@@ -189,6 +192,7 @@ Room.setEvent = function() {
          * 晒单墙
          */
     $('#room_showTrade').bind('click', function() {
+        PmGaTrace.showTradeEntryGaEvent();
         ShowTrade.load();
         ShowTrade.showShowTradeNumTip(true);
     });
@@ -205,6 +209,7 @@ Room.setEvent = function() {
      * 点击直播精华
      */
     $('#room_pride').bind('click', function() {
+        PmGaTrace.roomClassNoteGaEvent();
         ClassNote.load();
     });
 
@@ -221,23 +226,6 @@ Room.setEvent = function() {
         }
     });
 
-
-    /*    $(window).scroll(function (e) {
-            if ((e.timeStamp - Room.lastTimeStamp) < 150) {
-                return;
-            } else {
-                Room.lastTimeStamp = e.timeStamp;
-            }
-            var viewH = $(this).height(),//可见高度
-                contentH = $(this).get(0).scrollHeight,//内容高度
-                scrollTop = $(this).scrollTop();//滚动高度
-            if (scrollTop / (contentH - viewH) >= 0.95 && scrollTop > Room.lastScrollTop) {
-                Room.lastScrollTop = scrollTop;
-                Room.loadRoomClassNoteData(true);
-            } else {
-                Room.lastTimeStamp = 0;
-            }
-        });*/
 
     /**
      * 打开微信QRCode
@@ -295,6 +283,7 @@ Room.setEvent = function() {
      * 订阅
      */
     $('#room_teacherOps').on('click', 'a.subscribe', function(e) {
+        PmGaTrace.roomTeacherSubscribeGaEvent();
         if (!Data.userInfo.isLogin) {
             Login.load();
             return false;

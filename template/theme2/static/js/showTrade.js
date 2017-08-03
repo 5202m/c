@@ -101,6 +101,7 @@ ShowTrade.setEvent = function(){
      * 进入我的晒单
      */
     $('#myShowTrade').bind('click', function(){
+        PmGaTrace.myShowTradeListGaEvent();
         if(Data.userInfo.isLogin) {
             UserShowTrade.load();
         }else{
@@ -112,6 +113,7 @@ ShowTrade.setEvent = function(){
      */
     $('.addShowTrade').unbind('click');
     $('.addShowTrade').bind('click', function(){
+        PmGaTrace.showTradeListPlusEntryGaEvent();
         if(Data.userInfo.isLogin) {
             ShowTradeAdd.load();
         }else{

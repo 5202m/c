@@ -163,6 +163,7 @@ Rooms.setEventRoom = function() {
             Rooms.entryRoom($(this).attr("gi"));
         }
         $('.wenjuan-float-con').hide();
+        PmGaTrace.roomListGaEvent($(this).attr("rt"));
     });
 };
 

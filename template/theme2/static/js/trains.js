@@ -59,7 +59,8 @@ Trains.setTrainList = function() {
                     row._id,
                     feature.handler,
                     feature.clientSize,
-                    bgcss
+                    bgcss,
+                    row.status
                 );
                 if (feature.isEnd) {
                     trainsEndHtml.push(html);
@@ -318,4 +319,11 @@ Trains.setEvent = function() {
      * 返回首页
      */
     $('#train_back').bind('click', Container.back);
+
+
+    //二级页-进入按钮
+    $('#trainsList a').on('click',function () {
+        PmGaTrace.trainEntryGaEvent($(this).children('b').text(),$(this).parent().siblings('b').text())
+    });
+
 };

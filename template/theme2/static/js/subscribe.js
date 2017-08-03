@@ -153,6 +153,7 @@ Subscribe.setEvent = function() {
      * 点赞
      */
     $('#subscribeAnalyst').on('click', '.item-con .item-main .social-op span a.support', function() {
+        PmGaTrace.subscribePageThumbsUpGaEvent($(this).attr('userNo'));
         Subscribe.setPraise($(this), $(this).next('label'));
         return false;
     });
@@ -171,6 +172,7 @@ Subscribe.setEvent = function() {
         var typeLen = types.length;
         var analystArr = [];
         var currAnalyst = $this.attr('analystId');
+        PmGaTrace.subscribePageSubscribeGaEvent(currAnalyst);
         if ($this.attr('subscribed') == 'true') {
             Subscribe.subscribeOpTeacher = currAnalyst;
         } else {

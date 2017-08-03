@@ -35,6 +35,7 @@ Novice.setEvent = function(){
             Teach.currentRank = entryType;
             Teach.load();
         }
+        PmGaTrace.noviceRoomGaEvent(entryType);
     });
 };
 

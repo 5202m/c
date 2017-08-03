@@ -251,18 +251,21 @@ Analyst.setEvent = function(){
      * 更多老师
      */
     $('#analyst_more').bind('click', function(){
+        PmGaTrace.analystPageMoreEntryGaEvent(Analyst.userNo);
         Subscribe.load();
     });
     /**
      * 点赞
      */
     $('#analystPraiseTool').on('click', 'ul li a.support', function(){
+        PmGaTrace.analystPageThumbsUpGaEvent(Analyst.userNo);
         Subscribe.setPraise($(this), $(this).children('label'));
     });
     /**
      * 打开微信QRCode
      */
     $('#analystPraiseTool').on('click', 'a.add-wx', function(){
+        PmGaTrace.analystPageWechatGaEvent(Analyst.userNo);
         if(Util.isAppEnv()){
             $('#analystWechat i').remove();
             var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Analyst.wechatCode).concat('<br/>就可以加老师为微信好友');
@@ -280,6 +283,7 @@ Analyst.setEvent = function(){
      * 打开打赏
      */
     $('#analystPraiseTool').on('click', 'a.dollar', function(){
+        PmGaTrace.analystPageDollarGaEvent(Analyst.userNo);
         if(Util.isAppEnv()){
             $('#analystDollar i').remove();
             var tipText = '扫描上方二维码<br/>或者搜索微信号:'.concat(Analyst.wechatCode).concat('<br/>加老师为微信好友<br/>就可以给老师打赏发红包啦');
@@ -310,6 +314,7 @@ Analyst.setEvent = function(){
      * 订阅
      */
     $('#analystPraiseTool').on('click','a.subscribe',function (e) {
+        PmGaTrace.analystPageSubscribeGaEvent(Analyst.userNo);
         if(!Data.userInfo.isLogin){
             Login.load();
             return false;
@@ -335,7 +340,8 @@ Analyst.setEvent = function(){
     /**
      * 教学视频点击事件
      */
-    $('#analystTeachVideoList,#analystVideoList').on('click','li',function () {
+    $('#analystTeachVideoList,#analystVideoList,#analystStudentVideoList').on('click','li',function () {
+        PmGaTrace.analystPageZBVideoGaEvent($(this).parent().attr('id'),Analyst.userNo);
         VideoPlay.videoUrl = $(this).find('a').attr('vurl');
         VideoPlay.videoTitle = $(this).find('a').attr('title');
         VideoPlay.load();

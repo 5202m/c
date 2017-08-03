@@ -144,6 +144,7 @@ Syllabus.setEvent = function(){
         $('#syllabusDayTitle li').removeClass('active');
         $(this).addClass('active');
         Syllabus.setSyllabusList($(this).attr('day'));
+        PmGaTrace.syllabusListTabGaEvent($(this).attr('day'));
     });
     /**
      * 老师订阅
@@ -157,6 +158,8 @@ Syllabus.setEvent = function(){
      */
     $('#syllabusList').on('click', '.item-cell .item-bd .avatar-info', function(){
         Analyst.userNo = $(this).attr('userNo');
+        var classinfo = $(this).parent().prev().find('.s-status').attr('class');
+        PmGaTrace.syllabusListTeacherButtonGaEvent(Analyst.userNo,classinfo);
         Analyst.subscribeStr = $(this).parent().next().find('a').attr('subscribed') == 'true' ? '已订阅' : '订阅';
         Analyst.load();
         return false;
@@ -165,6 +168,7 @@ Syllabus.setEvent = function(){
      * 订阅
      */
     $('#syllabusList').on('click', '.item-cell .btn-op a.btnSubscribe', function(){
+        PmGaTrace.syllabusListSubscribeGaEvent($this.attr('analystId'));
         if(!Data.userInfo.isLogin){
             Login.load();
             return false;
