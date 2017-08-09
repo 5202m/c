@@ -48,9 +48,10 @@ var indexJS = {
         noticeJS.init();
         indexTool.SimpleRoom.init();
         indexTool.RedPacket.init();
+        if(indexJS.isRedPacket == 'true'){//8月份直播间活动
+            indexTool.activity_201708.init();
+        }
         indexJS.initGeetest();
-        indexJS.initGeetest();
-        //        indexJS.handleURLParameters();
     },
     /**
      * 事件控制
@@ -218,14 +219,7 @@ var indexJS = {
         });
         common.placeholderSupport(".formcont .in_line input[placeholder]"); //ie下输入框显示文字提示
     },
-    // handleURLParameters: function() {
-    //     var eventName = "{0}_concerned";
-    //     var $trigger = $(document.body);
-    //     $.each(this.concernedParameters, function(i, name) {
-    //         var value = common.getUrlParam(name);
-    //         $trigger.trigger(eventName.formatStr(name), value);
-    //     });
-    // },
+
     isNeedOnlineCS: function() {
         var roomType = $('#roomInfoId').attr('rt');
         if (roomType == 'vip' || roomType == "train") {
@@ -726,20 +720,5 @@ var indexJS = {
         }
 
         return size;
-    },
-
-    //判断用户是否头一次登陆晒单活动
-    getShowPrideActivityFlag: function(visitorId) {
-        if (common.isValid(visitorId)) {
-            $.post('/isShowTradeActivityFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
-                if (data) {
-                    if (!data.data) {
-                        $(".shaidan-conbox .del-btn").trigger('click');
-                    } else {
-                        $('#showTrade_header').trigger('click');
-                    }
-                }
-            });
-        }
     }
 };

@@ -675,5 +675,284 @@ var indexTool = {
             }
             return analystTmp;
         }
+    },
+
+    /*****  8月活动 start 2017.8.3  *****/
+    activity_201708 : {
+
+        remainNum : 0,
+
+        init : function () {
+            /*            var lineHeight = $(".comment-box li").height();
+             $(".comment-gdbox").css("height",lineHeight);*/
+
+            var $this = $(".gund-box"), scrollTimer;
+            $this.hover(function(){
+                clearInterval(scrollTimer);
+            },function(){
+                scrollTimer = setInterval(function(){
+                    indexTool.activity_201708.scrollNews($this);
+                },3000 );
+            }).trigger("mouseout");
+
+            indexTool.activity_201708.setEvent();
+            indexTool.activity_201708.activityLotteryList();
+            indexTool.activity_201708.replaceTeacherWX();
+            indexTool.activity_201708.getSurplusChance();
+            indexTool.activity_201708.isCurrentDayFirstLogin(indexJS.userInfo.userId);
+        },
+
+        setEvent : function () {
+
+            $("#showTrade_header").click(function(){
+                $(".blackbg").show();
+                indexTool.activity_201708.getSurplusChance();
+                $(".redbag-july-box").slideDown(1000);
+            });
+
+            $(".lay-del-btn").click(function(){
+                $(".blackbg").hide();
+                $(".redbag-july-box").hide();
+            });
+
+            $(".hongb-bot-p,.adv-rule-btn").click(function(){
+                $(".blackbg").show();
+                $("#ruleConLayer").slideDown(600);
+            });
+
+            $(".lay-del-btn2").click(function(){
+                if($('.redbag-july-box').is(':hidden')){
+                    $(".blackbg").hide();
+                }
+                $("#ruleConLayer").slideUp(600);
+            });
+
+            $('.adver-tan-btn').click(function () {
+                $("#showTrade_header").trigger('click');
+            });
+
+            $('#resultSuccCon4 .lay-del-btn2').on('click',function () {
+                $("#resultSuccCon4").slideUp(600);
+            });
+
+            $('#resultSuccCon3 .lay-del-btn2').on('click',function () {
+                $("#resultSuccCon3").slideUp(600);
+            });
+
+            $('#resultSuccCon2 .lay-del-btn2').on('click',function () {
+                $("#resultSuccCon2").slideUp(600);
+            });
+
+            $('#resultSuccCon .lay-del-btn2').on('click',function () {
+                $("#resultSuccCon").slideUp(600);
+            });
+
+            $("#lotteryBtn").rotate({
+                bind:
+                {
+                    click: function(){
+                        if (!indexJS.userInfo.isLogin) {
+                            $("#login_a").trigger("click");
+                            $('.lay-del-btn').trigger('click');
+                            return false;
+                        }
+
+                        if(indexTool.activity_201708.remainNum < 1){
+                            $('#resultSuccCon3').show();
+                            return;
+                        }
+                        indexTool.activity_201708.timeOut();
+                        indexTool.activity_201708.activityLottery(function (result) {
+                            indexTool.activity_201708.remainNum = result.num;
+                            $('.hongb-cout span').text(result.num);
+                            if(result.code != 0){
+                                if(result.code == 20007){
+                                    $('#resultSuccCon3').show();
+                                }else{
+                                    box.showMsg(result.msg || '网络超时，请稍后再试！');
+                                }
+                                return;
+                            }
+                            var giftNumber = result.giftNumber,data = 0;
+                            if(giftNumber && giftNumber.indexOf("@") > -1){
+                                giftNumber = giftNumber.substr(0,giftNumber.indexOf("@"));
+                                data = parseInt(giftNumber);
+                            }
+/*                            if(data==1){
+                                indexTool.activity_201708.rotateFunc(1,0,'大疆智能航拍无人机')
+                            }
+                            if(data==2){
+                                indexTool.activity_201708.rotateFunc(2,315,'1000元京东购物卡')
+                            }*/
+                            if(data==4){
+                                indexTool.activity_201708.rotateFunc(4,45,'10元微信红包');
+                            }else if(data==5){
+                                indexTool.activity_201708.rotateFunc(5,270,'5元微信红包');
+                            }else if(data==6){
+                                indexTool.activity_201708.rotateFunc(6,90,'2元微信红包');
+                            }else if(data==7){
+                                indexTool.activity_201708.rotateFunc(7,135,'30M流量包');
+                            }else if(data==9){
+                                indexTool.activity_201708.rotateFunc(9,180,'5000积分');
+                            }else if(data==10){
+                                indexTool.activity_201708.rotateFunc(10,225,'投资秘籍');
+                            }else{
+                                indexTool.activity_201708.rotateFunc(10,225,'投资秘籍');
+                            }
+
+                        });
+
+
+                    }
+                }
+            });
+        },
+
+        timeOut: function () {  //超时函数
+            $("#lotteryYuan").rotate({
+                angle: 0,
+                duration: 10000,
+                animateTo: 2160 + 225, //这里是设置请求超时后返回的角度，所以应该还是回到最原始的位置，2160是因为我要让它转6圈，就是360*6得来的
+                callback: function () {
+                    //alert('网络超时')
+                }
+            });
+        },
+
+        //中奖结果展示
+        rotateFunc: function (awards, angle, text) {  //awards:奖项，angle:奖项对应的角度
+            $('#lotteryYuan').stopRotate();
+            $("#lotteryYuan").rotate({
+                angle: 0,
+                duration: 5000,
+                animateTo: angle + 1440, //angle是图片上各奖项对应的角度，1440是我要让指针旋转4圈。所以最后的结束的角度就是这样子^^
+                callback: function () {
+                    var wxAwards = [4,5,6];
+                    if(wxAwards.indexOf(awards) > -1){//微信红包奖项
+                        $('#resultSuccCon h3 span').text(text);
+                        $('#resultSuccCon').show();
+                    }else if(awards == 9){
+                        $('#ewm_phone').hide();
+                        $('#resultSuccCon2 h3 span').text(text);
+                        $('.redbag-kf-text').html('所获积分将在1小时内自动存入您的账户余额');
+                        $('#resultSuccCon2').show();
+                    }else if(awards == 7){
+                        $('#ewm_phone').hide();
+                        $('#resultSuccCon2 h3 span').text(text);
+                        $('.redbag-kf-text').html('所获流量将在1小时内自动存入您的注册手机');
+                        $('#resultSuccCon2').show();
+                    }else if(awards == 10){
+                        $('#resultSuccCon4').show();
+                    } else {//非微信红包奖项
+                        $('#ewm_phone').show();
+                        $('#resultSuccCon2 h3 span').text(text);
+                        $('.redbag-kf-text').html('活动结束后<br />客服MM会联系您发放奖品');
+                        $('#resultSuccCon2').show();
+                    }
+                    var len = indexJS.userInfo.nickname.length;
+                    var item = '<li>'.concat('**'+indexJS.userInfo.nickname.substr(len -2)).concat(' 获').concat(text);
+                    $('.gund-box ul').append(item);
+                }
+            });
+        },
+
+        //无缝滚动
+        scrollNews: function (obj) {
+            var $self = obj.find("ul:first");
+            var lineHeight = $self.find("li:first").height();
+            $self.animate({"margin-top": -lineHeight + "px"}, 600, function () {
+                $self.css({"margin-top": "0px"}).find("li:first").appendTo($self);
+            })
+        },
+
+        //替换老师微信二维码
+        replaceTeacherWX : function () {
+            if(indexJS.serverTime > new Date('2017-08-21').getTime()){
+                $('#resultSuccCon .redbag-ewm-im img').attr('src','/theme1/img/redbag201708/layer_yangduoduo.png');
+                $('#resultSuccCon .redbag-ewm-fon p').html('微信号 gw_yang24k<br />添加分析师微信，核实身份后领奖');
+            }else if(indexJS.serverTime > new Date('2017-08-14').getTime()){
+                $('#resultSuccCon .redbag-ewm-im img').attr('src','/theme1/img/redbag201708/layer_liuce.png');
+                $('#resultSuccCon .redbag-ewm-fon p').html('微信号 liu_gw24k<br />添加分析师微信，核实身份后领奖');
+            }
+        },
+
+        //活动期间当天首次登陆
+        isCurrentDayFirstLogin : function (visitorId) {
+            if (common.isValid(visitorId)) {
+                $.post('/isCurrentDayFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
+                    if (data) {
+                        if (data.data) {
+                            $("#showTrade_header").trigger('click');
+                        }
+                    }
+                });
+            }
+        },
+
+        //获取当前用户的抽奖机会
+        getSurplusChance: function() {
+            if(!indexJS.userInfo.isLogin){
+                $('.hongb-cout span').text(0);
+                return;
+            }
+            $.post('/getSurplusChance',{}, function(data) {
+                if(data){
+                    $('.hongb-cout span').text(data.num);
+                    indexTool.activity_201708.remainNum = parseInt(data.num);
+                }
+
+            });
+        },
+
+        //抽奖
+        activityLottery: function(callback) {
+            $.post('/freeibLottery',{}, function(data) {
+                if(data){
+                    if(data.code != 0 && data.code != '20007'){
+                        data.num = Tool.activity_201708.remainNum;
+                    }
+                    callback(data);
+                }else{
+                    var msg = data.msg || "小主，状态不佳，请刷新页面后再抽奖";
+                    $('.hongb-cout span').text(Tool.activity_201708.remainNum);
+                    box.showMsg(msg);
+                }
+
+            });
+        },
+
+        //中奖列表
+        activityLotteryList: function() {
+            $.post('/freeibLotteryList',{}, function(data) {
+                if(data && data.code == 0 && data.list){
+                    var html = [];
+                    for(var i = 0, len = data.list.length; i < len; i++){
+                        var item = data.list[i];
+                        html.push('<li>');
+                        html.push(item.guestName);
+                        html.push(' 获');
+                        html.push(item.lotteryGiftName);
+                    }
+                    $('.gund-box ul').append(html.join(''));
+                }
+            });
+        },
+        //自己的中奖list
+        myLotteryList: function() {
+            $.post('/freeibMyLotteryList',{}, function(data) {
+                if(data && data.code == 0 && data.list){
+                    var html = [];
+                    for(var i = 0, len = data.list.length; i < len; i++){
+                        var item = data.list[i];
+                        html.push('<li>');
+                        html.push(item.guestName);
+                        html.push(' 获');
+                        html.push(item.lotteryGiftName);
+                    }
+                    $('.gund-box ul').append(html.join(''));
+                }
+            });
+        }
     }
+    /*****  8月活动 end 2017.8.3  *****/
 };
