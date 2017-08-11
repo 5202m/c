@@ -211,7 +211,7 @@ router.get('/', function(req, res) {
     } else if (appToken && options.platform && options.platform == 'appgts2') { //gts2单点登录
         targetGType = getGroupType(req, false);
         let params = {
-            clientId: config.appAutoLogin.clientId,
+            clientId: config.appAutoLoginGTS2.clientId,
             token: appToken,
             remoteIp: common.getClientIp(req),
             timestamp: common.formatDate(new Date(), 'yyyyMMddHHmmssSSS')
@@ -219,8 +219,8 @@ router.get('/', function(req, res) {
         params.sign = common.getMD5(
             'clientId=' + params.clientId + '&token=' + appToken + '&remoteIp=' +
             params.remoteIp + '&timestamp=' + params.timestamp + '&key=' +
-            config.appAutoLogin.rgsKey);
-        request.post({ url: config.appAutoLogin.rgsUrl, form: params },
+            config.appAutoLoginGTS2.rgsKey);
+        request.post({ url: config.appAutoLoginGTS2.rgsUrl, form: params },
             function(error, response, tmpData) {
                 if (error) {
                     logger.error("rgs validate->error" + error);

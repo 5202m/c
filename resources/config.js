@@ -79,6 +79,11 @@ var config = {
         clientId: 'pmlivebroadcast',
         rgsKey: '4f924b48xa012x49eax95bbx7a74a3bc0035'
     }, //app端自动登录直播间
+    appAutoLoginGTS2: {
+        rgsUrl: 'http://192.168.35.17:8080/rgs/validate', //UAT //'http://sso.24k.hk:8080/rgs/validate',//真实场
+        clientId: 'pmlivebroadcast',
+        rgsKey: '4f924b48xa012x49eax95bbx7a74a3bc0035'
+    }, //app端自动登录直播间
     geetest: {
         studio: {
             pc: {
