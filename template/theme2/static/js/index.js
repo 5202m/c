@@ -35,7 +35,7 @@ var Index = {
         Index.serverTimeTickId = window.setInterval(function() {
             Data.serverTime += 1000;
             Tool.courseTick.tick();
-            //Tool.RedPacket.tick();
+            Tool.RedPacket.tick();
         }, 1000); //每秒一次
     },
 

@@ -8,6 +8,13 @@ var Rooms = new Container({
     onLoad: function() {
         this.setAdvertisement();
         this.setStudioRoomList();
+        /** 8月份活动 start **/
+        if(Data.isRedPacket == 'true'){
+            Tool.activity_201708.init();
+        }else{
+            $('.advertise-cbox').hide();
+        }
+        /** 8月份活动 end **/
     },
     onShow: function() {
         $('body').attr('class', 'home');

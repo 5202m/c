@@ -1544,7 +1544,7 @@ var chat = {
                             userInfoTmp = data.onlineUserInfo;
                         if (data.online) {
                             var onLineNum = 0;
-                            if ($.inArray(userInfoTmp.userType, [1, 2]) > -1) {
+                            if ($.inArray(userInfoTmp.userType, [1, 2]) > -1 && userInfoTmp.userId != 'superadmin') {
                                 chat.contactAnalystEvent(userInfoTmp);
                                 onLineNum += 1;
                             }
