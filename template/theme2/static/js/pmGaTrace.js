@@ -1,7 +1,12 @@
 
 
 var PmGaTrace = {
-    
+
+    roomConstant : {
+      simple : 'studio_24',
+      live : 'studio_3'//实时解盘
+    },
+
     init : function () {
         PmGaTrace.setEvent();
     },
@@ -24,25 +29,6 @@ var PmGaTrace = {
             _gaq.push(['_trackEvent', 'm_studio','header_login', 'content_top',1,true]);
         });
 
-        //二级页面手机登录
-        $('#mobileLogin').on('click',function () {
-            _gaq.push(['_trackEvent', 'm_studio','header_dl_phone', 'content_top',1,true]);
-        });
-
-        //二级页面账户登陆
-        $('#accountLogin').on('click',function () {
-            _gaq.push(['_trackEvent', 'm_studio','header_dl_account', 'content_top',1,true]);
-        });
-
-        //登录
-        $('.submit-btn').on('click',function () {
-            var currentId = $('.current').attr('id');
-            if(currentId == 'mobileLogin'){
-                _gaq.push(['_trackEvent', 'm_studio','header_dl_login1', 'content_top',1,true]);
-            }else if(currentId == 'accountLogin'){
-                _gaq.push(['_trackEvent', 'm_studio','header_dl_login2', 'content_top',1,true]);
-            }
-        });
 
         //2.横幅海报
         //顶部banner栏目
@@ -71,9 +57,9 @@ var PmGaTrace = {
         //二级页-底部开户按钮
         $('#room_foot .infos-opbar .clearfix li:eq(1)').on('click',function () {
             var groupId = Data.userInfo.groupId, _action = '',_content = '';
-            if(groupId == 'studio_3'){//直播大厅
+            if(groupId == PmGaTrace.roomConstant.live){//直播大厅
                 _action = 'ZB_account',_content = 'content_ZB';
-            }else if(groupId == 'studio_24'){//新手专区
+            }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
                 _action = 'XS_account',_content = 'content_XS';
             }else if(PmGaTrace.isTrainRoom()){
                 _action = 'PXB_account',_content = 'content_PXB';
@@ -83,6 +69,26 @@ var PmGaTrace = {
             _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
         });
 
+    },
+
+    //登录tab
+    loginTabGaEvent : function (index) {
+        if(index == 0){//二级页面手机登录
+            _gaq.push(['_trackEvent', 'm_studio','header_dl_phone', 'content_top',1,true]);
+        }else if(index == 1){//二级页面账户登陆
+            _gaq.push(['_trackEvent', 'm_studio','header_dl_account', 'content_top',1,true]);
+        }
+    },
+
+    //登录按钮
+    loginSubmitGaEvent : function () {
+        //登录
+        var currentId = $('.current').attr('id');
+        if(currentId == 'mobileLogin'){
+            _gaq.push(['_trackEvent', 'm_studio','header_dl_login1', 'content_top',1,true]);
+        }else if(currentId == 'accountLogin'){
+            _gaq.push(['_trackEvent', 'm_studio','header_dl_login2', 'content_top',1,true]);
+        }
     },
 
     //首页房间（新手专区,培训班,直播大厅、vip专场。。。）

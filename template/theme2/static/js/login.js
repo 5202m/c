@@ -68,6 +68,7 @@ Login.setEvent = function() {
         _index && $('.forget_psw a').eq(0).show().siblings().hide();
         !_index && $('.forget_psw a').eq($('.sub-nav.active').index()).show().siblings().hide();
         Login.submitBtnShow();
+        PmGaTrace.loginTabGaEvent(_index);
     });
     //登录密码切换
     $('.password-tab .sub-nav').bind('click', function() {
@@ -257,6 +258,7 @@ Login.getMobileVerifyCode = function($this, vcKey) {
  */
 Login.doLogin = function() {
     Data.getRoom(function(roomInfo) {
+        PmGaTrace.loginSubmitGaEvent();
         var url = '/login';
         var params = { cookieId: chatAnalyze.getUTMCookie(), visitorId: (Data.userInfo.visitorId || ''), clientStoreId: (Data.userInfo.clientStoreId || '') };
         params.roomId = roomInfo ? roomInfo.id : '';
