@@ -48,9 +48,10 @@ var indexJS = {
         noticeJS.init();
         indexTool.SimpleRoom.init();
         indexTool.RedPacket.init();
+        if(indexJS.isRedPacket == 'true'){//8月份直播间活动
+            indexTool.activity_201708.init();
+        }
         indexJS.initGeetest();
-        indexJS.initGeetest();
-        //        indexJS.handleURLParameters();
     },
     /**
      * 事件控制
@@ -190,11 +191,11 @@ var indexJS = {
         /**
          * 联系助理按钮事件
          */
-        if (indexJS.isNeedOnlineCS()) {
+        if (indexJS.isNeedOnlineCS() && indexJS.userInfo.groupId != 'studio_29') {
             indexJS.connectOnlineCs();
         }
         $('.mod_infotab .tabnav .myaid').click(function() {
-            if (indexJS.isNeedOnlineCS()) {
+            if (indexJS.isNeedOnlineCS() && indexJS.userInfo.groupId != 'studio_29') {
                 indexJS.connectOnlineCs();
             } else {
                 if ($(".pletter_win .mult_dialog a[utype=3]").length == 0) {
@@ -218,14 +219,7 @@ var indexJS = {
         });
         common.placeholderSupport(".formcont .in_line input[placeholder]"); //ie下输入框显示文字提示
     },
-    // handleURLParameters: function() {
-    //     var eventName = "{0}_concerned";
-    //     var $trigger = $(document.body);
-    //     $.each(this.concernedParameters, function(i, name) {
-    //         var value = common.getUrlParam(name);
-    //         $trigger.trigger(eventName.formatStr(name), value);
-    //     });
-    // },
+
     isNeedOnlineCS: function() {
         var roomType = $('#roomInfoId').attr('rt');
         if (roomType == 'vip' || roomType == "train") {
@@ -352,7 +346,7 @@ var indexJS = {
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            // indexTool.RedPacket.tick();
+            indexTool.RedPacket.tick();
         }, 1000); //每秒一次
     },
     /**

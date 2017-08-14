@@ -15,7 +15,7 @@ let visitorService = {
             dasData: JSON.stringify(dasData)
         }).then(data => {
             defer.resolve(data);
-            visitorService.requestDas(type, dasData);
+            //visitorService.requestDas(type, dasData);
         }).catch(err => {
             logger.error("saveVisitorRecord! >>saveVisitorRecord:", path, err);
             logger.debug("saveVisitorRecord!", type, dasData);

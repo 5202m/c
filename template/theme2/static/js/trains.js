@@ -41,7 +41,7 @@ Trains.setTrainList = function() {
                 var openDate = JSON.parse(row.openDate);
                 var feature = Trains.getTrainFeature(row, false);
                 var dateStr = Util.formatDate(openDate.beginDate, 'yyyy.MM.dd') + '~' + Util.formatDate(openDate.endDate, 'yyyy.MM.dd');
-                var statusArray = ['', 'tracey_jiang', 'joe_chung', 'tonylee', 'joe_zhuang'],
+                var statusArray = ['', 'tracey_jiang', 'joe_chung', 'tonylee', 'joe_zhuang','zhouyou'],
                     bgcss = 1;
                 if (openDate.weekTime && openDate.weekTime[0].beginTime && openDate.weekTime[0].endTime) {
                     var timeStr = openDate.weekTime[0];

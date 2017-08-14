@@ -204,3 +204,6 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 	.header_redbag{margin-left: -25px; background-size: 323px 60px;padding-left: 45px;margin-right: 0;background-position: right 2px;}
 	.header_redbag .rb_text .te1{ height: 40px; margin-top: 2px;}
 }*/
+
+/* 问卷广告位 by terry 2017.7.11 */
+.wenjuan-adbox a{background:url(../img/wenjuan-icon2.gif) no-repeat}

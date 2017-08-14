@@ -60,8 +60,8 @@ ShowTrade.setShowTradeList = function(){
             row.praise||0,
             row._id,
             row.user.avatar,
-            row.tradeImg
-        ));
+            row.tradeImg,           (row.isAccord == 1) ? '<span class="starIcon"></span>' :　"&nbsp;"        ));
+
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');
         }
@@ -137,7 +137,9 @@ ShowTrade.setEvent = function(){
  * @param data
  */
 ShowTrade.pushShowTradeInfo = function(data) {
-    var tradeHtml=[], row = null,txt=null;
+    var tradeHtml = [],
+        row = null,
+        txt = null;
     for(var i = 0, length=data.length; i < length; i++){
         row = data[i];
         if($('#showTradeList .item-cell[sid="'+row.id+'"]').length==0){

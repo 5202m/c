@@ -59,6 +59,14 @@ Login.setEvent = function() {
         var _tips = $('.get-dt-code').parent().is(':visible')?_tips2:_tips1;
         $('.error-bar').removeClass('dn').find('.tips-txt').text(_tips);*/
     });
+    //提交注册操作
+    $('.login-con').on('click', '#openAccount', function() {
+        Register.load();
+        /*var _tips1 = "呀~ 手机号或密码不对哦，请重新输入";
+        var _tips2 = "呀~ 手机号不对哦，请重新输入";
+        var _tips = $('.get-dt-code').parent().is(':visible')?_tips2:_tips1;
+        $('.error-bar').removeClass('dn').find('.tips-txt').text(_tips);*/
+    });
     //登录切换
     $('.head-top .login-ms b').bind('click', function() {
         var _index = $(this).index();
@@ -334,6 +342,7 @@ Login.doLogin = function() {
                 Data.userInfo.visitorId = result.userInfo.visitorId;
                 Data.userInfo.createDate = result.userInfo.joinDate;
                 Data.userInfo.userType = 0;
+                Data.userInfo.accountNo = result.userInfo.accountNo;
                 LoginAuto.setAutoLogin($("#autoLogin").prop("checked"));
                 var key = 'storeInfos_' + Data.userInfo.groupType,
                     keyVal = Store.store(key);
@@ -341,9 +350,24 @@ Login.doLogin = function() {
                 Store.store(key, keyVal);
                 if (Login.groupId) {
                     Trains.changeRoom(Login.groupId);
+                } else if (Data.isToShowTrade) {
+                    ShowTradeAdd.load();
                 } else {
                     Container.back();
                 }
+                Data.userInfo.userTel = params.mobilePhone || result.userInfo.mobilePhone;
+                try {
+                    Data.userInfo.clientGroup = result.userInfo.clientGroup;
+                    if (typeof(result.isNewMember) != "undefined" && result.isNewMember) {
+                        chatAnalyze.setUTM(false, $.extend({ operationType: 3, roomName: $('#room_roomName').text(), userTel: params.mobilePhone }, Data.userInfo, Tool.courseTick.course));
+                    } else {
+                        chatAnalyze.setUTM(false, $.extend({ operationType: 4, roomName: $('#room_roomName').text(), userTel: params.mobilePhone }, Data.userInfo, Tool.courseTick.course));
+                    }
+
+                } catch (e) {
+                    console.log("Set mblogin UTM fail!" + e);
+                }
+
 
             }
         }, true, function() {

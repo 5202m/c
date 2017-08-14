@@ -21,8 +21,8 @@ var visitorService = require('../../service/visitorService'); //引入visitorSer
 var logger = require('../../resources/logConf').getLogger('base'); //引入log4js
 var chatPraiseService = require('../../service/chatPraiseService'); //引入chatPraiseService
 var showTradeService = require('../../service/showTradeService'); //引入chatPraiseService
-var chatSubscribeTypeService = require(
-    '../../service/chatSubscribeTypeService'); //引入chatSubscribeTypeService
+
+var chatSubscribeTypeService = require('../../service/chatSubscribeTypeService'); //引入chatSubscribeTypeService
 var chatSubscribeService = require('../../service/chatSubscribeService'); //引入chatSubscribeService
 var chatPointsService = require('../../service/chatPointsService'); //引入chatPointsService
 var clientTrainService = require('../../service/clientTrainService'); //引入chatTeacherService
@@ -180,6 +180,10 @@ router.get('/', function(req, res) {
                                                     req.session.studioUserInfo = loginRes.userInfo;
                                                     req.session.studioUserInfo.clientGroup = clientGroup;
                                                     req.session.studioUserInfo.firstLogin = true;
+                                                    //是否是新注册的用户
+                                                    if(result.isNewMember){
+                                                        logger.info("------account app new register user------accountNo:"+accountNo+";clientGroup:"+loginRes.userInfo.clientGroup);
+                                                    }
                                                 } else {
                                                     req.session.studioUserInfo = {
                                                         isLogin: false,
@@ -189,11 +193,99 @@ router.get('/', function(req, res) {
                                                         userId: result.userId
                                                     };
                                                 }
-                                                res.redirect('/');
+
+                                                res.redirect('/?islogApp='+result.isNewMember);
                                                 return;
                                             });
                                     });
                             });
+                    } catch (e) {
+                        logger.error("rgs validate->error" + e);
+                        res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                    }
+                } else {
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+            });
+        return;
+    } else if (appToken && options.platform && options.platform == 'appgts2') { //gts2单点登录
+        targetGType = getGroupType(req, false);
+        let params = {
+            clientId: config.appAutoLoginGTS2.clientId,
+            token: appToken,
+            remoteIp: common.getClientIp(req),
+            timestamp: common.formatDate(new Date(), 'yyyyMMddHHmmssSSS')
+        }
+        params.sign = common.getMD5(
+            'clientId=' + params.clientId + '&token=' + appToken + '&remoteIp=' +
+            params.remoteIp + '&timestamp=' + params.timestamp + '&key=' +
+            config.appAutoLoginGTS2.rgsKey);
+        request.post({ url: config.appAutoLoginGTS2.rgsUrl, form: params },
+            function(error, response, tmpData) {
+                if (error) {
+                    logger.error("rgs validate->error" + error);
+                    res.redirect(getGroupType(req, true) + getRredirctUrl(req));
+                }
+                logger.info("rgs validate==>SUCCESS" + JSON.stringify(tmpData));
+                tmpData = typeof tmpData == 'string' ? JSON.parse(tmpData) : tmpData;
+                if (tmpData && tmpData.code == 'success') {
+                    try {
+                        let gtsId = tmpData.result;
+                        var userPhone = null;
+                        var accountNo = null;
+                        //获取GST2客户资料
+                        apiService.getUserMobile(params, gtsId).then(data => {
+                            logger.info("getUserMobile==>SUCCESS" + JSON.stringify(data));
+                            userPhone = data.mobilePhone;
+                            var accList = data.accountInfoList;
+                            var clientGroupTmp = constant.clientGroup.register;
+                            if (accList && accList.length > 0) {
+                                clientGroupTmp = constant.clientGroup.notActive;
+                                for (var k in accList) {
+                                    acc = accList[k];
+                                    accountNo = acc.accountNo;
+                                    if (acc.activateTime) {
+                                        clientGroupTmp = constant.clientGroup.active;
+                                        break;
+                                    }
+                                }
+                            }
+                            var userInfo = {
+                                mobilePhone: userPhone,
+                                ip: params.remoteIp,
+                                groupType: targetGType,
+                                accountNo: accountNo,
+                                clientGroup: clientGroupTmp
+                            };
+                            studioService.checkMemberAndSave(userInfo, function(result) {
+                                logger.info("checkMemberAndSave==>SUCCESS" + JSON.stringify(result));
+                                studioService.login({ userId: result.userId, groupType: targetGType }, 2, function(loginRes) {
+                                    if (loginRes.isOK) {
+                                        logger.info("auto login==>SUCCESS" + JSON.stringify(loginRes));
+                                        loginRes.userInfo.isLogin = true;
+                                        req.session.studioUserInfo = loginRes.userInfo;
+                                        req.session.studioUserInfo.clientGroup = loginRes.userInfo.clientGroup;
+                                        req.session.studioUserInfo.firstLogin = true;
+                                        //是否是新注册的用户
+                                        if(result.isNewMember){
+                                            logger.info("------account appgts2 new register user------accountNo:"+accountNo+";clientGroup:"+loginRes.userInfo.clientGroup);
+                                        }
+                                    } else {
+                                        logger.info("auto login==>fail" + JSON.stringify(loginRes));
+                                        req.session.studioUserInfo = {
+                                            isLogin: false,
+                                            clientGroup: constant.clientGroup.visitor,
+                                            userType: constant.roleUserType.visitor,
+                                            mobilePhone: null,
+                                            userId: result.userId
+                                        };
+                                    }
+                                    logger.info("req.session.studioUserInfo:" + JSON.stringify(loginRes));
+                                    res.redirect('/?islogApp='+result.isNewMember);
+                                    return;
+                                });
+                            });
+                        });
                     } catch (e) {
                         logger.error("rgs validate->error" + e);
                         res.redirect(getGroupType(req, true) + getRredirctUrl(req));
@@ -313,6 +405,8 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 dasUrl: config.dasUrl
             }; //输出参数
             chatUser.groupId = groupId;
+            //防止刷新页面记录app注册
+            var islogApp = req.query["islogApp"];
             viewDataObj.theme = options.theme || "";
             viewDataObj.socketUrl = JSON.stringify(
                 common.formatHostUrl(req.hostname, config.socketServerUrl));
@@ -328,7 +422,10 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
                 platform: options && options.platform,
                 intentionalRoomId: chatUser.intentionalRoomId,
                 sid: req.sessionID,
-                createDate: chatUser.joinDate
+                createDate: chatUser.joinDate,
+                mobile: chatUser.mobilePhone,
+                accountNo: chatUser.accountNo,
+                isNewMember:islogApp
             });
             chatUser.intentionalRoomId = null; //用完了就销毁这个值。
             viewDataObj.userSession = chatUser;
@@ -484,7 +581,13 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             //     viewDataObj.isRedPacket = false;
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
-            viewDataObj.isRedPacket = config.isRedPacket;
+            //系统时间小于红包结束时间则生效,2017-08-04 23:35:00下线
+            if (new Date() < new Date("2017-08-25 23:59:59")) {
+                viewDataObj.isRedPacket = config.isRedPacket;
+            } else {
+                viewDataObj.isRedPacket = false;
+            }
+            viewDataObj.isShowTrade = config.isShowTrade;
             viewDataObj.options = JSON.stringify(options);
             viewDataObj.fromPlatform = options.platform;
             viewDataObj.version = versionUtil.getVersion();
@@ -572,8 +675,7 @@ router.get('/getMobileVerifyCode', function(req, res) {
                     delete result.data;
                     res.json(result);
                 }
-
-            });
+            }).catch(logger.error.bind(logger));
     }
 });
 /**
@@ -637,6 +739,7 @@ router.post('/login', function(req, res) {
                     req.session.studioUserInfo.cookieId = cookieId;
                     req.session.studioUserInfo.visitorId = visitorId;
                     req.session.studioUserInfo.roomName = roomName;
+                    req.session.studioUserInfo.mobile = mobilePhone;
                     //req.session.studioUserInfo.courseId = courseId;
                     //req.session.studioUserInfo.courseName = courseName;
                     var snUser = req.session.studioUserInfo;
@@ -704,7 +807,7 @@ router.post('/login', function(req, res) {
             baseApiService.checkMobileVerifyCode(mobilePhone,
                 userSession.groupType + "_login", verifyCode,
                 function(chkCodeRes) {
-                    if (chkCodeRes !== true) {
+                    if (chkCodeRes.data !== true) {
                         if (chkCodeRes.errcode &&
                             (chkCodeRes.errcode === "1006" || chkCodeRes.errcode === "1007")) {
                             result.error = {
@@ -773,7 +876,7 @@ router.post('/login', function(req, res) {
                                                         groupId: result.groupId,
                                                         clientGroup: clientGroup,
                                                         nickname: result.nickname,
-                                                        joinDate: new Date()
+                                                        joinDate: result.joinDate
                                                     };
                                                     result.userInfo = req.session.studioUserInfo;
                                                     delete result.groupId;
@@ -889,7 +992,7 @@ router.post('/login', function(req, res) {
                             groupType: userSession.groupType
                         }, 1, function(loginRes) {});
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         //userId自动登录
@@ -1346,7 +1449,7 @@ router.post('/reg', function(req, res) {
                                             firstLogin: true,
                                             isLogin: true,
                                             mobilePhone: userInfo.mobilePhone,
-                                            userId: userInfo.userId,
+                                            userId: result.userId,
                                             defGroupId: userInfo.defGroupId,
                                             clientGroup: userInfo.clientGroup,
                                             nickname: userInfo.nickname,
@@ -1437,7 +1540,7 @@ router.post('/resetPwd', function(req, res) {
                         }
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 2) {
         if (!userSession || common.isBlank(userSession.groupType)) {
@@ -1448,20 +1551,15 @@ router.post('/resetPwd', function(req, res) {
             res.json({ isOK: false, msg: '手机验证码不能为空！' });
         } else {
             baseApiService.checkMobileVerifyCode(params.mobilePhone,
-                userSession.groupType + "_resetPWD", params.verifyCode,
-                function(chkCodeRes) {
-                    if (!chkCodeRes || chkCodeRes.result != 0 || !chkCodeRes.data) {
-                        if (chkCodeRes.errcode === "1006" || chkCodeRes.errcode ===
-                            "1007") {
-                            res.json({ isOK: false, msg: chkCodeRes.errmsg });
-                        } else {
-                            res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
-                        }
+                    userSession.groupType + "_resetPWD", params.verifyCode)
+                .then((chkCodeRes) => {
+                    if (chkCodeRes !== true) {
+                        res.json({ isOK: false, msg: errorMessage.code_1007.errmsg });
                     } else {
                         userSession.mobilePhoneChk = params.mobilePhone;
                         res.json({ isOK: true, msg: "", mobilePhone: params.mobilePhone });
                     }
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else if (params.type == 3) {
         if (!userSession) {
@@ -1486,7 +1584,7 @@ router.post('/resetPwd', function(req, res) {
                         result.msg = result.error.errmsg;
                     }
                     res.json(result);
-                });
+                }).catch(logger.error.bind(logger));
         }
     } else {
         res.json({ isOK: false, msg: '参数错误！' });
@@ -2986,8 +3084,7 @@ router.post('/pmLogin', function(req, res) {
     }
     if (common.isBlank(accountNo) || common.isBlank(pwd)) {
         result.error = errorMessage.code_1013;
-    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() !=
-            userSession.verMalCode)) {
+    } else if (common.isBlank(verMalCode) || (verMalCode.toLowerCase() != userSession.verMalCode)) {
         result.error = errorMessage.code_1002;
     }
     /*else if(!/^8[0-9]+$/g.test(accountNo)&&!/^(90|92|95)[0-9]+$/g.test(accountNo)){
@@ -3013,13 +3110,18 @@ router.post('/pmLogin', function(req, res) {
                             clientGroup = 'notActive';
                         }
                         saveLoginInfo(res, req, userSession, checkAResult.mobilePhone,
-                            accountNo, clientStoreId, clientGroup, checkAResult.joinDate,
+                            accountNo, clientStoreId, clientGroup,
                             function(saveResult) {
                                 saveResult.isOK = true;
                                 req.session.studioUserInfo.cookieId = cookieId;
                                 req.session.studioUserInfo.visitorId = visitorId;
                                 req.session.studioUserInfo.roomName = roomName;
-                                req.session.studioUserInfo.joinDate = checkAResult.joinDate;
+                                saveResult.userInfo.mobilePhone = checkAResult.mobilePhone;
+                                saveResult.userInfo.accountNo = accountNo;
+                                req.session.studioUserInfo.joinDate = saveResult.joinDate;
+                                req.session.studioUserInfo.mobilePhone = checkAResult.mobilePhone;
+                                req.session.studioUserInfo.accountNo = accountNo;
+
                                 var snUser = req.session.studioUserInfo;
                                 var dasData = {
                                     mobile: snUser.mobilePhone,
@@ -3067,15 +3169,14 @@ router.post('/pmLogin', function(req, res) {
  * @param clientStoreId
  */
 function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
-    clientStoreId, clientGroup, joinDate, callback) {
+    clientStoreId, clientGroup, callback) {
     var userInfo = {
         mobilePhone: mobilePhone,
         ip: common.getClientIp(req),
         groupType: userSession.groupType,
         accountNo: accountNo,
         thirdId: null,
-        clientGroup: clientGroup,
-        joinDate: joinDate
+        clientGroup: clientGroup
     };
     studioService.checkMemberAndSave(userInfo, function(result, isNew) {
         req.session.studioUserInfo = {
@@ -3090,7 +3191,7 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             nickname: userInfo.nickname || result.userInfo.nickname,
             avatar: userInfo.avatar,
             defTemplate: userInfo.defTemplate,
-            joinDate: userInfo.joinDate
+            joinDate: result.joinDate
         };
         let snUser = req.session.studioUserInfo;
         result.userInfo = {
@@ -3110,12 +3211,12 @@ function saveLoginInfo(res, req, userSession, mobilePhone, accountNo,
             roomName: "",
             joinDate: snUser.joinDate
         };
-        callback(result);
-        if (isNew) {
-            //新注册
-            userInfo.item = "register_reg";
-            studioService.addRegisterPoint(userInfo, userInfo.clientGroup);
+        //是否是新注册的用户
+        if(result.isNewMember){
+            logger.info("------account new register user------accountNo:"+accountNo+";clientGroup:"+clientGroup);
         }
+        callback(result);
+
     });
 }
 
@@ -3159,46 +3260,77 @@ router.get("/geetest/register", function(req, res) {
  */
 router.post('/rob', function(req, res) {
     logger.info("redPacket<<rob begin！");
+    //没有登录
     var userInfo = req.session.studioUserInfo;
-    var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
-    var robParams = {
-        ac_periods: "20170612",
-        phone: userInfo.mobilePhone.replace("86-", ""),
-        userGroup: userInfo.clientGroup,
-        time: registerTime
+    if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
+        res.json({ result: "-1", msg: "未登录用户，请登录后抢红包！" });
+        return;
     }
-    request.post({
-        url: (config.pmOAPath + '/lottery/activity20170612/drawSimple'),
-        form: robParams
-    }, function(error, response, data) {
-        var result = {
-            result: 0,
-            money: 0,
-            msg: "",
-            residueDegree: 0
-        };
+    var clientTime = req.body['t'];
+    var minutes = clientTime - new Date().getTime();
+    if (Math.abs(minutes) >= 60000) {
+        res.json({ result: "-1", msg: "红包已过期，请等待下一波红包！" });
+        return;
+    }
+    var start = 30600000; //8:30
+    var cycle = 300000; //周期5分钟
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var time = now.getTime() - today;
+    //确定期数
+    var periods = parseInt((time - start) / cycle);
+    var isDepart = 0;
+    //获取整点时间
+    var temp = (time - ((time - start) % cycle));
+    var curTime = temp % 3600000;
+    if (0 == curTime) {
+        isDepart = 1;
+    }
+    var robParams = {
+        ac_periods: "20170801",
+        phone: userInfo.mobilePhone.replace("86-", ""),
+        nper: periods,
+        is_depart: isDepart
+    };
+
+    if (periods < 0) {
+        return;
+    }
+
+    /*如果整点且非未激活或者模拟用户,直接返回*/
+    if (1 == isDepart) {
+        logger.info("depart redPacket<<rob :", robParams.phone, userInfo.clientGroup, robParams.nper);
+        if (userInfo.clientGroup != "notActive" && userInfo.clientGroup != "simulate") {
+            res.json({ result: 0, money: 0, msg: "" });
+            return;
+        }
+    }
+
+    request.post({ url: (config.pmOAPath + '/lottery/activity20170801/draw'), form: robParams }, function(error, response, data) {
+        var result = { result: 0, money: 0, msg: "", code: "" };
         if (data) {
-            logger.info("redPacket<<rob :", robParams.phone, data);
+            logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
             try {
                 data = JSON.parse(data);
-                if (data.infoNo == 1) {
+                if (data.infoNo == 1 && data.infoGiftNumber) {
                     result.result = 0;
                     result.money = data.infoGiftName;
-                    result.residueDegree = data.lastNum;
                     res.json(result);
                     return;
+                } else {
+                    result.result = 1;
+                    result.code = data.infoNo;
                 }
-                result.msg = data.infoMsg;
             } catch (e) {}
         }
         res.json(result);
+        logger.info("redPacket<<rob end！");
     });
-    logger.info("redPacket<<rob end！");
 });
 
 /** 获取当前剩余抽奖机会 */
 router.post('/getLastRobChance', function(req, res) {
-    logger.info("get last redPacket chance<<begin！");
+    logger.info("get redPacket chance<<begin！");
     var userInfo = req.session.studioUserInfo;
     var registerTime = new Date(Date.parse(userInfo.joinDate)).getTime();
     var robParams = {
@@ -3218,7 +3350,7 @@ router.post('/getLastRobChance', function(req, res) {
             residueDegree: 0
         };
         if (data) {
-            logger.info("get last redPacket chance<<rob :", robParams.phone, data);
+            logger.info("get redPacket chance<<rob result:", robParams.phone, robParams.userGroup, robParams.time, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1) {
@@ -3236,7 +3368,6 @@ router.post('/getLastRobChance', function(req, res) {
         }
         res.json(result);
     });
-    logger.info("get last redPacket chance<<end！");
 });
 
 /**
@@ -3301,6 +3432,7 @@ router.post('/setAnalystSubscribeNum', function(req, res) {
         }
     });
 });
+
 router.get('/getRoomOnlineList', function(req, res) {
     let params = req.query;
     chatService.getRoomOnlineList(params)
@@ -3332,6 +3464,173 @@ router.get('/getToken', (req, res) => {
             logger.error(e);
             res.json({ isOK: false, msg: '参数错误' });
         });
-})
+});
+
+/** 8月份活动 code by ant  start 20170803 */
+
+//redis存储201708活动用户登陆情况
+router.post('/isCurrentDayFirstLogin', function(req, res) {
+    if (new Date().getTime() > new Date('2017-08-26').getTime()) {
+        res.json({ data: false });
+        return;
+    }
+    let params = req.body['data'];
+    if (common.isBlank(params)) {
+        res.json({ isOK: false, msg: '参数错误' });
+        return;
+    }
+    if (typeof params == 'string') {
+        try {
+            params = JSON.parse(params);
+        } catch (e) {
+            res.json(null);
+            return;
+        }
+    }
+    let userNo = params.userNo;
+    let key = "pm_Aug_activityLoginInfo_" + userNo;
+    cacheClient.get(key, function(err, result) {
+        let currentDay = common.formatDate(new Date(),'yyyyMMdd'),items = [];
+        if (err || !result) {
+            items.push(currentDay);
+            cacheClient.set(key, JSON.stringify(items));
+            var ttlTime = parseInt((new Date('2017-08-26').getTime() - new Date().getTime()) / 1000);
+            cacheClient.expire(key, ttlTime);
+            res.json({ data: true });
+        } else {
+            items = JSON.parse(result);
+            if(items.indexOf(currentDay) > -1){
+                res.json({ data: false });
+            }else {
+                items.push(currentDay);
+                cacheClient.set(key, JSON.stringify(items));
+                res.json({ data: true });
+            }
+        }
+    });
+});
+
+
+//查询当前用户剩余抽奖次数
+router.post('/getSurplusChance', function(req, res) {
+
+    var userInfo = req.session.studioUserInfo;
+    var requestParams = {
+        activityPeriods: "PM20170807",
+        mobile: userInfo.mobilePhone.replace("86-", ""),
+        companyId: 3 //公司ID，贵金属：3
+    };
+    request.post({
+        url: config.freeibUrl + '/unify-activity/act/20170807/getAvailableTimes',
+        form: requestParams
+    }, function(error, response, data) {
+        if(!error && data){
+            var result = JSON.parse(data);
+            if(result.code == 0){
+                res.json({code:0, isOk : true, num : result.data.availableTimes});
+            }
+        }else {
+            res.json({code:200,isOk : false,num : 0});
+        }
+
+    });
+
+});
+
+//抽奖
+router.post('/freeibLottery', function(req, res) {
+
+    var userInfo = req.session.studioUserInfo;
+    var requestParams = {
+        activityPeriods: "PM20170807",
+        mobile: userInfo.mobilePhone.replace("86-", ""),
+        companyId: 3 //公司ID，贵金属：3
+    };
+    request.post({
+        url: config.freeibUrl + '/unify-activity/act/20170807/lottery',
+        form: requestParams
+    }, function(error, response, data) {
+        if(!error && data){
+            var result = JSON.parse(data);
+            if(result.code == 0){
+                res.json({
+                    code:result.code, isOk : true, giftNumber : result.data.giftNumber,
+                    giftName : result.data.giftName, num : result.data.availableTimes
+                });
+            }else {
+                res.json({code:result.code,isOk : true,num : 0, msg : result.msg});
+            }
+        }else {
+            res.json({code:200,isOk : false,num : 0});
+        }
+
+    });
+
+});
+
+//中奖用户列表
+router.post('/freeibLotteryList', function(req, res) {
+
+    var total = req.body['total'] || 10;
+    var requestParams = {
+        activityPeriods: "PM20170807",
+        total: total,
+        companyId: 3 //公司ID，贵金属：3
+    };
+    request.post({
+        url: config.freeibUrl + '/unify-activity/act/20170807/list/all',
+        form: requestParams
+    }, function(error, response, data) {
+        if(!error && data){
+            var result = JSON.parse(data);
+            if(result.code == 0){
+                res.json({
+                    code:result.code, isOk : true, list : result.data.awardRecordList
+                });
+            }else{
+                res.json({code:result.code,isOk : true, msg : result.msg});
+            }
+        }else {
+            res.json({code:200,isOk : false,num : 0});
+        }
+
+    });
+
+});
+
+//我的中奖信息
+router.post('/freeibMyLotteryList', function(req, res) {
+
+    var total = req.body['total'] || 10;
+    var userInfo = req.session.studioUserInfo;
+    var requestParams = {
+        activityPeriods: "PM20170807",
+        total: total,
+        mobile: userInfo.mobilePhone.replace("86-", ""),
+        companyId: 3 //公司ID，贵金属：3
+    };
+    request.post({
+        url: config.freeibUrl + '/unify-activity/act/20170807/list/my',
+        form: requestParams
+    }, function(error, response, data) {
+        if(!error && data){
+            var result = JSON.parse(data);
+            if(result.code == 0){
+                res.json({
+                    code:result.code, isOk : true, list : result.data.awardRecordList,
+                    totalAmount : result.data.totalAmount
+                });
+            }else{
+                res.json({code:result.code,isOk : true, msg : result.msg});
+            }
+        }else {
+            res.json({code:200,isOk : false,num : 0});
+        }
+
+    });
+
+});
+
+/** 8月份活动 code by ant  end 20170803 */
 
 module.exports = router;

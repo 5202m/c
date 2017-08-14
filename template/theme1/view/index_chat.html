@@ -39,13 +39,31 @@
                 <div class="livebrief_list">
                     <div class="scrollbox">
                         <div id="textlivePanel">
-                            <div class="advertise-cbox">
-                                <a href="javascript:void(0)" id="redPacket_chat"><img src="/theme1/img/new-red-im.jpg" width="100%" alt="一大波5-500元红包大派送" /></a>
-                            </div>
                             <div class="livebrief" id="financeDataAndReview">
                                 <div class="calendabox financeData"></div>
                                 <div class="calendabox comment"></div>
                             </div>
+                            <%if(isRedPacket) {%>
+                            <div class="livebrief advertise-cbox">
+                                <img src="/theme1/img/redbag201708/new-red-im.jpg" width="100%" alt="一大波5-500元红包大派送" class="mCS_img_loaded">
+                                <div class="gund-box">
+                                    <ul style="margin-top: 0px;">
+                                        <li>**pt 获大疆航拍无人机</li>
+                                        <li>**风 获1000京东卡</li>
+                                        <li>**界 获2元微信红包</li>
+                                        <li>**仔 获5元微信红包</li>
+                                        <li>**mf 获1000京东卡</li>
+                                        <li>**翔 获投资秘籍</li>
+                                        <li>**名2 获5000积分</li>
+                                        <li>**kk 获5000积分</li>
+                                        <li>**12 获5元微信红包</li>
+                                        <li>**峰d 获10元微信红包</li>
+                                    </ul>
+                                </div>
+                                <a href="javascript://" class="adver-tan-btn"></a>
+                                <a href="javascript://" class="adv-rule-btn">活动详情</a>
+                            </div>
+                            <%}%>
                         </div>
                         <a id="textliveMore" href="javascript:void(0);" class="morebtn" style="">加载更多</a>
                     </div>

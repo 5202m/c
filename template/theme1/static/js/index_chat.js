@@ -194,7 +194,16 @@ var chat = {
             chat.setContent(sendObj, true, false); //直接把数据填入内容栏
             //清空输入框
             $("#contentText").html(""); //清空内容
-            chatAnalyze.setUTM(false, $.extend({ operationType: 2, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+
+            try{
+                chatAnalyze.setUTM(false, $.extend({ operationType: 2, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+            }
+            catch(e){
+                console.log("Set chat UTM fail!"+e);
+            }
+
+
+
         });
         //发送图片--选择图片
         $("#sendImgBtn").click(function() {
@@ -1074,7 +1083,13 @@ var chat = {
         });
         chat.setWhContent(sendObj, true, false); //直接把数据填入内容栏
         txtObj.html(""); //清空内容
-        chatAnalyze.setUTM(false, $.extend({ operationType: 8, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+        try{
+            chatAnalyze.setUTM(false, $.extend({ operationType: 8, roomName: $('#roomInfoId').text() }, indexJS.userInfo, indexJS.courseTick.course)); //统计发言次数
+        }
+        catch(e){
+            console.log("Set pmlogin UTM fail!"+e);
+        }
+
     },
     /**
      * 设置私聊访客
@@ -1449,10 +1464,16 @@ var chat = {
                 console.log("ok");
             });
             $(".img-loading[pf=chatMessage]").show();
-            chatAnalyze.setUTM(false, $.extend({
-                operationType: 1,
-                roomName:$('#roomInfoId').text(),
-            }, indexJS.userInfo, indexJS.courseTick.course));
+            try{
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 1,roomName:postData.roomName
+                }, indexJS.userInfo, indexJS.courseTick.course));
+            }
+            catch(e){
+                console.log("Set socket UTM fail!"+e);
+            }
+
+
         });
         //进入聊天室加载的在线用户
         this.socket.on('onlineUserList', function(data, dataLength) {
@@ -1482,7 +1503,7 @@ var chat = {
                 chat.setOnlineUser(row); //设置在线用户
                 if (row.userType == 3 && $('.mult_dialog a[uid=' + row.userId + ']').length > 0) {
                     $('.mult_dialog a[uid=' + row.userId + ']').attr('online', true);
-                } else if ($.inArray(row.userType, [1, 2]) > -1) {
+                } else if ($.inArray(row.userType, [1, 2]) > -1 && row.userId != 'superadmin') {
                     chat.contactAnalystEvent(row);
                 }
             }
@@ -1523,7 +1544,7 @@ var chat = {
                             userInfoTmp = data.onlineUserInfo;
                         if (data.online) {
                             var onLineNum = 0;
-                            if ($.inArray(userInfoTmp.userType, [1, 2]) > -1) {
+                            if ($.inArray(userInfoTmp.userType, [1, 2]) > -1 && userInfoTmp.userId != 'superadmin') {
                                 chat.contactAnalystEvent(userInfoTmp);
                                 onLineNum += 1;
                             }
@@ -1569,6 +1590,9 @@ var chat = {
                                 if (userInfoTmp.userType == 3) {
                                     $("#userListId #" + userInfoTmp.userId + ' .uname>span').addClass('csoffline');
                                 } else {
+                                    if(userInfoTmp.userId == 'superadmin'){
+                                        return;
+                                    }
                                     var onLineNum = parseInt($(".right_row .main_tabnav a[t='chat'] .dialognum span").text());
                                     $("#userListId #" + userInfoTmp.userId).remove();
                                     chat.contactAnalystEvent(userInfoTmp, true);

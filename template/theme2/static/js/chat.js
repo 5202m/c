@@ -322,8 +322,10 @@ var Chat = {
                     return false;
                 }
                 if (Data.userInfo.isSetName === false) {
-                    //TODO 弹出设置昵称//studioMbPop.popBox("set", {studioChatObj : studioChatMb});
-                    Pop.msg("请到电脑端设置昵称");
+                    Pop.msg("设置昵称才可以发言喔");
+                    $("#header").hide();
+                    Room.isRoom = true;
+                    AccountNickName.load();
                     return false;
                 }
             });
@@ -456,8 +458,10 @@ var Chat = {
                 return;
             }
             if(Data.userInfo.isSetName === false){
-                //设置昵称
-                Pop.msg("请到电脑端设置昵称");
+                Pop.msg("设置昵称才可以发言喔");
+                $("#header").hide();
+                Room.isRoom = true;
+                AccountNickName.load();
                 return;
             }
             var toUser = Chat.getToUser();
@@ -479,7 +483,12 @@ var Chat = {
 
             //清空输入框
             $("#chat_cont").html("").trigger("input");//清空内容
-            chatAnalyze.setUTM(false, $.extend({operationType:2}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            try{
+                chatAnalyze.setUTM(false, $.extend({operationType:2,roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            }
+            catch(e){
+                console.log("Set pubicchat UTM fail!"+e);
+            }
         });
     },
 
@@ -1350,7 +1359,13 @@ var Chat = {
             $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
                 console.log("send WHmessage ok!");
             });
-            chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#room_roomName').val()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            try{
+                chatAnalyze.setUTM(false,$.extend({operationType:8, userTel: $('#person_mb').text(),roomName:$('#room_roomName').text()}, Data.userInfo, Tool.courseTick.course));//统计发言次数
+            }
+            catch(e){
+                console.log("Set privatechat UTM fail!"+e);
+            }
+
         },
 
         /**

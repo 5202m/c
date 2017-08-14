@@ -365,9 +365,9 @@ var Player = {
          */
         playByQCloud: function($panel, url, title, autostart){
             this.clear($panel);
-            var player = new TcPlayer($panel.attr('id'),{
+            var options = {
                 "volume": 1,
-                "controls": "system",
+                //"controls": "system",
                 "m3u8": url,
                 "autoplay" : autostart,
                 "live" : true,
@@ -375,9 +375,11 @@ var Player = {
                 "x5_fullscreen": "true",
                 "width" :  '100%',
                 "height" : '100%'
-            });
-            $('.vcp-playtoggle').css({'background-repeat': 'no-repeat','background-position-x': '50%'});
-            $('.vcp-fullscreen-toggle').hide();
+            };
+            var hdsdUrl = common.getVideoHDSDUrl(url);
+            options.m3u8_hd = hdsdUrl.hd;
+            options.m3u8_sd = hdsdUrl.sd;
+            var player = new TcPlayer($panel.attr('id'),options);
     }
     }
 };

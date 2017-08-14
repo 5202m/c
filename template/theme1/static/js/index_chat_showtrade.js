@@ -380,7 +380,8 @@ var chatShowTrade = {
             commentTemp = row.comments; //晒单评论列表
             if (common.isBlank(chatShowTrade.tradeForUser)) {
                 var sid = row._id;
-                tradeHtml = tradeFormat.formatStr(row.title, row.user.userName, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise) ? 0 : row.praise, row._id, row.user.userNo, row.user.avatar);
+                tradeHtml = tradeFormat.formatStr(row.title, row.user.userName, showTradeDate, row.tradeImg, row.remark, common.isBlank(row.praise) ? 0 : row.praise, row._id, row.user.userNo,
+                    row.user.avatar,(row.isAccord == 1) ? '<span class="starIcon"></span>' :　"&nbsp;");
                 var tempTrade = $(tradeHtml);
                 if (i % 2 != 0) { //右边晒单
                     $('#showTradeDiv .scrollbox ul.sd_ul li').removeClass('r');
@@ -666,7 +667,7 @@ var chatShowTrade = {
                 formatHtmlArr.push('    <div class="cont">');
                 formatHtmlArr.push('        <div class="sd_summary">{0}</div>');
                 formatHtmlArr.push('        <div class="sd_tit">');
-                formatHtmlArr.push('            <span class="dep">晒单人：<a href="javascript:void(0);" class="sd_author" userId="{7}" avatar="{8}">{1}</a></span>');
+                formatHtmlArr.push('            {9}<span class="dep">晒单人：<a href="javascript:void(0);" class="sd_author" userId="{7}" avatar="{8}">{1}</a></span>');
                 formatHtmlArr.push('        </div>');
                 formatHtmlArr.push('        <a href="{3}" data-rel="sd-img" data-title="{0}" data-lightbox="dialog-img">');
                 formatHtmlArr.push('            <img src="{3}" alt="{0}" class="mCS_img_loaded"><i class="i-zoom"></i>');

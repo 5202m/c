@@ -4,3 +4,8 @@
 /.vscode
 /npm-debug.log*
 /.idea
+/template/theme4/static/js/room.min.js
+/template/theme4/static/js/lg.min.js
+/template/theme4/static/js/pop.min.js
+/template/theme4/static/css/index-dark.min.css
+/template/theme4/static/css/index.min.css

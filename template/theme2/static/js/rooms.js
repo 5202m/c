@@ -8,6 +8,13 @@ var Rooms = new Container({
     onLoad: function() {
         this.setAdvertisement();
         this.setStudioRoomList();
+        /** 8月份活动 start **/
+        if(Data.isRedPacket == 'true'){
+            Tool.activity_201708.init();
+        }else{
+            $('.advertise-cbox').hide();
+        }
+        /** 8月份活动 end **/
     },
     onShow: function() {
         $('body').attr('class', 'home');
@@ -31,7 +38,7 @@ Rooms.setAdvertisement = function() {
         if (dataList.result == 0) {
             var data = dataList.data;
             for (var i in data) {
-                var imgStr = '<img src="'+data[i].mediaUrl+'" alt="'+data[i].detailList[0].title+'"/>';
+                var imgStr = '<img src="' + data[i].mediaUrl + '" alt="' + data[i].detailList[0].title + '"/>';
                 html.push(Rooms.formatHtml("banner", (Util.isBlank(data[i].linkUrl) ? "javascript:void(0);" : data[i].linkUrl), imgStr));
                 if (data.length > 1) {
                     $("#position").append('<span class="' + (parseInt(i) == 0 ? 'p-click' : '') + '"></span>');
@@ -60,7 +67,7 @@ Rooms.setStudioRoomList = function() {
         currDate = Util.formatDate(Data.serverTime, 'yyyy-MM-dd');
     html.push('<div class="blk7 blke3e3ea"></div>');
     Data.getRoomList(function(rooms) {
-        var cls = ['blue', 'red', 'green', 'brown','green2'],
+        var cls = ['blue', 'red', 'green', 'brown', 'green2'],
             trainNum = 0;
         $.each(rooms, function(i, row) {
             if (row.roomType == 'train') {
@@ -78,12 +85,13 @@ Rooms.setStudioRoomList = function() {
                     trainObj = row;
                 }
             } else {
-                var loc_index = Util.randomIndex(3), uurl = '';
+                var loc_index = Util.randomIndex(3),
+                    uurl = '';
                 if (row.roomType == 'simple') {
                     loc_index = 2;
                 } else if (row.roomType == 'normal') {
                     loc_index = 0;
-                    if(row.name.split('(').length > 1){
+                    if (row.name.split('(').length > 1) {
                         loc_index = 4;
                     }
                 } else {
@@ -121,7 +129,7 @@ Rooms.setRoomCourseList = function() {
             //在线人数
             var size = (Data.onlineNumMap && Data.onlineNumMap[roomId]) || 0;
             Data.getRoom(roomId, function(room) {
-                size = Util.calculateRoomOnlineNum(room,size);
+                size = Util.calculateRoomOnlineNum(room, size);
                 $this.find(".item-hd .block-tit .listenership span").text(size);
             });
             //课程安排
@@ -161,6 +169,7 @@ Rooms.setEventRoom = function() {
         } else {
             Rooms.entryRoom($(this).attr("gi"));
         }
+        $('.wenjuan-float-con').hide();
     });
 };
 
