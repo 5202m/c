@@ -10,297 +10,288 @@
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
     <% if(isDevTest) { %>
-        <link rel="stylesheet" media="screen" href="/theme2/css/index.css" />
-        <link rel="stylesheet" media="screen" href="/theme2/css/guide.css" />
-        <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css" />
-        <!--<link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />-->
-        <link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css" />
-        <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
-        <script type="text/javascript" src="/base/lib/store.min.js"></script>
-        <script type="text/javascript" src="/theme2/js/store.js"></script>
-        <% }else{ %>
-            <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
-            <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>" />
-            <% } %>
-                <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
-                <script>
-                    //自动登录中...
-                    LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
-                    LoginAuto.init();
-                    //自动登录完成
-                </script>
+    <link rel="stylesheet" media="screen" href="/theme2/css/index.css"/>
+    <link rel="stylesheet" media="screen" href="/theme2/css/guide.css"/>
+    <link rel="stylesheet" media="screen" href="/base/lib/swipe/swiper.min.css"/>
+    <!--<link rel="stylesheet" media="screen" href="/base/lib/lightbox/lightbox.css" />-->
+    <link rel="stylesheet" media="screen" href="/base/lib/mScroll/jquery.mCustomScrollbar.min.css"/>
+    <script type="text/javascript" src="/base/lib/lazyload/lazyload.min.js"></script>
+    <script type="text/javascript" src="/base/lib/store.min.js"></script>
+    <script type="text/javascript" src="/theme2/js/store.js"></script>
+    <% }else{ %>
+    <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
+    <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>"/>
+    <% } %>
+    <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
+    <script>
+        //自动登录中...
+        LoginAuto.sessionUser = JSON.parse('<%- userInfo %>');
+        LoginAuto.init();
+        //自动登录完成
+    </script>
 </head>
 
-<!--  问卷调查浮动层  -->
-<%if(isShowTrade) {%>
-    <div class="wenjuan-float-con">
-        <a href="https://wj.qq.com/s/1455171/df3c/" target="_blank" class="wenjuan-adimg">有奖问答，最受欢迎分析师评选</a>
-        <a href="javascript://" class="wenjuan-del-btn"></a>
-    </div>
-    <%}%>
+<body class="home">
+<header id="header">
+    <section class="content_w clearfix">
+        <div class="logobar">
+            <h1 class="hide-t">视频直播间</h1>
+        </div>
+        <%if(isRedPacket) {%>
+        <div class="new_redbag fl" id="showTrade_header">
+            <img src="/theme2/img/redbag201708/headShowTrade.jpg" width="100%" alt="壕礼狂撒 100%中獎" />
+        </div>
+        <%}%>
+        <div class="rightbar">
+            <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')"
+               onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);"
+               class="qq"><i></i></a>
+            <a id="header_ui" href="javascript:void(0)" class="loginbtn">
+                <%= userSession.isLogin ? userSession.nickname : '登录' %>
+            </a>
+        </div>
+    </section>
+</header>
+<article class="content_w bgf2f2f2 dn" id="page_rooms">
+
+</article>
+<article class="content_w bgfff dn" id="page_room">
+
+</article>
+<article class="content_w bgfff dn" id="page_syllabus">
+
+</article>
+<article class="content_w bgfff dn" id="page_subscribe">
+
+</article>
+<article class="content_w bgfff dn" id="page_analyst">
+
+</article>
+<article class="content_w bgfff dn" id="page_showTrade">
+
+</article>
+<article class="content_w bgfff dn" id="page_userShowTrade">
+
+</article>
+<article class="content_w bgf2f2f2 dn" id="page_showTradeAdd">
+
+</article>
+<article class="content_w bgf2f2f2 dn" id="page_trains">
+
+</article>
+<article class="content_w login-fix dn" id="page_login">
+
+</article>
+<article class="content_w blke3e3ea dn" id="page_novice">
+
+</article>
+
+<article class="content_w blke3e3ea dn" id="page_teach">
+
+</article>
+<article class="content_w blke3e3ea dn" id="page_teachList">
+
+</article>
+<article class="content_w blke3e3ea dn" id="page_noviceGuide">
+
+</article>
+<article class="content_w bgf2f2f2 dn" id="page_privateChat">
+
+</article>
+<article class="content_w bgf2f2f2 dn" id="page_videoPlayer">
+
+</article>
+<article class="content_w bgfff dn" id="page_classNote">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_index">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_point">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_subscribe">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_info">
+
+</article>
+
+<article class="content_w accUserCenter dn " id="account_setAvatar">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_setMail">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_setName">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_setPwd">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_setNickname">
+
+</article>
+
+<article class="content_w accUserCenter dn" id="account_subscribeDetail">
+
+</article>
+
+<article class="content_w login-fix dn" id="page_register">
+
+</article>
+
+<% include pop.html %>
+
+<script type="text/javascript">
+    function pageFunc() {
+        Data.userInfo = LoginAuto.sessionUser;
+        Data.mobile24kPath = '<%= mobile24kPath %>';
+        Data.apiUrl = '<%= apiUrl %>';
+        Data.filePath = '<%= filePath %>';
+        Data.options = Util.parseJSON('<%- options%>') || {};
+        Data.syllabusData = Util.parseJSON('<%- syllabusData%>');
+        Data.serverTime = Number('<%= serverTime %>');
+        Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
+        Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
+        Data.appDefaultGroupId = '<%- appDefaultGroupId %>';
+        Data.userInfo.avatar = '<%= userSession.avatar %>';
+        Data.userInfo.userName = '<%= userSession.userName %>';
+        Data.userInfo.email = '<%= userSession.email %>';
+        Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
+        Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
+        Data.isRedPacket = '<%= isRedPacket %>';
+        Index.init();
+
+        try {
+            chatAnalyze.setUTM(false, $.extend({
+                operationType: 1,
+                userTel: '<%= userSession.mobilePhone %>',
+                roomName: $('#room_roomName').text()
+            }, Data.userInfo));
+        } catch (e) {
+            console.log("Set onunload UTM fail!" + e);
+        }
 
 
-        <body class="home">
-            <header id="header">
-                <section class="content_w clearfix">
-                    <div class="logobar">
-                        <h1 class="hide-t">视频直播间</h1>
-                    </div>
-                    <%if(isRedPacket) {%>
-                        <div class="new_redbag fl" id="redPacket_header">
-                            <img src="/theme2/img/new-redbag.png" width="100%" alt="5-500元红包大派送">
-                        </div>
-                        <%}%>
-                            <%if(isShowTrade) {%>
-                                <div class="new_redbag fl">
-                                    <a href="https://m.24k.hk/lp_v211_hd_201707pxbrj.html" target="_blank" onclick="_gaq.push(['_trackEvent', 'm_studio','nowSignUp', 'content_top',1,true]);">
-                                        <img src="/theme2/img/175x60.jpg" width="100%" alt="技术指标听课送大礼">
-                                    </a>
-                                </div>
-                                <%}%>
-                                    <div class="rightbar">
-                                        <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
-                                        <a id="header_ui" href="javascript:void(0)" class="loginbtn">
-                                            <%= userSession.isLogin ? userSession.nickname : '登录' %>
-                                        </a>
-                                        <!--<%if(userSession.isLogin){%>
-                            <a href="javascript:void(0);" class="loginbtn">
-                                <%= userSession.nickname || "匿名_xxx" %>
-                            </a>
-                            <%} else {%>
-                                <a id="header_ui" href="javascript:void(0);" class="loginbtn">登录</a>
-                                <%}%>-->
-                                    </div>
-                </section>
-            </header>
-            <article class="content_w bgf2f2f2 dn" id="page_rooms">
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true,
+            'disableScrolling': true,
+            'positionFromTop': 200,
+            'showImageNumberLabel': false
+        });
 
-            </article>
-            <article class="content_w bgfff dn" id="page_room">
+        $(".scrollbox").mCustomScrollbar({
+            theme: "light-thick",
+            scrollbarPosition: "outside",
+            scrollButtons: false
+        });
 
-            </article>
-            <article class="content_w bgfff dn" id="page_syllabus">
+        /** 活动规则滚动 */
+        $.mCustomScrollbar.defaults.scrollButtons.enable = true;
+        $("#content-d3").mCustomScrollbar({
+            theme: "dark-thick"
+        });
 
-            </article>
-            <article class="content_w bgfff dn" id="page_subscribe">
+        try {
 
-            </article>
-            <article class="content_w bgfff dn" id="page_analyst">
+            var isNewMembers = Data.userInfo.isNewMember;
+            if (isNewMembers == true || isNewMembers == "true") {
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 3,
+                    userTel: Data.userInfo.mobilePhone,
+                    accountNo: Data.userInfo.accountNo,
+                    roomName: $('#room_roomName').text()
+                }, Data.userInfo));
+            }
 
-            </article>
-            <article class="content_w bgfff dn" id="page_showTrade">
+        } catch (e) {
+            console.log("Set app register UTM fail!" + e);
+        }
 
-            </article>
-            <article class="content_w bgfff dn" id="page_userShowTrade">
-
-            </article>
-            <article class="content_w bgf2f2f2 dn" id="page_showTradeAdd">
-
-            </article>
-            <article class="content_w bgf2f2f2 dn" id="page_trains">
-
-            </article>
-            <article class="content_w login-fix dn" id="page_login">
-
-            </article>
-            <article class="content_w blke3e3ea dn" id="page_novice">
-
-            </article>
-
-            <article class="content_w blke3e3ea dn" id="page_teach">
-
-            </article>
-            <article class="content_w blke3e3ea dn" id="page_teachList">
-
-            </article>
-            <article class="content_w blke3e3ea dn" id="page_noviceGuide">
-
-            </article>
-            <article class="content_w bgf2f2f2 dn" id="page_privateChat">
-
-            </article>
-            <article class="content_w bgf2f2f2 dn" id="page_videoPlayer">
-
-            </article>
-            <article class="content_w bgfff dn" id="page_classNote">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_index">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_point">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_subscribe">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_info">
-
-            </article>
-
-            <article class="content_w accUserCenter dn " id="account_setAvatar">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_setMail">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_setName">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_setPwd">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_setNickname">
-
-            </article>
-
-            <article class="content_w accUserCenter dn" id="account_subscribeDetail">
-
-            </article>
-
-            <% include pop.html %>
-
-                <script type="text/javascript">
-                    function pageFunc() {
-                        Data.userInfo = LoginAuto.sessionUser;
-                        Data.mobile24kPath = '<%= mobile24kPath %>';
-                        Data.apiUrl = '<%= apiUrl %>';
-                        Data.filePath = '<%= filePath %>';
-                        Data.options = Util.parseJSON('<%- options%>') || {};
-                        Data.syllabusData = Util.parseJSON('<%- syllabusData%>');
-                        Data.serverTime = Number('<%= serverTime %>');
-                        Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
-                        Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
-                        Data.appDefaultGroupId = '<%- appDefaultGroupId %>';
-                        Data.userInfo.avatar = '<%= userSession.avatar %>';
-                        Data.userInfo.userName = '<%= userSession.userName %>';
-                        Data.userInfo.email = '<%= userSession.email %>';
-                        Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
-                        Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
-                        Index.init();
-
-                        try {
-                            chatAnalyze.setUTM(false, $.extend({
-                                operationType: 1,
-                                userTel: '<%= userSession.mobilePhone %>',
-                                roomName: $('#room_roomName').text()
-                            }, Data.userInfo));
-                        } catch (e) {
-                            console.log("Set onunload UTM fail!" + e);
-                        }
-
-
-
-                        lightbox.option({
-                            'resizeDuration': 200,
-                            'wrapAround': true,
-                            'disableScrolling': true,
-                            'positionFromTop': 200,
-                            'showImageNumberLabel': false
-                        });
-
-                        $(".scrollbox").mCustomScrollbar({
-                            theme: "light-thick",
-                            scrollbarPosition: "outside",
-                            scrollButtons: false
-                        });
-
-                        /** 活动规则滚动 */
-                        $.mCustomScrollbar.defaults.scrollButtons.enable = true;
-                        $("#content-d3").mCustomScrollbar({
-                            theme: "dark-thick"
-                        });
-                        Tool.getShowPrideActivityFlag(Data.userInfo.userId || Data.userInfo.visitorId);
-
-                        //分析师评选
-                        $(".wenjuan-del-btn").click(function() {
-                            $(this).parent().animate({
-                                opacitt: '0',
-                                bottom: '-94'
-                            });
-                        })
-                    }
-                    window.onunload = function() {
-                        chatAnalyze.setUTM(false, $.extend({
-                            operationType: 6,
-                            userTel: '<%= userSession.mobilePhone %>',
-                            roomName: $('#room_roomName').text()
-                        }, Data.userInfo));
-                    }
-                </script>
-                <% if(isDevTest) { %>
-                    <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
-                    <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
-                    <script type="text/javascript" src="/base/lib/socket.io.js"></script>
-                    <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
-                    <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
-                    <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
-                    <script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
-                    <script type="text/javascript" src="/base/lib/toucher.js"></script>
-                    <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
-                    <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
-                    <script type="text/javascript" src="/base/util/common.js"></script>
-                    <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
-                    <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
-                    <script type="text/javascript" src="/theme2/js/container.js"></script>
-                    <script type="text/javascript" src="/theme2/js/pop.js"></script>
-                    <script type="text/javascript" src="/theme2/js/login.js"></script>
-                    <script type="text/javascript" src="/theme2/js/chat.js"></script>
-                    <script type="text/javascript" src="/theme2/js/classNote.js"></script>
-                    <script type="text/javascript" src="/theme2/js/data.js"></script>
-                    <script type="text/javascript" src="/theme2/js/index.js"></script>
-                    <script type="text/javascript" src="/theme2/js/player.js"></script>
-                    <script type="text/javascript" src="/theme2/js/room.js"></script>
-                    <script type="text/javascript" src="/theme2/js/rooms.js"></script>
-                    <script type="text/javascript" src="/theme2/js/subscribe.js"></script>
-                    <script type="text/javascript" src="/theme2/js/syllabus.js"></script>
-                    <script type="text/javascript" src="/theme2/js/analyst.js"></script>
-                    <script type="text/javascript" src="/theme2/js/showTrade.js"></script>
-                    <script type="text/javascript" src="/theme2/js/userShowTrade.js"></script>
-                    <script type="text/javascript" src="/theme2/js/showTradeAdd.js"></script>
-                    <script type="text/javascript" src="/theme2/js/trains.js"></script>
-                    <script type="text/javascript" src="/theme2/js/tool.js"></script>
-                    <script type="text/javascript" src="/theme2/js/util.js"></script>
-                    <script type="text/javascript" src="/theme2/js/novice.js"></script>
-                    <script type="text/javascript" src="/theme2/js/teach.js"></script>
-                    <script type="text/javascript" src="/theme2/js/noviceGuide.js"></script>
-                    <script type="text/javascript" src="/theme2/js/privateChat.js"></script>
-                    <script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
-                    <script type="text/javascript" src="/theme2/js/yylive2.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountIndex.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountInfo.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountPoint.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSubscribe.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountEmail.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSetPwd.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSetName.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSetNickname.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSetAvatar.js"></script>
-                    <script type="text/javascript" src="/theme2/js/accountSubscribeDetail.js"></script>
-                    <script type="text/javascript" src="/theme2/js/pmGaTrace.js"></script>
-
-                    <script type="text/javascript">
-                        $(pageFunc);
-                    </script>
-                    <% }else{ %>
-                        <script type="text/javascript" src="/base/lib/basket.min.js"></script>
-                        <script type="text/javascript">
-                            basket.version = '<%=version%>';
-                            basket.require({
-                                url: "/theme2/js/lib.min.js?v=<%=version%>"
-                            }, {
-                                url: "/theme2/js/index.min.js?v=<%=version%>"
-                            }, null).then(pageFunc);
-                        </script>
-                        <% } %>
-        </body>
+    }
+    window.onunload = function () {
+        chatAnalyze.setUTM(false, $.extend({
+            operationType: 6,
+            userTel: '<%= userSession.mobilePhone %>',
+            roomName: $('#room_roomName').text()
+        }, Data.userInfo));
+    }
+</script>
+<% if(isDevTest) { %>
+<script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="/base/lib/socket.io.js"></script>
+<script type="text/javascript" src="/base/lib/websocket.min.js"></script>
+<script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
+<script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
+<script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
+<script type="text/javascript" src="/base/lib/toucher.js"></script>
+<script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
+<script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
+<script type="text/javascript" src="/base/util/common.js"></script>
+<script type="text/javascript" src="/base/util/gwanalysis.js"></script>
+<script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
+<script type="text/javascript" src="/theme2/js/container.js"></script>
+<script type="text/javascript" src="/theme2/js/pop.js"></script>
+<script type="text/javascript" src="/theme2/js/login.js"></script>
+<script type="text/javascript" src="/theme2/js/register.js"></script>
+<script type="text/javascript" src="/theme2/js/chat.js"></script>
+<script type="text/javascript" src="/theme2/js/classNote.js"></script>
+<script type="text/javascript" src="/theme2/js/data.js"></script>
+<script type="text/javascript" src="/theme2/js/index.js"></script>
+<script type="text/javascript" src="/theme2/js/player.js"></script>
+<script type="text/javascript" src="/theme2/js/room.js"></script>
+<script type="text/javascript" src="/theme2/js/rooms.js"></script>
+<script type="text/javascript" src="/theme2/js/subscribe.js"></script>
+<script type="text/javascript" src="/theme2/js/syllabus.js"></script>
+<script type="text/javascript" src="/theme2/js/analyst.js"></script>
+<script type="text/javascript" src="/theme2/js/showTrade.js"></script>
+<script type="text/javascript" src="/theme2/js/userShowTrade.js"></script>
+<script type="text/javascript" src="/theme2/js/showTradeAdd.js"></script>
+<script type="text/javascript" src="/theme2/js/trains.js"></script>
+<script type="text/javascript" src="/theme2/js/tool.js"></script>
+<script type="text/javascript" src="/theme2/js/util.js"></script>
+<script type="text/javascript" src="/theme2/js/novice.js"></script>
+<script type="text/javascript" src="/theme2/js/teach.js"></script>
+<script type="text/javascript" src="/theme2/js/noviceGuide.js"></script>
+<script type="text/javascript" src="/theme2/js/privateChat.js"></script>
+<script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
+<script type="text/javascript" src="/theme2/js/yylive2.js"></script>
+<script type="text/javascript" src="/theme2/js/accountIndex.js"></script>
+<script type="text/javascript" src="/theme2/js/accountInfo.js"></script>
+<script type="text/javascript" src="/theme2/js/accountPoint.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSubscribe.js"></script>
+<script type="text/javascript" src="/theme2/js/accountEmail.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSetPwd.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSetName.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSetNickname.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSetAvatar.js"></script>
+<script type="text/javascript" src="/theme2/js/accountSubscribeDetail.js"></script>
+<script type="text/javascript" src="/theme2/js/pmGaTrace.js"></script>
+<script type="text/javascript">
+    $(pageFunc);
+</script>
+<% }else{ %>
+<script type="text/javascript" src="/base/lib/basket.min.js"></script>
+<script type="text/javascript">
+    basket.version = '<%=version%>';
+    basket.require({
+        url: "/theme2/js/lib.min.js?v=<%=version%>"
+    }, {
+        url: "/theme2/js/index.min.js?v=<%=version%>"
+    }, null).then(pageFunc);
+</script>
+<% } %>
+</body>
 
 </html>

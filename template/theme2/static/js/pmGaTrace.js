@@ -102,6 +102,8 @@ var PmGaTrace = {
             _action = 'ZB', _content = 'content_ZB';
         }else if(roomType == 'vip'){
             _action = 'ZC', _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -117,6 +119,8 @@ var PmGaTrace = {
             _action = 'XS_ZJJC';
         }else if(type == 'advanced'){
             _action = 'XS_GJJC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, 'content_XS',1,true]);
     },
@@ -124,14 +128,16 @@ var PmGaTrace = {
     //课程列表
     roomSyllabusGaEvent : function(){
         var groupId = Data.userInfo.groupId, _action = '', _content = $('#roomCourse .s1').text();
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_KCLB';
-        }else if(groupId == 'studio_24'){//新手专区
-            _action = 'XS_ZBJ-KC';
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
+            _action = 'XS_ZBJ-KCLB';
         }else if(PmGaTrace.isTrainRoom()){
             _action = 'PXB_KCLB';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_KCLB';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -139,14 +145,16 @@ var PmGaTrace = {
     //课程列表周一至周五
     syllabusListTabGaEvent : function (day) {
         var groupId = Data.userInfo.groupId, _action = '', _content = '';
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB-KC-zhou'.concat(day), _content = 'content_ZB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_ZBJ-KC-zhou'.concat(day), _content = 'content_XS';
         }else if(PmGaTrace.isTrainRoom()){
             _action = 'PXB-KC-zhou'.concat(day), _content = 'content_PXB';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC-KC-zhou'.concat(day), _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -160,14 +168,16 @@ var PmGaTrace = {
     //课程列表旁边-老师订阅
     syllabusListSubscribeGaEvent : function (userno) {
         var groupId = Data.userInfo.groupId, _action = '',_content = userno;
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_KCLB_Teacher';
-        }else if(groupId == 'studio_24'){//新手专区
-            _action = 'XS_ZBJ-KC-Teacher';
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
+            _action = 'XS_ZBJ-KCLB-Teacher';
         }else if(PmGaTrace.isTrainRoom()){
             _action = 'PXB_KCLB_Teacher';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_KCLB_Teacher';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -182,14 +192,16 @@ var PmGaTrace = {
         }else if('me' == msgType){
             suffix = 'Relevant';
         }
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB-'.concat(suffix),_content = 'content_ZB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_ZBJ-'.concat(suffix), _content = 'content_XS';
         }else if(PmGaTrace.isTrainRoom()){//培训班
             _action = 'PXB-'.concat(suffix), _content = 'content_ZB';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC-'.concat(suffix), _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -197,12 +209,14 @@ var PmGaTrace = {
     //私聊框
     roomPrivateChatGaEvent : function () {
         var groupId = Data.userInfo.groupId, _action = '',_content = '';
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_KCLB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_ZBJ-PrivateChat', _content = 'content_XS';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_ZBJ-PrivateChat', _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -230,10 +244,12 @@ var PmGaTrace = {
     //房间查看挂单
     roomViewDataGaEvent : function (teacherno) {
         var groupId = Data.userInfo.groupId, _action = '',_content = teacherno;
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_GD_CK';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_GD_CK';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -279,12 +295,14 @@ var PmGaTrace = {
     //二级页-晒单墙按钮
     showTradeEntryGaEvent : function () {
         var groupId = Data.userInfo.groupId, _action = '',_content = '';
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_SD', _content = 'content_ZB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_SD', _content = 'content_XS';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_SD', _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -292,12 +310,14 @@ var PmGaTrace = {
     //三级页-我的晒单
     myShowTradeListGaEvent : function () {
         var groupId = Data.userInfo.groupId, _action = '',_content = '';
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_SD-WDSD', _content = 'content_ZB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_SD-WDSD', _content = 'content_XS';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_SD-WDSD', _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -305,12 +325,14 @@ var PmGaTrace = {
     //三级级页-晒单墙右边的“+”按钮
     showTradeListPlusEntryGaEvent : function () {
         var groupId = Data.userInfo.groupId, _action = '',_content = '';
-        if(groupId == 'studio_3'){//直播大厅
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
             _action = 'ZB_SD-Plus', _content = 'content_ZB';
-        }else if(groupId == 'studio_24'){//新手专区
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
             _action = 'XS_SD-Plus', _content = 'content_XS';
         }else if(PmGaTrace.isVipRoom()){
             _action = 'ZC_SD-Plus', _content = 'content_ZC';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, _content,1,true]);
     },
@@ -324,6 +346,8 @@ var PmGaTrace = {
             _action = 'PXB_Entry';
         }else if(stateName == '报名'){
             _action = 'PXB_Sign';
+        }else{
+            return;
         }
         _gaq.push(['_trackEvent', 'm_studio',_action, trainName,1,true]);
     },
@@ -391,11 +415,12 @@ var PmGaTrace = {
         }else if(classinfo.indexOf('status-grey') > -1){//结束
             suffix = 'OVER';
         }
-        if(groupId == 'studio_3'){//直播大厅
-            _action = 'ZB_KCLB'.concat(suffix);
-        }else if(groupId == 'studio_24'){//新手专区
-            _action = 'XS_ZBJ-KC-'.concat(suffix);
-
+        if(groupId == PmGaTrace.roomConstant.live){//直播大厅
+            _action = 'ZB_KCLB-'.concat(suffix);
+        }else if(groupId == PmGaTrace.roomConstant.simple){//新手专区
+            _action = 'XS_ZBJ-KCLB-'.concat(suffix);
+        }else{
+            return;
         }
         return _action;
     },
