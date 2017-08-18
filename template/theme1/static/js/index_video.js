@@ -169,6 +169,29 @@ var videos = {
         },
 
         /**
+         * 使用腾讯云直播
+         * @param $panel
+         * @param url
+         * @param title
+         * @param autostart
+         */
+        playByQCloud: function($panel, url, title, autostart){
+            this.clear($panel);
+            var options = {
+                "volume":1,
+                "autoplay" : autostart,
+                "width" :  '100%',
+                "height" : '100%'
+            };
+            if (/\.m3u8/.test(url)){
+                options.m3u8 = url;
+            }else{
+                options.flv = url;
+            }
+            var player =  new TcPlayer($panel.attr('id'), options);
+        },
+
+        /**
          * 清空播放器
          */
         clear: function($panel) {
@@ -191,17 +214,21 @@ var videos = {
                 this.videoData($panel, "currVideoUrl", url);
                 this.videoData($panel, "currVideoTitle", title);
 
-                if (/\.html/.test(url)) {
-                    this.playByIframe($panel, url, title, true);
-                } else if (/type=blws/.test(url)) {
-                    var videoUrl = $("#teachVideoPanel .numbox .c_num a").filter(".activity_video").attr("vurl");
-                    this.playByBLWS($panel, url, title, (videoUrl && videoUrl == url) ? true : false);
-                } else if (/\.swf/.test(url)) {
-                    this.playByEmbed($panel, url, title, true);
-                } else if (/rtmp/.test(url)) {
-                    obsPlayer.init(url, 'videoPlayerPanel', true);
+                if (/\.myqcloud\./.test(url)){
+                    this.playByQCloud($panel, url, title, true);
                 } else {
-                    this.playBySewise($panel, url, title, true);
+                    if (/\.html/.test(url)) {
+                        this.playByIframe($panel, url, title, true);
+                    } else if (/type=blws/.test(url)) {
+                        var videoUrl = $("#teachVideoPanel .numbox .c_num a").filter(".activity_video").attr("vurl");
+                        this.playByBLWS($panel, url, title, (videoUrl && videoUrl == url) ? true : false);
+                    } else if (/\.swf/.test(url)) {
+                        this.playByEmbed($panel, url, title, true);
+                    } else if (/rtmp/.test(url)) {
+                        obsPlayer.init(url, 'videoPlayerPanel', true);
+                    } else {
+                        this.playBySewise($panel, url, title, true);
+                    }
                 }
                 videos.setStudioInfo(false);
             }

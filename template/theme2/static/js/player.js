@@ -8,6 +8,7 @@ var Player = {
     type : "text", //'text'-文字直播，'video'-视频直播，'audio'-音频直播
     isFlashSupport : false,
     isAutoplay : false,
+    isQCloud: false,
 
     /**
      * 初始化
@@ -60,13 +61,17 @@ var Player = {
         }
         this.player.videoData($panel, "currVideoUrl", url);
         this.player.videoData($panel, "currVideoTitle", title);
-
-        if(/type=blws/.test(url)){
-            this.player.playByBLWS($panel, url, title, Player.isAutoplay);
-        }else if(Player.isFlashSupport){
-            this.player.playBySewise($panel, url, title, Player.isAutoplay);
-        }else{
-            this.player.playByVideo($panel, url, title, Player.isAutoplay);
+        if(/\.myqcloud\./.test(url)){
+            Player.isQCloud = true;
+            this.player.playByQCloud($panel, url, title, Player.isAutoplay);
+        } else {
+            if (/type=blws/.test(url)) {
+                this.player.playByBLWS($panel, url, title, Player.isAutoplay);
+            } else if (Player.isFlashSupport) {
+                this.player.playBySewise($panel, url, title, Player.isAutoplay);
+            } else {
+                this.player.playByVideo($panel, url, title, Player.isAutoplay);
+            }
         }
     },
 
@@ -89,12 +94,16 @@ var Player = {
             }
             $('#roomAudioCtrl').removeClass("stopped");
             $('#roomAudioImg').attr("imgIdx", imgIdx).attr('src','/theme2/img/wave' + imgIdx + '.gif');
-            this.player.doPlay($("#roomVideo"));
+            if(!/\.myqcloud\./.test(url)) {
+                this.player.doPlay($("#roomVideo"));
+            }
         }else{
             imgIdx = $('#roomAudioImg').attr("imgIdx") || imgIdx;
             $('#roomAudioImg').attr('src','/theme2/img/wave' + imgIdx + '.jpg');
             $('#roomAudioCtrl').addClass("stopped");
-            this.player.doPause($("#roomVideo"));
+            if(!/\.myqcloud\./.test(url)) {
+                this.player.doPause($("#roomVideo"));
+            }
         }
     },
 
@@ -119,7 +128,9 @@ var Player = {
         var playerCtrl = $("#room_playerCtrl");
         var playerCtrlTxt = $("#room_playerCtrlTxt");
         if(this.type == "video" || this.type == "audio"){
-            this.player.clear(videoPanel);
+            if(!Player.isQCloud) {
+                this.player.clear(videoPanel);
+            }
         }
         if(type == "text"){
             playerCtrl.hide();
@@ -153,10 +164,14 @@ var Player = {
             var isAudio = $(this).is(".switch-video");
             if(isAudio){
                 Player.change("video");
-                Player.startPlay();
+                if(!Player.isQCloud) {
+                    Player.startPlay();
+                }
             }else{
                 Player.change("audio");
-                Player.startPlay();
+                if(!Player.isQCloud) {
+                    Player.startPlay();
+                }
             }
         });
 
@@ -339,6 +354,32 @@ var Player = {
          */
         doPause : function($panel){
             $panel.find("video").trigger("pause");
-        }
+        },
+
+        /**
+         * 使用腾讯云直播
+         * @param $panel
+         * @param url
+         * @param title
+         * @param autostart
+         */
+        playByQCloud: function($panel, url, title, autostart){
+            this.clear($panel);
+            var options = {
+                "volume": 1,
+                //"controls": "system",
+                "m3u8": url,
+                "autoplay" : autostart,
+                "live" : true,
+                "x5_player" : true,
+                "x5_fullscreen": "true",
+                "width" :  '100%',
+                "height" : '100%'
+            };
+            var hdsdUrl = common.getVideoHDSDUrl(url);
+            options.m3u8_hd = hdsdUrl.hd;
+            options.m3u8_sd = hdsdUrl.sd;
+            var player = new TcPlayer($panel.attr('id'),options);
+    }
     }
 };

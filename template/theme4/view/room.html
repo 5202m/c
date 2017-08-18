@@ -164,43 +164,44 @@
                                 <a href="javascript:void(0)" class="backtolive" id="backToLive"><span>视频<br>在线</span></a>
 
                             </section>
-                            <section class="popupbg dn">
-                                <% include pop.html %>
-                            </section>
-                            <section class="errorbox dn">
-                                <div class="cont"></div>
-                            </section>
+    <section class="popupbg dn">
+        <% include pop.html %>
+    </section>
+    <section class="errorbox dn">
+        <div class="cont"></div>
+    </section>
 
-                            <script type="text/javascript" src="/base/lib/socket.io.js"></script>
-                            <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
-                            <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
-                            <script type="text/javascript" src="/base/lib/obsplayer/obsplayer.min.js"></script>
-                            <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
-                            <script type="text/javascript" src="/base/lib/toucher.js"></script>
-                            <% if(isDevTest) { %>
-                                <script type="text/javascript" src="/base/util/common.js"></script>
-                                <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
-                                <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
-                                <script type="text/javascript" src="/theme4/js/room.js"></script>
-                                <% }else{ %>
-                                    <script type="text/javascript" src="/theme4/js/room.min.js?v=<%=version%>"></script>
-                                    <% }%>
-                                        <script type="text/javascript">
-                                            $(function() {
-                                                studioChatMb.apiUrl = '<%= apiUrl %>';
-                                                studioChatMb.filePath = '<%= filePath %>';
-                                                studioChatMb.userInfo = JSON.parse('<%- userInfo %>');
-                                                studioChatMb.socketUrl = JSON.parse('<%- socketUrl %>');
-                                                studioChatMb.serverTime = Number('<%= serverTime %>');
-                                                studioChatMb.syllabusData = common.formatToJson('<%- syllabusData%>');
-                                                studioChatMb.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
-                                                studioChatMb.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
-                                                studioChatMb.options = JSON.parse('<%- options %>');
-                                                studioChatMb.theme = '<%- theme%>';
-                                                studioChatMb.init();
-                                                chatAnalyze.dasUrl = '<%= dasUrl%>';
-                                            });
-                                        </script>
+    <script type="text/javascript" src="/base/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="/base/lib/obsplayer/obsplayer.min.js"></script>
+    <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
+    <script type="text/javascript" src="/base/lib/toucher.js"></script>
+    <% if(isDevTest) { %>
+    <script type="text/javascript" src="/base/util/common.js"></script>
+    <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
+    <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
+    <script type="text/javascript" src="/theme4/js/room.js"></script>
+    <% }else{ %>
+    <script type="text/javascript" src="/theme4/js/room.min.js?v=<%=version%>"></script>
+    <% }%>
+    <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function() {
+            studioChatMb.apiUrl = '<%= apiUrl %>';
+            studioChatMb.filePath = '<%= filePath %>';
+            studioChatMb.userInfo = JSON.parse('<%- userInfo %>');
+            studioChatMb.socketUrl = JSON.parse('<%- socketUrl %>');
+            studioChatMb.serverTime = Number('<%= serverTime %>');
+            studioChatMb.syllabusData = common.formatToJson('<%- syllabusData%>');
+            studioChatMb.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
+            studioChatMb.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
+            studioChatMb.options = JSON.parse('<%- options %>');
+            studioChatMb.theme = '<%- theme%>';
+            studioChatMb.init();
+            chatAnalyze.dasUrl = '<%= dasUrl%>';
+        });
+    </script>
 </body>
 
 </html>
