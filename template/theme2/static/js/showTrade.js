@@ -12,7 +12,7 @@ var ShowTrade = new Container({
         ShowTrade.setEvent();
     },
     onShow : function () {
-        if(Util.isAppEnv())$('.addShowTrade .i-addbtn3').hide();
+        //if(Util.isAppEnv())$('.addShowTrade .i-addbtn3').hide();
     }
 });
 
@@ -60,7 +60,8 @@ ShowTrade.setShowTradeList = function(){
             row.praise||0,
             row._id,
             row.user.avatar,
-            row.tradeImg,           (row.isAccord == 1) ? '<span class="starIcon"></span>' :　"&nbsp;"        ));
+            row.tradeImg,
+            (row.isAccord == 1) ? '<span class="starIcon"></span>' :　"&nbsp;"));
 
         if(i < length - 1) {
             tradeHtml.push('<div class="blk7 blke3e3ea"></div>');

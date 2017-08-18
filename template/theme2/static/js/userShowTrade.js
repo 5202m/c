@@ -16,7 +16,7 @@ var UserShowTrade = new Container({
         UserShowTrade.setEvent();
     },
     onShow : function () {
-        if(Util.isAppEnv())$('.addShowTrade .i-addbtn3').hide();
+        //if(Util.isAppEnv())$('.addShowTrade .i-addbtn3').hide();
     }
 });
 

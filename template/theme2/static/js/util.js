@@ -710,5 +710,17 @@ var Util ={
         }
         size = size < 10 ? 0 : size;
         return size;
+    },
+
+    /**
+     * loading效果
+     * @param isShow
+     */
+    loadingData : function (isShow) {
+        if(isShow){
+            $("article:last").after('<div class="img-loading" ><i></i></div>');
+        }else{
+            $('.img-loading').remove();
+        }
     }
 };

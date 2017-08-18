@@ -1182,6 +1182,7 @@ article.content_w.bgeee {
 .head-top .sdan-btn {
     top: 50%;
     margin-top: -8px;
+    line-height:18px;
 }
 .head-top .login-ms {
     color: #bfbfc7;
@@ -2961,13 +2962,13 @@ article.content_w.bgeee {
     -o-text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;
+}
 .sdan-con .item-con .starIcon {
     float: right;
     width: 17px;
     height: 17px;
     display:inline-block;
     background: url(../img/img_css.png) no-repeat -87px -501px;
-}
 }
 .sdan-con .item-con .c-time {
     color: #9898a1;
@@ -6172,3 +6173,28 @@ article.accUserCenter{background:none}
     .redbag-pub-box h3{line-height:54px}
     .rule-con-box li{font-size:12px}
 }
+
+/**loading start**/
+.img-loading{
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 101;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+}
+.img-loading i{
+    position: absolute;
+    display: block;
+    width: 25px;
+    height: 25px;
+    background: url(../img/loading2.gif) center no-repeat;
+    background-size: 25px 25px;
+    top: 50%;
+    left: 50%;
+    margin-top: -13px;
+    margin-left: -13px;
+}
+/**loading end**/
