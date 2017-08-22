@@ -47,23 +47,49 @@ var room = {
         try {
             $.getJSON('/admin/getSyllabus?t=' + new Date().getTime(), { groupType: room.userInfo.groupType, groupId: room.userInfo.groupId }, function(data) {
                 var loc_html = null;
-                if (data && common.isValid(data.studioLink)) {
-                    var studioLinkArr = JSON.parse(data.studioLink),
-                        url = '';
-                    for (var i in studioLinkArr) {
-                        if (studioLinkArr[i].code == 1) {
-                            url = studioLinkArr[i].url;
-                            break;
+                var course = common.getSyllabusPlan(data, new Date().getTime());
+                if (course.liveLink && course.liveLink.length > 0) {
+                    $.each(course.liveLink, function(i, row) {
+                        if (row.code == '1') {
+                            course.studioLink = row.url;
                         }
-                    }
-                    if (common.isValid(url)) {
-                        obsPlayer.init(url, 'yyVideoDiv', true);
+                    });
+                }
+                if (data && common.isValid(course.studioLink)) {
+                    if (/\.myqcloud\./.test(course.studioLink)){
+                        room.playByQCloud('yyVideoDiv', course.studioLink, '', true);
+                    }else {
+                        obsPlayer.init(course.studioLink, 'yyVideoDiv', true);
                     }
                 }
             });
         } catch (e) {
             console.error("setVideo has error:" + e);
         }
+    },
+    /**
+     * 使用腾讯云直播
+     * @param $panel
+     * @param url
+     * @param title
+     * @param autostart
+     */
+    playByQCloud: function($panel, url, title, autostart){
+        LazyLoad.js(['//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js'], function() {
+            var options = {
+                "volume" : 1,
+                "autoplay" : autostart,
+                "width" :  '100%',
+                "height" : '100%'
+            };
+            if (/\.m3u8/.test(url)){
+                options.m3u8 = url;
+            }else{
+                options.flv = url;
+            }
+            $('#'+$panel).empty();
+            var player =  new TcPlayer($panel, options);
+        });
     },
     /**
      * @记录列表显示
