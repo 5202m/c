@@ -1052,6 +1052,25 @@ var common = {
         });
         return sortedList.concat(sysArr, vipArr, activeArr, notActiveArr,
             simulateArr, registerArr, visitorArr);
+    },
+    /**
+     * 处理腾讯云高清标清视频URL
+     * @param url
+     */
+    getVideoHDSDUrl: function(url){
+        var urls = {hd:'', sd:''};
+        var currentUrl = url.substring(0,url.lastIndexOf('.'));
+        if (/\.m3u8/.test(url)){
+            urls.hd = currentUrl+'_900.m3u8';
+            urls.sd = currentUrl+'_550.m3u8';
+        }else if(/rtmp/.test(url)){
+            urls.hd = url+'_900';
+            urls.sd = url+'_550';
+        }else{
+            urls.hd = currentUrl+'_900.flv';
+            urls.sd = currentUrl+'_550.flv';
+        }
+        return urls;
     }
 };
 /**
