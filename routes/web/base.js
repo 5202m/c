@@ -1704,6 +1704,12 @@ router.get('/getShowTradeInfo', function(req, res) {
  * 新增晒单评论
  */
 router.post('/addShowTradeComment', function(req, res) {
+
+    let userinfo = req.session.studioUserInfo;
+    if(!userinfo || userinfo.clientGroup == 'visitor'){
+        res.json({'isOk' : false, 'msg' : '游客不能评论，立即注册即可评论!'});
+        return;
+    }
     var reqParam = req.body['data'];
     try {
         reqParam = JSON.parse(reqParam);

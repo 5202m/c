@@ -716,7 +716,7 @@ var Util ={
      * loading效果
      * @param isShow
      */
-    loadingData : function (isShow) {
+    loadingCircle : function (isShow) {
         if(isShow){
             $("article:last").after('<div class="img-loading" ><i></i></div>');
         }else{

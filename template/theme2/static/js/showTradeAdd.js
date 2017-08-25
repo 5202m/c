@@ -37,7 +37,7 @@ ShowTradeAdd.uploadShowTradeImg = function(formData,fileObj){
                 }else{
                     Pop.msg("上传图片失败，请联系在线客服！");
                 }
-                Util.loadingData(false);
+                Util.loadingCircle(false);
             },
             error: function (result) {
                 console.error("error:",result);
@@ -140,7 +140,7 @@ ShowTradeAdd.setEvent = function(){
         var fileSize = img.size;
         //图片小于200kb直接上传
         if(fileSize <= 200 * 1024){
-            Util.loadingData(true);
+            Util.loadingCircle(true);
             var formData = new FormData($("#showTradeAddForm")[0]);
             ShowTradeAdd.uploadShowTradeImg(formData,_this);
             return false;
@@ -149,7 +149,7 @@ ShowTradeAdd.setEvent = function(){
             Pop.msg('发送的图片大小不要超过3MB.');
             return false;
         }
-        Util.loadingData(true);
+        Util.loadingCircle(true);
         //加载文件转成URL所需的文件流
         var reader = new FileReader();
         reader.readAsDataURL(img);
