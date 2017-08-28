@@ -183,6 +183,8 @@ var Player = {
      * 播放器
      */
     player : {
+        //腾讯云监听定时器对象
+        qCloudIntervalObj: null,
         /**
          * 视频数据
          * @param $panel
@@ -380,14 +382,16 @@ var Player = {
                     1002: "直播即将开始，请耐心等待"
                 },
                 listener: function(msg){
-                    var intervalObj = null;
+                    if(Player.player.qCloudIntervalObj) {
+                        window.clearInterval(Player.player.qCloudIntervalObj);
+                    }
                     if(msg.type == 'error'){
-                        intervalObj = window.setInterval(function(){
+                        Player.player.qCloudIntervalObj = window.setInterval(function(){
                             player.load();
                         }, 5000);
                     }else{
-                        if(intervalObj) {
-                            window.clearInterval(intervalObj);
+                        if(Player.player.qCloudIntervalObj) {
+                            window.clearInterval(Player.player.qCloudIntervalObj);
                         }
                     }
                 }

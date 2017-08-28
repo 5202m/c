@@ -987,6 +987,8 @@ var studioChatMb = {
          * 播放器
          */
         player: {
+            //腾讯云监听定时器对象
+            qCloudIntervalObj: null,
             /**
              * 视频数据
              * @param $panel
@@ -1223,14 +1225,16 @@ var studioChatMb = {
                         1002: "直播即将开始，请耐心等待"
                     },
                     listener: function(msg){
-                        var intervalObj = null;
+                        if(studioChatMb.video.player.qCloudIntervalObj) {
+                            window.clearInterval(studioChatMb.video.player.qCloudIntervalObj);
+                        }
                         if(msg.type == 'error'){
-                            intervalObj = window.setInterval(function(){
+                            studioChatMb.video.player.qCloudIntervalObj = window.setInterval(function(){
                                 player.load();
                             }, 5000);
                         }else{
-                            if(intervalObj) {
-                                window.clearInterval(intervalObj);
+                            if(studioChatMb.video.player.qCloudIntervalObj) {
+                                window.clearInterval(studioChatMb.video.player.qCloudIntervalObj);
                             }
                         }
                     }
