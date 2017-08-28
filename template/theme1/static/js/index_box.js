@@ -770,7 +770,7 @@ var box = {
      */
     openLgBox: function(closeable, showTip, lgTime) {
         if (closeable === false || $(".login").data("closeable") === false) {
-            $(".pop_close").hide();
+            //$(".pop_close").hide();
             $(".login").data("closeable", false);
         } else {
             $(".pop_close").show();

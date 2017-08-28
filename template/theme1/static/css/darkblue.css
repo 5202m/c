@@ -4,7 +4,7 @@ body,.box-header,.left_cont,.mod_infotab .tabnav .nav-a.on,.right_row{ backgroun
 .sub-tabnav > a i,.tabnav .khbtn i,.myaid i,.numctrl i,.mod_main .taglist .tag i,.skilldata .pdname i,.mod_main .dialog .bubble > i,.toolbar .tbtn,.wechatbox .wechatbtn i,.info_push .pushclose i,.view_select i,.userlist i{ background-image: url(../img/darkblue/icons.png) }
 
 .box-header h1{ background-image: url(../img/darkblue/pm-logo.png); }
-.header_ad a{ background-image: url(../img/darkblue/header_ad.gif); }
+/*.header_ad a{ background-image: url(../img/darkblue/header_ad.gif); }*/
 .h_menu1 .welcome{ color: #b4c6da }
 .h_menu1 .topbtn{ border-color: #8fadcc; color: #fff }
 .h_menu1 .topbtn:hover{ background: #2ca5da; border-color: #2ca5da }
