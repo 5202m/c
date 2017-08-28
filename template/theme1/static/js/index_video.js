@@ -181,7 +181,23 @@ var videos = {
                 "volume":1,
                 "autoplay" : autostart,
                 "width" :  '100%',
-                "height" : '100%'
+                "height" : '100%',
+                "wording": {
+                    5: "请检查是否已安装flash，如已安装请允许网站运行flash",
+                    1002: "直播即将开始，请耐心等待"
+                },
+                listener: function(msg){
+                    var intervalObj = null;
+                    if(msg.type == 'error'){
+                        intervalObj = window.setInterval(function(){
+                            player.load();
+                        }, 5000);
+                    }else{
+                        if(intervalObj) {
+                            window.clearInterval(intervalObj);
+                        }
+                    }
+                }
             };
             if (/\.m3u8/.test(url)){
                 options.m3u8 = url;
