@@ -309,10 +309,10 @@ var Tool = {
                 /*08:32*/
                 {
                     start: 30720000,
-                    userId: "lin_gw24k",
-                    userName: "林意轩",
-                    wechat: "lin_gw24k",
-                    wechatImg: "/theme2/img/yx_lin.png"
+                    userId: "buck_chen",
+                    userName: "陈铎",
+                    wechat: "chen_gw24k",
+                    wechatImg: "/theme2/img/buck_chen.png"
                 }
             ],
             redPacketPopFlag: true, //红包弹出标记

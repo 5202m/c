@@ -22,6 +22,9 @@
     <script type="text/javascript" src="/theme2/js/top.min.js?v=<%=version%>"></script>
     <link rel="stylesheet" media="screen" href="/theme2/css/index.min.css?v=<%=version%>"/>
     <% } %>
+    <%if(isRedPacket) {%>
+    <link href="/theme2/css/redbag201707.css" rel="stylesheet" type="text/css">
+    <%}%>
     <script type="text/javascript" src="/theme2/js/<%= isDevTest ? 'loginAuto.js' : ('lg.min.js?v=' + version)%>"></script>
     <script>
         //自动登录中...
@@ -38,261 +41,270 @@
             <h1 class="hide-t">视频直播间</h1>
         </div>
         <%if(isRedPacket) {%>
-        <div class="new_redbag fl" id="showTrade_header">
+<!--        <div class="new_redbag fl" id="showTrade_header">
             <img src="/theme2/img/redbag201708/headShowTrade.jpg" width="100%" alt="壕礼狂撒 100%中獎" />
+        </div>-->
+        <div class="header_redbag fl" id="redPacket_header">
+            <div class="redbag_pic"></div>
+            <div class="rb_text">
+                <div class="timecount">
+                    <b rp="minutesLabel"></b>
+                    <span>分</span>
+                    <b rp="secondsLabel"></b>
+                    <span>秒</span>
+                </div>
+            </div>
         </div>
         <%}%>
         <div class="rightbar">
-            <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')"
-               onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);"
-               class="qq"><i></i></a>
+            <a href="javascript:Tool.OnlineCS.connect('pm', 'qq', 'mb')" onclick="_gaq.push(['_trackEvent', 'm_studio','header_QQ', 'content_top',1,true]);" class="qq"><i></i></a>
             <a id="header_ui" href="javascript:void(0)" class="loginbtn">
                 <%= userSession.isLogin ? userSession.nickname : '登录' %>
             </a>
         </div>
     </section>
 </header>
-<article class="content_w bgf2f2f2 dn" id="page_rooms">
+    <article class="content_w bgf2f2f2 dn" id="page_rooms">
 
-</article>
-<article class="content_w bgfff dn" id="page_room">
+    </article>
+    <article class="content_w bgfff dn" id="page_room">
 
-</article>
-<article class="content_w bgfff dn" id="page_syllabus">
+    </article>
+    <article class="content_w bgfff dn" id="page_syllabus">
 
-</article>
-<article class="content_w bgfff dn" id="page_subscribe">
+    </article>
+    <article class="content_w bgfff dn" id="page_subscribe">
 
-</article>
-<article class="content_w bgfff dn" id="page_analyst">
+    </article>
+    <article class="content_w bgfff dn" id="page_analyst">
 
-</article>
-<article class="content_w bgfff dn" id="page_showTrade">
+    </article>
+    <article class="content_w bgfff dn" id="page_showTrade">
 
-</article>
-<article class="content_w bgfff dn" id="page_userShowTrade">
+    </article>
+    <article class="content_w bgfff dn" id="page_userShowTrade">
 
-</article>
-<article class="content_w bgf2f2f2 dn" id="page_showTradeAdd">
+    </article>
+    <article class="content_w bgf2f2f2 dn" id="page_showTradeAdd">
 
-</article>
-<article class="content_w bgf2f2f2 dn" id="page_trains">
+    </article>
+    <article class="content_w bgf2f2f2 dn" id="page_trains">
 
-</article>
-<article class="content_w login-fix dn" id="page_login">
+    </article>
+    <article class="content_w login-fix dn" id="page_login">
 
-</article>
-<article class="content_w blke3e3ea dn" id="page_novice">
+    </article>
+    <article class="content_w blke3e3ea dn" id="page_novice">
 
-</article>
+    </article>
 
-<article class="content_w blke3e3ea dn" id="page_teach">
+    <article class="content_w blke3e3ea dn" id="page_teach">
 
-</article>
-<article class="content_w blke3e3ea dn" id="page_teachList">
+    </article>
+    <article class="content_w blke3e3ea dn" id="page_teachList">
 
-</article>
-<article class="content_w blke3e3ea dn" id="page_noviceGuide">
+    </article>
+    <article class="content_w blke3e3ea dn" id="page_noviceGuide">
 
-</article>
-<article class="content_w bgf2f2f2 dn" id="page_privateChat">
+    </article>
+    <article class="content_w bgf2f2f2 dn" id="page_privateChat">
 
-</article>
-<article class="content_w bgf2f2f2 dn" id="page_videoPlayer">
+    </article>
+    <article class="content_w bgf2f2f2 dn" id="page_videoPlayer">
 
-</article>
-<article class="content_w bgfff dn" id="page_classNote">
+    </article>
+    <article class="content_w bgfff dn" id="page_classNote">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_index">
+    <article class="content_w accUserCenter dn" id="account_index">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_point">
+    <article class="content_w accUserCenter dn" id="account_point">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_subscribe">
+    <article class="content_w accUserCenter dn" id="account_subscribe">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_info">
+    <article class="content_w accUserCenter dn" id="account_info">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn " id="account_setAvatar">
+    <article class="content_w accUserCenter dn " id="account_setAvatar">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_setMail">
+    <article class="content_w accUserCenter dn" id="account_setMail">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_setName">
+    <article class="content_w accUserCenter dn" id="account_setName">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_setPwd">
+    <article class="content_w accUserCenter dn" id="account_setPwd">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_setNickname">
+    <article class="content_w accUserCenter dn" id="account_setNickname">
 
-</article>
+    </article>
 
-<article class="content_w accUserCenter dn" id="account_subscribeDetail">
+    <article class="content_w accUserCenter dn" id="account_subscribeDetail">
 
-</article>
+    </article>
 
-<article class="content_w login-fix dn" id="page_register">
+    <article class="content_w login-fix dn" id="page_register">
 
-</article>
+    </article>
 
-<% include pop.html %>
+    <% include pop.html %>
 
-<script type="text/javascript">
-    function pageFunc() {
-        Data.userInfo = LoginAuto.sessionUser;
-        Data.mobile24kPath = '<%= mobile24kPath %>';
-        Data.apiUrl = '<%= apiUrl %>';
-        Data.filePath = '<%= filePath %>';
-        Data.options = Util.parseJSON('<%- options%>') || {};
-        Data.syllabusData = Util.parseJSON('<%- syllabusData%>');
-        Data.serverTime = Number('<%= serverTime %>');
-        Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
-        Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
-        Data.appDefaultGroupId = '<%- appDefaultGroupId %>';
-        Data.userInfo.avatar = '<%= userSession.avatar %>';
-        Data.userInfo.userName = '<%= userSession.userName %>';
-        Data.userInfo.email = '<%= userSession.email %>';
-        Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
-        Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
-        Data.isRedPacket = '<%= isRedPacket %>';
-        Index.init();
+    <script type="text/javascript">
+        function pageFunc() {
+            Data.userInfo = LoginAuto.sessionUser;
+            Data.mobile24kPath = '<%= mobile24kPath %>';
+            Data.apiUrl = '<%= apiUrl %>';
+            Data.filePath = '<%= filePath %>';
+            Data.options = Util.parseJSON('<%- options%>') || {};
+            Data.syllabusData = Util.parseJSON('<%- syllabusData%>');
+            Data.serverTime = Number('<%= serverTime %>');
+            Data.socketUrl = Util.parseJSON('<%- socketUrl %>');
+            Data.redPacketLastPeriods = '<%- redPacketLastPeriods %>';
+            Data.appDefaultGroupId = '<%- appDefaultGroupId %>';
+            Data.userInfo.avatar = '<%= userSession.avatar %>';
+            Data.userInfo.userName = '<%= userSession.userName %>';
+            Data.userInfo.email = '<%= userSession.email %>';
+            Data.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
+            Data.userInfo.userTel = '<%= userSession.mobilePhone %>';
+            Data.isRedPacket = '<%= isRedPacket %>';
+            Index.init();
 
-        try {
+            try {
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 1,
+                    userTel: '<%= userSession.mobilePhone %>',
+                    roomName: $('#room_roomName').text()
+                }, Data.userInfo));
+            } catch (e) {
+                console.log("Set onunload UTM fail!" + e);
+            }
+
+
+            lightbox.option({
+                'resizeDuration': 200,
+                'wrapAround': true,
+                'disableScrolling': true,
+                'positionFromTop': 200,
+                'showImageNumberLabel': false
+            });
+
+            $(".scrollbox").mCustomScrollbar({
+                theme: "light-thick",
+                scrollbarPosition: "outside",
+                scrollButtons: false
+            });
+
+            /** 活动规则滚动 */
+            $.mCustomScrollbar.defaults.scrollButtons.enable = true;
+            $("#content-d3").mCustomScrollbar({
+                theme: "dark-thick"
+            });
+
+            try {
+
+                var isNewMembers = Data.userInfo.isNewMember;
+                if (isNewMembers == true || isNewMembers == "true") {
+                    chatAnalyze.setUTM(false, $.extend({
+                        operationType: 3,
+                        userTel: Data.userInfo.mobilePhone,
+                        accountNo: Data.userInfo.accountNo,
+                        roomName: $('#room_roomName').text()
+                    }, Data.userInfo));
+                }
+
+            } catch (e) {
+                console.log("Set app register UTM fail!" + e);
+            }
+
+        }
+        window.onunload = function () {
             chatAnalyze.setUTM(false, $.extend({
-                operationType: 1,
+                operationType: 6,
                 userTel: '<%= userSession.mobilePhone %>',
                 roomName: $('#room_roomName').text()
             }, Data.userInfo));
-        } catch (e) {
-            console.log("Set onunload UTM fail!" + e);
         }
-
-
-        lightbox.option({
-            'resizeDuration': 200,
-            'wrapAround': true,
-            'disableScrolling': true,
-            'positionFromTop': 200,
-            'showImageNumberLabel': false
-        });
-
-        $(".scrollbox").mCustomScrollbar({
-            theme: "light-thick",
-            scrollbarPosition: "outside",
-            scrollButtons: false
-        });
-
-        /** 活动规则滚动 */
-        $.mCustomScrollbar.defaults.scrollButtons.enable = true;
-        $("#content-d3").mCustomScrollbar({
-            theme: "dark-thick"
-        });
-
-        try {
-
-            var isNewMembers = Data.userInfo.isNewMember;
-            if (isNewMembers == true || isNewMembers == "true") {
-                chatAnalyze.setUTM(false, $.extend({
-                    operationType: 3,
-                    userTel: Data.userInfo.mobilePhone,
-                    accountNo: Data.userInfo.accountNo,
-                    roomName: $('#room_roomName').text()
-                }, Data.userInfo));
-            }
-
-        } catch (e) {
-            console.log("Set app register UTM fail!" + e);
-        }
-
-    }
-    window.onunload = function () {
-        chatAnalyze.setUTM(false, $.extend({
-            operationType: 6,
-            userTel: '<%= userSession.mobilePhone %>',
-            roomName: $('#room_roomName').text()
-        }, Data.userInfo));
-    }
-</script>
-<script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js" charset="utf-8"></script>
-<% if(isDevTest) { %>
-<script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
-<script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
-<script type="text/javascript" src="/base/lib/socket.io.js"></script>
-<script type="text/javascript" src="/base/lib/websocket.min.js"></script>
-<script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
-<script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
-<script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
-<script type="text/javascript" src="/base/lib/toucher.js"></script>
-<script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
-<script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
-<script type="text/javascript" src="/base/util/common.js"></script>
-<script type="text/javascript" src="/base/util/gwanalysis.js"></script>
-<script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
-<script type="text/javascript" src="/theme2/js/container.js"></script>
-<script type="text/javascript" src="/theme2/js/pop.js"></script>
-<script type="text/javascript" src="/theme2/js/login.js"></script>
-<script type="text/javascript" src="/theme2/js/register.js"></script>
-<script type="text/javascript" src="/theme2/js/chat.js"></script>
-<script type="text/javascript" src="/theme2/js/classNote.js"></script>
-<script type="text/javascript" src="/theme2/js/data.js"></script>
-<script type="text/javascript" src="/theme2/js/index.js"></script>
-<script type="text/javascript" src="/theme2/js/player.js"></script>
-<script type="text/javascript" src="/theme2/js/room.js"></script>
-<script type="text/javascript" src="/theme2/js/rooms.js"></script>
-<script type="text/javascript" src="/theme2/js/subscribe.js"></script>
-<script type="text/javascript" src="/theme2/js/syllabus.js"></script>
-<script type="text/javascript" src="/theme2/js/analyst.js"></script>
-<script type="text/javascript" src="/theme2/js/showTrade.js"></script>
-<script type="text/javascript" src="/theme2/js/userShowTrade.js"></script>
-<script type="text/javascript" src="/theme2/js/showTradeAdd.js"></script>
-<script type="text/javascript" src="/theme2/js/trains.js"></script>
-<script type="text/javascript" src="/theme2/js/tool.js"></script>
-<script type="text/javascript" src="/theme2/js/util.js"></script>
-<script type="text/javascript" src="/theme2/js/novice.js"></script>
-<script type="text/javascript" src="/theme2/js/teach.js"></script>
-<script type="text/javascript" src="/theme2/js/noviceGuide.js"></script>
-<script type="text/javascript" src="/theme2/js/privateChat.js"></script>
-<script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
-<script type="text/javascript" src="/theme2/js/yylive2.js"></script>
-<script type="text/javascript" src="/theme2/js/accountIndex.js"></script>
-<script type="text/javascript" src="/theme2/js/accountInfo.js"></script>
-<script type="text/javascript" src="/theme2/js/accountPoint.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSubscribe.js"></script>
-<script type="text/javascript" src="/theme2/js/accountEmail.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSetPwd.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSetName.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSetNickname.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSetAvatar.js"></script>
-<script type="text/javascript" src="/theme2/js/accountSubscribeDetail.js"></script>
-<script type="text/javascript" src="/theme2/js/pmGaTrace.js"></script>
-<script type="text/javascript">
-    $(pageFunc);
-</script>
-<% }else{ %>
-<script type="text/javascript" src="/base/lib/basket.min.js"></script>
-<script type="text/javascript">
-    basket.version = '<%=version%>';
-    basket.require({
-        url: "/theme2/js/lib.min.js?v=<%=version%>"
-    }, {
-        url: "/theme2/js/index.min.js?v=<%=version%>"
-    }, null).then(pageFunc);
-</script>
-<% } %>
+    </script>
+    <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js" charset="utf-8"></script>
+    <% if(isDevTest) { %>
+    <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="/base/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
+    <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
+    <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
+    <script type="text/javascript" src="/base/lib/lazyload/img.lazyload.js"></script>
+    <script type="text/javascript" src="/base/lib/toucher.js"></script>
+    <script type="text/javascript" src="/base/lib/iphone-inline-video.browser.js"></script>
+    <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
+    <script type="text/javascript" src="/base/util/common.js"></script>
+    <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
+    <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
+    <script type="text/javascript" src="/theme2/js/container.js"></script>
+    <script type="text/javascript" src="/theme2/js/pop.js"></script>
+    <script type="text/javascript" src="/theme2/js/login.js"></script>
+    <script type="text/javascript" src="/theme2/js/register.js"></script>
+    <script type="text/javascript" src="/theme2/js/chat.js"></script>
+    <script type="text/javascript" src="/theme2/js/classNote.js"></script>
+    <script type="text/javascript" src="/theme2/js/data.js"></script>
+    <script type="text/javascript" src="/theme2/js/index.js"></script>
+    <script type="text/javascript" src="/theme2/js/player.js"></script>
+    <script type="text/javascript" src="/theme2/js/room.js"></script>
+    <script type="text/javascript" src="/theme2/js/rooms.js"></script>
+    <script type="text/javascript" src="/theme2/js/subscribe.js"></script>
+    <script type="text/javascript" src="/theme2/js/syllabus.js"></script>
+    <script type="text/javascript" src="/theme2/js/analyst.js"></script>
+    <script type="text/javascript" src="/theme2/js/showTrade.js"></script>
+    <script type="text/javascript" src="/theme2/js/userShowTrade.js"></script>
+    <script type="text/javascript" src="/theme2/js/showTradeAdd.js"></script>
+    <script type="text/javascript" src="/theme2/js/trains.js"></script>
+    <script type="text/javascript" src="/theme2/js/tool.js"></script>
+    <script type="text/javascript" src="/theme2/js/util.js"></script>
+    <script type="text/javascript" src="/theme2/js/novice.js"></script>
+    <script type="text/javascript" src="/theme2/js/teach.js"></script>
+    <script type="text/javascript" src="/theme2/js/noviceGuide.js"></script>
+    <script type="text/javascript" src="/theme2/js/privateChat.js"></script>
+    <script type="text/javascript" src="/theme2/js/videoPlayer.js"></script>
+    <script type="text/javascript" src="/theme2/js/yylive2.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountIndex.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountInfo.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountPoint.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSubscribe.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountEmail.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSetPwd.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSetName.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSetNickname.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSetAvatar.js"></script>
+    <script type="text/javascript" src="/theme2/js/accountSubscribeDetail.js"></script>
+    <script type="text/javascript" src="/theme2/js/pmGaTrace.js"></script>
+    <script type="text/javascript">
+        $(pageFunc);
+    </script>
+    <% }else{ %>
+    <script type="text/javascript" src="/base/lib/basket.min.js"></script>
+    <script type="text/javascript">
+        basket.version = '<%=version%>';
+        basket.require({
+            url: "/theme2/js/lib.min.js?v=<%=version%>"
+        }, {
+            url: "/theme2/js/index.min.js?v=<%=version%>"
+        }, null).then(pageFunc);
+    </script>
+    <% } %>
 </body>
 
 </html>

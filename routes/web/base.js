@@ -582,7 +582,7 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
             //系统时间小于红包结束时间则生效,2017-08-04 23:35:00下线
-            if (new Date() < new Date("2017-08-25 23:59:59")) {
+            if (new Date() < new Date("2017-09-15 23:59:59")) {
                 viewDataObj.isRedPacket = config.isRedPacket;
             } else {
                 viewDataObj.isRedPacket = false;
@@ -3265,7 +3265,7 @@ router.get("/geetest/register", function(req, res) {
  * 抢红包
  */
 router.post('/rob', function(req, res) {
-    logger.info("redPacket<<rob begin！");
+    logger.info("redPacket<<rob begin！",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
     //没有登录
     var userInfo = req.session.studioUserInfo;
     if (!userInfo || !userInfo.isLogin || !userInfo.mobilePhone) {
@@ -3293,7 +3293,7 @@ router.post('/rob', function(req, res) {
         isDepart = 1;
     }
     var robParams = {
-        ac_periods: "20170801",
+        ac_periods: "20170901",
         phone: userInfo.mobilePhone.replace("86-", ""),
         nper: periods,
         is_depart: isDepart
@@ -3302,6 +3302,8 @@ router.post('/rob', function(req, res) {
     if (periods < 0) {
         return;
     }
+
+    logger.info("redPacket<<rob go！",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
 
     /*如果整点且非未激活或者模拟用户,直接返回*/
     if (1 == isDepart) {
@@ -3313,9 +3315,10 @@ router.post('/rob', function(req, res) {
     }
 
     request.post({ url: (config.pmOAPath + '/lottery/activity20170801/draw'), form: robParams }, function(error, response, data) {
+        logger.info("redPacket<<rob<<http://testweb1.24k.hk:81 ！",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
         var result = { result: 0, money: 0, msg: "", code: "" };
         if (data) {
-            logger.info("redPacket<<rob :", robParams.phone, robParams.nper, robParams.is_depart, data);
+            logger.info("redPacket<<rob data:", robParams.phone, robParams.nper, robParams.is_depart, data);
             try {
                 data = JSON.parse(data);
                 if (data.infoNo == 1 && data.infoGiftNumber) {
@@ -3330,7 +3333,7 @@ router.post('/rob', function(req, res) {
             } catch (e) {}
         }
         res.json(result);
-        logger.info("redPacket<<rob end！");
+        logger.info("redPacket<<rob end！",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
     });
 });
 

@@ -29,9 +29,9 @@ var indexJS = {
         { points: 400000000000, name: 'L10' }
     ],
     init: function() {
+        this.serverTimeUp();
         this.widthCheck();
         this.heightCalcu();
-        this.serverTimeUp();
         this.setVisitStore(); //设置访客存储
         this.setEvent(); //设置各种事件
         //this.setTradeStrategyNote(null, true);
@@ -48,10 +48,7 @@ var indexJS = {
         noticeJS.init();
         indexTool.SimpleRoom.init();
         indexTool.RedPacket.init();
-        if(indexJS.isRedPacket == 'true'){//8月份直播间活动
-            indexTool.activity_201708.init();
-        }
-        indexJS.initGeetest();
+        //indexJS.initGeetest();
     },
     /**
      * 事件控制
@@ -335,19 +332,20 @@ var indexJS = {
      * 服务器时间更新
      */
     serverTimeUp: function() {
-        indexJS.fillCourse(); //填充课程
-        indexJS.courseTick.tick();
-        this.towMinTime = this.serverTime;
+
         setInterval(function() {
             indexJS.serverTime += 1000;
+            indexTool.RedPacket.tick();
             if (indexJS.serverTime - indexJS.towMinTime >= 2 * 60 * 1000) {
                 indexJS.towMinTime = indexJS.serverTime;
                 videosLive.setInformation();
             }
             chat.setPushInfo();
             indexJS.courseTick.tick();
-            indexTool.RedPacket.tick();
         }, 1000); //每秒一次
+        indexJS.fillCourse(); //填充课程
+        indexJS.courseTick.tick();
+        this.towMinTime = this.serverTime;
     },
     /**
      * 刷新昵称

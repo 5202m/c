@@ -19,7 +19,7 @@
     <link href="/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
     <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
     <%if(isRedPacket) {%>
-    <link href="/theme1/css/redbag201708.css" rel="stylesheet" type="text/css">
+    <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
     <%}%>
      <!--[if lt IE 9]>
     <link href="/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
@@ -47,9 +47,24 @@
         <div class="box-header-in clearfix">
             <h1 class="fl hide-t" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_logo', 'content_top', 1, true]);">视频直播间</h1>
             <%if(isRedPacket) {%>
-                <div class="header_showTrade_ad fl" id="showTrade_header">
+<!--                <div class="header_showTrade_ad fl" id="showTrade_header">
                     <a href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
+                </div>-->
+            <div class="header_redbag fl" id="redPacket_header"
+                 onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_banner', 'content_middle', 1, true]);">
+                <div class="redbag_pic"></div>
+                <div class="rb_text">
+                    <div class="te1">
+                        第<b rp="timesLabel"></b>波微信红包
+                    </div>
+                    <div class="timecount">
+                        <b rp="minutesLabel"></b>
+                        <span>分</span>
+                        <b rp="secondsLabel"></b>
+                        <span>秒</span>
+                    </div>
                 </div>
+            </div>
             <%} else{ %>
             <div class="header_ad fl">
                 <a href="http://www.24k.hk/special/analyst.html" target="_blank"
@@ -141,90 +156,90 @@
     }
 %>
 
-            <script type="text/javascript">
-                function pageFunc() {
-                    indexJS.fromPlatform = '<%- fromPlatform%>';
-                    indexJS.apiUrl = '<%= apiUrl %>';
-                    indexJS.userInfo = JSON.parse('<%- userInfo %>');
-                    indexJS.serverTime = Number('<%= serverTime %>');
-                    indexJS.socketUrl = JSON.parse('<%- socketUrl %>');
-                    indexJS.filePath = '<%= filePath %>';
-                    indexJS.syllabusData = common.formatToJson('<%- syllabusData%>');
-                    indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
-                    indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
-                    indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
-                    indexJS.userInfo.createDate = '<%= userSession.joinDate %>';
-                    indexJS.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
-                    indexJS.isRedPacket = '<%= isRedPacket %>';
-                    indexJS.init(); //初始化
+    <script type="text/javascript">
+        function pageFunc() {
+            indexJS.fromPlatform = '<%- fromPlatform%>';
+            indexJS.apiUrl = '<%= apiUrl %>';
+            indexJS.userInfo = JSON.parse('<%- userInfo %>');
+            indexJS.serverTime = Number('<%= serverTime %>');
+            indexJS.socketUrl = JSON.parse('<%- socketUrl %>');
+            indexJS.filePath = '<%= filePath %>';
+            indexJS.syllabusData = common.formatToJson('<%- syllabusData%>');
+            indexJS.currStudioAuth = ('<%- currStudioAuth%>' == 'true');
+            indexJS.visitorSpeak = ('<%- visitorSpeak%>' == 'true');
+            indexJS.redPacketLastPeriods = ('<%- redPacketLastPeriods%>');
+            indexJS.userInfo.createDate = '<%= userSession.joinDate %>';
+            indexJS.userInfo.mobilePhone = '<%= userSession.mobilePhone %>';
+            indexJS.isRedPacket = '<%= isRedPacket %>';
+            indexJS.init(); //初始化
 
-                    indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
-                    $(".dashang_rule .scrollbox").mCustomScrollbar({
-                        theme: "light-thick",
-                        scrollbarPosition: "outside",
-                        scrollButtons: false
-                    });
-                }
+            indexTool.Theme.setTheme('<%-defSkin%>', false); //修改样式
+            $(".dashang_rule .scrollbox").mCustomScrollbar({
+                theme: "light-thick",
+                scrollbarPosition: "outside",
+                scrollButtons: false
+            });
+        }
 
-                try {
-                    window.onunload = function() {
-                        chatAnalyze.setUTM(false, $.extend({
-                            operationType: 6,
-                            userTel: '<%= userSession.mobilePhone %>',
-                            roomName: $("#roomInfoId").text()
-                        }, indexJS.userInfo));
-                    }
+        try {
+            window.onunload = function () {
+                chatAnalyze.setUTM(false, $.extend({
+                    operationType: 6,
+                    userTel: '<%= userSession.mobilePhone %>',
+                    roomName: $("#roomInfoId").text()
+                }, indexJS.userInfo));
+            }
 
-                } catch (e) {
-                    console.log("Set onunload UTM fail!" + e);
-                }
-            </script>
+        } catch (e) {
+            console.log("Set onunload UTM fail!" + e);
+        }
+    </script>
     <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js" charset="utf-8"></script>
-            <%if(isDevTest) {%>
-                <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
-                <script type="text/javascript" src="/base/lib/socket.io.js"></script>
-                <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
-                <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
-                <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
-                <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
-                <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
-                <script type="text/javascript" src="/base/lib/jquery.xdomainrequest.min.js"></script>
-                <script type="text/javascript" src="/base/lib/obsplayer/obsplayer.min.js"></script>
-                <script type="text/javascript" src="/base/lib/paste.js"></script>
-                <script type="text/javascript" src="/base/lib/jquery.superslide.2.1.1.js"></script>
-                <script type="text/javascript" src="/base/lib/jquery.face.js"></script>
-                <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
-                <script type="text/javascript" src="/base/lib/newquote.js"></script>
-                <script type="text/javascript" src="/base/util/common.js"></script>
-                <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
-                <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
-                <script type="text/javascript" src="/theme1/js/index.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_box.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_video.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_video_live.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_video_teach.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_video_subscribe.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_video_train.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_chat_pride.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_chat.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_chat_teacher.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_chat_showtrade.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_notice.js"></script>
-                <script type="text/javascript" src="/theme1/js/index_tool.js"></script>
-                <script type="text/javascript">
-                    $(pageFunc);
-                </script>
-                <%} else{ %>
-                    <script type="text/javascript" src="/base/lib/basket.min.js"></script>
-                    <script type="text/javascript">
-                        basket.version = '<%=version%>';
-                        basket.require({
-                            url: "/theme1/js/lib.min.js?v=<%=version%>"
-                        }, {
-                            url: "/theme1/js/index.min.js?v=<%=version%>"
-                        }, pageFunc).then(pageFunc);
-                    </script>
-                    <%}%>
+    <%if(isDevTest) {%>
+    <script type="text/javascript" src="/base/lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="/base/lib/socket.io.js"></script>
+    <script type="text/javascript" src="/base/lib/mScroll/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="/base/lib/jQueryRotate.2.2.js"></script>
+    <script type="text/javascript" src="/base/lib/lightbox/lightbox.min.js"></script>
+    <script type="text/javascript" src="/base/lib/jqueryUI/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/base/lib/swipe/swiper.min.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.xdomainrequest.min.js"></script>
+    <script type="text/javascript" src="/base/lib/obsplayer/obsplayer.min.js"></script>
+    <script type="text/javascript" src="/base/lib/paste.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.superslide.2.1.1.js"></script>
+    <script type="text/javascript" src="/base/lib/jquery.face.js"></script>
+    <script type="text/javascript" src="/base/lib/websocket.min.js"></script>
+    <script type="text/javascript" src="/base/lib/newquote.js"></script>
+    <script type="text/javascript" src="/base/util/common.js"></script>
+    <script type="text/javascript" src="/base/util/gwanalysis.js"></script>
+    <script type="text/javascript" src="/base/util/chatAnalyze.js"></script>
+    <script type="text/javascript" src="/theme1/js/index.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_box.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_video.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_video_live.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_video_teach.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_video_subscribe.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_video_train.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_chat_pride.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_chat.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_chat_teacher.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_chat_showtrade.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_notice.js"></script>
+    <script type="text/javascript" src="/theme1/js/index_tool.js"></script>
+    <script type="text/javascript">
+        $(pageFunc);
+    </script>
+    <%} else{ %>
+    <script type="text/javascript" src="/base/lib/basket.min.js"></script>
+    <script type="text/javascript">
+        basket.version = '<%=version%>';
+        basket.require({
+            url: "/theme1/js/lib.min.js?v=<%=version%>"
+        }, {
+            url: "/theme1/js/index.min.js?v=<%=version%>"
+        }, pageFunc).then(pageFunc);
+    </script>
+    <%}%>
 </body>
 
 </html>
