@@ -313,6 +313,13 @@ var Tool = {
                     userName: "陈铎",
                     wechat: "chen_gw24k",
                     wechatImg: "/theme2/img/buck_chen.png"
+                },
+                {
+                    start: 57600000,
+                    userId: "eric_liu",
+                    userName: "刘策",
+                    wechat: "liu_gw24k",
+                    wechatImg: "/theme2/img/ce_liu.png"
                 }
             ],
             redPacketPopFlag: true, //红包弹出标记
