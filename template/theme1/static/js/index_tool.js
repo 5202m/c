@@ -650,14 +650,14 @@ var indexTool = {
                             });
                         }
                     } else {
-                        if (data.code == 1005 || data.code == 1006 || data.code == 1004) {
+                        if (data.code == 1005 || data.code == 1006 || data.code == 1004 || data.code == 1007) {
                             indexTool.RedPacket.config.miniClose = true;
                             indexTool.RedPacket.showPop("resNo", {
                                 wechatImg: analyst.wechatImg,
                                 wechat: analyst.wechat
                             });
                         } else {
-                            box.showMsg(data.msg || "红包信息异常!");
+                           // box.showMsg(data.msg || "红包信息异常!");
                         }
                     }
                     indexTool.RedPacket.config.opened = false;

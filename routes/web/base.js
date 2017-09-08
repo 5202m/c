@@ -3315,7 +3315,7 @@ router.post('/rob', function(req, res) {
     }
 
     request.post({ url: (config.pmOAPath + '/lottery/activity20170801/draw'), form: robParams }, function(error, response, data) {
-        logger.info("redPacket<<rob<<http://testweb1.24k.hk:81 ！",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
+        logger.info("redPacket<<rob",common.formatDate(new Date(),'yyyy-MM-dd hh:mm:ss:SSS'));
         var result = { result: 0, money: 0, msg: "", code: "" };
         if (data) {
             logger.info("redPacket<<rob data:", robParams.phone, robParams.nper, robParams.is_depart, data);
@@ -3329,6 +3329,7 @@ router.post('/rob', function(req, res) {
                 } else {
                     result.result = 1;
                     result.code = data.infoNo;
+                    result.msg = data.infoMsg;
                 }
             } catch (e) {}
         }
