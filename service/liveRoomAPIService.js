@@ -8,6 +8,22 @@ const baseUrl = config.apiUrl;
 
 let apiAuth = new APIAuth(config.apiAuth.appId, config.apiAuth.appSecret);
 
+class Timer {
+    constructor() {
+        this.duration = null;
+        this.start = Date.now();
+    }
+    stop() {
+        let now = Date.now();
+        this.duration = now - this.start;
+        return this.duration;
+    }
+    reset() {
+        this.duration = null;
+        this.start = Date.now();
+    }
+}
+
 /**
  * 在请求路径后面添加公司代码
  * @param {string} path 请求路径
@@ -108,13 +124,16 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Getting data from liveRoom API with path: " + path);
         path = addCompanyIdToPath(path);
-		path = encodeURI(path);
+        path = encodeURI(path);
+        let timer = new Timer();
         addAccessToken()
             .then(headers => {
                 let options = {
                     url: baseUrl + path,
                     headers: headers
                 };
+                logger.debug("addAccessToken", ">>>", timer.stop(), "ms");
+                timer.reset();
                 request(options, (err, res, data) => {
                     if (err) {
                         logger.error("Get " + path.split("?")[0] + ">>>error:" + err);
@@ -122,6 +141,7 @@ module.exports = {
                     } else {
                         handler.success(data);
                     }
+                    logger.debug("GET", path, ">>>", timer.stop(), "ms");
                 });
             })
             .catch(e => {
@@ -135,6 +155,7 @@ module.exports = {
         let handler = responseHandler(deferred, callback);
         logger.debug("Posting data to liveRoom API with path: ", path, JSON.stringify(data));
         data = addCompanyIdToBody(data);
+        let timer = new Timer();
         addAccessToken({ "Connection": "close" })
             .then(headers => {
                 let options = {
@@ -143,6 +164,8 @@ module.exports = {
                     json: true,
                     headers: headers
                 };
+                logger.debug("addAccessToken", ">>>", timer.stop(), "ms");
+                timer.reset();
                 request.post(options, (err, res, data) => {
                     if (err) {
                         logger.error("Post " + path + ">>>error:" + err);
@@ -150,6 +173,7 @@ module.exports = {
                     } else {
                         handler.success(data);
                     }
+                    logger.debug("POST", path, ">>>", timer.stop(), "ms", JSON.stringify(data));
                 });
             })
             .catch(e => {

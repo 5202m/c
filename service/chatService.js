@@ -140,5 +140,23 @@ class ChatService {
         });
         return defer.promise;
     }
+
+    /**
+     * 发送活动推送通知
+     * @param data
+     * @returns {*|jQuery.promise|promise.promise|d.promise|promise|t.promise}
+     */
+    sendNoticeActivity(data) {
+        let defer = new Deferred();
+        let path = "/chat/sendNoticeActivity";
+        liveRoomAPIService.post(path, data).then(data => {
+            defer.resolve(data);
+        }, function (err) {
+            logger.error("sendNoticeActivity! >>sendNoticeActivity:", err);
+            defer.reject(err);
+        });
+        return defer.promise;
+    }
+
 }
 module.exports = new ChatService();

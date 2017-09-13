@@ -14,6 +14,13 @@ var Room = new Container({
         Tool.getAllMarketPrice.init();
         Chat.setEvent();
         Room.loadRoomClassNote();
+        /** 9月份活动 start **/
+        if(Data.isRedPacket == 'true'){
+            Tool.speak_activity_201709.init();
+        }else{
+            $('.fy_barbg').hide();
+        }
+        /** 9月份活动 end **/
     },
     onShow: function() {
         Room.initPage();
@@ -74,20 +81,6 @@ Room.initPage = function() {
         }
     });
 };
-
-// /**
-//  * 判断是否红包活动培训班
-//  */
-// Room.getRedPacketRoom = function(currentRoomId) {
-//     $.getJSON('/isRedPacketRoom', { roomId: currentRoomId }, function(data) {
-//         if (data.isOK) {
-//             $("#redPacket_header").show();
-//         } else {
-//             $('.redbag_pop').hide()
-//             $("#redPacket_header").hide();
-//         }
-//     });
-// };
 
 /**
  * 游客累计观看提醒

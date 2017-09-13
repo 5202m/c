@@ -105,6 +105,13 @@ var Chat = {
                         }
                     }
                     break;
+                case 'activity':
+                    console.log(result);
+                    if(Data.userInfo.userId === result.data.userId){
+                        Tool.speak_activity_201709.openAward(result.data.giftName);
+                    }
+                    Tool.speak_activity_201709.appendPrizerList(result.data);
+                    break;
             }
         });
         //信息传输
@@ -473,9 +480,39 @@ var Chat = {
                 content : {msgType:Data.msgType.text, value:msg}
             };
             sendObj.fromUser.toUser = toUser;
-            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
+/*            $.post(Data.apiUrl+"/message/sendMsg", {data:sendObj}, function(){
                 console.log("send message ok!");
-            });
+            });*/
+
+            //发言
+            if(!Data.userInfo.isLogin){
+                $.post(Data.apiUrl + "/message/sendMsg", { data: sendObj }, function() {
+                    console.log("send message ok!");
+                });
+            }else{
+                $.ajax({
+                    url:'/speakActivity',  //请求的URL
+                    timeout : 500, //超时时间设置，单位毫秒
+                    type : 'post',  //请求方式，get或post
+                    data :{
+                        mobilePhone: sendObj.fromUser.mobile,
+                        content: {
+                            "userId": sendObj.fromUser.userId,
+                            "nickname":sendObj.fromUser.nickname,
+                            "mobilePhone":sendObj.fromUser.mobile
+                        }
+                    },  //请求所传参数，json格式
+                    dataType:'json',//返回的数据格式
+                    success:function(){ //请求成功的回调函数
+                    },
+                    complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                        $.post(Data.apiUrl + "/message/sendMsg", {data: sendObj}, function() {
+                            console.log("ok");
+                        });
+                    }
+                });
+            }
+
             Chat.receiveMsg(sendObj, true, false);//直接把数据填入内容栏
 
             //清空输入框

@@ -582,9 +582,9 @@ function toStudioView(chatUser, options, groupId, clientGroup, isMobile, req,
             // }
             viewDataObj.appDefaultGroupId = config.studioThirdUsed.roomId.studio;
             //系统时间小于红包结束时间则生效,2017-08-04 23:35:00下线
-            if (new Date() < new Date("2017-09-15 23:59:59")) {
+            if (new Date() > new Date(config.activityStartTime) && new Date() < new Date(config.activityEndTime)) {
                 viewDataObj.isRedPacket = config.isRedPacket;
-            } else {
+            }  else {
                 viewDataObj.isRedPacket = false;
             }
             viewDataObj.isShowTrade = config.isShowTrade;
@@ -3476,11 +3476,14 @@ router.get('/getToken', (req, res) => {
         });
 });
 
-/** 8月份活动 code by ant  start 20170803 */
 
-//redis存储201708活动用户登陆情况
+
+/** 9月份活动 code by ant  start 20170909 */
+
+//redis存储201709活动用户登陆情况
 router.post('/isCurrentDayFirstLogin', function(req, res) {
-    if (new Date().getTime() > new Date('2017-08-26').getTime()) {
+    let deadline = config.activityEndTime;
+    if (new Date().getTime() > new Date(deadline).getTime()) {
         res.json({ data: false });
         return;
     }
@@ -3497,150 +3500,176 @@ router.post('/isCurrentDayFirstLogin', function(req, res) {
             return;
         }
     }
-    let userNo = params.userNo;
-    let key = "pm_Aug_activityLoginInfo_" + userNo;
+    let key = "pm_Sep_Speak_ActivityLoginInfo_".concat(common.formatDate(new Date(),'yyyyMMdd'));
     cacheClient.get(key, function(err, result) {
-        let currentDay = common.formatDate(new Date(),'yyyyMMdd'),items = [];
+        let userNo = params.userNo,items = [];
         if (err || !result) {
-            items.push(currentDay);
+            items.push(userNo);
             cacheClient.set(key, JSON.stringify(items));
-            var ttlTime = parseInt((new Date('2017-08-26').getTime() - new Date().getTime()) / 1000);
+            var ttlTime = parseInt((new Date(deadline).getTime() - new Date().getTime()) / 1000);
             cacheClient.expire(key, ttlTime);
             res.json({ data: true });
         } else {
             items = JSON.parse(result);
-            if(items.indexOf(currentDay) > -1){
+            if(items.indexOf(userNo) > -1){
                 res.json({ data: false });
             }else {
-                items.push(currentDay);
+                items.push(userNo);
                 cacheClient.set(key, JSON.stringify(items));
+                var ttlTime = parseInt((new Date(deadline).getTime() - new Date().getTime()) / 1000);
+                cacheClient.expire(key, ttlTime);
                 res.json({ data: true });
             }
         }
     });
 });
 
+//发言触发抽奖（仅限用户每日第一次发言）
+router.post('/speakActivity',function (req, res) {
 
-//查询当前用户剩余抽奖次数
-router.post('/getSurplusChance', function(req, res) {
+    //
+    if (new Date().getTime() > new Date(config.activityEndTime).getTime() || isWeedend(new Date())) {//当前活动时间控制
+        return res.json({"code" : 200,msg:'活动结束或者周末'});
+    }
 
-    var userInfo = req.session.studioUserInfo;
-    var requestParams = {
-        activityPeriods: "PM20170807",
-        mobile: userInfo.mobilePhone.replace("86-", ""),
-        companyId: 3 //公司ID，贵金属：3
-    };
-    request.post({
-        url: config.freeibUrl + '/unify-activity/act/20170807/getAvailableTimes',
-        form: requestParams
-    }, function(error, response, data) {
-        if(!error && data){
-            var result = JSON.parse(data);
-            if(result.code == 0){
-                res.json({code:0, isOk : true, num : result.data.availableTimes});
+    let userInfo = req.session.studioUserInfo,maxUsers = 900;
+    let mobilePhone = userInfo.mobilePhone.replace("86-", "");
+    var content = req.body['content'],allPhone = [];//查询redis得到当天所有的发言用户
+
+    //验证当前发言内容(得到当前发言的楼数，用户多次发言仅计算第一次发言，过滤)
+    speakActivityLotteryInfo(function (data) {
+        allPhone = data.users || [];
+        if(allPhone.indexOf(mobilePhone) > -1 || allPhone.length >= maxUsers){//已发言(当天发言人数超过900)，终止
+            if(allPhone.length >= maxUsers && allPhone.indexOf(mobilePhone) == 0){
+                allPhone.push(mobilePhone)
+                saveLotteryInfo(allPhone);
             }
-        }else {
-            res.json({code:200,isOk : false,num : 0});
+            return res.json({"code" : 200});
         }
+        //保存抽奖用户信息
+        allPhone.push(mobilePhone);
+        saveLotteryInfo(allPhone);
+        //调用freeib接口抽奖
+        speakFreeIBLottery(mobilePhone,function (lotteryinfo) {
+            if(lotteryinfo.code == 0){//中奖
+                content.giftName = lotteryinfo.giftName;
+                content.giftNo = lotteryinfo.giftNo;
+                logger.info('send notice to api:',content);
+                chatService.sendNoticeActivity({info: content, groupType: 'studio'});
+            }
+            return res.json(lotteryinfo);
+        });
 
     });
 
-});
-
-//抽奖
-router.post('/freeibLottery', function(req, res) {
-
-    var userInfo = req.session.studioUserInfo;
-    var requestParams = {
-        activityPeriods: "PM20170807",
-        mobile: userInfo.mobilePhone.replace("86-", ""),
-        companyId: 3 //公司ID，贵金属：3
-    };
-    request.post({
-        url: config.freeibUrl + '/unify-activity/act/20170807/lottery',
-        form: requestParams
-    }, function(error, response, data) {
-        if(!error && data){
-            var result = JSON.parse(data);
-            if(result.code == 0){
-                res.json({
-                    code:result.code, isOk : true, giftNumber : result.data.giftNumber,
-                    giftName : result.data.giftName, num : result.data.availableTimes
-                });
-            }else {
-                res.json({code:result.code,isOk : true,num : 0, msg : result.msg});
-            }
-        }else {
-            res.json({code:200,isOk : false,num : 0});
-        }
-
-    });
 
 });
 
 //中奖用户列表
-router.post('/freeibLotteryList', function(req, res) {
-
-    var total = req.body['total'] || 10;
+router.post('/speakActivityLotteryList', function(req, res) {
+    if (new Date().getTime() > new Date(config.activityEndTime).getTime()) {//当前活动时间控制
+        return res.json({isOk : false,msg : '活动结束！'});
+    }
+    var total = req.body['total'] || 20;
     var requestParams = {
-        activityPeriods: "PM20170807",
+        activityPeriods: "PM20170918",
         total: total,
-        companyId: 3 //公司ID，贵金属：3
+        companyId : 3
     };
     request.post({
-        url: config.freeibUrl + '/unify-activity/act/20170807/list/all',
+        url: config.freeibUrl + '/unify-activity/act/20170918/list/all',
         form: requestParams
     }, function(error, response, data) {
         if(!error && data){
             var result = JSON.parse(data);
-            if(result.code == 0){
-                res.json({
-                    code:result.code, isOk : true, list : result.data.awardRecordList
-                });
+            if(result.code == '0'){
+                res.json({isOk : true, list : result.data.awardRecordList || []});
             }else{
-                res.json({code:result.code,isOk : true, msg : result.msg});
+                res.json({isOk : true, msg : result.infoMsg});
             }
         }else {
-            res.json({code:200,isOk : false,num : 0});
+            res.json({isOk : false,msg : error});
         }
 
     });
 
 });
 
-//我的中奖信息
-router.post('/freeibMyLotteryList', function(req, res) {
-
-    var total = req.body['total'] || 10;
-    var userInfo = req.session.studioUserInfo;
-    var requestParams = {
-        activityPeriods: "PM20170807",
-        total: total,
-        mobile: userInfo.mobilePhone.replace("86-", ""),
-        companyId: 3 //公司ID，贵金属：3
-    };
-    request.post({
-        url: config.freeibUrl + '/unify-activity/act/20170807/list/my',
-        form: requestParams
-    }, function(error, response, data) {
-        if(!error && data){
-            var result = JSON.parse(data);
-            if(result.code == 0){
-                res.json({
-                    code:result.code, isOk : true, list : result.data.awardRecordList,
-                    totalAmount : result.data.totalAmount
-                });
-            }else{
-                res.json({code:result.code,isOk : true, msg : result.msg});
-            }
-        }else {
-            res.json({code:200,isOk : false,num : 0});
+//pm 9月份发言活动 页面查询
+router.get('/getSpeakActivityInfo', function(req, res) {
+    let day = req.query['day'];
+    day = day ? day : common.formatDate(new Date(),'yyyyMMdd');
+    let key = "pm_speak_activity_lottery_".concat(day);
+    cacheClient.get(key, function(err, result) {
+        if (!err && result) {
+            let users = JSON.parse(result) || [];
+            res.json({ isOk: true, data : {users:users,size:users.length} });
+        } else {
+            res.json({ isOk: false, data : err });
         }
-
     });
-
 });
 
-/** 8月份活动 code by ant  end 20170803 */
+/**  发言抽奖 */
+function speakFreeIBLottery(mobilePhone,callback) {
+
+    let result = {code:-1},starttime = new Date().getTime();//-1:异常  1:未中奖   0中奖
+    var requestParams = {
+        activityPeriods : "PM20170918",
+        mobile : mobilePhone,
+        companyId : 3
+    };
+    request.post({
+        url: config.freeibUrl + '/unify-activity/act/20170918/lottery',
+        form: requestParams
+    }, function(error, response, data) {
+        logger.info("speakFreeIBLottery>>result>>",data);
+        if(!error && data){
+            var lotteryResult = JSON.parse(data);
+            if(lotteryResult.code == '0' && (lotteryResult.data && lotteryResult.data.lotteryGiftNumber !='nothing@0') ){
+                result = {code:0,giftName:lotteryResult.data.lotteryGiftName,giftNo:lotteryResult.data.lotteryGiftNumber};
+            }else{
+                result = {code:1,msg:lotteryResult.msg};
+            }
+        }
+        let callTime = new Date().getTime() - starttime;
+        logger.info("speakFreeIBLottery>>time(ms)>>",callTime);
+        callback(result);
+    });
+
+};
+
+/** 是否为周末 **/
+function isWeedend(date){
+    var _date = date || new Date();
+    var day = _date.getDay();
+    if(day == 6 || day == 0){
+        return true;
+    }
+    return false;
+};
+
+/** 保存当天抽奖用户数据 */
+function saveLotteryInfo(data){
+    let currentDay = common.formatDate(new Date(),'yyyyMMdd');
+    let key = "pm_speak_activity_lottery_" + currentDay;
+    let ttlTime = parseInt((new Date('2017-10-15').getTime() - new Date().getTime()) / 1000);
+    cacheClient.set(key, JSON.stringify(data));
+    cacheClient.expire(key, ttlTime);
+    return true;
+};
+
+//获取当天发言用户信息
+function speakActivityLotteryInfo(callback){
+    var users = [],key = "pm_speak_activity_lottery_" + common.formatDate(new Date(),'yyyyMMdd');
+    cacheClient.get(key, function(err, result) {
+        if (!err && result) {
+            users = JSON.parse(result)
+        }
+        callback({users : users});
+    });
+};
+
+/** 9月份活动 code by ant  end 20170909 */
 
 module.exports = router;

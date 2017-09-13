@@ -961,6 +961,244 @@ var indexTool = {
                 }
             });
         }
-    }
+    },
     /*****  8月活动 end 2017.8.3  *****/
+
+    /*****  9月PM发言活动 start 2017.9.9  *****/
+    speak_activity_201709 :  {
+
+        init : function () {
+            indexTool.speak_activity_201709.setEvent();
+            this.isCurrentDayFirstLogin(indexJS.userInfo.userId);
+            indexTool.speak_activity_201709.activityLotteryList();
+        },
+
+        setEvent : function(){
+
+            //头部banner点击
+            $(".header_showTrade_ad").click(function(){
+                $(".blackbg").show();
+                $(".redbag-sep-box").slideDown();
+            });
+
+            //关闭点击
+            $(".redbag-sep-box .lay-del-btn").click(function(){
+                $(".blackbg").hide();
+                $(this).parent().slideUp();
+            });
+
+            //弹出层活动详情
+            $(".ly-rule-fon a").click(function(){
+                $(".blackbg").show();
+                $(".redbag-pub-box").slideDown();
+            });
+
+            //活动规则关闭
+            $(".redbag-pub-box .lay-del-btn").click(function(){
+                $(".blackbg").hide();
+                $(this).parent().slideUp();
+            });
+
+            //右侧banner活动详情
+            $(".adv-rule-btn").click(function(){
+                $(".blackbg").show();
+                $(".redbag-pub-box").slideDown();
+            });
+
+            //右侧banner关闭点击
+            $(".advertise-cbox .adv-del-btn").click(function(){
+                $(this).parent().slideUp();
+                indexJS.heightCalcu();
+            });
+
+            //右侧banner马上发言
+            $('.adver-tan-btn,.ly-btn-fon').on('click',function () {
+                $('.redbag-sep-box .lay-del-btn').trigger('click');
+                if(indexJS.userInfo.isLogin){
+                    $('.mod_main .main_tabnav a:eq(1)').trigger('click');
+                    $('#contentText').focus();
+                }else {
+                    common.openPopup('.blackbg,.login');
+                }
+            });
+
+            // 大红包特效 - 关闭
+            $('.fy-big-redbag .fy-close').click(function () {
+                $('.fy-redbagbg,.fy-redbags,.fy-big-redbag,.fy-shine,.fy-ribbon').hide();
+                $('.fy-big-redbag .rb-cont').css({'top':-1000,'opacity':0}).removeClass('ani');
+                $('.fy-big-redbag .cong,.fy-ribbon,.fy-shine').css('opacity',0);
+                $('.fy-big-redbag .cong').removeClass('done');
+                $('.fy-shine').removeClass('ani');
+
+                $('.fy-big-redbag .rb-cont,.fy-big-redbag .cong,.fy-ribbon,.fy-shine').stop(true);
+            });
+
+
+            $('.fy-pop .fy-rulebtn').click(function(){
+                $('.fy-pop').hide();
+                $('.fy-pop-rule').addClass('temp').slideDown()
+            })
+            $('.fy-pop .fy-close').click(function(){
+
+                if($(this).parent().parent().hasClass('temp')){
+                    $(this).parent().parent().removeClass('temp').slideUp(500,function () {
+                        $('.fy-pop-main').slideDown();
+                    })
+                }else{
+                    $(this).parent().parent().slideUp();
+                    $('.fy-popbg').hide();
+                }
+            });
+
+            $('.fy-info-close').click(function () {
+                $('.fy-infos').hide()
+            })
+            $('.fybar-rulebtn').click(function(){
+                $('.fy-popbg').show();
+                $('.fy-pop-rule').slideDown()
+            })
+
+            $('.fybar-close').click(function(){
+                $('.fy_pos').addClass('hid').slideUp();
+                heightCalcu();
+            })
+
+
+        },
+
+        //开奖 大红包触发
+        openAward : function (giftName) {
+            if(!giftName){
+                return;
+            }
+            $('.conginfo span').text('发言获得'.concat(giftName));
+
+            $('.fy-big-redbag .rb-cont,.fy-big-redbag .cong,.fy-ribbon,.fy-shine').stop(true);
+
+            $('.fy-redbagbg,.fy-redbags,.fy-big-redbag,.fy-shine').show()
+            $('.fy-big-redbag .rb-cont').delay(1000).animate({'top':0,'opacity':1},600,function () {
+                $(this).addClass('ani');
+                $('.fy-shine').animate({'opacity':1},500,function () {
+                    $('.fy-shine').addClass('ani');
+                });
+
+            })
+            $('.fy-big-redbag .cong').delay(2000).animate({'opacity':1},600,function () {
+                $(this).addClass('done');
+                $('.fy-ribbon').show();
+            })
+            $('.fy-ribbon').delay(3000).animate({'opacity':1},600,function () {
+                $('.fy-ribbon').show();
+            });
+        },
+
+        //飘带效果
+        appendPrizerList : function (data) {
+            console.log(data);
+            var flag = 1;//追加末尾，0：追加头部
+            if($('.fy-info-cont div').size() > 30){
+                $('.fy-info-cont').children()[0].remove();
+                flag = 0;
+            }
+            var html = [],len = data.nickname.length,awardName = '';
+            if(data.giftNo.indexOf('mobile_flow') > 0){//流量
+                html.push('<div class="fy-info pf-t5 ani-2">');
+                awardName = data.giftName || '30M流量';
+            }else{//红包
+                html.push('<div class="fy-info money pf-t5 ani-2">');
+                awardName = data.giftName || '2元红包';
+            }
+            var nickname = data.nickname.length > 2 ? data.nickname.substr(len -2) : data.nickname;
+            html.push('<p>**'.concat(nickname).concat('发言获<b>').concat(awardName).concat('</b></p>'));
+            html.push('</div>');
+            if(flag == 0){
+                $('.fy-info-cont').prepend(html.join(''));
+            }else{
+                $('.fy-info-cont').append(html.join(''));
+            }
+
+        },
+
+        //活动期间当天首次登陆
+        isCurrentDayFirstLogin : function (visitorId) {
+            if (common.isValid(visitorId)) {
+                $.post('/isCurrentDayFirstLogin', { data: JSON.stringify({ userNo: visitorId }) }, function(data) {
+                    if (data) {
+                        if (data.data) {
+                            $("#showTrade_header").trigger('click');
+                        }
+                    }
+                });
+            }
+        },
+
+        //中奖列表
+        activityLotteryList: function() {
+            $.post('/speakActivityLotteryList',{}, function(data) {
+                if(data.isOk){
+                    var html = [],awardName = '';
+                    for(var i = 0, len = data.list.length; i < len; i++){
+                        var item = JSON.parse(data.list[i].otherMsg),anI = i % 10;
+                        if(!item)break;
+                        if(item.giftNumber.indexOf('mobile_flow') > -1){
+                            html.push('<div class="fy-info pf-t'+i+' ani-'+anI+'">');
+                            awardName = item.giftName || '30M流量';
+                        }else{
+                            html.push('<div class="fy-info money pf-t'+i+' ani-'+anI+'">');
+                            awardName = item.giftName || '2元红包';
+                        }
+                        item.guestName = item.guestName || item.guestPhone;
+                        var _len = item.guestName.length;
+                        var nickname = _len > 2 ? item.guestName.substr(_len -2) : item.guestName;
+                        html.push('<p>**'.concat(nickname).concat('发言获<b>').concat(awardName).concat('</b></p>'));
+                        html.push('</div>')
+                    }
+                    if(data.list.length > 10){
+                        $('.fy-info-cont').html(html.join(''));
+                    }else{
+                        $('.fy-info-cont').append(html.join(''));
+                    }
+                    indexTool.speak_activity_201709.randomBigPrize();
+                    setInterval(indexTool.speak_activity_201709.randomBigPrize,1*60*60*1000);
+                    setInterval(indexTool.speak_activity_201709.removeBigPrize,10*60*1000);
+                }
+            });
+        },
+
+        //随机产生中大奖数据
+        randomBigPrize : function () {
+            if(indexJS.serverTime < 1505865600000)return;
+            if($('.fy-info-cont').size() == 0 || $('.fy-info-cont div').size() < 10){
+                return;
+            }
+            if($('#bigPrize').size() > 0 ){
+                $('#bigPrize').remove();
+            }
+            var users = ['**小猪','**咋地','**带跑','**尚香','**做多','**租仔'];
+            var prizes = ['航拍无人机','1000京东卡'];
+            var userNo = Math.floor(Math.random() * users.length);
+            var prizeNo = userNo%2;
+            var html = [];
+            if(prizeNo == 0){
+                html.push('<div class="fy-info plane pf-t'+userNo+' ani-7" id="bigPrize">');
+            }else if(prizeNo == 1){
+                html.push('<div class="fy-info jd pf-t'+userNo+' ani-7" id="bigPrize">');
+            }else{
+                html.push('<div class="fy-info money pf-t'+userNo+' ani-7" id="bigPrize">');
+            }
+            html.push('<p>'.concat(users[userNo]).concat('发言获<b>').concat(prizes[prizeNo]).concat('</b></p>'));
+            html.push('</div>');
+            $('.fy-info-cont').append(html.join(''));
+        },
+
+        //删除大奖数据
+        removeBigPrize : function () {
+            if($('#bigPrize').size() > 0 ){
+                $('#bigPrize').remove();
+            }
+        }
+
+    }
+
+    /*****  9月PM发言活动 end 2017.9.9  *****/
 };

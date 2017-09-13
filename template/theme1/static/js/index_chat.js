@@ -186,11 +186,40 @@ var chat = {
             }
             sendObj.fromUser.pointsGlobal = parseInt($('.personal_center .levelbar .le_detail').attr('pg'));
             sendObj.fromUser.toUser = toUser;
-            $.post(indexJS.apiUrl + "/message/sendMsg", {
+/*            $.post(indexJS.apiUrl + "/message/sendMsg", {
                 data: sendObj
             }, function() {
                 console.log("ok");
-            });
+            });*/
+            //发言
+            if(!indexJS.userInfo.isLogin){
+                $.post(indexJS.apiUrl + "/message/sendMsg", { data: sendObj }, function() {
+                    console.log("ok");
+                });
+            }else{
+                $.ajax({
+                    url:'/speakActivity',  //请求的URL
+                    timeout : 500, //超时时间设置，单位毫秒
+                    type : 'post',  //请求方式，get或post
+                    data :{
+                        mobilePhone: sendObj.fromUser.mobile,
+                        content: {
+                            "userId": sendObj.fromUser.userId,
+                            "nickname":sendObj.fromUser.nickname,
+                            "mobilePhone":sendObj.fromUser.mobile
+                        }
+                    },  //请求所传参数，json格式
+                    dataType:'json',//返回的数据格式
+                    success:function(){ //请求成功的回调函数
+                    },
+                    complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                        $.post(indexJS.apiUrl + "/message/sendMsg", {data: sendObj}, function() {
+                            console.log("ok");
+                        });
+                    }
+                });
+            }
+
             chat.setContent(sendObj, true, false); //直接把数据填入内容栏
             //清空输入框
             $("#contentText").html(""); //清空内容
@@ -1480,25 +1509,7 @@ var chat = {
             data = common.sortOnlineUserList(data, indexJS.userInfo.userId);
             //如客户数小于200，则追加额外游客数
             var onLineNum = dataLength;
-/*            if ($("#roomInfoId").attr("av") == "true") {
-                var randId = 0,
-                    size = 0;
-                if (dataLength > 100) {
-                    size = Math.ceil(Math.random() * 50) + 275;
-                } else {
-                    size = dataLength <= 10 ? 60 : (200 / dataLength) * 3 + 10;
-                }
-                for (var i = 0; i < size; i++) {
-                    randId = common.randomNumber(6);
-                    data.push({ userId: ("visitor_" + randId), clientGroup: 'visitor', nickname: ('游客_' + randId), sequence: 15, userType: -1 });
-                }
-                onLineNum = onLineNum + size;
-            }*/
-            var row = null;
-            var userArr = [];
             for (var i in data) {
-
-                //userArr.push(chat.getOnlineUserDom(data[i]).dom); //设置在线用户
                 row = data[i];
                 chat.setOnlineUser(row); //设置在线用户
                 if (row.userType == 3 && $('.mult_dialog a[uid=' + row.userId + ']').length > 0) {
@@ -1507,8 +1518,6 @@ var chat = {
                     chat.contactAnalystEvent(row);
                 }
             }
-            /*$('#userListIdNew').html(userArr.join(""));
-            onLineNum = onLineNum + $('.mult_dialog a[uid]').length + $('#analystbar a[uid]').length;*/
             indexJS.setListScroll(".otheruser .scrollbox");
             var $_room = $('#roomList_panel .on');
             var room = {isOpen : $_room.attr('sp'), allowVisitor : $_room.attr('av'), roomType : $_room.attr('rt'),
@@ -1690,6 +1699,13 @@ var chat = {
                     break;
                 case 'serverTime':
                     indexJS.serverTime = result.data;
+                    break;
+                case 'activity':
+                    console.log(result);
+                    if(indexJS.userInfo.userId === result.data.userId){
+                        indexTool.speak_activity_201709.openAward(result.data.giftName);
+                    }
+                    indexTool.speak_activity_201709.appendPrizerList(result.data);
                     break;
             }
         });

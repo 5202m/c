@@ -69,7 +69,7 @@
 <%if(isRedPacket) {%>
 
     <!-- 抢红包-未登录状态 -->
-    <div class="redbag_pop nologin dn" id="redPacket_noLogin">
+<!--    <div class="redbag_pop nologin dn" id="redPacket_noLogin">
         <div class="cont">
             <div class="rb_top">
                 <span><i></i>登录金道实时解盘<i></i></span>
@@ -79,7 +79,7 @@
             <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
         </div>
     </div>
-    <!-- 抢红包-已登录状态 -->
+    &lt;!&ndash; 抢红包-已登录状态 &ndash;&gt;
     <div class="redbag_pop dn" id="redPacket_normal">
         <div class="cont">
             <div class="rb_top2">
@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <!-- 抢红包-结果页-无奖 -->
+    &lt;!&ndash; 抢红包-结果页-无奖 &ndash;&gt;
     <div class="redbag_pop rb_result dn" id="redPacket_resNo">
         <div class="cont">
             <div class="rb_top2">
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    <!-- 抢红包-结果页-中奖！ -->
+    &lt;!&ndash; 抢红包-结果页-中奖！ &ndash;&gt;
     <div class="redbag_pop rb_result2 dn" id="redPacket_resYes">
         <div class="cont">
             <div class="congratulation">恭喜获得<br /><b rp="money"></b>元微信红包
@@ -154,7 +154,7 @@
     </div>
 
 
-    <!-- 抢红包-5秒倒计时 -->
+    &lt;!&ndash; 抢红包-5秒倒计时 &ndash;&gt;
     <div class="redbag_pop pop2 dn" id="redPacket_mini">
         <div class="cont">
             <div class="rb_top2">
@@ -171,97 +171,107 @@
             </div>
             <div class="pop_close"><a href="javascript:void(0)">关闭</a></div>
         </div>
+    </div>-->
+
+<!-- ===== 9月活动层 begin ===== -->
+<div class="shadow dn"></div>
+<div class="black dn"></div>
+<div class="redbag-sep-box dn">
+    <a href="javascript://" class="lay-del-btn" title="关闭"></a>
+    <div class="redbag-sep-con">
+        <div class="ly-btn-fon"><a href="javascript:void(0);">马上发言</a></div>
+        <p class="ly-p-fon">发言越多，奖励越多，奖励次数不限。发言就是这么值钱！</p>
+        <div class="ly-rule-fon"><a href="javascript:void(0);">更多活动详情 <span>&gt;</span></a></div>
     </div>
+</div>
 
-
-
-    <!-- ===== 8月活动层 begin ===== -->
-<!--
-    <div class="shadow dn"></div>
-    <div class="redbag-july-box dn">
-        <div class="redbag-july-con">
-            <a href="javascript://" class="lay-del-btn" title="关闭"><i></i></a>
-            <div class="lay-zhiz-btn"></div>
-            <div class="zhuanp-box" id="lotteryYuan"></div>
-            <div class="deng-box"></div>
-            <div class="jiant-box" id="lotteryBtn">
-                <p class="hongb-cout">可抽<span></span>次</p>
-            </div>
-            <p class="hongb-bot-p"><a href="javascript:void(0)">更多抽奖机会 <span>&gt;</span></a></p>
-        </div>
-    </div>
-
-    &lt;!&ndash; 抽奖结果层 - 微信红包 &ndash;&gt;
-    <div class="redbag-pub-box dn" id="resultSuccCon">
-        <a href="javascript://" class="lay-del-btn2" title="关闭"></a>
-        <h3>恭喜获得<span>5元微信红包</span></h3>
-        <div class="redbag-cen-itme redba-cen-bg">
-            <p class="redbag-cen-p">存款满$200可再获一次抽奖机会<br />手气这么好，再来一次试试</p>
-            <div class="redbag-ewm-fon">
-                <div class="redbag-ewm-im"><img src="/theme2/img/redbag201708/layer-ewm.png" alt="ewm" /></div>
-                <p>微信号 chen_gw24k<br />添加分析师微信，核实身份后领奖</p>
-                <a href="javascript:void(0)" class="redbag-btn-sub">去存款</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="redbag-pub-box dn" id="resultSuccCon4">
-        <a href="javascript://" class="lay-del-btn2" title="关闭"></a>
-        <h3>恭喜获得<span>投资秘籍</span></h3>
-        <div class="redbag-cen-itme redba-cen-bg">
-            <p class="redbag-cen-p">存款满$200可再获一次抽奖机会<br />手气这么好，再来一次试试</p>
-            <div class="redbag-ewm-fon">
-                <div class="redbag-ewm-im"><img src="/theme2/img/redbag201708/layer-wei.png" alt="ewm" /></div>
-                <p>微信号 weigw24k<br />添加分析师微信，回复“秘籍”二字，<br/>分析师核实身份后发放独家投资秘籍。</p>
-                <a href="javascript:void(0)"  class="redbag-btn-sub">去存款</a>
-            </div>
-        </div>
-    </div>
-
-    &lt;!&ndash; 次数不足 &ndash;&gt;
-    <div class="redbag-pub-box dn" id="resultSuccCon3">
-        <a href="javascript://" class="lay-del-btn2" title="关闭"></a>
-        <h3>您的抽奖次数不足</h3>
-        <div class="redbag-cen-itme redba-cen-bg">
-            <p class="redbag-cen-p">存款满$200可再获一次抽奖机会<br />手气这么好，万一中了呢？</p>
-            <div class="redbag-ewm-fon">
-                <a href="javascript:void(0)" class="redbag-btn-sub">去存款</a>
-            </div>
-        </div>
-    </div>
-
-    &lt;!&ndash; 抽奖结果层 - 其他奖品 &ndash;&gt;
-    <div class="redbag-pub-box dn" id="resultSuccCon2">
-        <a href="javascript://" class="lay-del-btn2" title="关闭"></a>
-        <h3>恭喜获得<span></span></h3>
-        <div class="redbag-cen-itme redba-cen-bg">
-            <p class="redbag-cen-p">存款满$200可再获一次抽奖机会<br/>手气这么好，再来一次试试</p>
-            <div class="redbag-ewm-fon">
-                <div class="redbag-ewm-im"><img src="/theme2/img/redbag201708/layer-phone.png" alt="ewm" /></div>
-                <p class="redbag-kf-text">活动结束后<br />客服MM会联系您发放奖品</p>
-                <a href="javascript:void(0)" class="redbag-btn-sub">去存款</a>
-            </div>
-        </div>
-    </div>
-
-    &lt;!&ndash; 活动规则 &ndash;&gt;
-    <div class="redbag-pub-box rule-box dn" id="ruleConLayer">
-        <a href="javascript://" class="lay-del-btn2" title="关闭"></a>
-        <h3>活动规则</h3>
-        <div class="redbag-cen-itme rule-con-box">
+<!-- 活动规则 -->
+<div class="redbag-pub-box rule-box dn" id="ruleConLayer">
+    <a href="javascript://" class="lay-del-btn" title="关闭" id=""></a>
+    <h3>活动规则</h3>
+    <div class="redbag-cen-itme rule-con-box">
+        <div class="rule-hei" id="content-d3">
+            <p><strong>活动时间：</strong>即日起至2017.9.29</p>
+            <p><strong>活动对象：</strong>实时解盘所有登录用户</p>
             <ul>
-            <li><i></i>活动期间所有登录实时解盘用户均可获得一次抽奖机会；在活动期间用户每笔大于等于$200的存款可获得一次抽奖机会，上不封顶；</li>
-            <li><i></i>用户单笔投资额越多，获得大奖的机会越高；</li>
-            <li><i></i>如抽中大疆智能航拍无人机、京东购物卡，活动结束后三个工作日内，客服会联系用户核实身份，确认无误后发放；如抽中微信红包，须添加分析师微信，活动结束后三个工作日内，分析师确认身份无误后发放；如抽中流量包，会在1小时内会自动发放至获奖用户注册手机；如抽中积分，会在1小时内自动发放至获奖用户账户积分余额中；</li>
-            <li><i></i>如发现有任何虚假作弊行为，立即取消获奖资格，停止奖励发放；</li>
-            <li><i></i>金道贵金属有随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权；</li>
-            <li><i></i>如有疑问，请联系老师助理咨询。</li>
+                <li><i>1、</i>活动期间所有登录用户在实时解盘发言可随机获得发言奖励；</li>
+                <li><i>2、</i>活动期间一个用户每日可获得最多一次奖励，活动期间可获得多次奖励；</li>
+                <li><i>3、</i>活动奖品包括大疆智能航拍无人机、1000元京东购物卡、海量2-200元随机红包、30/20M流量等；如中实物类、京东购物卡类奖品，活动结束后客服在三个工作日内会联系用户核实身份，确认无误后发放；如中微信红包，须添加分析师微信，活动结束后三个工作日内，分析师核对身份无误后发放奖励；如中流量包，在1小时内会自动发放至获奖用户注册手机；</li>
+                <li><i>4、</i>如发现有任何恶意灌水、刷屏、扰乱聊天室秩序，以及虚假作弊行为，立即取消获奖资格，停止奖励发放；</li>
+                <li><i>5、</i>金道贵金属有随时修订、暂停、终止本活动及任何相关规则条款之权利及其解释权；</li>
+                <li><i>6、</i>如有疑问，请联系老师助理咨询。</li>
             </ul>
-
+        </div>
+        <div class="weix-info">
+            <p>杨多多老师微信号: <span>gw_yang24k</span> <img src="/theme2/img/redbag201709/layer-ewm.png" alt="gw_yang24k" /></p>
         </div>
     </div>
--->
-    <!-- ===== 8月活动层 end ===== -->
+</div>
+
+<!-- 红包背景 -->
+<div class="fy-redbagbg dn"></div>
+
+<!-- 红包雨 -->
+<div class="fy-redbags dn">
+    <div class="fy-rb ani-13 pf-l62 mini op-70"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-3 pf-l42 op-90 "><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-11 pf-l30 op-70"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-1 pf-l32"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-6 pf-l55 op-50"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-7 pf-l48 mini op-80"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-10 pf-l30 mini"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-15 mini op-90"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-14 pf-l45 op-70"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-2 pf-l36 op-60"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-9 pf-l48 op-80"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-20 pf-l70 op-50 mini"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-8 mini op-90"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-23 pf-l28 mini"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-12 pf-l62 op-50"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+
+    <div class="fy-rb ani-16 pf-l25 op-80"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-17 pf-l55 mini"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-18 op-90"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-19 pf-l46 mini"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-4 pf-l70 op-60"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+
+    <div class="fy-rb ani-21 pf-l40"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-22 pf-l62 mini op-90"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-5 pf-l58 mini op-80"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-24 pf-l65"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-25 pf-l55"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+
+    <div class="fy-rb ani-26 pf-l30 mini op-80"><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-27 pf-l62 "><img src="/theme2/img/redbag201709/fly-redbag2.png" alt=""></div>
+    <div class="fy-rb ani-28 pf-l28 op-90"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-29 pf-l58 op-70"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+    <div class="fy-rb ani-30 pf-l40 op-60"><img src="/theme2/img/redbag201709/fly-redbag1.png" alt=""></div>
+</div>
+
+<!-- duang -->
+<div class="fy-shine dn"><img src="/theme2/img/redbag201709/shine.png" alt=""></div>
+
+<!-- 大红包 -->
+<div class="fy-big-redbag dn">
+    <div class="rb-cont">
+        <div class="cong">
+            <div class="conginfo">
+                <div class="tit"><img src="/theme2/img/redbag201709/congtext.png" alt=""></div>
+                <span>发言获得10元红包！</span>
+                <div class="fy-redbagqr">
+                    <div class="fy-redbagqrbox"><img src="/theme2/img/redbag201709/layer-ewm.png" alt=""></div>
+                    <p><!--添加杨多多老师<br>-->gw_yang24k</p>
+                </div>
+            </div>
+        </div>
+        <div class="rb-wrap"></div>
+    </div>
+    <a href="javascript:void(0)" class="fy-close"></a>
+</div>
+
+<!-- 彩带飘飘 -->
+<div class="fy-ribbon dn"><img src="/theme2/img/redbag201709/ribbon.png" alt=""></div>
+<!-- ===== 9月活动层 end ===== -->
 
 <%}%>
 

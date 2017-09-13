@@ -19,7 +19,7 @@
     <link href="/theme1/css/index<%=isDevTest? '.css' : ('.min.css?t=' + new Date().getTime())%>" type="text/css" rel="stylesheet" />
     <link href="/base/lib/pikaday/pikaday.min.css" type="text/css" rel="stylesheet" />
     <%if(isRedPacket) {%>
-    <link href="/theme1/css/redbag201704.css" rel="stylesheet" type="text/css">
+    <link href="/theme1/css/redbag201709.css" rel="stylesheet" type="text/css">
     <%}%>
      <!--[if lt IE 9]>
     <link href="/theme1/css/studioIE.css" rel="stylesheet" type="text/css">
@@ -47,10 +47,10 @@
         <div class="box-header-in clearfix">
             <h1 class="fl hide-t" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_logo', 'content_top', 1, true]);">视频直播间</h1>
             <%if(isRedPacket) {%>
-<!--                <div class="header_showTrade_ad fl" id="showTrade_header">
-                    <a href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"></a>
-                </div>-->
-            <div class="header_redbag fl" id="redPacket_header"
+            <div class="header_showTrade_ad fl" id="showTrade_header">
+                <a href="javascript:void(0)" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'header_banner', 'content_top', 1, true]);"><i></i></a>
+            </div>
+<!--            <div class="header_redbag fl" id="redPacket_header"
                  onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'hbf_banner', 'content_middle', 1, true]);">
                 <div class="redbag_pic"></div>
                 <div class="rb_text">
@@ -64,7 +64,7 @@
                         <span>秒</span>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <%} else{ %>
             <div class="header_ad fl">
                 <a href="http://www.24k.hk/special/analyst.html" target="_blank"

@@ -47,8 +47,9 @@ var indexJS = {
         chatShowTrade.init();
         noticeJS.init();
         indexTool.SimpleRoom.init();
-        indexTool.RedPacket.init();
+        //indexTool.RedPacket.init();
         //indexJS.initGeetest();
+        indexTool.speak_activity_201709.init();
     },
     /**
      * 事件控制

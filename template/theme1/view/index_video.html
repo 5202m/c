@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="mod_infotab">
+        <div class="mod_infotab" style="overflow:hidden">
             <div class="tabnav clearfix">
                 <a href="javascript:void(0)" class="nav-a tablink on live" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'left_live', 'content_left', 1, true]);"><span class="hoverbox">实时解盘</span></a>
                 <a href="javascript:void(0)" class="nav-a tablink teach" onclick="_gaq.push(['_trackEvent', 'pmchat_studio', 'left_teachvideo', 'content_left', 1, true]);"><span class="hoverbox">教学</span></a>
@@ -253,6 +253,40 @@
                     </div>
                 </div>
             </div>
+
+            <%if(isRedPacket) {%>
+            <!-- 红包活动 中奖信息 -->
+            <div class="fy-infos">
+                <div class="fy-info-cont">
+                    <div class="fy-info ani-1">
+                        <p>**老师发言获<b>30M流量包</b></p>
+                    </div>
+                    <div class="fy-info money pf-t3 ani-2">
+                        <p>**就赚发言获<b>微信红包2元</b></p>
+                    </div>
+                    <div class="fy-info pf-t2 ani-3">
+                        <p>**ia发言获<b>30M流量包</b></p>
+                    </div>
+                    <div class="fy-info  pf-t6 ani-4">
+                        <p>**钞机发言获<b>30M流量包</b></p>
+                    </div>
+                    <div class="fy-info money pf-t4 ani-2">
+                        <p>**狀元发言获<b>微信红包5元</b></p>
+                    </div>
+                    <div class="fy-info money pf-t8 ani-3">
+                        <p>**点灯发言获<b>微信红包2元</b></p>
+                    </div>
+                    <div class="fy-info money pf-t7 ani-5">
+                        <p>**西亚发言获<b>微信红包10元</b></p>
+                    </div>
+                    <div class="fy-info pf-t5 ani-2">
+                        <p>**辣椒发言获<b>30M流量包</b></p>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="fy-info-close">不再显示中奖信息</a>
+            </div>
+            <%}%>
+
         </div>
     </div>
 </div>

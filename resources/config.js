@@ -36,7 +36,8 @@ var config = {
     }, //UTM系统信息
     isDevTest: true, //是否开发或测试环境
     isRedPacket: true, //是否红包活动
-    isShowTrade : false,//晒单活动
+    activityStartTime : '2017-09-12 00:00:00',//活动开始时间
+    activityEndTime:'2017-09-29 23:59:59',//活动结束时间
     cjTrainRoom: 'studio_57', //炒金培训班放间
     sessionConfig: { key: 'connect.sid', secret: 'pm@chat' }, //session 对应key,secret
     redisUrlObj: { host: '192.168.35.81', port: 6379 }, //链接redis缓存客户端连接
@@ -71,7 +72,7 @@ var config = {
     web24kPath: 'http://testweb1.24k.hk:8090', //24k信息地址
     pmOAPath: 'http://testweb1.24k.hk:81', //https://oa.24k.hk
     packetAcUrl: 'http://testweb1.24k.hk/activity20160105/getActivityUrl', //红包活动连接
-    freeibUrl : 'https://gwactivity.24k.hk',
+    freeibUrl : 'http://testgwactivity.24k.hk:8098',
     mobile24kPath: 'http://testweb1.24k.hk:8092', //24k信息地址 http://m.24k.hk
     dasUrl: 'http://192.168.35.222:8088/GwUserTrackingManager_NEW/put/insertRoom', //das数据分析系统地址
     appAutoLogin: {
