@@ -1173,7 +1173,8 @@ var Chat = {
                         toUser: {
                             userId: csTmp.userNo,
                             userType: csTmp.userType
-                        }
+                        },
+                        isFront: true
                     }
                 }, function(){
                     console.log("api getWhMsg ok");

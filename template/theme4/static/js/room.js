@@ -2012,7 +2012,8 @@ var studioChatMb = {
                         groupId: studioChatMb.userInfo.groupId,
                         groupType: studioChatMb.userInfo.groupType,
                         userId: studioChatMb.userInfo.userId,
-                        toUser: { userId: csTmp.userNo, userType: csTmp.userType }
+                        toUser: { userId: csTmp.userNo, userType: csTmp.userType },
+                        isFront: true
                     }
                 },
                 function() {

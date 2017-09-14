@@ -1256,7 +1256,8 @@ var chat = {
                             toUser: {
                                 userId: userId,
                                 userType: userType
-                            }
+                            },
+                            isFront: true
                         }
                     };
                     $.post(indexJS.apiUrl + "/message/getWhMsg", whMsgObj,
